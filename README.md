@@ -15,7 +15,6 @@ Start the app with
 npm start
 ```
 
-Navigate to https://localhost:4200/
 
 # Stack
 - [SvelteKit](https://kit.svelte.dev/) as web framework
