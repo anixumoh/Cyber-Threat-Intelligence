@@ -1,0 +1,144 @@
+<div class="m-4">
+  <h5 class="font-weight-bold">Basics</h5>
+  <p class="mb-1">Diferent Dorks can be used in the search box for advanced queries.</p>
+  <p class="mb-1">If no dorks are used, your keyword will be searched at the title, content and url.</p>
+  <p class="mb-1">
+    The seach is not sensitive for case <span class="badge badge-light border p-1">( M,m )</span>, underscore
+    <span class="badge badge-light border p-1">( _ )</span> or space
+    <span class="badge badge-light border p-1">( ' ' )</span>
+  </p>
+  <p class="mb-1">
+    For exact search use quotation marks <span class="badge badge-light border p-1">(i.e. "Blueliv Barcelona")</span>,
+    and for regex use bars <span class="badge badge-light border p-1">(i.e. /[aZ]{{ '{' }}12{{ '}' }}/)</span>
+  </p>
+</div>
+<div class="m-4">
+  <h5 class="font-weight-bold">Operators</h5>
+  <p class="mb-1">
+    Operators <span class="badge badge-light border p-1">AND</span>,
+    <span class="badge badge-light border p-1">OR</span> and <span class="badge badge-light border p-1">NOT</span> are
+    the only supported boolean operators.
+  </p>
+
+  <p class="mb-1">Brackets are supported as well:</p>
+  <pre class="bg-light border rounded p-1">(url:blue or url:liv)</pre>
+  <p class="mb-1">And scaping with backslash ( \ ) is also supported:</p>
+  <pre class="bg-light border rounded p-1">url:blue\/</pre>
+</div>
+<div class="m-4">
+  <h5 class="font-weight-bold">Dorks</h5>
+  <table class="table table-sm table-bordered">
+    <thead>
+      <tr>
+        <th>Dork</th>
+        <th>Examples</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td rowspan="4">content<br />url<br />title</td>
+        <td><span>Hello world</span></td>
+        <td>Searches hello world on all fields</td>
+      </tr>
+      <tr>
+        <td><span>"Hello world"</span></td>
+        <td>Searches exact matches of "Hello world" on all fields</td>
+      </tr>
+      <tr>
+        <td><span>all:"Hello world"</span></td>
+        <td>Same as above</td>
+      </tr>
+      <tr>
+        <td>
+          <span>all:/[aZ]{{ '{' }}20{{ '}' }}/</span>
+        </td>
+        <td>Searches by regex on all fields</td>
+      </tr>
+      <tr>
+        <td rowspan="3">content</td>
+        <td><span>content: Hello world</span></td>
+        <td>Searches hello world on the content field</td>
+      </tr>
+      <tr>
+        <td><span>content: "Hello world"</span></td>
+        <td>Searches exact matches of "Hello world" on the content field</td>
+      </tr>
+      <tr>
+        <td>
+          <span>all: /[aZ]{{ '{' }}20{{ '}' }}/</span>
+        </td>
+        <td>Searches by regex on content field</td>
+      </tr>
+      <tr>
+        <td rowspan="2">title</td>
+        <!-- , intitle  -->
+        <td><span>title: Hello world</span></td>
+        <td>Searches hello world on the content field</td>
+      </tr>
+      <tr>
+        <td><span>title: "Hello world"</span></td>
+        <td>Searches exact matches of "Hello world" on the content field</td>
+      </tr>
+      <tr>
+        <td rowspan="4">site_readable</td>
+        <td><span>site_readable: facebookcorewwwi</span></td>
+        <td>Matches urls from site facebookcorewwwi.onion</td>
+      </tr>
+      <tr>
+        <td><span>site_readable: facebookcorewwwi.onion\:8080</span></td>
+        <td>Matches urls from site facebookcorewwwi.onion:8080 (scaping needed)</td>
+      </tr>
+      <tr>
+        <td><span>site_readable: facebookcorewwwi.onion</span></td>
+        <td>Matches urls from site facebookcorewwwi.onion</td>
+      </tr>
+      <tr>
+        <td><span>site_readable: facebook*</span></td>
+        <td>Matches urls whose onion starts with facebook</td>
+      </tr>
+      <tr>
+        <td rowspan="4">last_update</td>
+        <td><span>updated:-1w</span></td>
+        <td>Matches urls updated less than a week ago</td>
+      </tr>
+      <tr>
+        <td><span>updated:+1week</span></td>
+        <td>Matches urls updated more than a week ago</td>
+      </tr>
+      <tr>
+        <td><span>updated:-1Y updated:+1M</span></td>
+        <td>Matches urls updated between a year ago and a month ago</td>
+      </tr>
+      <tr>
+        <td><span>updated:-3days</span></td>
+        <td>Matches urls updated less than three days ago</td>
+      </tr>
+      <tr>
+        <td rowspan="6">mime</td>
+        <td><span>mime:text/html</span></td>
+        <td>Finds urls whose content_type is text/html</td>
+      </tr>
+      <tr>
+        <td><span>mime:application-x/*</span></td>
+        <td>Finds urls whose content type starts with application-x/</td>
+      </tr>
+      <tr>
+        <td><span>screenshot:</span></td>
+        <td>Matches only urls that have screenshot</td>
+      </tr>
+      <tr>
+        <td><span>has_screenshot:</span></td>
+        <td>Matches only urls that have screenshot</td>
+      </tr>
+      <tr>
+        <td><span>no_screenshot:</span></td>
+        <td>Matches only urls that dont have screenshot</td>
+      </tr>
+      <tr>
+        <td><span>!screenshot:</span></td>
+        <td>Matches only urls that dont have screenshot</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

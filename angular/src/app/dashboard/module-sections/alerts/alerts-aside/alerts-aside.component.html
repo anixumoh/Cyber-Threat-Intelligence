@@ -1,0 +1,261 @@
+<div class="aside-container card rounded-0 float-right" style="height: 100%">
+  <div class="card-header height-header clearfix">
+    <div class="d-flex align-items-center bg-primary py-2 px-2 rounded float-left mr-2">
+      <i class="text-white" [ngClass]="moduleType === 'credit_card' ? 'icon-rss' : 'icon-bell-solid'"></i>
+    </div>
+    <h6 class="text-dark mt-1 mb-0 float-left">
+      <span>{{ moduleType === 'credit_card' ? 'Feeds' : 'Alerts' }}</span>
+    </h6>
+  </div>
+
+  <div class="card-body automatic-height">
+    <ng-container *ngIf="moduleType === 'credit_card'">
+      <div *ngIf="!feeds || !listBanksFeeds || !listCreditCardsFeeds; else tmpl2" class="no-results-box">
+        <i class="icon-spinner rotate"></i>
+        <h6 class="no-results">Loading</h6>
+      </div>
+      <ng-template #tmpl2>
+        <form class="p-2 clearfix">
+          <div class="card-header text-primary p-2 clearfix" style="border: 1px solid rgba(0, 0, 0, 0.125)">
+            <h6 class="mt-1 mb-0 float-left">Configure</h6>
+          </div>
+          <ul class="list-group bg-light" style="background-color: #f7f7f7 !important">
+            <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+              <div class="form-check mb-0">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [checked]="feeds ? feeds.publicFeed : false"
+                  (change)="changeStatePublicFeed()"
+                  [disabled]="grants?.isCustomerOrOperator()"
+                />
+                <span class="text-dark ml-1">Do you want to retrieve cards from public feed?</span>
+              </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+              <div class="form-check mb-0">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [checked]="feeds ? feeds.activateAlerts : false"
+                  (change)="changeStateNewCard()"
+                  [disabled]="grants?.isCustomerOrOperator()"
+                />
+                <span class="text-dark ml-1">Do you want to be notified if a new card is detected?</span>
+              </div>
+            </li>
+            <li class="list-group-item p-0" *ngIf="feeds?.activateAlerts === true">
+              <ul class="list-group list-group-flush ml-4">
+                <li class="list-group-item p-2">
+                  <div class="form-check mb-0">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [disabled]="listBanksFeeds.values.length === 0 || grants?.isCustomerOrOperator()"
+                      [checked]="listBanksFeeds.values.length > 0"
+                      (change)="changeStateBankCard()"
+                    />
+                    <span class="text-dark ml-1">Bank Card</span>
+                    <span *ngIf="listBanksFeeds.values.length === 0" class="alert-warning ml-2"
+                      >Please, insert a Bank</span
+                    >
+                  </div>
+                </li>
+                <li class="list-group-item p-2" *ngIf="feeds?.activateAlerts === true">
+                  <div class="form-check mb-0">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [disabled]="listCreditCardsFeeds.values.length === 0 || grants?.isCustomerOrOperator()"
+                      [checked]="listCreditCardsFeeds.values.length > 0"
+                      (change)="changeStateCorpCard()"
+                    />
+                    <span class="text-dark ml-1">Corporative Card</span>
+                    <span *ngIf="listCreditCardsFeeds.values.length === 0" class="alert-warning ml-2"
+                      >Please, insert a Credit Card</span
+                    >
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </form>
+      </ng-template>
+    </ng-container>
+
+    <ng-container class="card-form" *ngIf="moduleType !== 'credit_card' || (feeds && feeds.activateAlerts)">
+      <div class="m-2 clearfix" style="border: 1px solid rgba(0, 0, 0, 0.125)">
+        <div class="card-header text-primary p-2 clearfix">
+          <div class="d-flex justify-content-between mb-2">
+            <h6 class="mt-1 mb-0">Alert recipients</h6>
+            <div *ngIf="!loading" class="d-flex">
+              <span>
+                <button
+                  class="btn btn-sm text-primary btn-light mr-1"
+                  type="button"
+                  (click)="showAddUser = true; showAddEmail = false; this.emailError = ''"
+                  id="profileButton"
+                  [disabled]="grants?.isCustomerOrOperator()"
+                >
+                  <i class="icon-plus-circle-solid" id="profileButton"></i>
+                  <span class="ml-1"> Add User </span>
+                </button>
+              </span>
+              <span>
+                <button
+                  class="btn btn-light btn-sm text-primary ml-1"
+                  type="button"
+                  (click)="showAddEmail = true; showAddUser = false"
+                  id="profileButton"
+                >
+                  <i class="icon-plus-circle-solid" id="profileButton"></i>
+                  <span class="ml-1">Add Email</span>
+                </button>
+              </span>
+            </div>
+          </div>
+
+          <div
+            class="input-search input-group input-group-sm ml-3 float-right"
+            *ngIf="showAddUser"
+            style="width: 192px"
+          >
+            <div class="input-group-prepend">
+              <button
+                class="btn btn-light border text-primary"
+                type="button"
+                (click)="closeAddInput('user')"
+                id="profileButton"
+              >
+                Close
+              </button>
+            </div>
+            <input
+              class="form-control"
+              style="height: 31px"
+              type="text"
+              #textInput
+              placeholder="Write here user"
+              (keyup)="searchUser($event)"
+              required
+              aria-describedby="button-addon1"
+            />
+          </div>
+          <div class="input-search input-group input-group-sm ml-3 float-right" *ngIf="showAddEmail">
+            <div class="input-group-prepend">
+              <button
+                class="btn btn-light border text-primary"
+                type="button"
+                id="profileButton"
+                (click)="closeAddInput('email')"
+              >
+                Close
+              </button>
+            </div>
+            <input
+              class="form-control"
+              style="height: 31px"
+              type="text"
+              #textInput
+              placeholder="Write here e-mail"
+              required
+              aria-describedby="button-addon1"
+            />
+            <div class="input-group-append">
+              <button
+                #dropDownButtonUser
+                class="btn btn-light border text-primary"
+                type="button"
+                id="profileButton"
+                (click)="selectEmail(textInput.value)"
+              >
+                <i class="icon-plus" id="profileButton"></i>
+              </button>
+            </div>
+          </div>
+          <div class="float-left">
+            <small class="text-danger mt-2">{{ emailError }}</small>
+          </div>
+        </div>
+
+        <div *ngIf="loading; else tmpl1" class="no-results-box">
+          <i class="icon-spinner rotate"></i>
+          <h6 class="no-results">Loading</h6>
+        </div>
+
+        <ng-template #tmpl1>
+          <div #dropDownUser class="dropdown-container" *ngIf="isMenuOpened" id="profileButton">
+            <ul class="list-group p-0" [ngClass]="isMenuOpened ? 'open' : ''" (click)="toggleMenu()">
+              <li
+                class="list-group-item list-group-item-action border-0 px-3 py-2"
+                *ngFor="let user of values"
+                [value]="user"
+                (click)="selectUser(user)"
+                id="profileButton"
+              >
+                {{ user.username }}
+              </li>
+            </ul>
+          </div>
+          <div
+            class="card-body py-0 px-4"
+            *ngIf="!addedUsersList || addedUsersList.length === 0"
+            id="profileButton"
+            style="padding: 0 !important; height: 102px"
+          >
+            <div class="mt-2">
+              <img
+                class="rounded mx-auto d-block mb-2"
+                style="height: 60px"
+                src="assets/default_images/searching.svg"
+              />
+              <h6 class="mb-0 text-center text-primary">You haven't configured any alerts yet.</h6>
+            </div>
+          </div>
+          <div
+            class="card-body py-0 px-4"
+            *ngIf="addedUsersList?.length > 0"
+            id="profileButton"
+            style="padding: 0px !important"
+          >
+            <table class="table my mb-0">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th class="th-text-center th-70">Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="addedUsersList?.length > 0">
+                  <tr *ngFor="let user of addedUsersList; let i = index">
+                    <td class="vertical-middle" style="min-width: 130px">
+                      <p class="mb-0">{{ user.username || 'Custom User' }}</p>
+                    </td>
+                    <td class="vertical-middle">
+                      <p class="mb-0">{{ user.email || user.value }}</p>
+                    </td>
+                    <td class="vertical-middle text-center td-70" (click)="deleteUser(user)" id="profileButton">
+                      <button
+                        class="btn btn-sm btn-circle"
+                        [disabled]="grants?.isCustomerOrOperator()"
+                        id="profileButton"
+                      >
+                        <i
+                          class="icon-delete color-danger"
+                          style="cursor: pointer"
+                          [class.cursor-not-allowed]="showMode"
+                          id="profileButton"
+                        ></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </ng-template>
+      </div>
+    </ng-container>
+  </div>
+</div>

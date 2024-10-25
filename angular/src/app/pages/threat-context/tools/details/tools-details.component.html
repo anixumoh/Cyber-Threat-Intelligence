@@ -1,0 +1,144 @@
+<app-overlay [loading]="loading">
+  <threat-context-navigation [path]="path" [name]="name"></threat-context-navigation>
+  <div style="min-height: 650px">
+    <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-0 tcx-section-name">Tools</h6>
+    <div class="mb-2" style="display: flex; justify-content: space-between; align-items: center">
+      <h4 class="mt-2 text-truncate tcx-resource-name">{{ name }}</h4>
+      <div style="display: flex">
+        <div class="button-action mr-1" ngbDropdown>
+          <button
+            ngbDropdownToggle
+            class="btn btn-light btn-sm border text-primary width-85 float-left btn-actions"
+            type="button"
+            id="actionsButtonDropdown"
+            name="button"
+          >
+            Export
+          </button>
+          <div ngbDropdownMenu class="actions-dropdown-menu padding-0 border-0">
+            <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded font-14">
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToCSV()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>CSV</span>
+              </li>
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToJson()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>JSON</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-light btn-sm border text-primary width-85" (click)="backToList()">
+          Back to list
+        </button>
+      </div>
+    </div>
+
+    <div class="card p-0 mb-4">
+      <div class="flex">
+        <div class="col-auto">
+          <img class="img-fluid" src="/assets/img/tool.png" alt="Target" width="130" />
+        </div>
+
+        <div class="col-lg">
+          <app-flush-list [data]="entries" mode="bold"></app-flush-list>
+        </div>
+
+        <div class="col-lg">
+          <app-flush-list [data]="entries2" mode="bold"></app-flush-list>
+        </div>
+      </div>
+    </div>
+
+    <app-tabs [items]="tabs" [active]="activeTab" (onChange)="onTabChange($event)">
+      <div class="card" *ngIf="activeTab === toolsTabs.DESCRIPTION && description">
+        <div class="card-body">
+          <div class="mb-4">
+            <ul class="list-group m-4">
+              <div class="list-group-item border-0 rounded-0 pl-0 pt-0 pr-2 pb-0">
+                <div class="text-dark mb-0" [innerHTML]="description"></div>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-5" *ngIf="references && references.length > 0">
+        <p>
+          <button
+            type="button"
+            (click)="collapseReferences.toggle()"
+            class="btn btn-outline-primary mb-3"
+            *ngIf="activeTab === toolsTabs.DESCRIPTION && description"
+            [attr.aria-expanded]="isCollapsed"
+            aria-controls="collapseExample"
+          >
+            References
+            <i class="icon-large ml-2 icon-arrow-down"></i>
+          </button>
+        </p>
+        <div #collapseReferences="ngbCollapse" [ngbCollapse]="!isCollapsed">
+          <div class="card">
+            <div class="card-body">
+              <div class="mb-4 ">
+                <ul class="list-group m-4">
+                  <li
+                    class="list-group-item border-0 rounded-0 pl-0 pt-0 pr-2 pb-0"
+                    *ngFor="let reference of references"
+                  >
+                    <i class="icon-lens text-90 text-dark float-left font-6"></i>
+                    <span *ngIf="reference.title && !reference.link">{{ reference.title }}</span>
+                    <a href="{{ reference.link }}" target="_blank" *ngIf="reference.link && !reference.title">
+                      {{ reference.link }}
+                    </a>
+                    <a href="{{ reference.link }}" target="_blank" *ngIf="reference.link && reference.title">
+                      {{ reference.title }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <related-ioc-list
+        [showTitle]="false"
+        [style.display]="activeTab === toolsTabs.MALWARE ? 'block' : 'none'"
+        *ngIf="item && item.name && canStartToLoadMalware"
+        [source]="malwareSource"
+      ></related-ioc-list>
+
+      <actors-list
+        [style.display]="activeTab === toolsTabs.ACTORS ? 'block' : 'none'"
+        *ngIf="item && canStartToLoadActors"
+        [source]="actorsListSource"
+      ></actors-list>
+
+      <campaigns-list
+        [style.display]="activeTab === toolsTabs.CAMPAIGNS ? 'block' : 'none'"
+        *ngIf="item && canStartToLoadCampaigns"
+        [source]="campaignsSource"
+      ></campaigns-list>
+
+      <signatures-list
+        [style.display]="activeTab === toolsTabs.SIGNATURES ? 'block' : 'none'"
+        *ngIf="item && canStartToLoadSignatures"
+        [source]="signaturesListSource"
+      ></signatures-list>
+
+      <cve-list
+        [style.display]="activeTab === toolsTabs.CVE ? 'block' : 'none'"
+        *ngIf="item && canStartToLoadCVE"
+        [source]="cveListSource"
+      ></cve-list>
+    </app-tabs>
+  </div>
+</app-overlay>

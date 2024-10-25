@@ -1,0 +1,8 @@
+{
+    "field": "Password is expired",
+    "message": "error.password.expired",
+    "error": true,
+    "token": "neven.mollov3",
+    "code": 0,
+    "httpCode": 401
+}

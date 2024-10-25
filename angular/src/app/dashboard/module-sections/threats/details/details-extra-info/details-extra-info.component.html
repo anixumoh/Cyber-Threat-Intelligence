@@ -1,0 +1,161 @@
+<!-- INFORMATION RETWEETS -->
+<div class="card mb-2" *ngIf="moduleName === 'hacktivism' && retweet_info">
+  <div class="card-header bg-light clearfix">
+    <h6 class="mb-0">Retweets Information</h6>
+  </div>
+  <div class="card-body">
+    <p class="mb-0">
+      <span class="mr-2">Total Retweets:</span>
+      <span class="badge badge-primary px-3">{{ retweet_info.total_retweets }}</span>
+    </p>
+
+    <p></p>
+  </div>
+</div>
+<div class="border rounded p-2 bg-light clearfix mb-2" *ngIf="!grants?.isCustomer() || history?.length">
+  <!-- REPORT BUTTON -->
+  <button
+    *ngIf="!grants?.isCustomer()"
+    class="btn btn-light btn-sm border buttonActive float-left mr-1"
+    [ngClass]="isMenuReportOpened ? 'active' : ''"
+    type="button"
+    name="button"
+    (click)="toggleMenuReport()"
+  >
+    Report Email
+  </button>
+  <ng-container *ngIf="history?.length">
+    <button
+      class="btn btn-light btn-sm border buttonActive float-left mr-1"
+      [ngClass]="isMenuHistoryOpened ? 'active' : ''"
+      type="button"
+      name="button"
+      (click)="isMenuHistoryOpened = !isMenuHistoryOpened"
+    >
+      History
+    </button>
+  </ng-container>
+</div>
+<!--REPORT EMAIL CONTENT -->
+<div class="report-several-content mr-2 pt-3 pb-4" [ngClass]="isMenuReportOpened ? 'open' : ''">
+  <div class="report-sent-flash alert alert-success text-center" role="alert">
+    <strong>Report sent</strong> Check your email
+  </div>
+  <!-- FORM -->
+  <div class="input-group input-group-sm" style="width: 500px">
+    <div class="input-group-prepend">
+      <button
+        class="btn btn-light btn-sm border px-2 justify-content-between"
+        #buttonDropDownLanguage
+        [ngClass]="isMenuReportLanguagesOpened ? 'is-active' : ''"
+        (click)="toggleReportLanguages()"
+        type="button"
+      >
+        Language: {{ language_report }}
+        <i class="icon-angle-down ml-4"></i>
+      </button>
+    </div>
+    <input
+      class="form-control"
+      #inputReport
+      type="text"
+      (input)="checkValue(inputReport.value)"
+      placeholder=" Enter here the e-mail address"
+    />
+    <div class="input-group-append">
+      <button
+        class="btn btn-primary px-4"
+        [disabled]="emailError"
+        (click)="sendReport(inputReport.value)"
+        type="button"
+      >
+        Send
+      </button>
+    </div>
+    <button class="btn btn-primary btn-sm ml-2" (click)="downloadReport()" type="button">
+      <i class="icon-download mr-1"></i> Download
+    </button>
+  </div>
+  <small *ngIf="emailError" class="text-danger">Invalid e-mail</small>
+  <!-- DROPDOWN LANGUAGES -->
+  <div class="language dropdown-content" [ngClass]="isMenuReportLanguagesOpened ? 'open' : ''">
+    <ul
+      #dropDownLanguage
+      class="list-group shadow border rounded"
+      [ngClass]="isMenuReportLanguagesOpened ? 'open' : ''"
+      (click)="toggleReportLanguages()"
+    >
+      <li
+        class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+        (click)="selectReportLenguage('en')"
+      >
+        English
+      </li>
+      <li
+        class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+        (click)="selectReportLenguage('es')"
+      >
+        Spanish
+      </li>
+      <li
+        class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+        (click)="selectReportLenguage('pt')"
+      >
+        Portuguese
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!--History Table-->
+<div class="card table-container mb-4" *ngIf="history && history.length > 0 && isMenuHistoryOpened">
+  <table class="table table-hover table-indexed history-table">
+    <thead>
+      <tr>
+        <th>Version</th>
+        <th>Date</th>
+        <th>File</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of history">
+        <td>{{ item.version }}</td>
+        <td>{{ item.timestamp | timezone }}</td>
+        <td>
+          <a (click)="openNewTab(item.resource_id, item.version)">
+            {{ _resource.module_type !== 'dark_web' ? item.file : item.version }}
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- METADATA -->
+<div class="report-several-content">
+  <div class="card card-border-primary mb-2">
+    <div class="card-header bg-ligth clearfix">
+      <h6 class="mb-0">Metadata</h6>
+    </div>
+    <div class="card-body p-0">
+      <div *ngFor="let key of metadataKey; let i = index">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <b class="text-dark mb-0">"{{ key }}"</b>
+            <span class="text-secondary">"{{ metadataValue[i] }}"</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MORE DETAIL INFO -->
+<ng-container *ngIf="moduleName !== 'credential' && moduleName !== 'credit_card'">
+  <moreInfoDetail
+    [isMenuViewMoreOpened]="isMenuViewMoreOpened"
+    [moreInfoData]="moreInfoData"
+    [resource]="resource.id"
+    [searchWords]="resource.search_words"
+  >
+  </moreInfoDetail>
+</ng-container>

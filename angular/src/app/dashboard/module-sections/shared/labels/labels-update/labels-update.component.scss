@@ -1,0 +1,56 @@
+@import "src/scss/variables";
+
+// DOPDOWN
+.dropdown-ul-list {
+  position: absolute;
+  top:180px;
+  right:-20%;
+  width: 70%;
+  z-index:9;
+  margin:0;
+  padding:0;
+  transition: height .3s;
+  overflow: hidden;
+  border: none;
+  border-radius: $border-radius;
+  visibility: hidden;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.13);
+  height: 0;
+  &.open {
+    visibility: visible;
+    border: 1px solid $light;
+    height: 300px;
+    overflow: auto !important;
+  }
+  .dropdown-li-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style-type: none;
+    border-top: 1px solid $light;
+    background-color: $white;
+    color: $gray;
+    font-size: 14px;
+    font-weight: $font-weight-thin;
+    height: 42px;
+    padding: 0 10px;
+    cursor: pointer;
+    &:first-child {
+      color: $light;
+      background-color: $white;
+      border-top: none;
+    }
+    &:hover:not(:first-child) {
+      background-color: $bg-blueliv;
+      color: $gray;
+    }
+    &.active {
+      background-color: $bg-blueliv;
+      color: $gray;
+    }
+  }
+}
+
+.center{
+  text-align: center;
+}

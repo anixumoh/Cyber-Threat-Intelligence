@@ -1,0 +1,279 @@
+<div class="settings-parameter card mb-4">
+  <div class="card-header border-bottom-0 bg-light px-2 py-1 header-card">
+    <div class="header-card">
+      <div class="form-check mt-2 mb-0 float-left">
+        <input
+          class="form-check-input mt-0"
+          type="checkbox"
+          #inputAll
+          [(ngModel)]="all"
+          [disabled]="grants.isCustomerOrOperator()"
+          [ngClass]="grants?.isCustomerOrOperator() ? 'cursor-not-allowed' : ''"
+          (change)="selectAll()"
+        />
+      </div>
+      <ng-template [appToggle]="searchTemplate">
+        <h6 class="title-card text-dark text-uppercase" style="font-size: 0.9rem">{{ config?.name }}</h6>
+      </ng-template>
+    </div>
+    <ng-container>
+      <div>
+        <i
+          class="alert-error icon-error text-danger float-left"
+          *ngIf="config?.newData && config?.texts?.tooltip && !config?.parameterValid"
+          [ngbTooltip]="config?.texts?.tooltip"
+        ></i>
+        <button class="btn btn-circle bg-light ml-1 float-right" #buttonSearch>
+          <i class="icon-search text-primary"></i>
+        </button>
+        <button
+          class="btn btn-circle bg-light ml-1 float-right"
+          *ngIf="!grants?.isCustomerOrOperator()"
+          (click)="toogleAdding()"
+        >
+          <i class="icon-plus text-primary"></i>
+        </button>
+        <button
+          [ngbTooltip]="'Import cpes from a csv file'"
+          class="btn btn-circle bg-light ml-1 float-right"
+          *ngIf="!grants?.isCustomerOrOperator()"
+          (click)="loadFileModule.click()"
+        >
+          <i class="icon-cloud-upload text-primary" aria-hidden="true"></i>
+        </button>
+        <input #loadFileModule type="file" accept=".csv" (change)="importCpes($event)" hidden />
+
+        <button class="btn btn-circle bg-light ml-1 float-right" #buttonInfo>
+          <i class="icon-info-character text-primary"></i>
+        </button>
+      </div>
+    </ng-container>
+    <ng-template [appToggleContains]="buttonSearch" #searchTemplate="appToggleContains">
+      <div class="content-search">
+        <div class="form-group mb-0">
+          <input
+            class="form-control form-control-sm"
+            [placeholder]="config?.texts?.area_placeholder"
+            [(ngModel)]="searchText"
+          />
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- INFO -->
+  <ng-template [appToggleContains]="buttonInfo">
+    <div class="alert-info px-2 py-1">
+      <p class="font-italic text-90">{{ config?.texts?.description }}</p>
+      <ng-container *ngIf="currentModule.type === 'EXPLORER'" class="mt-2">
+        <p class="font-italic text-90">
+          <br />
+          If you choose to import from a csv file, the format should be as follows, with a cpe per line:
+        </p>
+        <ul class="ml-2">
+          <li class="mt-2">cpe:2.3:a:oracle:*:*:*:*:*:*:*:*:*</li>
+          <li>cpe:2.3:a:oracle:*:*:*:*:*:*:*:*:*</li>
+          <li class="mb-2">cpe:2.3:a:oracle:applications_framework:11.5.10.2:*:*:*:*:*:*:*</li>
+        </ul>
+        <p class="font-italic text-90">The import is limited to 1000 records per upload.</p>
+        <p class="mb-2 font-italic text-90">
+          You can read more regarding CPE naming <a href="https://cpe.mitre.org/specification/">here</a>.
+        </p>
+      </ng-container>
+    </div>
+  </ng-template>
+
+  <!-- isAdding? -->
+  <div class="padding-10 adding-card" *ngIf="isAdding">
+    <div class="deprecated-checkbox">
+      <input type="checkbox" [(ngModel)]="includeDeprecated" (ngModelChange)="changeDeprecated()" class="mr-1" />
+      Include deprecated versions
+    </div>
+
+    <div class="">
+      <div>Vendor:</div>
+      <input
+        type="text"
+        class="mt-2 search-box"
+        placeholder="Search for vendor"
+        [(ngModel)]="searchVendor"
+        (ngModelChange)="searchCompany()"
+      />
+      <div *ngIf="isVendorDropdownOpen">
+        <ul class="company-dropdown">
+          <ng-container *ngIf="companies && companies.length; else noItems">
+            <li
+              class="list-group-item list-group-item-action cursor-pointer border-0 p-2"
+              *ngFor="let company of companies"
+              (click)="companyChange(company)"
+            >
+              <span class="text-90">{{ company.label }}</span>
+            </li>
+          </ng-container>
+          <ng-template #noItems>
+            <li class="list-group-item list-group-item-action border-0 p-4 font-italic loading" *ngIf="loadingVendors">
+              <i class="icon-spinner rotate"></i>
+            </li>
+            <li class="list-group-item list-group-item-action border-0 p-4 font-italic" *ngIf="!loadingVendors">
+              No results
+            </li>
+          </ng-template>
+        </ul>
+      </div>
+    </div>
+    <div class="" *ngIf="company">
+      <div>Product:</div>
+      <input
+        type="text"
+        class="mt-2 search-box"
+        placeholder="Search for product"
+        [(ngModel)]="searchProduct"
+        (ngModelChange)="searchProducts()"
+      />
+      <div *ngIf="isProductDropdownOpen">
+        <ul class="company-dropdown">
+          <ng-container *ngIf="products && products.length && !loadingProducts; else noItems">
+            <li
+              class="list-group-item list-group-item-action cursor-pointer border-0 p-2"
+              *ngFor="let product of products"
+              (click)="productChange(product)"
+            >
+              <span class="text-90" [ngClass]="product.deprecated ? 'text-danger' : ''">{{ product.label }}</span>
+              <span class="text-danger font-italic ml-1" *ngIf="product.deprecated">(deprecated)</span>
+            </li>
+          </ng-container>
+          <ng-template #noItems>
+            <li class="list-group-item list-group-item-action border-0 p-4 font-italic loading" *ngIf="loadingProducts">
+              <i class="icon-spinner rotate"></i>
+            </li>
+            <li class="list-group-item list-group-item-action border-0 p-4 font-italic" *ngIf="!loadingProducts">
+              No results
+            </li>
+          </ng-template>
+        </ul>
+      </div>
+    </div>
+    <div class="" *ngIf="product">
+      <div>Version:</div>
+      <input
+        type="text"
+        class="mt-2 search-box"
+        placeholder="Search for a version"
+        [(ngModel)]="searchVersion"
+        (ngModelChange)="searchVersions()"
+      />
+      <div *ngIf="isVersionDropdownOpen">
+        <ul class="company-dropdown company-dropdown--version">
+          <ng-container *ngIf="versions && versions.length && !loadingVersions; else noItems">
+            <li
+              class="list-group-item list-group-item-action cursor-pointer border-0 p-2"
+              *ngFor="let version of versions"
+              (click)="versionChange(version)"
+            >
+              <span class="text-90" [ngClass]="version.deprecated ? 'text-danger' : ''">{{ version.title }}</span>
+              <span class="text-danger font-italic ml-1" *ngIf="version.deprecated">(deprecated)</span>
+            </li>
+          </ng-container>
+          <ng-template #noItems>
+            <li class="list-group-item list-group-item-action border-0 p-4 font-italic loading" *ngIf="loadingProducts">
+              <i class="icon-spinner rotate"></i>
+            </li>
+            <li class="list-group-item list-group-item-action border-0 p-4 font-italic" *ngIf="!loadingProducts">
+              No results
+            </li>
+          </ng-template>
+        </ul>
+      </div>
+    </div>
+    <div class="text-right">
+      <button
+        class="btn btn-primary btn-sm"
+        [disabled]="!company || companies.length === 0 || isVendorDropdownOpen"
+        (click)="store()"
+      >
+        <i class="icon-plus"></i>
+        Add
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body height-list border-top p-0" *ngIf="!isAdding">
+    <div class="list-parameters">
+      <!-- NO RESULTS -->
+      <div class="no-results-box-md mt-4 p-4" *ngIf="items?.length === 0">
+        <img class="rounded mx-auto d-block mb-2" src="assets/default_images/searching.svg" />
+        <h6 class="mb-0 text-center text-primary">"There are no {{ config?.name }}"</h6>
+      </div>
+      <!-- LIST -->
+      <ul class="list-group list-group-flush">
+        <ng-container *ngFor="let item of items | filter: searchText:'title'; let index = index">
+          <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+            <div
+              class="form-check mb-0 text-truncate carbon-fix"
+              [ngbTooltip]="item.title"
+              [placement]="index === 0 ? 'bottom' : 'top'"
+            >
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [disabled]="grants.isCustomerOrOperator()"
+                [ngClass]="grants?.isCustomerOrOperator() ? 'cursor-not-allowed' : ''"
+                (change)="onSelectChange()"
+                [(ngModel)]="item.selected"
+              />
+              <span class="text-dark ml-1">{{ item.title }}</span>
+            </div>
+            <button
+              class="btn btn-circle bg-light ml-1 float-right"
+              *ngIf="!grants.isCustomerOrOperator()"
+              (click)="openConfirmationModal([{ title: item.title, cpe: item.cpe }])"
+            >
+              <i class="icon-delete bglight text-danger"></i>
+            </button>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+  <!-- CARD FOOTER - ONLY SELECTED LIST-ITEMS -->
+  <div class="card-footer p-1" *ngIf="isSomeItemSelected()">
+    <button
+      class="delete btn btn-danger btn-sm px-4 float-right"
+      *ngIf="!grants.isCustomerOrOperator()"
+      (click)="openDeleteAllConfirmationModal()"
+    >
+      Delete
+    </button>
+  </div>
+</div>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete this product?'"
+  [warning]="'This action cannot be undone.'"
+  [acceptBtn]="'Yes'"
+  *ngIf="deleteConfirmation"
+  [cancelBtn]="'No'"
+  (accept)="delete(techIndex)"
+  (cancel)="closeConfirmation()"
+>
+</modal-window>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete selected productss?'"
+  [warning]="'This action cannot be undone.'"
+  [acceptBtn]="'Yes'"
+  *ngIf="deleteAllConfirmation"
+  [cancelBtn]="'No'"
+  (accept)="deleteAll(items)"
+  (cancel)="closeConfirmation()"
+>
+</modal-window>
+
+<modal-window *ngIf="cveImportModal" [modalTitle]="'Error'" [cancelBtn]="'Close'" (cancel)="cveImportModal = false">
+  <div class="mb-4">Some cpes could not be imported due to format issues:</div>
+  <ul class="ml-4 mb-4">
+    <li *ngFor="let cpe of cpeError">{{ cpe }}</li>
+  </ul>
+</modal-window>

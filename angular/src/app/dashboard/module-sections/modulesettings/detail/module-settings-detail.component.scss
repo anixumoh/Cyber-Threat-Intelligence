@@ -1,0 +1,24 @@
+@import "src/scss/variables";
+
+.buttons {
+  font-family: 'Open Sans', sans-serif;
+  margin-top: 20px;
+
+  .update {
+    cursor: pointer;
+    background-color: $default;
+    color: $white;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+
+  .cancel {
+    cursor: pointer;
+    background-color: $white;
+    color: $gray;
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+}

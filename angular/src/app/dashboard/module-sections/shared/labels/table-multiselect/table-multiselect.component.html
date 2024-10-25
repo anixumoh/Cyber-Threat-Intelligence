@@ -1,0 +1,60 @@
+<ng-container *ngIf="!tableList || tableList.length === 0">
+  <div class="labels-table-empty rounded border">
+    <img src="assets/default_images/searching.svg" class="labels-table-empty-img" />
+    <p class="no-results mt-2">There are no labels to show</p>
+  </div>
+</ng-container>
+<ul class="dropdown-ul-list rounded border" *ngIf="tableList && tableList.length">
+  <ng-container *ngFor="let item of tableList; index as i; trackBy: identify">
+    <li
+      class="dropdown-li-item"
+      *ngIf="!item.noShow"
+      [ngClass]="item.selected === true ? 'active' : ''"
+      (click)="toggleItem(i, 'selected', $event)"
+    >
+      <app-label-item [label]="item"></app-label-item>
+      <span class="pull-right btns-right">
+        <ng-container *ngIf="filterLabels">
+          <span class="mr-2 label-btns" *ngIf="item.selected">
+            <label for="or{{ item.id }}" class="label-checkbox">OR</label>
+            <input
+              name="or{{ item.id }}"
+              type="radio"
+              [checked]="!item.strict && !item.excluded"
+              (click)="updateLabel(i, 'or')"
+            />
+          </span>
+          <span class="mr-2 label-btns" *ngIf="item.selected">
+            <label for="and{{ item.id }}" class="label-checkbox">AND</label>
+            <input
+              name="and{{ item.id }}"
+              type="radio"
+              [checked]="item.strict && !item.excluded"
+              (click)="updateLabel(i, 'and')"
+            />
+          </span>
+          <span class="mr-1 label-btns" *ngIf="item.selected">
+            <label for="not{{ item.id }}" class="label-checkbox">NOT</label>
+            <input
+              name="not{{ item.id }}"
+              type="radio"
+              [checked]="!item.strict && item.excluded"
+              (click)="updateLabel(i, 'not')"
+            />
+          </span>
+        </ng-container>
+        <ng-container *ngIf="!filterLabels">
+          <i class="icon-check check" style="margin-top: 5px"></i>
+        </ng-container>
+
+        <button
+          class="btn btn-circle bg-light ml-2 text-primary"
+          (click)="updateItem($event, item)"
+          *ngIf="!grants.isAnalystOrCustomerOrOperator()"
+        >
+          <i class="icon-pencil-square" style="margin-left: 0px !important" aria-hidden="true"> </i>
+        </button>
+      </span>
+    </li>
+  </ng-container>
+</ul>

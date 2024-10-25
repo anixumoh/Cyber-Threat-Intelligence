@@ -1,0 +1,106 @@
+<!-- ERROR -->
+<div class="" *ngIf="!loading && items?.length === 0">
+  <ng-container *ngIf="robotSnippet">
+    <img src="assets/default_images/searching.svg" />
+    <h6 class="no-results">{{ errorMessage }}</h6>
+  </ng-container>
+  <div *ngIf="alertSnippet" class="alert-table alert-danger text-danger mb-0" role="alert">
+    <i class="icon-exclamation-triangle"></i>
+    <span class="ml-1 font-weight-bold">{{ errorMessage }}</span>
+  </div>
+</div>
+<!-- TABLE -->
+<table class="table mb-0" *ngIf="!loading">
+  <thead *ngIf="items?.length !== 0">
+    <tr>
+      <ng-container *ngFor="let header of tableHeader">
+        <th class="vertical-middle px-3" [ngClass]="header.class ? header.class : ''">{{ header.value }}</th>
+      </ng-container>
+    </tr>
+  </thead>
+  <tbody *ngIf="items?.length !== 0">
+    <tr
+      *ngFor="let it of items"
+      [ngClass]="isClickable ? 'cursor-pointer' : 'cursor-default'"
+      (click)="navigateToDetail($event, it)"
+    >
+      <td
+        class="vertical-middle bg-white px-3"
+        *ngFor="let t of it.resourceDataByModule"
+        [ngClass]="t.class ? t.class : ''"
+      >
+        <p
+          class="mb-0"
+          *ngIf="
+            !t.url &&
+            !t.icon &&
+            !t.detail &&
+            !t.ref &&
+            !t.isTLP &&
+            !t.isPre &&
+            !t.isTitle &&
+            !t.isSeverity &&
+            !t.isArray &&
+            !t.isModal &&
+            !t.isScore &&
+            !t.isUrl
+          "
+          [ngClass]="t.elementClass ? t.elementClass : ''"
+        >
+          {{ t.value }}
+        </p>
+        <span class="badge badge-pill badge-light px-2" *ngIf="t.iconMalware" [style.background-color]="t.color">
+          <i
+            [class]="t.iconClass"
+            style="font-size: 12px"
+            [ngClass]="t.elementClass ? t.elementClass : ''"
+            [ngClass]="t.iconClass ? t.iconClass : ''"
+          >
+          </i>
+          <span class="text-white" style="font-size: 12px" *ngIf="t.text">{{ t.text }}</span>
+        </span>
+        <p class="mb-0" *ngIf="t.icon">
+          <i [class]="t.iconClass" [ngClass]="t.elementClass ? t.elementClass : ''"></i>
+          <span *ngIf="t.text">{{ t.text }}</span>
+        </p>
+
+        <app-tlp *ngIf="t.isTLP" [status]="t.value" [ngClass]="t.elementClass ? t.elementClass : ''"> </app-tlp>
+        <app-score-color
+          *ngIf="t.isScore"
+          [scoreData]="t.value"
+          [fixedDecimals]="1"
+          [ngClass]="t.elementClass ? t.elementClass : ''"
+        >
+        </app-score-color>
+        <pre *ngIf="t.isPre">{{ t.value }}</pre>
+        <ng-container *ngIf="t.isTitle">
+          <b class="title mb-0">{{ t.title }}</b>
+          <p class="weight-200 mb-0">{{ t.value }}</p>
+          <p></p
+        ></ng-container>
+
+        <!-- ARRAY OBJECTS -->
+        <ng-container *ngIf="t.isArray">
+          <div class="sub-item" *ngFor="let element of t.value">
+            <p class="text-secondary mb-0">{{ element }}</p>
+          </div>
+        </ng-container>
+        <app-severity *ngIf="t.isSeverity" [severity]="t.value"> </app-severity>
+        <ng-container *ngIf="t.isModal">
+          <button class="btn btn-light btn-sm border text-primary" (click)="t.isOpen = true">View</button>
+          <modal-window
+            *ngIf="t.isOpen"
+            [modalTitle]="t.modalTitle"
+            (cancel)="t.isOpen = false"
+            [customClass]="'modal-xl'"
+          >
+            <pre>{{ t.value }}</pre>
+          </modal-window>
+        </ng-container>
+        <p class="text-secondary mb-0 isUrl" *ngIf="t.isUrl" (click)="navigateExternal(t.isUrl)">
+          <i class="icon-external-link text-primary"></i>
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>

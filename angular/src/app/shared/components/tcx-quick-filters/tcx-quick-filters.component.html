@@ -1,0 +1,46 @@
+<div ngbDropdown [(open)]="isOpen" class="tc-dropdown mt-2">
+  <button class="btn btn-light text-primary border tc-dropdown__btn" id="dropdownForm1" ngbDropdownToggle>
+    Quick filters
+
+    <div class="tc-dropdown__btn-icon">
+      <i [ngStyle]="{ display: isOpen ? 'none' : 'inline' }" class="icon-arrow-down"></i>
+      <i [ngStyle]="{ display: isOpen ? 'inline' : 'none' }" class="icon-arrow-up"></i>
+    </div>
+  </button>
+  <div ngbDropdownMenu aria-labelledby="dropdownForm1" class="tc-dropdown__content">
+    <ul class="list-group list-group-flush">
+      <ng-template [ngIf]="items.length" [ngIfElse]="noItems">
+        <li class="list-group-item text-container" *ngFor="let item of items">
+          <div class="tc-dropdown__content-title">{{ item.title }}</div>
+          <span *ngFor="let filter of item.filters" class="tc-dropdown__content-item">
+            <a class="tc-dropdown__content-link" (click)="selectFilter(filter, $event)">{{ filter.name }}</a>
+            <span class="tc-dropdown__content-separator mr-1 ml-1" *ngIf="filter.name !== 'Africa'">&#183;</span></span
+          >
+
+          <div *ngIf="item.filters2">
+            <span *ngFor="let filter of item.filters2" class="tc-dropdown__content-item">
+              <a class="tc-dropdown__content-link" (click)="selectFilter(filter, $event)">{{ filter.name }}</a>
+              <span class="tc-dropdown__content-separator mr-1 ml-1">&#183;</span></span
+            >
+          </div>
+          <div *ngIf="item.title === 'Saved searches'" class="filter-button-container">
+            <button type="button" (click)="onEditSavedFilters($event)" class="btn btn-light text-primary btn-sm">
+              <i class="icon-pencil-square mr-1" aria-hidden="true"></i>
+              Edit
+            </button>
+          </div>
+        </li>
+      </ng-template>
+      <ng-template #noItems>
+        <li class="list-group-item text-container">
+          <span class="tc-dropdown__content-item">You haven’t saved any searches yet.</span>
+        </li>
+      </ng-template>
+    </ul>
+  </div>
+</div>
+<app-tcx-modal-edit-saved-searches
+  [openModal]="openEditModal"
+  [tcxType]="tcxType"
+  (emitOpenModal)="onEditFilters(false)"
+></app-tcx-modal-edit-saved-searches>

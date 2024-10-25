@@ -1,0 +1,24 @@
+.dropdown-container {
+  margin: 1rem 0;
+}
+
+i {
+  font-size: 0.7em;
+}
+
+.activeOption {
+  background-color: #ced4d9;
+  color: white;
+}
+
+.dropdown {
+  position: fixed;
+  z-index: 1;
+  height: 44vh;
+  overflow: auto;
+  cursor: pointer;
+}
+
+.position-absolute {
+  position: absolute;
+}

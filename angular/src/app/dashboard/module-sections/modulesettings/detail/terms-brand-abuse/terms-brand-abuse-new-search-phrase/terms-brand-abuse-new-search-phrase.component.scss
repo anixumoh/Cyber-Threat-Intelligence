@@ -1,0 +1,8 @@
+@import "src/scss/variables";
+
+.isError{
+  border: 1px solid $danger
+}
+textarea{
+  height:150px;
+}

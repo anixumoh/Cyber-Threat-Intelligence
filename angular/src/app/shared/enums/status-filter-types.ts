@@ -1,0 +1,6 @@
+export const StatusFilterTypes = {
+  POSITIVE: 'POSITIVE',
+  NEGATIVE: 'NEGATIVE',
+  INFORMATIVE: 'INFORMATIVE',
+  NOT_IMPORTANT: 'NOT_IMPORTANT'
+};

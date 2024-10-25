@@ -1,0 +1,269 @@
+{
+    "data": {
+        "type": "CVE",
+        "id": "221942",
+        "attributes": {
+            "status": "unknown",
+            "name": "CVE-2023-36884",
+            "created_at": "2023-07-12T01:11:18.103348Z",
+            "published_at": "2023-07-11T19:15:00Z",
+            "ioc_link": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/ioc/",
+            "num_pocs": 3,
+            "platforms": [
+                {
+                    "id": "cpe:2.3:a:microsoft:word:2013:sp1:*:*:*:*:*:*",
+                    "title": "cpe:2.3:a:microsoft:word:2013:sp1:*:*:*:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:word:2016:*:*:*:*:*:*:*",
+                    "title": "cpe:2.3:a:microsoft:word:2016:*:*:*:*:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_server_2008:r2:sp1:*:*:*:*:x64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_server_2008:r2:sp1:*:*:*:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_server_2012:r2:*:*:*:*:*:*:*",
+                    "title": "cpe:2.3:o:microsoft:windows_server_2012:r2:*:*:*:*:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_server_2016:-:*:*:*:*:*:*:*",
+                    "title": "cpe:2.3:o:microsoft:windows_server_2016:-:*:*:*:*:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_server_2008:-:sp2:*:*:*:*:*:*",
+                    "title": "cpe:2.3:o:microsoft:windows_server_2008:-:sp2:*:*:*:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_server_2012:-:*:*:*:*:*:*:*",
+                    "title": "cpe:2.3:o:microsoft:windows_server_2012:-:*:*:*:*:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_server_2019:-:*:*:*:*:*:*:*",
+                    "title": "cpe:2.3:o:microsoft:windows_server_2019:-:*:*:*:*:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_server_2022:-:*:*:*:*:*:*:*",
+                    "title": "cpe:2.3:o:microsoft:windows_server_2022:-:*:*:*:*:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:office:2019:*:*:*:*:*:x86:*",
+                    "title": "cpe:2.3:a:microsoft:office:2019:*:*:*:*:*:x86:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:office:2019:*:*:*:*:*:x64:*",
+                    "title": "cpe:2.3:a:microsoft:office:2019:*:*:*:*:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:office:2021:*:*:*:ltsc:*:x64:*",
+                    "title": "cpe:2.3:a:microsoft:office:2021:*:*:*:ltsc:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:office:2021:*:*:*:ltsc:*:x86:*",
+                    "title": "cpe:2.3:a:microsoft:office:2021:*:*:*:ltsc:*:x86:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_11:22h2:*:*:*:*:*:x64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_11:22h2:*:*:*:*:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_11:22h2:*:*:*:*:*:arm64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_11:22h2:*:*:*:*:*:arm64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_1607:-:*:*:*:*:*:x64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_1607:-:*:*:*:*:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_1809:-:*:*:*:*:*:x64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_1809:-:*:*:*:*:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_21h2:-:*:*:*:*:*:x64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_21h2:-:*:*:*:*:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_22h2:-:*:*:*:*:*:x64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_22h2:-:*:*:*:*:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_21h2:-:*:*:*:*:*:arm64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_21h2:-:*:*:*:*:*:arm64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_21h2:-:*:*:*:*:*:x86:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_21h2:-:*:*:*:*:*:x86:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_22h2:-:*:*:*:*:*:arm64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_22h2:-:*:*:*:*:*:arm64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_1809:-:*:*:*:*:*:arm64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_1809:-:*:*:*:*:*:arm64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_1809:-:*:*:*:*:*:x86:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_1809:-:*:*:*:*:*:x86:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_22h2:-:*:*:*:*:*:x86:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_22h2:-:*:*:*:*:*:x86:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_1607:-:*:*:*:*:*:x86:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_1607:-:*:*:*:*:*:x86:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_11_21h2:-:*:*:*:*:*:arm64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_11_21h2:-:*:*:*:*:*:arm64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_11_21h2:-:*:*:*:*:*:x64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_11_21h2:-:*:*:*:*:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_1507:-:*:*:*:*:*:x64:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_1507:-:*:*:*:*:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:o:microsoft:windows_10_1507:-:*:*:*:*:*:x86:*",
+                    "title": "cpe:2.3:o:microsoft:windows_10_1507:-:*:*:*:*:*:x86:*"
+                }
+            ],
+            "popularity_changed": false,
+            "references": [
+                {
+                    "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2023-36884"
+                },
+                {
+                    "url": "http://seclists.org/fulldisclosure/2023/Jul/43"
+                }
+            ],
+            "microsoft_bulletins": [],
+            "exploits": [],
+            "tags_slugs": [],
+            "num_signatures": 0,
+            "updated_at": "2023-08-10T09:00:32.401545Z",
+            "score": 7.5,
+            "bl_score_changed_at": "2023-09-09T09:25:02.057005Z",
+            "explorer_update": "2023-09-09T09:25:02.076936Z",
+            "popularity": 0.505,
+            "num_malware": 0,
+            "cvss": {
+                "v3": {
+                    "scope": "UNCHANGED",
+                    "version": "3.1",
+                    "baseScore": 7.5,
+                    "attackVector": "NETWORK",
+                    "baseSeverity": "HIGH",
+                    "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H",
+                    "integrityImpact": "HIGH",
+                    "userInteraction": "REQUIRED",
+                    "attackComplexity": "HIGH",
+                    "availabilityImpact": "HIGH",
+                    "privilegesRequired": "NONE",
+                    "confidentialityImpact": "HIGH"
+                }
+            },
+            "description": "Windows Search Remote Code Execution Vulnerability",
+            "previous_bl_score": 68.3433333333333,
+            "bl_score": 6.8
+        },
+        "relationships": {
+            "campaigns": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/relationships/campaigns/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/campaign/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "attack_patterns": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/relationships/attack-pattern/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/attack-pattern/"
+                },
+                "meta": {
+                    "count": 18
+                }
+            },
+            "threat_actors": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/relationships/threat-actors/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/threat-actor/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "crime_servers": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/relationships/crime-server/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/crime-server/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "mentions": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/relationships/mentions/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/mention/"
+                },
+                "meta": {
+                    "count": 101
+                }
+            },
+            "tags": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/relationships/tags/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/tag/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "signatures": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/relationships/signature/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/signature/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "sparks": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/relationships/spark/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/spark/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "malware": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/relationships/malware/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/malware/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "tools": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/relationships/tools/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/tool/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            }
+        },
+        "links": {
+            "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-36884/"
+        }
+    }
+}

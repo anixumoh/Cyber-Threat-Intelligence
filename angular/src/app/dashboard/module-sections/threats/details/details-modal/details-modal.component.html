@@ -1,0 +1,44 @@
+<!-- @MZ : Custom css class definition concerning the parent modal(modal-window) are located in moddive.component.scss in .bot-modal{...} -->
+<modal-window modalTitle="More Info" (cancel)="closeModal()" [customClass]="'modal-xl'">
+  <div class="row mx-2 mt-4 mb-0">
+    <div class="col-lg-6" *ngIf="item">
+      <ul class="list-group mb-4">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+          *ngIf="resourceType !== resourceTypes.BOTIP"
+        >
+          <b class="text-dark">LOGIN:</b>
+          <span class="text-secondary">{{ item.username }}</span>
+        </li>
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+          *ngIf="resourceType !== resourceTypes.BOTIP"
+        >
+          <b class="text-dark">PASSWORD:</b>
+          <span class="text-secondary">{{ item.password }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <b class="text-dark">BOT IP:</b>
+          <span class="text-secondary">{{ item.botIp || '-' }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <b class="text-dark">AFFECTED URL:</b>
+          <span class="text-secondary">{{ item.portalUrl }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <b class="text-dark">CREDENTIALS STOLEN AT:</b>
+          <span class="text-secondary">{{ item.reportedAt | timezone }}</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <b class="text-dark">BOTNET TYPE:</b>
+          <span class="text-secondary">
+            <app-tcx-linkeable [value]="item.type"></app-tcx-linkeable>
+          </span>
+        </li>
+      </ul>
+    </div>
+    <div class="col-lg-6">
+      <app-map [dataImages]="mapData" width="275" height="95%"></app-map>
+    </div>
+  </div>
+</modal-window>

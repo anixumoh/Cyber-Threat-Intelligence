@@ -1,0 +1,25 @@
+@import 'src/scss/variables';
+
+.app-basic-list {
+  &__item {
+    position: relative;
+  }
+
+  &__item-close {
+    position: absolute;
+    right: 10px;
+    top: 13px;
+    height: 22px;
+    width: 22px;
+    color: #fff;
+    background-color: silver;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 19px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #dd0000;
+    }
+  }
+}

@@ -1,0 +1,186 @@
+@import 'src/scss/variables';
+
+.dropdown-container {
+  .list-group {
+    position: absolute;
+    top: 34px;
+    left: 0;
+    z-index: 9;
+    width: 230px;
+    height: 200px;
+    overflow: auto;
+    transition: height 0.3s;
+    visibility: hidden;
+    &.open {
+      visibility: visible;
+    }
+  }
+}
+
+.list-group-dropdown {
+  height: 148px;
+  overflow-y: scroll;
+}
+.list-group {
+  height: 179px;
+  overflow-y: scroll;
+  .list-group-item {
+    border-radius: 0.25rem;
+    border: 0;
+    cursor: pinter;
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: transparent;
+    }
+  }
+  .list-group-item:hover {
+    background-color: $light;
+    color: $primary;
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: $primary;
+    }
+  }
+  .list-group-item.active {
+    background-color: $light;
+    color: $primary;
+    font-weight: bold;
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: $primary;
+    }
+  }
+
+  .list-group-item.hidden {
+    display: none !important;
+  }
+}
+.list-group::-webkit-scrollbar-track {
+  background-color: $light;
+}
+.list-group::-webkit-scrollbar {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  width: 5px !important;
+  height: 5px !important;
+}
+.list-group::-webkit-scrollbar-thumb {
+  background-color: #084951;
+  outline: 1px solid black;
+}
+
+.box-inputs {
+  position: relative;
+  .checkbox-top {
+    position: absolute;
+    top: 8px;
+    right: 0;
+  }
+}
+.input-search {
+  width: 220px;
+  .form-control {
+    height: 31px;
+  }
+}
+
+.dropdown-container-tlp {
+  position: absolute;
+  top: 63px;
+  right: 43px;
+  width: 0px;
+  z-index: 5;
+  .list-group {
+    visibility: hidden;
+  }
+  .list-group.open {
+    visibility: visible;
+    border: 1px solid $border;
+    border-radius: 4px;
+    box-shadow: $shadow-regular;
+    .list-group-item:hover {
+      color: $primary;
+    }
+    .tlp-text {
+      color: $dark;
+      margin-left: 6px;
+    }
+  }
+}
+
+// ASIDE CONTENT
+.aside-container.card {
+  width: 600px;
+  .height-header {
+    height: 56px;
+  }
+  .automatic-height {
+    padding-bottom: 64px;
+    height: calc(100vh - 112px);
+    overflow-y: scroll;
+    &::-webkit-scrollbar-track {
+      background-color: $white;
+    }
+    &::-webkit-scrollbar {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      width: 2px !important;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #084951;
+      outline: 1px solid black;
+    }
+  }
+  .height-footer {
+    position: absolute;
+    bottom: 0;
+    height: 56px;
+    width: 599px;
+  }
+}
+// HEIGHT & SCROLLBAR
+.height-list {
+  max-height: 300px;
+  overflow-y: scroll !important;
+}
+
+// LIST
+.list-user-info {
+  padding-left: 12px;
+  padding-right: 12px;
+
+  i {
+    height: 28px;
+    width: 28px;
+    text-align: center;
+    padding-top: 7px;
+  }
+}
+// GENERAL
+.icon-arrow-down,
+.icon-arrow-up {
+  cursor: pointer;
+}
+
+.color-red {
+  color: red;
+}
+
+//RENEW PASSWORD
+.renew-alert {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+
+  i {
+    margin-right: 5px;
+    color: $danger;
+  }
+  p {
+    margin-top: 2px;
+    color: $danger;
+  }
+}
+
+.smaller-input {
+  font-size: 15px;
+}

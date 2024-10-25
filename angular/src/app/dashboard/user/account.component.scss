@@ -1,0 +1,58 @@
+@import 'src/scss/variables';
+
+.aside-container {
+  width: 330px;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px 10px;
+  font-size: 1rem;
+  border-top: 2px solid gray;
+
+  .user-letter,
+  .user-info,
+  .user-actions,
+  .user-action {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .user-letter {
+    user-select: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    border: 1px solid $primary;
+    font-size: 1.5rem;
+    color: $primary;
+  }
+
+  .user-info {
+    margin-top: 6px;
+  }
+
+  .user-actions {
+    margin-top: 20px;
+    width: 100%;
+    .user-action {
+      padding: 15px;
+      border-top: 1px solid #ccc;
+      width: 100%;
+
+      &:first-child {
+        border-top: none;
+      }
+      a,
+      button {
+        width: 180px;
+        max-width: 100%;
+        span {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+

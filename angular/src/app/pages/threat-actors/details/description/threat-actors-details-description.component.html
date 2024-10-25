@@ -1,0 +1,111 @@
+<div class="col-md-12 col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <div class="mb-4">
+        <ul class="list-group m-4">
+          <li class="list-group-item border-0 rounded-0 pl-0 pt-0 pr-2 pb-0">
+            <div *ngIf="item.aliases && item.aliases.length > 0">
+              <h5>Aliases</h5>
+              <ul class="list-group m-4">
+                <li class="list-group-item border-0 rounded-0 pl-0 pt-0 pr-2 pb-0" *ngFor="let alias of item.aliases">
+                  <i class="icon-lens text-90 text-dark float-left"></i>
+                  <p class="text-dark mb-0">{{ alias }}</p>
+                </li>
+              </ul>
+            </div>
+
+            <p class="text-dark" [innerHTML]="item.description"></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    <button
+      type="button"
+      (click)="collapseObjectives.toggle()"
+      class="btn btn-outline-primary mb-3 *ngIf=item.objective"
+      [attr.aria-expanded]="isCollapsed"
+      aria-controls="collapseExample"
+    >
+      Objectives
+      <i class="icon-large ml-2 icon-arrow-down"></i>
+    </button>
+  </p>
+  <div #collapseObjectives="ngbCollapse" [ngbCollapse]="!isCollapsed">
+    <div class="card">
+      <div class="card-body">
+        <div class="mb-4">
+          <ul class="list-group m-4">
+            <li class="list-group-item border-0 rounded-0 pl-0 pt-0 pr-2 pb-0">
+              <p class="text-dark mb-0" [innerHTML]="item.objective"></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    <button
+      type="button"
+      (click)="collapseModus.toggle()"
+      class="btn btn-outline-primary mb-3 *ngIf=item.modus_operandi"
+      [attr.aria-expanded]="isCollapsed"
+      aria-controls="collapseExample"
+    >
+      Modus Operandi
+      <i class="icon-large ml-2 icon-arrow-down"></i>
+    </button>
+  </p>
+  <div #collapseModus="ngbCollapse" [ngbCollapse]="!isCollapsed">
+    <div class="card">
+      <div class="card-body">
+        <div class="mb-4">
+          <ul class="list-group m-4">
+            <li class="list-group-item border-0 rounded-0 pl-0 pt-0 pr-2 pb-0">
+              <p class="text-dark mb-0" [innerHTML]="item.modus_operandi"></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    <button
+      type="button"
+      (click)="collapseReferences.toggle()"
+      class="btn btn-outline-primary mb-3 *ngIf=item.references && item.references.length > 0"
+      [attr.aria-expanded]="isCollapsed"
+      aria-controls="collapseExample"
+    >
+      References
+      <i class="icon-large ml-2 icon-arrow-down"></i>
+    </button>
+  </p>
+  <div #collapseReferences="ngbCollapse" [ngbCollapse]="!isCollapsed">
+    <div class="card">
+      <div class="card-body">
+        <div class="mb-4">
+          <ul class="list-group m-4">
+            <li
+              class="list-group-item border-0 rounded-0 pl-0 pt-0 pr-2 pb-0"
+              *ngFor="let reference of item.references"
+            >
+              <i class="icon-lens text-90 text-dark float-left"></i>
+              <span *ngIf="reference.title && !reference.link">{{ reference.title }}</span>
+              <a href="{{ reference.link }}" target="_blank" *ngIf="reference.link && !reference.title">
+                {{ reference.link }}
+              </a>
+              <a href="{{ reference.link }}" target="_blank" *ngIf="reference.link && reference.title">
+                {{ reference.title }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

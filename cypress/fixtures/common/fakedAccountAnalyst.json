@@ -1,0 +1,62 @@
+{
+    "name": "neven",
+    "firstSurname": "mollov",
+    "secondSurname": "",
+    "email": "neven.mollov3@outpost24.com",
+    "username": "neven.mollov3",
+    "id": 977,
+    "password": "*",
+    "address": "",
+    "telephone": null,
+    "cellphone": null,
+    "job": "",
+    "companiesId": "",
+    "expirationTime": "",
+    "timezone": "Europe/Madrid",
+    "internalUser": false,
+    "grants": {
+        "userId": 977,
+        "username": "neven.mollov3",
+        "superadmin": false,
+        "master": false,
+        "sales": false,
+        "trial": false,
+        "superSearchGrants": [
+            {
+                "reputationalSearchGrantsMap": {},
+                "itemId": 504,
+                "analyst": true,
+                "operator": false,
+                "mssp_customer": false,
+                "reputationalSearchGrants": []
+            }
+        ],
+        "superSearchGrantsMap": {
+            "504": {
+                "reputationalSearchGrantsMap": {},
+                "itemId": 504,
+                "analyst": true,
+                "operator": false,
+                "mssp_customer": false,
+                "reputationalSearchGrants": []
+            }
+        },
+        "mssp_admin": false
+    },
+    "status": "ENABLED",
+    "lastPasswordChangeTime": 1689724800000,
+    "lastIpAddress": "147.136.252.185",
+    "createdAt": 1689754281000,
+    "updatedAt": 1689859249000,
+    "licenseAccepted": true,
+    "twoFactorAuthentication": false,
+    "lastLoginAt": 1689859248000,
+    "landingPage": "",
+    "groups": [],
+    "masterGrant": "USER",
+    "sessionTimeout": 20,
+    "eventMessageActivated": true,
+    "customerId": 1,
+    "daysToPasswordChange": 9999,
+    "api": false
+}

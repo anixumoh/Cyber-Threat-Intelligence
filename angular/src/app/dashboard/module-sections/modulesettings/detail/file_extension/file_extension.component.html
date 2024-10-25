@@ -1,0 +1,21 @@
+<div class="card mb-4" style="max-width: 400px">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-1 ml-1 float-left">File Extension filter</h6>
+  </div>
+  <div class="card-body p-0">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item p-2" *ngFor="let value of checkboxValues; let i = index">
+        <div class="toggle-button">
+          <input
+            type="checkbox"
+            [(ngModel)]="value.selected"
+            (change)="sendStatus(value)"
+            [disabled]="grants?.isCustomerOrOperator()"
+            [ngClass]="grants?.isCustomerOrOperator() ? 'cursor-not-allowed' : ''"
+          />
+          <span class="ml-2">{{ value.name }}</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

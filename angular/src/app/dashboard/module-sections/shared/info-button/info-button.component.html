@@ -1,0 +1,13 @@
+<button class="btn btn-light btn-sm border text-primary float-right px-3 ml-3" (click)="openInfoModal()">
+  <i class="icon-info" aria-hidden="true"></i>
+</button>
+
+<modal-window
+  [customClass]="'modal-l'"
+  [headerClass]="'no-border'"
+  zIndex="1050"
+  *ngIf="infoModal"
+  (cancel)="closeInfoModal()"
+>
+  <div class="info-module" [innerHTML]="infoModalText.description"></div>
+</modal-window>

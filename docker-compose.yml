@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  static:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - API_HOST=https://tcmaster.blueliv.com
+    ports:
+      - 8000:8000

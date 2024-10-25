@@ -1,0 +1,207 @@
+<div class="header-table-section border-top bg-light p-2">
+  <div class="d-flex align-items-center" *ngIf="template_header && template_header[0]">
+    <ng-container *ngTemplateOutlet="template_header[0]"></ng-container>
+  </div>
+  <div class="d-flex align-items-center flex-wrap">
+    <div class="mr-2" *ngIf="template_header && template_header[1]">
+      <ng-container *ngTemplateOutlet="template_header[1]"></ng-container>
+    </div>
+    <div *ngIf="isNumberOfItemsSelected && pagination && isPaginate" style="position: relative">
+      <a
+        class="btn btn-light border border-secondary btn-sm float-right d-flex align-items-center"
+        (click)="isMenuOpened = !isMenuOpened"
+        [ngbTooltip]="'Pagination table'"
+        tooltipClass="font-12"
+      >
+        <i class="icon-format_list_bulleted" aria-hidden="true"></i>
+        <span class="pr-1">{{ pagination[keyMaxRow] }}</span>
+      </a>
+      <ul class="list-group border rounded shadow right-position" *ngIf="isMenuOpened" (click)="isMenuOpened = false">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center border-0 px-3 py-2"
+          *ngFor="let i of optionMaxRows"
+          [class.active]="i === pagination[keyMaxRow]"
+          (click)="changePagination(i)"
+        >
+          <p class="mb-0">{{ i }}</p>
+          <i class="icon-check check"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="table-scroll">
+  <table class="table">
+    <thead>
+      <tr class="">
+        <th class="align-middle td-30 change-padding" *ngIf="isRowSelected && rows.length">
+          <span class="d-flex align-items-center">
+            <input type="checkbox" (ngModelChange)="selectedAll()" [ngModel]="_selectedAll" />
+          </span>
+        </th>
+        <ng-container *ngIf="table.header && table.header.length > 0">
+          <th class="" *ngFor="let header of table.header" [style.width]="header.width">
+            <ng-template [ngIf]="!header.hidden">
+              <span class="d-flex align-items-center" [class]="setClass(header.class)">
+                {{ header.title }}
+                <i *ngIf="header.sort" class="cursor-pointer ml-1" [ngClass]="header.sort" (click)="sort(header)"></i>
+              </span>
+            </ng-template>
+          </th>
+        </ng-container>
+
+        <th class="align-middle td-30" *ngIf="isEdit && !hiddenBody"></th>
+        <th class="align-middle td-30" *ngIf="isDelete && !hiddenBody"></th>
+      </tr>
+    </thead>
+    <ng-content></ng-content>
+    <tbody *ngIf="!hiddenBody">
+      <ng-template [ngIf]="rows && rows.length > 0 && !table.isLoading" [ngIfElse]="noData">
+        <ng-template ngFor let-item [ngForOf]="rows">
+          <tr class="cursor-default">
+            <td class="vertical-middle" *ngIf="isRowSelected">
+              <span class="d-flex align-items-center">
+                <input
+                  class="cursor-pointer"
+                  type="checkbox"
+                  (ngModelChange)="selectedRow(item)"
+                  [(ngModel)]="item[keyRowSelected]"
+                />
+              </span>
+            </td>
+            <ng-template ngFor let-header [ngForOf]="table.header">
+              <td [class]="getClassTD(header, item)" (click)="onActionClick(header, item)">
+                <ng-template
+                  [ngIf]="header.isTemplate && template_outlet[header.key]"
+                  [ngIfElse]="template_notTemplate"
+                >
+                  <span class="d-flex align-items-center" [ngClass]="header.class">
+                    <ng-container
+                      *ngTemplateOutlet="template_outlet[header.key]; context: getContext(item)"
+                    ></ng-container>
+                  </span>
+                </ng-template>
+                <ng-template #template_notTemplate>
+                  <span class="d-flex align-items-center" [ngClass]="header.class">
+                    {{ item[header.key] ? item[header.key] : ' --- ' }}
+                  </span>
+                </ng-template>
+              </td>
+            </ng-template>
+            <td class="vertical-middle" *ngIf="isEdit && !hiddenBody">
+              <span class="d-flex align-items-center">
+                <app-action-circle
+                  [ngbTooltip]="
+                    editSuperadminOnly && (item.labelProtected || item.graphicConfigurationTemplateId)
+                      ? 'You do not have permission to perform this action.'
+                      : 'Edit'
+                  "
+                  [isDisabled]="editSuperadminOnly && (item.labelProtected || item.graphicConfigurationTemplateId)"
+                  (clickEvent)="editEmitter.emit(item)"
+                  [icon]="'icon-mode_edit'"
+                  [colorIcon]="'text-primary'"
+                >
+                </app-action-circle>
+              </span>
+            </td>
+            <td class="vertical-middle" *ngIf="isDelete && !hiddenBody">
+              <span class="d-flex align-items-center">
+                <app-action-circle
+                  [ngbTooltip]="
+                    editSuperadminOnly && (item.labelProtected || item.graphicConfigurationTemplateId)
+                      ? 'You do not have permission to perform this action.'
+                      : 'Delete'
+                  "
+                  [isDisabled]="editSuperadminOnly && (item.labelProtected || item.graphicConfigurationTemplateId)"
+                  (clickEvent)="deleteEmmiter.emit(item)"
+                  [isLoading]="userSelected === item"
+                  [icon]="'icon-delete'"
+                  [colorIcon]="'text-danger'"
+                  [placement]="'left-bottom'"
+                >
+                </app-action-circle>
+              </span>
+            </td>
+          </tr>
+        </ng-template>
+      </ng-template>
+
+      <ng-template #noData>
+        <tr>
+          <td colspan="100%">
+            <div class="card-section mt-4 mr-5 ml-5 mb-5">
+              <is-data-is-loading [isLoading]="table.isLoading"></is-data-is-loading>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </tbody>
+    <tfoot *ngIf="template_footer">
+      <tr>
+        <th colspan="100%">
+          <ng-container *ngTemplateOutlet="template_footer"></ng-container>
+        </th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+<ng-container *ngIf="pagination && isPaginate && rows.length > 0">
+  <nav class="float-left mr-2">
+    <ul class="pagination pagination-sm">
+      <li class="page-item">
+        <a
+          class="page-link"
+          (click)="changePage(1)"
+          [class.disabled]="pagination.page === 1"
+          [class.cursor-not-allowed]="pagination.page === 1"
+        >
+          <i class="icon-angle-double-left text-primary" aria-hidden="true"></i>
+          <span style="visibility: hidden">.</span>
+        </a>
+      </li>
+      <li class="page-item">
+        <a
+          class="page-link"
+          (click)="changePage(pagination.page - 1)"
+          [class.disabled]="pagination.page <= 1"
+          [class.cursor-not-allowed]="pagination.page === 1"
+        >
+          <i class="icon-angle-left text-primary" aria-hidden="true"></i>
+          <span style="visibility: hidden">.</span>
+        </a>
+      </li>
+      <li class="page-item" *ngFor="let page of pages">
+        <a class="page-link text-primary" [class.active]="pagination.page === page" (click)="changePage(page)" nohref>
+          {{ page }}
+        </a>
+      </li>
+      <li class="page-item">
+        <a
+          class="page-link"
+          (click)="changePage(pagination.page + 1)"
+          [class.disabled]="pagination.page >= totalPages"
+          [class.cursor-not-allowed]="pagination.page >= totalPages"
+        >
+          <i class="icon-angle-right text-primary" aria-hidden="true"></i>
+          <span style="visibility: hidden">.</span>
+        </a>
+      </li>
+      <li class="page-item">
+        <a
+          class="page-link"
+          (click)="changePage(totalPages)"
+          [class.disabled]="pagination.page === totalPages"
+          [class.cursor-not-allowed]="pagination.page === totalPages"
+        >
+          <i class="icon-angle-double-right text-primary" aria-hidden="true"></i>
+          <span style="visibility: hidden">.</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <p class="pagination-info pt-1" *ngIf="!favorite">
+    Total pages:
+    <span class="font-weight-bold ml-1">{{ totalPages | number }}</span>
+  </p>
+</ng-container>

@@ -1,0 +1,49 @@
+<div ngbDropdown [placement]="placement">
+  <button
+    class="btn btn-light btn-sm d-xl-border"
+    class="{{ showText ? 'border' : '' }}"
+    [ngClass]="{ 'btn--active': highlight }"
+    ngbDropdownToggle
+    type="button"
+    [id]="id"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    <i
+      class="{{ icon === 'icon-format_list_bulleted' || showText ? 'font-weight-bold' : 'd-xl-none font-weight-bold' }}"
+      [ngClass]="icon"
+    ></i>
+    <span
+      [ngClass]="icon === 'icon-format_list_bulleted' || showText ? '' : 'd-none d-xl-block'"
+      class="{{ showText ? 'ml-2' : '' }}"
+      >{{ label || selected.name }}</span
+    >
+  </button>
+  <div class="dropdown-menu" [ngClass]="class" ngbDropdownMenu [attr.aria-labelledby]="id">
+    <ng-template [ngIf]="!loading && !items?.length">
+      <div style="height: 50px;" class="d-flex justify-content-center align-items-center">There are no items</div>
+    </ng-template>
+    <ng-template [ngIf]="loading">
+      <div style="height: 50px;" class="d-flex justify-content-center align-items-center">
+        <i class="icon-spinner rotate"></i>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="items?.length">
+      <a
+        *ngFor="let item of items"
+        class="dropdown-item {{ item.class ? item.class : '' }} "
+        [ngClass]="{ 'item--active': isActive(item.value) }"
+        (click)="onChangeValue(item)"
+        class="d-flex align-items-center"
+      >
+        <i *ngIf="item.icon" [ngClass]="item.icon"></i>
+        <app-large-text
+          ellipsisStyle="url"
+          charactersShown="38"
+          [value]="item.name"
+          placement="bottom"
+        ></app-large-text>
+      </a>
+    </ng-template>
+  </div>
+</div>

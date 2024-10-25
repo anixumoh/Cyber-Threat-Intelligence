@@ -1,0 +1,238 @@
+@import 'src/scss/variables';
+
+.settings-edit {
+  padding-top: 30px;
+}
+/* Input */
+.uploadDefault {
+  display: none;
+}
+.choose-file {
+  padding: 7.5px 0;
+  cursor: pointer;
+}
+.delete-file {
+  padding: 10px 0;
+  border: none;
+}
+.uploader {
+  width: 100%;
+  display: flex;
+  .btn-outline-default {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .uploader-text {
+    border-radius: $border-radius;
+    width: 250px;
+    border: 1px solid $gray-hover;
+    border-left: none;
+    padding-left: 5px;
+    margin-top: 5px;
+    font-size: 12px;
+    font-weight: $font-weight-thin;
+
+    &:focus {
+      outline: none;
+      border: 1px solid $default;
+    }
+  }
+  i.material-icons.upload-icon {
+    position: absolute;
+    left: 25px;
+    color: $gray;
+    top: 8px;
+    z-index: 999999;
+    font-size: 20px;
+  }
+
+  &:focus {
+    .uploader-text {
+      outline: none;
+      border: 1px solid $default;
+    }
+    i.material-icons.upload-icon {
+      color: $default;
+    }
+  }
+}
+
+/* Info box */
+.uploader-info {
+  border: 1px solid $default;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 0;
+  position: fixed;
+  bottom: 0;
+  right: 60px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  width: 560px;
+
+  .header-info {
+    height: 60px;
+    display: flex;
+    background-color: $default;
+    color: $white;
+    font-size: $font-normal;
+    .time-info {
+      display: flex;
+      flex-direction: column;
+      .time-info__remaining {
+        color: $gray;
+        font-weight: $font-weight-thin;
+      }
+    }
+
+    .action-btns {
+      right: 0px;
+      display: flex;
+      width: 46px;
+      justify-content: space-around;
+      padding-top: 3px;
+    }
+  }
+
+  .summary-info {
+    display: flex;
+    justify-content: space-around;
+    .info {
+      display: flex;
+      align-items: center;
+      &.info-error {
+        font-weight: $font-weight-thin;
+      }
+    }
+    .material-icons {
+      &.icon-max,
+      &.icon-min {
+        font-size: 18px;
+        font-weight: $font-weight-thin;
+        cursor: pointer;
+      }
+      &.icon-close {
+        font-size: 20px;
+        cursor: pointer;
+        font-weight: $font-weight-thin;
+      }
+    }
+  }
+  .main-info {
+    display: flex;
+    flex-direction: column;
+    .file-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      background-color: $white;
+      border-bottom: 1px solid $light;
+      height: 48px;
+      padding-bottom: 10px;
+      .file-info__icons-text {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        flex-grow: 1;
+        .file-info__icons {
+          display: flex;
+          align-items: flex-start;
+        }
+        .file-info__text {
+          flex-grow: 1;
+          color: $gray;
+          font-size: $font-normal;
+          font-weight: $font-weight-thin;
+          .file-info__text-error {
+            color: $danger;
+          }
+        }
+      }
+    }
+    .cancel {
+      justify-content: flex-end;
+      background-color: $default02;
+      .link {
+        font-size: $font-normal;
+        font-weight: $font-weight-thin;
+        color: $gray;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  .material-icons {
+    &.icon-max,
+    &.icon-min {
+      font-size: 18px;
+      font-weight: $font-weight-thin;
+      cursor: pointer;
+    }
+
+    &.icon-close {
+      font-size: 20px;
+      cursor: pointer;
+      font-weight: $font-weight-thin;
+    }
+  }
+}
+
+.material-icons {
+  &.is-circle {
+    font-size: 12px;
+
+    &.is-gray {
+      color: $default;
+    }
+
+    &.is-white {
+      color: $white;
+    }
+    position: relative;
+    font-weight: $font-weight-bold;
+    z-index: 1;
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      z-index: -1;
+      width: 16px;
+      height: 16px;
+      border-radius: 100%;
+    }
+
+    &.is-success::before {
+      background-color: $success;
+    }
+
+    &.is-error::before {
+      background-color: $danger;
+    }
+  }
+
+  &.is-tool {
+    color: $gray;
+    cursor: pointer;
+    font-size: 18px;
+  }
+}
+
+.error-icon {
+  padding-top: 12px !important;
+}
+
+.refresh-icon:hover {
+  color: #0679fa !important;
+}
+
+.delete-icon:hover {
+  color: #dc655a !important;
+}

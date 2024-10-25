@@ -1,0 +1,112 @@
+<div class="card mb-4 w-50">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-0 ml-1 float-left">Insert</h6>
+    <button class="btn btn-circle bg-light float-right" (click)="toggleShowInfo()">
+      <i class="icon-info-circle-solid color-primary"></i>
+    </button>
+  </div>
+  <div class="card-header px-3 px-2 py-1 alert-info border-0" *ngIf="isShowInfo">
+    <span class="font-italic text-90">{{ data.texts.description }}</span>
+  </div>
+  <div class="card-body p-0">
+    <div class="form-group margin-bottom-0">
+      <textarea
+        class="form-control border-0"
+        [(ngModel)]="newdata"
+        [disabled]="grants?.isCustomerOrOperator()"
+        rows="3"
+        placeholder="{{ data.texts.area_placeholder }}"
+      >
+      </textarea>
+    </div>
+  </div>
+  <div class="card-footer p-1">
+    <button
+      class="btn btn-primary btn-sm px-4 float-right"
+      [disabled]="grants?.isCustomerOrOperator()"
+      (click)="disableInputs ? null : addDataCreditCard(); resetInputSelectAll()"
+    >
+      Add
+    </button>
+  </div>
+</div>
+
+<div class="card mb-4 w-50">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-0 ml-1 float-left">{{ data.name }}</h6>
+    <div class="form-group mb-0 float-right">
+      <input class="form-control form-control-sm" type="text" placeholder="Search" (keyup)="searchInList($event)" />
+    </div>
+  </div>
+  <div class="card-boddy p-0 height-list">
+    <!-- NO RESULTS -->
+    <div *ngIf="values.length == 0" class="no-results-box">
+      <img src="assets/default_images/searching.svg" />
+      <h6 class="no-results">"There are no {{ data.name }}"</h6>
+    </div>
+    <!-- TABLE -->
+    <table *ngIf="values.length != 0" class="table">
+      <thead>
+        <tr>
+          <th>
+            <div class="toggle-button">
+              <input
+                id="all"
+                #inputAll
+                [(ngModel)]="selectedAll"
+                [disabled]="grants?.isCustomerOrOperator()"
+                (change)="selectAll()"
+                type="checkbox"
+              />
+            </div>
+          </th>
+          <th class="">{{ data.name }}</th>
+          <th *ngIf="data.id === 'typo_keyword_distance'">
+            <span class="float-right">Distance</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let value of values; let i = index">
+          <td class="vertical-middle">
+            <div class="toggle-button">
+              <input
+                type="checkbox"
+                id="value.id"
+                [(ngModel)]="value.selected"
+                [disabled]="grants?.isCustomerOrOperator()"
+                (change)="checkIfAllSelected()"
+              />
+            </div>
+          </td>
+          <td class="vertical-middle">
+            <p class="mb-0" #elem [attr.id]="value.id">{{ renderValue(value) }}</p>
+          </td>
+          <td class="vertical-middle" *ngIf="data.id === 'typo_keyword_distance' && !value.isLoading">
+            <input
+              class="typo_keyword_input margin-left-40 float-right"
+              type="number"
+              (input)="setDistanceUpdate(value, $event)"
+              value="{{ value.value.split('~')[1] }}"
+              min="2"
+              [max]="maxDistance(value.value.split('~')[0].length / 2)"
+              [disabled]="disableInputs || grants?.isCustomerOrOperator()"
+            />
+          </td>
+          <td class="vertical-middle" *ngIf="data.id === 'typo_keyword_distance' && value.isLoading">
+            <i class="icon-spinner rotate float-right"> </i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer p-1">
+    <button
+      class="btn btn-light btn-sm text-danger float-right"
+      (click)="disableInputs ? null : delete()"
+      [disabled]="values.length == 0 || grants?.isCustomerOrOperator()"
+    >
+      Delete
+    </button>
+  </div>
+</div>

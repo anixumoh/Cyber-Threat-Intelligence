@@ -1,0 +1,108 @@
+{
+    "data": {
+        "attributes": {
+            "bl_score": 5.9,
+            "cvss": {
+                "v3": {
+                    "attackComplexity": "LOW",
+                    "attackVector": "NETWORK",
+                    "availabilityImpact": "HIGH",
+                    "baseScore": 9.8,
+                    "baseSeverity": "CRITICAL",
+                    "confidentialityImpact": "HIGH",
+                    "integrityImpact": "HIGH",
+                    "privilegesRequired": "NONE",
+                    "scope": "UNCHANGED",
+                    "userInteraction": "NONE",
+                    "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                    "version": "3.1"
+                }
+            },
+            "name": "CVE-2023-28462",
+            "published_at": 1680207300000,
+            "updated_at": 1680933626000,
+            "description": "A JNDI rebind operation in the default ORB listener in Payara Server 4.1.2.191 (Enterprise), 5.20.0 and newer (Enterprise), and 5.2020.1 and newer (Community), when Java 1.8u181 and earlier is used, allows remote attackers to load malicious code on the server once a JNDI directory scan is performed."
+        },
+        "relationships": {
+            "attack_patterns": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "campaigns": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "crime_servers": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "malware": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "mentions": {
+                "meta": {
+                    "count": 1
+                }
+            },
+            "signatures": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "sparks": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "tags": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "threat_actors": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "tools": {
+                "meta": {
+                    "count": 0
+                }
+            }
+        }
+    },
+    "resourceData": {
+        "cve": "CVE-2023-28462",
+        "scoring": 5.9,
+        "publishedAt": 1680207300000,
+        "vendor": "Oracle",
+        "product": "*",
+        "version": "*",
+        "cpe": "cpe:2.3:a:oracle:*:*:*:*:*:*:*:*:*",
+        "countAffectedPlatforms": 3,
+        "priority": "TRIVIAL",
+        "id": 310054738,
+        "module_id": 2910,
+        "created_at": 1680912000000,
+        "user_rating": 0,
+        "read": false,
+        "userModified": false,
+        "issued": false,
+        "labels": [
+            {
+                "id": 6,
+                "name": "Hacktivism Credentials",
+                "background_color": 45960,
+                "text_color": 16777215,
+                "type": "MODULE_LABEL"
+            }
+        ],
+        "followedUp": false,
+        "history": []
+    }
+}

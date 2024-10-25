@@ -1,0 +1,150 @@
+@import "src/scss/variables";
+@import "../settings-detail-generic";
+
+label{
+  .custom-control-indicator {
+    background-color: $white;
+    border: 1px solid $gray;
+    width: 14px;
+    height: 14px;
+  }
+  .custom-control-input:checked~.custom-control-indicator {
+    background-color: $gray;
+  }
+  .custom-control-description {
+    margin-left: 25px;
+  }
+}
+
+/* PANELS */
+.panel{
+  border-radius:0;
+  padding-left:0;
+  padding-right:0;
+  margin-bottom:0;
+  border:none;
+  box-shadow:none;
+}
+/* PANEL HEADER */
+.panel .panel-heading{
+  background-color:$white;
+  padding-left:0;
+  padding-right:0;
+  height:48px;
+}
+.panel .panel-heading .panel-title{
+  font-size:18px;
+}
+/* DROPDOWN MENU */
+.panel .dropdown-menu{
+  min-width:200px;
+  border:1px solid $light;
+  border-radius:0;
+  margin-top:7px;
+}
+.panel .dropdown-menu li a{
+  padding:10px;
+}
+.panel .dropdown-menu li i{
+  margin-right:6px;
+  margin-left:10px;
+}
+.panel .dropdown-menu li a:hover{
+  background-color:$white;
+  color:#337ABD;
+}
+.panel .dropdown-menu a{
+  color:#888888;
+  font-weight:$font-weight-thin;
+}
+.panel .dropdown-menu strong{
+  margin-right:5px;
+  color:#08262C;
+}
+/* PANEL BODY */
+.panel .panel-body{
+  padding-left:0;
+  padding-right:0;
+}
+/* PANEL FOOTER */
+.panel .panel-footer{
+  background-color:$white;
+  padding-left:0;
+  padding-right:0;
+}
+
+.dropdown-ul-list {
+    position: absolute;
+    top: 50px;
+    z-index: 9;
+    width: 230px;
+    margin: 0;
+    padding: 0;
+    transition: height .3s;
+    overflow: hidden;
+    border: none;
+    border-radius: $border-radius;
+    visibility: hidden;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.13);
+    &.right-position {
+      visibility: visible;
+      border: 1px solid $light;
+      right: 0 !important;
+    }
+    &.left-position {
+      visibility: visible;
+      border: 1px solid $light;
+    }
+}
+
+.dropdown-li-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style-type: none;
+    border-top: 1px solid $light;
+    background-color: $white;
+    color: $gray;
+    font-size: 14px;
+    font-weight: $font-weight-thin;
+    height: 42px;
+    padding: 0 10px;
+    cursor: pointer;
+
+    .check {
+        float: right;
+        display: none;
+        font-size: 16px;
+    }
+    &:first-child {
+        color: $light;
+        background-color: $white;
+        border-top: none;
+    }
+    &:hover:not(:first-child) {
+        background-color: $bg-blueliv;
+        color: $gray;
+    }
+    &.active {
+        background-color: $bg-blueliv;
+        color: $gray;
+        .check {
+            display: block;
+        }
+    }
+}
+// TABLE
+table{
+  tbody{
+    td{
+      i{
+        font-size:16px;
+      }
+    }
+  }
+}
+// HEIGHT
+.main-list{
+  height:calc(100vh - 280px);
+  overflow:auto;
+}

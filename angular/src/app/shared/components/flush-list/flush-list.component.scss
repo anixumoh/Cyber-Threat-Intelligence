@@ -1,0 +1,24 @@
+.list-group-flush--bold {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+.warning-message {
+  cursor: pointer;
+  color: #327abd;
+}
+
+.text-truncate2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tooltip-custom {
+  max-width: 400px;
+
+  .tooltip-inner {
+    max-width: 400px;
+  }
+}

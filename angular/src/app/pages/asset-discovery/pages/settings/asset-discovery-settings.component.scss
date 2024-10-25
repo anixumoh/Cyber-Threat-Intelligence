@@ -1,0 +1,8 @@
+@import 'src/scss/variables';
+
+.grid-container {
+  display: grid !important;
+  grid-template-columns: 49% 49%;
+  grid-gap: 20px;
+  margin-bottom: 20px;
+}

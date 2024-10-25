@@ -1,0 +1,54 @@
+@import 'src/scss/variables';
+
+.input {
+  height: 31px !important;
+}
+.input-group {
+  input {
+    height: 31px !important;
+  }
+}
+
+.btn-blue-bkg {
+  background-color: #007bff !important;
+}
+
+.loading-container {
+  min-height: 355px;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: #00b18e85;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: #00b18f;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked.mat-disabled .mat-slide-toggle-bar {
+  background-color: #00b18e50;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked.mat-disabled .mat-slide-toggle-thumb {
+  background-color: #00b18e85;
+}
+
+::ng-deep .mat-slide-toggle.mat-disabled {
+  opacity: 1 !important;
+}
+
+.disabled-btn {
+  cursor: not-allowed !important;
+  opacity: 50%;
+}
+
+:host ::ng-deep {
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: $primary;
+  }
+
+  .mat-checkbox-label {
+    font-size: 14px;
+  }
+}

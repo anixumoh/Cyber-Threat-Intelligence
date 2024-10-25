@@ -1,0 +1,44 @@
+<div class="form-group mb-0 generic-list-container">
+  <div class="d-flex align-items-center justify-content-between mb-1 pl-1 pr-2">
+    <label [style]="{ display: searchTerm ? 'none' : 'block', marginBottom: 0 }">{{ title }}</label>
+    <input
+      *ngIf="haveSearch"
+      #searchFilter
+      [style]="{ display: searchTerm ? 'block' : 'none', marginBottom: 0, width: '113px' }"
+      placeholder="search"
+      (keyup)="onSearchInFilters($event, type)"
+    />
+    <div class="d-flex align-items-center justify-content-end">
+      <ng-container *ngIf="haveSearch">
+        <button type="button" class="btn btn-circle bg-light mr-1 ml-1" (click)="onSearchFilter(type, typeFilter)">
+          <i class="icon-search text-primary pl-1"></i>
+        </button>
+        <div class="d-flex align-items-center">
+          <div [formGroup]="form" *ngIf="haveInverse">
+            <mat-slide-toggle [checked]="false" [id]="inverseId" [formControlName]="formControlByName"
+              ><small
+                class="form-check-label font-weight-normal ml-1"
+                [ngClass]="form.value[formControlByName] ? 'active' : ''"
+                >Inverse</small
+              ></mat-slide-toggle
+            >
+          </div>
+          <ng-content select="[component]"></ng-content>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <ul class="list-group card overflow-auto">
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center"
+      *ngFor="let element of elements; let i = index; let last = last"
+      (click)="isMultiClick ? onMultiClick(typeClick, i) : onMultiClickActions(i, arrayName, actionPosition)"
+      [ngClass]="{ active: element.selected, disabled: element.disabled, disabledResult: element.disabled }"
+      [ngbTooltip]="haveTooltip ? element[propertyForTooltip] : ''"
+      [placement]="last ? 'top' : 'bottom'"
+    >
+      <span>{{ element.label || element.name }}</span>
+      <i class="icon-check" *ngIf="element.selected"></i>
+    </li>
+  </ul>
+</div>

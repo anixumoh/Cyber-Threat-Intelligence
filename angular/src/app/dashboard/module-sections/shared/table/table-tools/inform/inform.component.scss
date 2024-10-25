@@ -1,0 +1,28 @@
+@import "src/scss/variables";
+
+.relative {
+  position: relative;
+}
+
+.btn, .btn-group {
+  position: static;
+}
+
+.list-group {
+  position: absolute;
+  z-index: 9;
+  transition:height .3s;
+  overflow: hidden;
+  top: -35px;
+  right: 42px;
+  &.open {
+    visibility:visible;
+  }
+
+  &.last-item {
+    top: -95px;
+  }
+  .list-group-item{
+    width: 155px;
+  }
+}

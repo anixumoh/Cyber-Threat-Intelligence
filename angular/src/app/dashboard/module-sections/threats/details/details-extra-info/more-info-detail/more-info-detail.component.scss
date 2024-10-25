@@ -1,0 +1,67 @@
+@import 'src/scss/variables';
+
+.border-bottom-preview {
+  border-bottom: 4px solid $primary;
+}
+pre {
+  white-space: pre-line;
+  overflow-y: scroll;
+  display: block;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+.height-scroll-modal {
+  margin-top: 20px;
+  max-height: 800px !important;
+}
+
+.json-pre {
+  white-space: pre;
+}
+
+.height-scroll {
+  max-height: 300px;
+  overflow: auto;
+}
+
+.expandButtons {
+  position: sticky;
+  background-color: white;
+  top: 0px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+}
+
+.expand-content {
+  padding: 5px;
+  margin: 50px;
+  white-space: pre-line;
+  overflow-y: scroll;
+  display: block;
+  word-break: break-all;
+  word-wrap: break-word;
+}
+
+:host ::ng-deep mark {
+  font-size: 15px;
+  background-color: rgb(255, 238, 0);
+  font-weight: bolder;
+}
+
+:host ::ng-deep .selected {
+  background-color: #f58414 !important;
+}
+
+.pre-html {
+  max-height: 348px !important;
+}
+
+.media-box {
+  padding: 10px;
+}
+
+.hash-button {
+  margin-top: 20px;
+}

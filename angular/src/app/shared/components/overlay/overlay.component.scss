@@ -1,0 +1,31 @@
+$auOverlay: 'overlay';
+.overlay {
+  position: relative;
+  width: 100%;
+
+  &__layer {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    cursor: progress;
+    background-color: rgba(#b4b4b4, 0.25);
+
+    & > div {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+  }
+
+  &:hover {
+    .overlay__layer {
+      display: block;
+    }
+  }
+}

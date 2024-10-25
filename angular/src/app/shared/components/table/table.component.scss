@@ -1,0 +1,52 @@
+@import 'src/scss/variables';
+
+.app-table-container {
+  position: relative;
+  width: 100%;
+
+  .empty {
+    display: flex;
+    flex-flow: nowrap column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    text-align: center;
+
+    &--sm {
+      min-height: 170px;
+    }
+
+    img {
+      min-width: 100px;
+      width: 25%;
+    }
+
+    &__text {
+      font-size: 1.5em;
+      color: $primary;
+    }
+  }
+
+  .table {
+    width: 100%;
+    margin: 0 !important;
+    position: relative;
+    z-index: 0;
+
+    &--sticky tr th {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 55px !important;
+      border-bottom-color: transparent !important;
+      box-shadow: inset 0 -2px 0 $primary;
+    }
+
+    &--sticky-fixed-scroll tr th {
+      top: 100px !important;
+    }
+
+    &.table-fixed {
+      table-layout: fixed;
+    }
+  }
+}

@@ -1,0 +1,38 @@
+.list-items {
+  position: relative;
+  display: block;
+  padding: 8px;
+  margin-bottom: -1px;
+  background-color: #f2f2f2;
+  font-size: 12px;
+
+  i {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    padding-top: 7px;
+    vertical-align: middle;
+  }
+}
+
+.align-right {
+  text-align: right;
+}
+
+.margin-title {
+  margin-left: 5px;
+}
+
+.width-header {
+  max-width: 287px;
+}
+
+.text-ellipsis--3 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+  text-align: center;
+}

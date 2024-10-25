@@ -1,0 +1,8 @@
+{
+    "field": "error.password.history_violation",
+    "message": "New password must not match older passwords",
+    "error": true,
+    "token": null,
+    "code": -1,
+    "httpCode": 400
+}

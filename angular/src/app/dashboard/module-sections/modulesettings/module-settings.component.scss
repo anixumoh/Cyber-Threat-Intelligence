@@ -1,0 +1,15 @@
+@import 'src/scss/variables';
+
+.classify-box {
+  .classify-text {
+    font-size: 1rem;
+  }
+}
+
+.module-settings.not-allowed {
+  cursor: not-allowed;
+  .all-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}

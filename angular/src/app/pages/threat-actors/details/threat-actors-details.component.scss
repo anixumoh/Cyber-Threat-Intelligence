@@ -1,0 +1,29 @@
+@import 'src/scss/variables';
+
+.flex {
+  display: flex;
+  padding: 15px 0;
+  width: 100%;
+}
+
+.card__item {
+  flex: 1 1 0;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.border-left--primary {
+  border-left: 3px solid $primary;
+
+  .list-group-item {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+  }
+}
+
+button:disabled {
+  opacity: 0.6;
+}

@@ -1,0 +1,7 @@
+<app-overlay [loading]="loading">
+  <div class="card m-4 card-block" style="min-height: 300px">
+    <ng-container *ngIf="killChainData.nodes.length > 0">
+      <visualization-tree [graphData]="killChainData" [settings]="killChainSettings"></visualization-tree>
+    </ng-container>
+  </div>
+</app-overlay>

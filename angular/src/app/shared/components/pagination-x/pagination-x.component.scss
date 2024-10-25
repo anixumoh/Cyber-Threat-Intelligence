@@ -1,0 +1,17 @@
+@import 'src/scss/variables';
+
+.page-item {
+  .page-link {
+    &.active {
+      color: $white !important;
+      background-color: $primary;
+      pointer-events: none;
+    }
+
+    &.disabled {
+      pointer-events: none;
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}

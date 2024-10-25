@@ -1,0 +1,156 @@
+<div class="card mb-4 w-50">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-0 ml-1 float-left">Add Banks</h6>
+    <button class="btn btn-circle bg-light float-right" (click)="toggleShowInfo()">
+      <i class="icon-info-circle-solid color-primary"></i>
+    </button>
+  </div>
+  <div class="card-header px-3 px-2 py-1 alert-info border-0" *ngIf="isShowInfo">
+    <span class="font-italic text-90">{{ data.texts.description }}</span>
+  </div>
+  <div class="card-body">
+    <button class="btn btn-light btn-sm border text-primary float-left mr-1" (click)="toggleSelectBanks()"
+      [disabled]="buttonDisabled || grants.isCustomerOrOperator()" #dropdownBanksButton>
+      {{ bank || 'Select Bank' }}
+    </button>
+    <div class="form-group mb-0 float-left" *ngIf="!grants.isCustomerOrOperator()"
+      [ngClass]="isSelectOpenBanks ? 'show':'hide'">
+      <input class="form-control form-control-sm search-domain to-reset float-left" (keyup)="filterBanks($event)"
+        placeholder="Search Bank" [disabled]="grants.isCustomerOrOperator()" #dropdownBanksInput />
+      <div class="dropdown-menu dropdown-menu-search" *ngIf="allBanks && !(searchBanks.length === 0)">
+        <ul class="list-group list-group-flush border rounded shadow">
+          <li class="list-group-item list-group-item-action cursor-pointer border-0 p-2" *ngFor="let bankk of allBanks"
+            (click)="changeBank(bankk)">
+            <span class="text-90">{{ bankk }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div *ngIf="bank && bankSelected_showBinCodes" class="float-right">
+      <div class="dropdown" #dropdownBincodes>
+        <button class="btn btn-light btn-sm border dropdown-toggle" (click)="toggleSelectBinCodes($event)"
+          [disabled]="grants.isCustomerOrOperator()">
+          View default bincodes
+        </button>
+        <div class="dropdown-menu dropdown-menu-bincodes" *ngIf="!grants.isCustomerOrOperator()"
+          [ngClass]="isSelectOpenBincodes ? 'show':'hide'">
+          <div class="list-group list-group-flush border rounded shadow">
+            <div class="list-group-item list-group-item-action cursor-pointer border-0 p-2"
+              *ngFor="let binCode of binCodes">
+              <span class="text-90">{{ binCode }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer p-1">
+    <button class="btn btn-primary btn-sm px-4 float-right" (click)="addDataBanks()"
+      [disabled]="!bank || grants.isCustomerOrOperator()">
+      Add
+    </button>
+  </div>
+</div>
+
+<div class="card mb-4 w-50">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-0 ml-1 float-left">List Banks</h6>
+    <div class="form-group mb-0 float-right">
+      <input class="form-control form-control-sm" type="text" placeholder="search" (keyup)="searchInList($event)" />
+    </div>
+  </div>
+  <div class="card-body p-0 height-list">
+    <!-- NO RESULTS -->
+    <div *ngIf="values.length==0" class="no-results-box">
+      <img src="assets/default_images/searching.svg" />
+      <h6 class="no-results">"There are no {{data.name}}"</h6>
+    </div>
+    <!-- TABLE -->
+    <table *ngIf="values.length!=0" class="table">
+      <thead>
+        <tr>
+          <th>
+            <div class="toggle-button">
+              <input id="all" [(ngModel)]="selectedAll" (change)="selectAll();"
+                [disabled]="grants.isCustomerOrOperator()" type="checkbox" />
+            </div>
+          </th>
+          <th class="">Bank Name</th>
+          <th class="text-center td-60">BinCodes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let value of values; let i = index">
+          <td class="vertical-middle">
+            <div class="toggle-button">
+              <input type="checkbox" id="value.id" [(ngModel)]="value.selected"
+                [disabled]="grants.isCustomerOrOperator()" (change)="checkIfAllSelected();" />
+            </div>
+          </td>
+          <td class="vertical-middle">
+            <p class="mb-0" [attr.id]="value.id">{{ value.value }}</p>
+          </td>
+          <td class="vertical-middle text-center">
+            <button class="btn btn-circle bg-light" (click)="openCloseBincodesModal($event, value)">
+              <i class="icon-search color-primary"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer p-1">
+    <button class="btn btn-light btn-sm text-danger float-right" (click)="disableInputs? null:delete()"
+      [disabled]="values.length==0 || grants.isCustomerOrOperator()">
+      Delete
+    </button>
+  </div>
+</div>
+
+
+<!-- MODAL -->
+<div class="overlay" [style.zIndex]="10000" *ngIf="isOpenBinCodeModal">
+  <div class="modal">
+    <div class="modal-content">
+      <div class="modal-header clearfix">
+        <h6 class="mb-0 mt-1 float-left">BinCodes2</h6>
+        <button class="close pt-2" type="button">
+          <i class="icon-times color-danger" (click)="openCloseBincodesModal($event, 'close')"></i>
+        </button>
+      </div>
+      <div class="modal-body p-0">
+        <div class="bg-light border-bottom p-2">
+          <div class="input-group input-group-sm">
+            <input class="form-control" type="text" placeholder="Add BinCode" [disabled]="grants.isCustomerOrOperator()"
+              [(ngModel)]="inputBinCode">
+            <div class="input-group-append">
+              <button class="btn btn-light text-primary border" type="button" [disabled]="grants.isCustomerOrOperator()"
+                (click)="addBinCode()">
+                Add binCode
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="content-list">
+          <ul class="list-group list-group-flush">
+            <li
+              class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 p-2"
+              *ngFor="let bincode of addedBincodes">
+              <span class="text-dark ml-2">{{ bincode }}</span>
+              <button class="btn btn-circle bg-light" *ngIf="!grants?.isCustomerOrOperator()"
+                (click)="deleteBincode(bincode)">
+                <i class="icon-delete color-danger"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer bg-light">
+        <button class="btn btn-primary btn-sm float-right" (click)="applySaveOrDeleteBincodes()"
+          [disabled]='grants?.isCustomerOrOperator()'>
+          Apply
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

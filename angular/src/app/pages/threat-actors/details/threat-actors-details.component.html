@@ -1,0 +1,122 @@
+<app-overlay [loading]="loading">
+  <threat-context-navigation [path]="path" [name]="name"></threat-context-navigation>
+  <div style="min-height: 650px">
+    <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-0 tcx-section-name">Actors</h6>
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <h4 class="mt-2 mb-4 tcx-resource-name">{{ name }}</h4>
+      <div style="display: flex">
+        <button
+          class="btn btn-light btn-sm border text-primary width-85 float-left btn-actions mr-1"
+          type="button"
+          name="button"
+          (click)="downloadReport()"
+          [disabled]="loadingReport"
+        >
+          Report <i class="icon-spinner rotate ml-1" *ngIf="loadingReport"></i>
+        </button>
+        <div class="button-action mr-1" ngbDropdown>
+          <button
+            ngbDropdownToggle
+            class="btn btn-light btn-sm border text-primary width-85 float-left btn-actions"
+            type="button"
+            id="actionsButtonDropdown"
+            name="button"
+          >
+            Export
+          </button>
+          <div ngbDropdownMenu class="actions-dropdown-menu padding-0 border-0">
+            <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded font-14">
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToCSV()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>CSV</span>
+              </li>
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToJson()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>JSON</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-light btn-sm border text-primary width-85" (click)="backToList()">
+          Back to list
+        </button>
+      </div>
+    </div>
+
+    <div class="card p-0 mb-4">
+      <div class="flex">
+        <div class="col-auto">
+          <img class="img-fluid" src="/assets/img/threat_actor.png" alt="Target" width="130" />
+        </div>
+
+        <div class="col-lg">
+          <app-flush-list [data]="entries" mode="bold"></app-flush-list>
+        </div>
+
+        <div class="col-lg">
+          <app-flush-list [data]="entries2" mode="bold"></app-flush-list>
+        </div>
+      </div>
+    </div>
+
+    <app-tabs [items]="tabs" [active]="activeTab" (onChange)="onTabChange($event)">
+      <div class="mt-4">
+        <threat-actors-details-description *ngIf="activeTab === ActorsTabs.DESCRIPTION && item" [item]="item">
+        </threat-actors-details-description>
+
+        <related-ioc-list
+          [showTitle]="false"
+          [style.display]="activeTab === ActorsTabs.CONTEXT ? 'block' : 'none'"
+          *ngIf="item && canStartToLoadIOC"
+          [source]="iocSource"
+        ></related-ioc-list>
+
+        <campaigns-list
+          [style.display]="activeTab === ActorsTabs.CAMPAIGN ? 'block' : 'none'"
+          *ngIf="item && canStartToLoadCampaigns"
+          [source]="campaingsListSource"
+        ></campaigns-list>
+
+        <attack-patterns
+          [actorName]="name"
+          [style.display]="activeTab === ActorsTabs.ATTACK_PATTERN ? 'block' : 'none'"
+          *ngIf="item && canStartToLoadAttackPatterns"
+          [source]="attackPatternsSource"
+        ></attack-patterns>
+
+        <signatures-list
+          [style.display]="activeTab === ActorsTabs.SIGNATURE ? 'block' : 'none'"
+          *ngIf="item && canStartToLoadSignatures"
+          [source]="signaturesListSource"
+        ></signatures-list>
+
+        <cve-list
+          [style.display]="activeTab === ActorsTabs.CVE ? 'block' : 'none'"
+          *ngIf="item && canStartToLoadCVEs"
+          [source]="cveListSource"
+        ></cve-list>
+
+        <tools-list
+          [style.display]="activeTab === ActorsTabs.TOOL ? 'block' : 'none'"
+          *ngIf="item && canStartToLoadTools"
+          [source]="toolsListSource"
+        ></tools-list>
+
+        <app-actors-target-tab
+          *ngIf="item && item.id && canStartToLoadTarget"
+          [style.display]="activeTab === ActorsTabs.TARGETS ? 'block' : 'none'"
+          [actor]="item"
+          [actorId]="item.id"
+          (change)="onTargetTabChange($event)"
+        ></app-actors-target-tab>
+      </div>
+    </app-tabs>
+  </div>
+</app-overlay>

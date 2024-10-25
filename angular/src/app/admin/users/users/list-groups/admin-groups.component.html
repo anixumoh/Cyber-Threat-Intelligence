@@ -1,0 +1,30 @@
+<app-table-admin
+  [isPaginate]="false"
+  [isRowSelected]="false"
+  [template_header]="[HeaderTitle]"
+  (reloadEmitter)="reloadData()"
+  (editEmitter)="createEdit($event)"
+  (deleteEmmiter)="itemSelected = $event; confirmation['delete'] = true"
+  (rowClick)="clickOnARow($event)"
+  [(table)]="table"
+>
+</app-table-admin>
+
+<ng-template #HeaderTitle>
+  <button type="button" (click)="createEdit()" class="btn btn-light text-primary btn-sm">
+    <i class="icon-plus-circle-solid mr-1" aria-hidden="true"></i>
+    Add Group
+  </button>
+</ng-template>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete the group ' + itemSelected?.name + ' ?'"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="confirmation['delete'] && itemSelected"
+  [acceptBtn]="'Yes'"
+  [cancelBtn]="'No'"
+  (accept)="delete(itemSelected)"
+  (cancel)="(confirmation['delete']); itemSelected = null"
+>
+</modal-window>

@@ -1,0 +1,56 @@
+@import 'src/scss/variables';
+
+/* TLP */
+.relativePosition {
+  position: relative;
+}
+
+.isFirst {
+  top: -28px !important;
+}
+
+.isLast {
+  top: -130px !important;
+}
+
+// DROPDOWN
+.list-group {
+  position: absolute;
+  transition: height 0.3s;
+  overflow: hidden;
+  visibility: hidden;
+  top: -68px;
+  &.open {
+    visibility: visible;
+  }
+  .list-group-item {
+    cursor: pointer;
+    display: block;
+  }
+}
+// COLORS
+.is-white {
+  color: $gray;
+}
+.is-green {
+  color: rgb(51, 255, 0);
+}
+.is-amber {
+  color: rgb(255, 192, 0);
+}
+.is-red {
+  color: rgb(255, 0, 51);
+}
+
+.center-actions {
+  margin: 0 auto;
+  background-color: #bdbdbd !important;
+  &:hover {
+    background-color: #979494 !important;
+  }
+}
+
+button {
+  width: 18px;
+  height: 18px;
+}

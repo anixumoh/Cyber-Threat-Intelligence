@@ -1,0 +1,11 @@
+<div class="severity">
+  <span class="cursor-none">
+    <i class="icon-lens" [ngClass]="severity === 1 || severity === 2 ? 'is-yellow' : 'is-white'"> </i>
+  </span>
+  <span class="cursor-none">
+    <i class="icon-lens" [ngClass]="severity === 3 || severity === 4 ? 'is-amber' : 'is-white'"> </i>
+  </span>
+  <span class="cursor-none">
+    <i class="icon-lens" [ngClass]="severity >= 5 ? 'is-red' : 'is-white'"> </i>
+  </span>
+</div>

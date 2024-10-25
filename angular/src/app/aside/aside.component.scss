@@ -1,0 +1,22 @@
+@import "src/scss/variables";
+
+
+:host {
+  display: block;
+}
+// ASIDE CONTAINER
+.aside-bg{
+  overflow-y: auto;
+  &.show-aside{
+    background-color: rgba(0, 0, 0, .80);
+    position: fixed;
+    top:54px;
+    right: 0;
+    z-index: 1100;
+    height: calc(100vh - 54px);
+    display: block;
+  }
+  &.hide-aside{
+    display: none;
+  }
+}

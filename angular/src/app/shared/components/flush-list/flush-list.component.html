@@ -1,0 +1,51 @@
+<div class="list-group list-group-flush">
+  <div class="list-group-item" *ngFor="let entry of data" style="padding: 0.75em 0">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap">
+      <div [ngClass]="{ 'list-group-flush--bold': mode === 'bold' }">
+        <i class="{{ entry.icon }} p-2 mr-2 text-white"></i> {{ entry.title }}
+      </div>
+
+      <i *ngIf="entry.loading" class="icon-spinner rotate text-primary"></i>
+      <app-tlp *ngIf="entry.title == 'TLP' && !entry.loading" [status]="entry.value" [interactive]="false"></app-tlp>
+      <div
+        class="text-secondary text-truncate2 text-right {{ entry.warningMessage ? 'warning-message' : '' }}"
+        *ngIf="entry.title != 'TLP' && !entry.loading"
+        style="max-width: 60%"
+        (click)="clickEntry(entry)"
+      >
+        <app-large-text *ngIf="!entry.link" [value]="entry.value || '-'" [placement]="placement"></app-large-text>
+
+        <a
+          href=""
+          *ngIf="entry.link"
+          class="float-left vertical-middle"
+          [routerLink]="entry.link"
+          [queryParams]="entry.queryParams"
+        >
+          <app-large-text [value]="entry.value" [placement]="placement"></app-large-text>
+        </a>
+
+        <ng-container *ngIf="entry.id && entry.id === 'ct'">
+          <i
+            class="icon-info ml-2 text-primary mb-1 vertical-middle"
+            [ngbTooltip]="tipContent"
+            [closeDelay]="2000000"
+            [autoClose]="true"
+            tooltipClass="tooltip-custom"
+          ></i>
+          <ng-template #tipContent>
+            <div>
+              The compilation time is extracted from the
+              <a
+                href="https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_file_header"
+                target="_blank"
+                >PE/COFF header </a
+              > and it indicates the local time of the system where it was compiled / created. This information can
+              give hints of the creator timezone but it can be tampered too.
+            </div>
+          </ng-template>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

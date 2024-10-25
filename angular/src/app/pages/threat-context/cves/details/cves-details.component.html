@@ -1,0 +1,268 @@
+<app-overlay [loading]="loading">
+  <threat-context-navigation [path]="path" [name]="name"></threat-context-navigation>
+  <div style="min-height: 650px">
+    <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-0 tcx-section-name">CVE</h6>
+    <div class="mb-2" style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px">
+      <span style="display: flex">
+        <h4 data-test="cve-name" class="text-truncate tcx-resource-name" style="margin: 0">{{ item.name }}</h4>
+      </span>
+
+      <div style="display: flex">
+        <div class="button-action mr-1" ngbDropdown>
+          <button
+            ngbDropdownToggle
+            class="btn btn-light btn-sm border text-primary width-85 float-left btn-actions"
+            type="button"
+            id="actionsButtonDropdown"
+            name="button"
+            *ngIf="contracted"
+          >
+            Export
+          </button>
+          <div ngbDropdownMenu class="actions-dropdown-menu padding-0 border-0">
+            <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded font-14">
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToCSV()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>CSV</span>
+              </li>
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToJson()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>JSON</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div *ngIf="fromexplorer" class="d-flex d-gap">
+          <button
+            type="button"
+            class="btn btn-light btn-sm border text-primary width-85 mr-1"
+            *ngIf="fromexplorer"
+            (click)="backToThreats()"
+          >
+            Back to threats
+          </button>
+          <button
+            data-test="previous-cve-button"
+            [disabled]="resourcesService.CVE_Navigation.list.length <= 1"
+            (click)="previousCVEClick()"
+            type="button"
+            class="btn btn-light text-primary btn-sm justify-content-start"
+            style="width: 120px"
+          >
+            <i class="icon-arrow-left" aria-hidden="true"></i>
+            Previous CVE
+          </button>
+
+          <button
+            data-test="next-cve-button"
+            [disabled]="resourcesService.CVE_Navigation.list.length <= 1"
+            (click)="nextCVEClick()"
+            type="button"
+            class="btn btn-light text-primary btn-sm justify-content-end"
+            style="width: 120px"
+          >
+            Next CVE
+            <i class="icon-arrow-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-0 mb-4" style="min-height: 170px">
+      <div class="flex">
+        <div class="col-auto">
+          <app-gauge-chart *ngIf="risk" [gaugeData]="risk"> </app-gauge-chart>
+        </div>
+
+        <div class="col-lg">
+          <app-flush-list [data]="entries" mode="bold"></app-flush-list>
+          <div class="list-group list-group-flush" *ngIf="item && item.id">
+            <div
+              class="list-group-item"
+              style="padding: 0.75em 0; user-select: none"
+              [ngClass]="{ 'cursor-pointer': mentionsCount > 0 && contracted }"
+              (click)="mentionsCollapsed = !mentionsCollapsed"
+            >
+              <div style="display: flex; justify-content: space-between; align-items: center">
+                <h6 class="mb-0 text-bold"><i class="icon-list bg-primary p-2 mr-2 text-white"></i> MENTIONS</h6>
+                <div class="d-flex align-items-center secondary-text">
+                  {{ mentionsCount }}
+
+                  <i
+                    aria-hidden="true"
+                    *ngIf="contracted && mentionsCount > 0"
+                    style="margin-left: 4px"
+                    [ngClass]="mentionsCollapsed ? 'icon-arrow-right' : 'icon-arrow-down'"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!mentionsCollapsed" class="mt-1">
+            <ul class="list-group">
+              <li
+                class="list-group-item pt-1 pb-1 cursor-pointer"
+                *ngFor="let mention of mentionsCategories"
+                (click)="goToMentions(mention)"
+              >
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+                  <div class="text-link">{{ mention.label }}</div>
+                  <div>{{ mention.value || 0 }}</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="list-group list-group-flush" *ngIf="selectedResource">
+            <div class="list-group-item" style="padding: 0.75em 0; user-select: none">
+              <div style="display: flex; justify-content: space-between; align-items: center">
+                <h6 class="mb-0 text-bold">
+                  <i class="icon-tag bg-primary p-2 mr-2 text-white"></i>
+                  LABELS
+
+                  <button class="btn no-flex btn-circle" (click)="openEditLabels()">
+                    <i class="icon-mode_edit text-primary"></i>
+                  </button>
+                </h6>
+                <div
+                  class="d-flex align-items-center secondary-text"
+                  style="max-width: 200px; flex-wrap: wrap; justify-content: flex-end"
+                >
+                  <div *ngFor="let label of selectedResource.labels">
+                    <app-label-item [label]="label" labelProperty="name"></app-label-item>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg">
+          <div class="col">
+            <h5 *ngIf="item && item.cvss && (item.cvss.v2 || item.cvss.v3)">Common Vulnerability Scoring System</h5>
+            <div class="mb-3 mt-3" *ngIf="item && item.cvss && (item.cvss.v2 || item.cvss.v3)">
+              <ul class="list-group" *ngIf="forattedCvssV2">
+                <div
+                  class="list-group-item list-group-item-action bg-light list-group-item d-flex justify-content-between align-items-center mb-1 cursor-pointer"
+                  style="display: flex; justify-content: space-between; align-items: center"
+                  (click)="cvssV2Collapsed = !cvssV2Collapsed"
+                >
+                  <h6 class="mb-0">CVSS V2</h6>
+                  <div class="d-flex align-items-center">
+                    <span class="text-secondary mr-1">(Score: <span [innerHTML]="v2Score"></span>)</span>
+                    <i aria-hidden="true" [ngClass]="cvssV2Collapsed ? 'icon-arrow-right' : 'icon-arrow-down'"></i>
+                  </div>
+                </div>
+                <div [innerHTML]="forattedCvssV2" *ngIf="!cvssV2Collapsed"></div>
+              </ul>
+              <ul class="list-group" *ngIf="forattedCvssV3">
+                <div
+                  class="list-group-item list-group-item-action bg-light list-group-item d-flex justify-content-between align-items-center mb-1 cursor-pointer"
+                  style="display: flex; justify-content: space-between; align-items: center"
+                  (click)="cvssV3Collapsed = !cvssV3Collapsed"
+                >
+                  <h6 class="mb-0">CVSS V3</h6>
+                  <div class="d-flex align-items-center">
+                    <span class="text-secondary mr-1">(Score: <span [innerHTML]="v3Score"></span>)</span>
+                    <i aria-hidden="true" [ngClass]="cvssV3Collapsed ? 'icon-arrow-right' : 'icon-arrow-down'"></i>
+                  </div>
+                </div>
+                <div [innerHTML]="forattedCvssV3" *ngIf="!cvssV3Collapsed"></div>
+              </ul>
+              <ng-container *ngIf="msBulletins && msBulletins.length > 0">
+                <h5>Microsoft Bulletins</h5>
+                <ul class="list-group">
+                  <ng-container *ngFor="let bulletin of msBulletins">
+                    <div
+                      class="list-group-item list-group-item-action list-group-item d-flex justify-content-between align-items-center mb-1 cursor-pointer"
+                      (click)="bulletin.collapsed = !bulletin.collapsed"
+                    >
+                      <h6 class="mb-0">{{ bulletin.name }}</h6>
+                      <i aria-hidden="true" [ngClass]="bulletin.collapsed ? 'icon-arrow-right' : 'icon-arrow-down'"></i>
+                    </div>
+                    <div [innerHTML]="bulletin.formatted" *ngIf="!bulletin.collapsed"></div>
+                  </ng-container>
+                </ul>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <app-tabs [items]="tabs" [active]="activeTab" (onChange)="onTabChange($event)">
+      <app-cve-description
+        [style.display]="activeTab === cveTabs.DESCRIPTION ? 'block' : 'none'"
+        [model]="item"
+        *ngIf="item && canStartToLoadDescription"
+      ></app-cve-description>
+
+      <ng-container *ngIf="activeTab !== cveTabs.DESCRIPTION">
+        <ng-container *ngIf="contracted; else noTcx">
+          <related-ioc-list
+            [showTitle]="false"
+            [style.display]="activeTab === cveTabs.MALWARE ? 'block' : 'none'"
+            *ngIf="item && canStartToLoadContext"
+            [source]="iocSource"
+          ></related-ioc-list>
+
+          <actors-list
+            [style.display]="activeTab === cveTabs.ACTORS ? 'block' : 'none'"
+            *ngIf="item && canStartToLoadActors"
+            [source]="actorsListSource"
+          ></actors-list>
+
+          <attack-patterns
+            [style.display]="activeTab === cveTabs.ATTACK_PATTERN ? 'block' : 'none'"
+            *ngIf="item && canStartToLoadAttackPatterns"
+            [source]="attackPatternsSource"
+          ></attack-patterns>
+
+          <tools-list
+            [style.display]="activeTab === cveTabs.TOOL ? 'block' : 'none'"
+            *ngIf="item && canStartToLoadTools"
+            [source]="toolsListSource"
+          ></tools-list>
+
+          <campaigns-list
+            [style.display]="activeTab === cveTabs.CAMPAIGN ? 'block' : 'none'"
+            *ngIf="item && canStartToLoadCampaigns"
+            [source]="campaingsListSource"
+          ></campaigns-list>
+
+          <signatures-list
+            [style.display]="activeTab === cveTabs.SIGNATURE ? 'block' : 'none'"
+            *ngIf="item && canStartToLoadSignatures"
+            [source]="signatureSource"
+          ></signatures-list>
+
+          <mentions-list
+            [style.display]="activeTab === cveTabs.MENTION ? 'block' : 'none'"
+            *ngIf="item && canStartToLoadMentions"
+            [source]="mentionSource"
+            [initialFilterBy]="mentionsFilterBy"
+          ></mentions-list>
+        </ng-container>
+      </ng-container>
+
+      <ng-template #noTcx>
+        <div class="card mb-4" style="margin-top: 50px; margin-left: 150px; margin-right: 150px" *ngIf="!loading">
+          <div class="alert-table mb-0 d-flex" style="background-color: #e2d6604a; color: #6e6014">
+            <i class="icon-info-circle-solid mr-3" style="margin-top: 4px"></i>
+            <span class="font-weight-bold">
+              To access the detailed information, please review your License and reach out to your Account
+              Manager.</span
+            >
+          </div>
+        </div>
+      </ng-template>
+    </app-tabs>
+  </div>
+</app-overlay>

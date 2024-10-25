@@ -1,0 +1,28 @@
+@import 'src/scss/variables';
+@import '../generic-parameter/generic-parameter.component.scss';
+.typo_keyword_input {
+  width: 3.1em;
+}
+
+input[type='number'] {
+  padding: 0 0 0 12px;
+  height: 33px;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']:hover::-webkit-inner-spin-button {
+  width: 25px;
+  height: 33px;
+}
+
+.position {
+  position: relative;
+}
+
+.align-element {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 9px;
+  left: -35px;
+}

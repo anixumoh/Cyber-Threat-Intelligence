@@ -1,0 +1,182 @@
+{
+    "data": {
+        "type": "CVE",
+        "id": "221995",
+        "attributes": {
+            "status": "unknown",
+            "name": "CVE-2023-33150",
+            "created_at": "2023-07-12T01:11:56.852456Z",
+            "published_at": "2023-07-11T18:15:00Z",
+            "ioc_link": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/ioc/",
+            "num_pocs": 0,
+            "platforms": [
+                {
+                    "id": "cpe:2.3:a:microsoft:word:2013:sp1:*:*:*:*:*:*",
+                    "title": "cpe:2.3:a:microsoft:word:2013:sp1:*:*:*:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:word:2016:*:*:*:*:*:*:*",
+                    "title": "cpe:2.3:a:microsoft:word:2016:*:*:*:*:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:word:2013:sp1:*:*:rt:*:*:*",
+                    "title": "cpe:2.3:a:microsoft:word:2013:sp1:*:*:rt:*:*:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:365_apps:-:*:*:*:enterprise:*:x64:*",
+                    "title": "cpe:2.3:a:microsoft:365_apps:-:*:*:*:enterprise:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:365_apps:-:*:*:*:enterprise:*:x86:*",
+                    "title": "cpe:2.3:a:microsoft:365_apps:-:*:*:*:enterprise:*:x86:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:office:2019:*:*:*:*:-:x86:*",
+                    "title": "cpe:2.3:a:microsoft:office:2019:*:*:*:*:-:x86:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:office:2019:*:*:*:*:-:x64:*",
+                    "title": "cpe:2.3:a:microsoft:office:2019:*:*:*:*:-:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:office:2021:*:*:*:ltsc:*:x64:*",
+                    "title": "cpe:2.3:a:microsoft:office:2021:*:*:*:ltsc:*:x64:*"
+                },
+                {
+                    "id": "cpe:2.3:a:microsoft:office:2021:*:*:*:ltsc:*:x86:*",
+                    "title": "cpe:2.3:a:microsoft:office:2021:*:*:*:ltsc:*:x86:*"
+                }
+            ],
+            "popularity_changed": false,
+            "references": [
+                {
+                    "url": "https://msrc.microsoft.com/update-guide/vulnerability/CVE-2023-33150"
+                }
+            ],
+            "microsoft_bulletins": [],
+            "exploits": [],
+            "tags_slugs": [],
+            "num_signatures": 0,
+            "updated_at": "2023-08-08T01:10:49.629194Z",
+            "score": 9.6,
+            "bl_score_changed_at": "2023-09-08T15:30:09.284029Z",
+            "explorer_update": "2023-09-08T15:30:09.297439Z",
+            "popularity": 0.04,
+            "num_malware": 0,
+            "cvss": {
+                "v3": {
+                    "scope": "CHANGED",
+                    "version": "3.1",
+                    "baseScore": 9.6,
+                    "attackVector": "NETWORK",
+                    "baseSeverity": "CRITICAL",
+                    "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H",
+                    "integrityImpact": "HIGH",
+                    "userInteraction": "REQUIRED",
+                    "attackComplexity": "LOW",
+                    "availabilityImpact": "HIGH",
+                    "privilegesRequired": "NONE",
+                    "confidentialityImpact": "HIGH"
+                }
+            },
+            "description": "Microsoft Office Security Feature Bypass Vulnerability",
+            "previous_bl_score": 76.0833333333333,
+            "bl_score": 7.6
+        },
+        "relationships": {
+            "campaigns": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/relationships/campaigns/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/campaign/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "attack_patterns": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/relationships/attack-pattern/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/attack-pattern/"
+                },
+                "meta": {
+                    "count": 6
+                }
+            },
+            "threat_actors": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/relationships/threat-actors/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/threat-actor/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "crime_servers": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/relationships/crime-server/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/crime-server/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "mentions": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/relationships/mentions/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/mention/"
+                },
+                "meta": {
+                    "count": 8
+                }
+            },
+            "tags": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/relationships/tags/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/tag/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "signatures": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/relationships/signature/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/signature/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "sparks": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/relationships/spark/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/spark/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "malware": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/relationships/malware/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/malware/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            },
+            "tools": {
+                "links": {
+                    "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/relationships/tools/",
+                    "related": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/tool/"
+                },
+                "meta": {
+                    "count": 0
+                }
+            }
+        },
+        "links": {
+            "self": "https://tcmaster.blueliv.com/api/v1/cve/CVE-2023-33150/"
+        }
+    }
+}

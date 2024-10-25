@@ -1,0 +1,113 @@
+<ng-container>
+  <div class="tab-content">
+    <div class="tab-pane active">
+      <!-- HEADER SECTION -->
+      <app-table-admin
+        [isRowSelected]="false"
+        [template_header]="[HeaderTitle, TemplateOptions]"
+        [editSuperadminOnly]="isSuperAdmin"
+        (reloadEmitter)="reloadData()"
+        (editEmitter)="createEdit($event)"
+        (deleteEmmiter)="selected = $event; confirmation['delete'] = true"
+        (rowClick)="clickOnARow($event)"
+        (sortEmmiter)="onSort($event)"
+        [template_outlet]="{
+          prioritized: templatePrioritized,
+          label: templateLabels,
+          labelProtected: templateProtected
+        }"
+        [(table)]="table"
+        #adminTable
+      >
+      </app-table-admin>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #templateProtected let-item>
+  <i *ngIf="item.labelProtected" [title]="'Protected Label'" class="icon-shield" aria-hidden="true"></i>
+</ng-template>
+
+<ng-template #templatePrioritized let-item>
+  <i
+    [class.icon-minus]="!item.prioritized"
+    [class.text-ligth]="!item.prioritized"
+    [class.icon-check]="item.prioritized"
+    [class.text-success]="item.prioritized"
+    class="cursor-pointer"
+    aria-hidden="true"
+  ></i>
+</ng-template>
+
+<ng-template #templateLabels let-item>
+  <div class="labels">
+    <span
+      class="badge font-weight-bold table-tag cursor-pointer"
+      [style.border]="'2px solid'"
+      [style.border-color]="item.bgColorHex"
+      [style.color]="'#1b2734'"
+    >
+      {{ item.label }}
+    </span>
+  </div>
+</ng-template>
+
+<ng-template #HeaderTitle>
+  <button type="button" (click)="createEdit()" class="btn btn-light text-primary btn-sm">
+    <i class="icon-plus-circle-solid mr-1" aria-hidden="true"></i>
+    Add Label
+  </button>
+</ng-template>
+
+<ng-template #TemplateOptions>
+  <div class="d-flex align-items-center filter-section flex-wrap">
+    <span *ngIf="!idOrg" class="mr-2 d-flex align-items-center margin-mobile">
+      <span class="mr-1 float-left">Organization:</span>
+      <select
+        class="form-inline form-control-sm float-left border org-select"
+        [(ngModel)]="table.queryParam['ss']"
+        (change)="onChangeOrg()"
+      >
+        <option disabled selected>--Select --</option>
+        <option *ngFor="let org of listOrg" [value]="org.id">{{ org.name }}</option>
+      </select>
+    </span>
+    <span class="d-flex align-items-center mr-2 margin-mobile">
+      <span class="mr-1 ml-1 float-left">Module:</span>
+      <select
+        class="form-inline form-control-sm float-left border mod-select"
+        [disabled]="!table.queryParam['ss']"
+        [(ngModel)]="table.queryParam['rs']"
+        (change)="reloadData(true)"
+      >
+        <option disabled selected>--Select --</option>
+        <option *ngFor="let mod of listMod" [value]="mod.id">{{ mod.name }}</option>
+      </select>
+    </span>
+    <div class="d-flex align-items-center margin-mobile">
+      <input
+        class="btns-container__search-input"
+        placeholder="Search for labels"
+        type="search"
+        value=""
+        name="search"
+        id="search"
+        [(ngModel)]="searchedText"
+        (ngModelChange)="search()"
+      />
+      <i class="icon-search input-search"></i>
+    </div>
+  </div>
+</ng-template>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete the label ' + selected?.label + ' ?'"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="confirmation['delete'] && selected"
+  [acceptBtn]="'Yes'"
+  [cancelBtn]="'No'"
+  (accept)="delete(selected)"
+  (cancel)="(confirmation['delete']); selected = null"
+>
+</modal-window>

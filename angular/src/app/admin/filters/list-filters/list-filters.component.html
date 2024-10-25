@@ -1,0 +1,64 @@
+<ng-container *ngIf="listOrg && listOrg.length > 0">
+  <main-header-v1 [title]="idOrg ? '' : 'Filters Template'">
+    <app-table-admin
+      [isRowSelected]="false"
+      [template_header]="[HeaderTitle, TemplateOptions]"
+      [(table)]="table"
+      (editEmitter)="createEdit($event)"
+      (deleteEmmiter)="selected = $event; confirmation['delete'] = true"
+      (reloadEmitter)="reloadData(false)"
+      (sortEmmiter)="onSort($event)"
+      #adminTable
+    >
+    </app-table-admin>
+  </main-header-v1>
+
+  <ng-template #HeaderTitle>
+    <button type="button" (click)="createEdit()" class="btn btn-light text-primary btn-sm">
+      <i class="icon-plus-circle-solid mr-1" aria-hidden="true"></i>
+      Add Filter
+    </button>
+  </ng-template>
+
+  <ng-template #TemplateOptions>
+    <div class="d-flex align-items-center filter-section flex-wrap">
+      <ng-container *ngIf="!idOrg">
+        <div class="d-flex align-items-center filter-section">
+          <span class="mr-1 float-left mr-3">Organization</span>
+          <select
+            class="form-inline form-control-sm float-left border"
+            [(ngModel)]="table.queryParam['ss']"
+            (change)="reloadData(true)"
+          >
+            <option disabled selected>--Select --</option>
+            <option *ngFor="let org of listOrg" [value]="org.id">{{ org.name }}</option>
+          </select>
+        </div>
+      </ng-container>
+      <div class="d-flex align-items-center">
+        <input
+          class="btns-container__search-input"
+          placeholder="Search for name"
+          type="search"
+          value=""
+          name="search"
+          id="search"
+          [(ngModel)]="searchedText"
+          (ngModelChange)="search()"
+        />
+        <i class="icon-search input-search"></i>
+      </div>
+    </div>
+  </ng-template>
+  <modal-window
+    [modalTitle]="'Confirmation'"
+    [modalBody]="'Are you sure you want to delete the filter ' + selected?.name + ' ?'"
+    [warning]="'All configuration of the filters will also be deleted.'"
+    *ngIf="confirmation['delete'] && selected"
+    [acceptBtn]="'Yes'"
+    [cancelBtn]="'No'"
+    (accept)="delete(selected)"
+    (cancel)="(confirmation['delete']); selected = null"
+  >
+  </modal-window>
+</ng-container>

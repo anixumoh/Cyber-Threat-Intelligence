@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <base href="/" />
+    <meta charset="utf-8" />
+    <meta name="description" content="Blueliv threat compass service" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <!-- Angular App -->
+    <script src="/assets/env/env.js"></script>
+    <script src="/runtime.js" type="module"></script>
+    <script src="/polyfills.js" type="module"></script>
+    <script src="/scripts.js" defer></script>
+    <script src="/main.js" defer type="module"></script>
+
+    <!-- Amcharts -->
+    <script src="/assets/amcharts/core.js"></script>
+    <script src="/assets/amcharts/charts.js"></script>
+    <script src="/assets/amcharts/maps.js"></script>
+    <script src="/assets/amcharts/amcharts4-geodata/worldLow.js"></script>
+    <script src="/assets/amcharts/plugins/annotation.js"></script>
+    <script src="/assets/amcharts/themes/animated.js"></script>
+    <!-- Svelte App -->
+    %sveltekit.head%
+  </head>
+
+  <body class="app main-container" id="main-container">
+    <link id="angular-stylesheet" rel="stylesheet" href="/styles.css" />
+    <div id="svelte-app">%sveltekit.body%</div>
+    <div id="angular-app" style="display: none">
+      <app-root></app-root>
+    </div>
+  </body>
+</html>

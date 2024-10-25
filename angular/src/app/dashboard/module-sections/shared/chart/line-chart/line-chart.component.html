@@ -1,0 +1,8 @@
+<div
+  #exportButton
+  class="chart-export-btn"
+  (mouseover)="setTransparent(true)"
+  (mouseout)="setTransparent(false)"
+  (click)="setTransparent(false)"
+></div>
+<div #chartDiv [class.transparent-chart]="isChartTransparent" [style.width.%]="100" [style.height.px]="200"></div>

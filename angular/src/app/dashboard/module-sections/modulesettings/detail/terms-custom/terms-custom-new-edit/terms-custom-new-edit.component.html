@@ -1,0 +1,209 @@
+<!-- LOADING PROCESS -->
+<div *ngIf="!resource" class="no-results-box">
+  <i class="icon-spinner rotate"></i>
+  <h6 class="no-results">Loading</h6>
+</div>
+<form *ngIf="resource && termsForm" [formGroup]="termsForm">
+  <div class="card mb-2">
+    <div class="card-header p-1 clearfix">
+      <h6 class="mt-1 mb-0 ml-1 float-left">Add Term</h6>
+      <button
+        class="btn btn-light btn-sm border text-primary float-right ml-1"
+        type="button"
+        (click)="navigateToList()"
+      >
+        <i class="icon-arrow-left mr-1"></i>
+        Back to list
+      </button>
+      <button
+        class="btn btn-ligth btn-sm border text-primary float-right ml-1"
+        *ngIf="editMode"
+        type="button"
+        (click)="navigateToDetail()"
+      >
+        Detail
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group mb-4">
+            <div class="d-flex justify-content-between">
+              <label for="searchPhrase">Search Phrase</label>
+              <button class="btn btn-circle bg-light" (click)="openCloseInfoModal()" matTooltip="Info">
+                <i class="icon-info-circle-solid color-primary"></i>
+              </button>
+            </div>
+            <div class="card-header px-2 py-1 alert-info border-0" *ngIf="openSearchPhraseInfo">
+              <span class="font-italic text-90"
+                >Insert the search phrase (e.g. mycompany.co.uk). You can also add multiple search phrases (one per
+                line).</span
+              >
+            </div>
+            <textarea
+              id="searchPhrase"
+              class="form-control form-control-sm"
+              rows="3"
+              placeholder="Write here the search phrases, separated by a line break"
+              formControlName="searchPhrase"
+            >
+            </textarea>
+
+            <span
+              *ngIf="searchPhrase && searchPhrase?.errors && searchPhrase?.errors?.required && searchPhrase.touched"
+              class="color-error mt-1"
+              ><i class="icon-times-circle-solid"></i>This field is required</span
+            >
+            <span
+              *ngIf="searchPhrase && searchPhrase?.errors && searchPhrase?.errors?.['pattern'] || validateSearchPhraseData"
+              class="d-flex align-items-center color-error mt-1"
+              ><i class="icon-times-circle-solid"></i>Must be at least 3 characters long</span
+            >
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <ul class="list-group mb-4">
+                <li class="list-group-item bg-light p-2">
+                  <label class="mb-0 ml-1 d-flex align-items-center">
+                    <input type="checkbox" id="searchEngines" formControlName="searchEngines" />
+                    <span class="ml-2">News</span>
+                  </label>
+                </li>
+                <li class="list-group-item bg-light p-2">
+                  <label class="mb-0 ml-1 d-flex align-items-center">
+                    <input type="checkbox" id="searchTwitter" formControlName="searchTwitter" />
+                    <span class="ml-2 order-2">Real time Twitter feed</span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6">
+              <div class="card mb-4">
+                <div class="card-header p-1 clearfix">
+                  <h6 class="mb-0 mt-1 ml-1 float-left">Uploaded Logo</h6>
+                  <button class="btn btn-circle bg-light float-right" (click)="toggleShowInfo($event)">
+                    <i class="icon-info-circle-solid color-primary"></i>
+                  </button>
+                </div>
+                <div class="card-header px-3 px-2 py-1 alert-info border-0" *ngIf="isShowInfo">
+                  <span class="font-italic text-90">Upload a logo in order to detect the abuse of it</span>
+                </div>
+                <div class="card-body">
+                  <img class="img-thumbnail mb-3" *ngIf="downloadedImage" [src]="downloadedImage" />
+                  <app-uploader-settings
+                    (uploadFile)="uploadFile($event)"
+                    (deleteFile)="deleteFile()"
+                    [status]="filesStatus"
+                    [allowedUrl]="false"
+                    [uploaderInfo]="false"
+                    [multipleSelect]="false"
+                    [isDelete]="true"
+                    [isModule]="false"
+                    [isDisable]="isDisabledImageLoad"
+                  >
+                  </app-uploader-settings>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header p-0 d-flex align-items-center justify-content-between">
+              <h6 class="mb-2 mt-2 ml-2 float-left">Crawlers</h6>
+            </div>
+            <div class="card-body p-0 height-list" formArrayName="transformadasList">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of tableHeader" style="font-size: 12px">{{ header }}</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="transformadasList?.length !== 0">
+                  <tr *ngFor="let transformada of transformadasList; let i = index" [formGroupName]="i">
+                    <td class="vertical-middle">
+                      <p class="mb-0">{{ transformada.value.transformadaName }}</p>
+                    </td>
+                    <td class="vertical-middle td-center td-80">
+                      <app-enable-disable
+                        [status]="transformada.value.enabledTransformada"
+                        [interactive]="true"
+                        (setStatus)="setStatus($event, i)"
+                      >
+                      </app-enable-disable>
+                    </td>
+                    <td class="vertical-middle td-center" *ngIf="grants?.isMaster() || grants?.isSuperAdmin()">
+                      <div class="d-flex">
+                        <input
+                          class="mb-0"
+                          type="text"
+                          [disabled]="transformada.value.enabledTransformada ? false : true"
+                          (change)="updateSchedExpression($event, i)"
+                          [value]="transformada.value.visionSchedExpression"
+                        />
+                        <span class="cursor-pointer text-primary" (click)="openInfoModal()"
+                          ><i class="icon-info-circle-solid ml-2"></i
+                        ></span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let unavailableTransformada of unavailableTransformadas" style="opacity: 0.5">
+                    <td class="vertical-middle">
+                      <p class="mb-0">{{ unavailableTransformada }}</p>
+                    </td>
+                    <td class="vertical-middle td-center td-80">
+                      <app-enable-disable [status]="false" [interactive]="false"> </app-enable-disable>
+                    </td>
+                    <td class="vertical-middle td-center" *ngIf="grants?.isMaster() || grants?.isSuperAdmin()"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer p-1">
+      <button
+        class="btn btn-primary btn-sm px-4 float-right"
+        *ngIf="!editMode"
+        type="submit"
+        [disabled]="!termsForm.valid || loading"
+        (click)="onSubmit()"
+      >
+        <i class="icon-spinner rotate mr-1" *ngIf="loading"></i>
+        Create
+      </button>
+      <button
+        class="btn btn-primary btn-sm px-4 float-right"
+        *ngIf="editMode"
+        [disabled]="!termsForm.valid || loading"
+        (click)="onSubmitEditMode()"
+      >
+        <i class="icon-spinner rotate mr-1" *ngIf="loading"></i>
+        Save
+      </button>
+    </div>
+  </div>
+</form>
+
+<modal-window (cancel)="openInfoModal()" [modalTitle]="'Info'" *ngIf="isModalInfoOpen">
+  <pre>
+      <p class="font-weight-bold">Format:</p>
+      *  *  *  *  *  *
+      ┬  ┬  ┬  ┬  ┬  ┬
+      │  │  │  │  │  └─── day of week (0 - 6) (0 is Sunday)
+      │  │  │  │  └────── month (1 - 12)
+      │  │  │  └───────── day of month (1 - 31)
+      │  │  └──────────── hour (0 - 23)
+      │  └─────────────── minute (0 - 59)
+      └────────────────── second (0 - 59)</pre>
+  <p class="font-weight-bold">Examples:</p>
+  <ul class="info-list">
+    <li>0 0 * * * ? : Every hour</li>
+    <li>0 0/5 * * * ? : Every 5 minutes</li>
+    <li>0 0 12 * * ? : Every day at 12 p.m.</li>
+    <li>0 0 8 1 * ? : Every 1st day of month at 8 a.m.</li>
+    <li>0 0 8 * * 1-5? : On mondays to fridays at 8 a.m.</li>
+  </ul>
+</modal-window>

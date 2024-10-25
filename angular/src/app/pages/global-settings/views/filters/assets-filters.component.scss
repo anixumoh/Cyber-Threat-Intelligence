@@ -1,0 +1,154 @@
+@import '~scss/mixins';
+
+.btn-search {
+  height: 33px;
+  background: #eaeff3;
+  border: 1px solid #ced6da;
+  box-sizing: border-box;
+  border-radius: 0px 3px 3px 0px;
+  width: 32.15px;
+}
+
+.reset-icon {
+  position: relative;
+  right: 18px;
+  top: 1px;
+  width: 0px;
+}
+
+.filter-buttons {
+  @include flexbox;
+
+  .filter-btn {
+    padding-left: 8px;
+    padding-right: 8px;
+    height: 33px;
+    margin-bottom: 5px;
+  }
+}
+
+.assets-filters-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 82px;
+  align-items: center;
+  padding: 10px;
+  background: #f8f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  box-sizing: border-box;
+  border-radius: 5px 5px 0px 0px;
+
+  ::ng-deep .mat-select {
+    margin-top: 0px !important;
+  }
+
+  ::ng-deep label:not(.mat-form-field-empty) {
+    font-size: 21px !important;
+    margin-top: -1px;
+  }
+
+  ::ng-deep .mat-select-min-line {
+    visibility: hidden;
+  }
+
+  ::ng-deep .mat-select-value {
+    visibility: hidden !important;
+  }
+
+  ::ng-deep .mat-form-field-flex {
+    max-height: 33px;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    padding: 0.5em 0;
+    border-top: 0.6em solid transparent;
+  }
+
+  ::ng-deep .mat-form-field-underline {
+    display: none;
+  }
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0.34375em;
+  }
+
+  ::ng-deep .mat-select {
+    margin-top: 5px;
+  }
+
+  ::ng-deep .mat-form-field-flex {
+    height: 41px;
+  }
+
+  ::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: #fdfdfd !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 3px !important;
+    padding: 0 10px !important;
+  }
+
+  .filter-boxes {
+    display: flex;
+
+    @media (max-width: 1281px) {
+      .form-field-container {
+        ::ng-deep .mat-form-field {
+          max-width: 160px;
+        }
+
+        &--tag {
+          ::ng-deep .mat-form-field {
+            max-width: 100px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.search-section {
+  @include ct-flex-with-params(space-between, center);
+}
+
+.filters-section {
+  padding-top: 5px;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+
+  flex-direction: row;
+  align-items: center;
+  width: 70%;
+}
+
+.search-box {
+  height: 33px;
+  border-radius: 0px;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #ced4da;
+  box-sizing: border-box;
+  border-right: none;
+}
+
+.search-box:focus {
+  background: #ffffff;
+  border: 1px solid #80bdff;
+}
+
+.search-box::placeholder {
+  font-size: 14px;
+}
+
+.search-box:focus::placeholder {
+  color: transparent;
+}
+
+.button-size-apply {
+  font-size: 2.4em;
+}
+
+.button-size-reset {
+  font-size: 2em;
+}

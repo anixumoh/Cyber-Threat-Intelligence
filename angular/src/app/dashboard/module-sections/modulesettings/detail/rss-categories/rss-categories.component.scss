@@ -1,0 +1,12 @@
+@import "src/scss/variables";
+@import "../settings-detail-generic";
+
+.main-list{
+  height:calc(100vh - 180px);
+  overflow:auto;
+}
+.list-group{
+  .list-group-item{
+    padding:15px;
+  }
+}

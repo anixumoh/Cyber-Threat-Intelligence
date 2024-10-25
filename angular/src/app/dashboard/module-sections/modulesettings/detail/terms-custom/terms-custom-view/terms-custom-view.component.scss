@@ -1,0 +1,28 @@
+@import 'src/scss/variables';
+
+// PANEL
+.panel {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 200px;
+  padding: 15px !important;
+  overflow: auto;
+}
+
+.main-list {
+  max-height: 350px;
+  overflow: auto;
+}
+
+.image {
+  width: 100%;
+}
+
+.table-container {
+  max-height: 300px !important;
+  overflow-y: scroll !important;
+}
+
+.disabled-btn {
+  cursor: not-allowed !important;
+  opacity: 50%;
+}

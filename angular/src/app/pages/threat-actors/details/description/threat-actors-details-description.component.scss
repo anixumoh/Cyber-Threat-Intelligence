@@ -1,0 +1,38 @@
+.list-group-item {
+  i {
+    font-size: 6px;
+    margin: 8px 10px 0 0;
+  }
+}
+
+:host ::ng-deep {
+  ol ol,
+  ul ul,
+  ol ul,
+  ul ol {
+    margin-bottom: 20px;
+    list-style-type: disc !important;
+    margin-left: 1.5rem;
+    & ul {
+      list-style-type: circle !important;
+      & ul {
+        list-style-type: square !important;
+      }
+    }
+  }
+}
+
+.btn-outline-primary {
+  margin: 10px 10px 10px 10px;
+}
+
+.btn-outline-primary:hover {
+  background-color: white;
+}
+
+.btn-outline-primary:focus {
+  background-color: white!important;
+}
+
+.toggle-icon-arrow-down { position: -312px -116px; } 
+.collapsed.toggle-icon-arrow-down { position: -454px -72px; }

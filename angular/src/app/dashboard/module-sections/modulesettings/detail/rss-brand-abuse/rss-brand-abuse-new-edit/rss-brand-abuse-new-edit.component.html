@@ -1,0 +1,79 @@
+<!-- LOADING PROCESS -->
+<div *ngIf="!resource; else tmpl1" class="no-results-box">
+  <i class="icon-spinner rotate"></i>
+  <h6 class="no-results">Loading</h6>
+</div>
+<ng-template #tmpl1>
+  <form [formGroup]="termsForm" (ngSubmit)="onSubmit()">
+    <div class="card mb-2">
+      <div class="card-header p-1 clearfix">
+        <h6 class="mt-1 mb-0 ml-1 float-left">Add RSS</h6>
+        <button
+          class="btn btn-light btn-sm border text-primary float-right ml-1"
+          type="button"
+          (click)="navigateToList()"
+        >
+          <i class="icon-arrow-left mr-1"></i>
+          Back to list
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group mb-4">
+              <label for="name">Name</label>
+              <input
+                class="form-control form-control-sm"
+                type="text"
+                id="name"
+                placeholder="Write here the name"
+                formControlName="name"
+              />
+              <span *ngIf="!name.valid && name.touched">
+                <span *ngIf="name.errors['required']">This field is required</span>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="url">Url</label>
+              <input
+                class="form-control form-control-sm"
+                type="text"
+                id="url"
+                placeholder="Write here the url"
+                formControlName="url"
+              />
+              <span *ngIf="!url.valid && url.touched" class="text-danger">
+                <p *ngIf="url.errors['required']" class="text-danger mb-1">This field is required</p>
+                <p *ngIf="url.errors['urlInvalid']" class="text-danger mb-1">This url is invalid</p>
+                <p *ngIf="url.errors['prefixInvalid']" class="text-danger mb-1">
+                  Url must start with http://, https:// or ftp://
+                </p>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group mb-4">
+              <label class="">RSS Types</label>
+              <select class="form-control form-control-sm" formControlName="rssFeedTypeId">
+                <option *ngFor="let rss of rssAvailableTypes" [value]="rss.id">{{ rss.name }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer p-1">
+        <button
+          class="btn btn-primary btn-sm px-4 float-right"
+          type="submit"
+          [disabled]="!termsForm.valid || grants?.isCustomerOrOperator()"
+        >
+          <i *ngIf="isLoading" class="icon-spinner rotate mr-1"></i>
+          {{ buttonText() }}
+        </button>
+      </div>
+    </div>
+  </form>
+  <ng-template></ng-template
+></ng-template>

@@ -1,0 +1,20 @@
+<script src="../../parameter-settings/parameter-settings-detail/resources/parameter.ts"></script>
+<div class="card generic-setting  main-list">
+  <div class="card-header clearfix">
+    <h3 class="panel-title pull-left">RSS CATEGORIES FILTER</h3>
+  </div>
+  <div class="card-body padding-30">
+    <ul *ngIf="formatedValues" class="list-group">
+      <li class="list-group-item"
+          *ngFor="let value of formatedValues; let i = index">
+          <div class="toggle-button">
+            <input type="checkbox"
+                   [(ngModel)]="value.value"
+                   (change)="sendStatus()"
+                   [disabled]="grants?.isCustomerOrOperator()"/>
+            <span class="margin-left-10">{{value.formated}}</span>
+          </div>
+      </li>
+    </ul>
+  </div>
+</div>

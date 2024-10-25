@@ -1,0 +1,340 @@
+<!-- MAIN HEADER -->
+<div class="main-header row align-items-end mt-4 mb-3 clearfix">
+  <div class="main-header-left col float-left">
+    <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-3 mt-1">{{ moduleNameHeader }}</h6>
+    <h5 class="text-dark mb-0 title-truncate" *ngIf="resource" [ngClass]="resource.title ? '' : 'font-italic'">
+      {{ resource.title || 'No title' }}
+    </h5>
+  </div>
+  <div class="main-header-right col-auto float-right">
+    <div class="btn-group btn-group-sm float-right" *ngIf="resource">
+      <button
+        class="btn btn-light btn-sm border text-primary"
+        type="button"
+        (click)="navigateDetails('previous')"
+        [disabled]="!showNavigation || !showPrev"
+      >
+        <i class="icon-angle-left px-1"></i>
+      </button>
+      <button type="button" class="btn btn-light btn-sm border text-primary" (click)="navigateToThreats()">
+        Back to list
+      </button>
+      <button
+        class="btn btn-light btn-sm border text-primary"
+        type="button"
+        (click)="navigateDetails('next')"
+        [disabled]="!showNavigation || !showNext"
+      >
+        <i class="icon-angle-right px-1"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- LOADING PROCESS -->
+<div *ngIf="!resource && !error" class="no-results-box">
+  <i class="icon-spinner rotate"></i>
+  <h3 class="no-results">Loading</h3>
+</div>
+<!-- NO RESULTS -->
+<div *ngIf="error" class="no-results-box">
+  <img src="assets/default_images/searching.svg" />
+  <h3 class="no-results">"{{ error }}"</h3>
+</div>
+<!-- MAIN HEADER DETAILS -->
+<div class="main-header-detail border-top border-bottom bg-light p-2 clearfix mb-4" *ngIf="resource">
+  <div class="main-header-left">
+    <!-- BTN MARK INCIDENT XL -->
+    <button
+      *ngIf="!isTrial && !grants?.isCustomer()"
+      class="btn btn-light btn-sm mr-1 float-left d-none d-xl-block"
+      type="button"
+      name="button"
+      (click)="onClickIssue()"
+      [ngClass]="isIssued() ? 'buttonActive' : ''"
+      data-toggle="tooltip"
+      data-placement="top"
+      title="Add User"
+    >
+      Mark as incident
+    </button>
+    <!-- BTN MARK INCIDENT SM -->
+    <button
+      class="btn btn-circle bg-light mr-1 float-left d-xl-none"
+      *ngIf="!grants.isCustomer()"
+      type="button"
+      name="button"
+      (click)="onClickIssue()"
+      [ngClass]="isIssued() ? 'buttonActive' : ''"
+    >
+      <i class="icon-exclamation-triangle" aria-hidden="true"></i>
+    </button>
+    <!-- BTN FAV XL -->
+    <button
+      class="btn btn-light btn-sm mr-1 float-left d-none d-xl-block"
+      type="button"
+      (click)="onChangeMarkAsFavorite()"
+      [ngClass]="isFav() ? 'buttonActive' : ''"
+    >
+      Mark as favorite
+    </button>
+    <!-- BTN FAV SM -->
+    <button
+      class="btn btn-circle bg-light mr-1 float-left d-xl-none"
+      type="button"
+      (click)="onChangeMarkAsFavorite()"
+      [ngClass]="isFav() ? 'buttonActive' : ''"
+    >
+      <i class="icon-bookmark-solid" aria-hidden="true"></i>
+    </button>
+    <!-- BTN MARK READ XL -->
+    <button
+      class="btn btn-light btn-sm mr-1 float-left d-none d-xl-block"
+      type="button"
+      (click)="onChangeMarkAsRead(true)"
+      [ngClass]="markedAsUnread ? '' : 'buttonActive'"
+    >
+      Mark as read
+    </button>
+    <!-- BTN MARK READ SM -->
+    <button
+      class="btn btn-circle bg-light mr-1 float-left d-xl-none"
+      type="button"
+      (click)="onChangeMarkAsRead(true)"
+      [ngClass]="markedAsUnread ? '' : 'buttonActive'"
+    >
+      <i class="icon-eye" aria-hidden="true"></i>
+    </button>
+    <!-- BTN MARK UNREAD XL -->
+    <button
+      class="btn btn-light btn-sm mr-1 float-left d-none d-xl-block"
+      type="button"
+      (click)="onChangeMarkAsRead(false)"
+      [ngClass]="!markedAsUnread ? '' : 'buttonActive'"
+    >
+      Mark as unread
+    </button>
+    <!-- BTN MARK UNREAD SM -->
+    <button
+      class="btn btn-circle bg-light mr-1 float-left d-xl-none"
+      type="button"
+      (click)="onChangeMarkAsRead(false)"
+      [ngClass]="!markedAsUnread ? '' : 'buttonActive'"
+    >
+      <i class="icon-eye-slash" aria-hidden="true"></i>
+    </button>
+    <!-- BTN TAKEDOWN XL -->
+    <button
+      class="btn btn-light btn-sm mr-1 float-left d-none d-xl-block"
+      *ngIf="isTakeDownAvailable"
+      type="button"
+      (click)="onClickOpenTakedown()"
+    >
+      Takedown
+    </button>
+    <!-- BTN TAKEDOWN SM -->
+    <button
+      class="btn btn-circle bg-light mr-1 float-left d-xl-none"
+      *ngIf="isTakeDownAvailable"
+      type="button"
+      (click)="onClickOpenTakedown()"
+    >
+      <i class="icon-medkit" aria-hidden="true"></i>
+    </button>
+    <!-- BTN LABELS -->
+    <ng-container *ngIf="!isTrial && !grants?.isCustomer()">
+      <div class="float-left mr-1">
+        <app-labels-temp [type]="'action'" [isDetails]="true"></app-labels-temp>
+      </div>
+    </ng-container>
+    <!-- BTN DELETE -->
+    <button
+      *ngIf="!isTrial && !grants?.isCustomer()"
+      class="btn btn-light btn-sm btn-delete text-danger mr-1 float-left d-none d-xl-block"
+      (click)="deleteModal()"
+      nohref
+    >
+      Delete threat
+    </button>
+    <!-- BTN DELETE -->
+    <button
+      class="btn btn-circle bg-light btn-delete text-danger mr-1 float-left d-xl-none"
+      *ngIf="!grants.isCustomer()"
+      (click)="deleteModal()"
+      nohref
+    >
+      <i class="icon-delete" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div *ngIf="!isTrial" class="main-header-right">
+    <ng-container *ngIf="!grants?.isCustomer() && !grants?.isGlobalCustomer()">
+      <button
+        #commentModalButton
+        class="btn btn-light btn-sm border mr-1 float-right"
+        (click)="detailComments.toggleMenu()"
+      >
+        Comments · {{ commentsNum || 0 }}
+      </button>
+    </ng-container>
+    <ng-container *ngIf="showFollowUpBtn && !grants?.isCustomer()">
+      <button
+        class="btn btn-light btn-sm border mr-1 float-right"
+        (click)="handleFollowUp()"
+        [ngClass]="{ buttonActive: resource.followedUp }"
+      >
+        <i class="icon-clock mr-1"></i>
+        Follow Up
+      </button>
+    </ng-container>
+    <resource-comments
+      #detailComments
+      [commentModalButtons]="[commentModalButton]"
+      [resourceId]="resource.id"
+      [moduleName]="activeModule.moduleName"
+      (commentsNumber)="updateComments($event)"
+    >
+    </resource-comments>
+  </div>
+</div>
+<!-- DETAIL HEADER STANDARD -->
+<div class="detail-header-standar mb-4" *ngIf="resource">
+  <details-header [headerData]="headerData" [resource]="resource" (detailHeaderEmit)="onChangeDetailHeader($event)">
+  </details-header>
+</div>
+<div *ngIf="resource">
+  <app-details-extra-info
+    *ngIf="resource"
+    [moduleName]="activeModule.moduleName"
+    [resource]="resource"
+    [history]="showFollowUpBtn && !grants?.isCustomer() ? resource.history : []"
+    [moduleId]="activeModule.id"
+    [organizationId]="activeOrganization.id"
+    (selectEmitter)="selectImport($event)"
+  >
+  </app-details-extra-info>
+
+  <app-details-table
+    [moduleName]="activeModule.moduleName"
+    [resource]="resource"
+    [moduleId]="activeModule.id"
+    [loading]="isLoading"
+    (loadDataEvent)="loadData()"
+  >
+  </app-details-table>
+</div>
+<div class="module-preview" [ngClass]="isPreviewOpened ? 'open' : ''" (swiperight)="onSwiperightPreview()">
+  <div *ngIf="isPreviewOpened">
+    <header class="title">
+      <h3>{{ resource.title }}</h3>
+      <div class="comments is-white no-pointer">{{ commentsNum || 0 }}</div>
+    </header>
+    <main>
+      <article>
+        <resource-comments
+          [resourceId]="resource.id"
+          [moduleName]="activeModule.moduleName"
+          [eraseComments]="eraseComments"
+          [getCom]="getComments"
+          (commentsNumber)="setCommentsNumber($event)"
+        >
+        </resource-comments>
+      </article>
+    </main>
+  </div>
+</div>
+<!-- MODAL ADD INCIDENT -->
+<app-modal-add-incident
+  [isModalOpen]="isAddIncidentModalOpen"
+  [resource]="resource"
+  (closeModal)="isAddIncidentModalOpen = false"
+>
+</app-modal-add-incident>
+<!-- MODAL VIEW INCIDENT -->
+<modal-view-incident [isModalOpen]="isViewIncidentModalOpen" (onCloseModal)="isViewIncidentModalOpen = false">
+</modal-view-incident>
+<!-- MODAL TAKEDOWN -->
+<app-modal-takedown
+  [resource]="resource"
+  [openModal]="showTakedown"
+  (takeDownEmitter)="resetTakeDownAvailable()"
+  (close)="onClickOpenTakedown()"
+>
+</app-modal-takedown>
+
+<!-- MODAL IMAGE DARKWEB -->
+<modal-window
+  modalTitle="Screenshot"
+  [imageBody]="screenshot"
+  *ngIf="screenShotSelected"
+  [customClass]="'modal-big'"
+  cancelBtn="Close"
+  (cancel)="screenShotSelected = false"
+>
+</modal-window>
+<!-- MODAL DELETE OPTIONS -->
+<modal-window modalTitle="Choose an option" *ngIf="deleteOptionsModal" (cancel)="deleteOptionsModal = false">
+  <div class="input-group mb-1">
+    <input type="text" class="form-control" value="{{ resource.url }}" [(ngModel)]="resource.url" />
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="button" (click)="copyToClipboard(resource.url)">
+        <i class="icon-copy"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-between delete-container mt-2">
+    <button
+      class="btn btn-light text-primary delete-btn" data-test="Temporal Delete"
+      (click)="isDeleteConfirmationOpened = true; deleteOptionsModal = false"
+    >
+      Temporal Delete
+    </button>
+    <button
+      class="btn btn-light text-primary ml-1"
+      (click)="isBlockAllConfirmationOpened = true; deleteOptionsModal = false"
+    >
+      Block Url/subUrls
+    </button>
+    <button class="btn btn-light text-primary" (click)="isBlockConfirmationOpened = true; deleteOptionsModal = false">
+      Block entire Domain
+    </button>
+  </div>
+</modal-window>
+
+<!-- MODAL DELETE -->
+<modal-window
+  modalTitle="Remove resource"
+  modalBody="Are you sure you want to delete the selected resource?"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="isDeleteConfirmationOpened"
+  acceptBtn="Yes"
+  cancelBtn="No"
+  (accept)="deleteThreat(); isDeleteConfirmationOpened = false"
+  (cancel)="isDeleteConfirmationOpened = false"
+>
+</modal-window>
+
+<!-- BLOCK DOMAIN CONFIRMATION -->
+<modal-window
+  modalTitle="Block domain / domains"
+  modalBody="Are you sure you want to block the selected domain?"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="isBlockConfirmationOpened"
+  acceptBtn="Yes"
+  cancelBtn="No"
+  (accept)="onBlockDomain(); isBlockConfirmationOpened = false"
+  (cancel)="isBlockConfirmationOpened = false"
+>
+</modal-window>
+
+<!-- BLOCK DOMAIN AND SUBURLS CONFIRMATION-->
+<modal-window
+  modalTitle="Block domain / domains"
+  modalBody="Are you sure you want to block the selected domain and its sub urls?"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="isBlockAllConfirmationOpened"
+  acceptBtn="Yes"
+  cancelBtn="No"
+  (accept)="onBlockUrls(); isBlockAllConfirmationOpened = false"
+  (cancel)="isBlockAllConfirmationOpened = false"
+>
+</modal-window>

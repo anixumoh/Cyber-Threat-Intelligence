@@ -1,0 +1,83 @@
+<div
+  class="filter-container multi-select-component"
+  [ngClass]="disabled == true ? 'multiselect-shown' : 'multiselect-edit'"
+>
+  <!-- WIHT BUTTON -->
+  <div *ngIf="!isShown">
+    <!-- SELECT FILTER - RESPONSIVE BIG -->
+    <button
+      class="btn btn-light btn-sm border d-none d-xl-block"
+      [ngClass]="selectedFilter ? 'buttonActive' : ''"
+      type="button"
+      name="button"
+      (click)="toggleMenu($event)"
+    >
+      {{ multiSelectTitle }}
+    </button>
+    <!-- SELECT FILTER - RESPONSIVE SMALL -->
+    <button
+      class="btn btn-light btn-sm d-xl-none"
+      [ngClass]="selectedFilter ? 'buttonActive' : ''"
+      type="button"
+      name="button"
+      (click)="toggleMenu($event)"
+    >
+      <i class="{{ iconClass }}"></i>
+    </button>
+    <div class="list-dropdown">
+      <ul
+        class="list-group shadow border rounded"
+        (scroll)="onScroll($event)"
+        [ngClass]="isMenuOpened ? 'open' : ''"
+        (click)="toggleMenu($event)"
+        *ngIf="selectedItems && selectedItems.length > 0"
+      >
+        <li
+          class="
+            list-group-item list-group-item-action
+            d-flex
+            justify-content-between
+            align-items-center
+            cursor-pointer
+            border-0
+            px-3
+            py-2
+          "
+          *ngFor="let item of selectedItems; let j = index"
+          [value]="item.label"
+          [ngClass]="item.selected === true ? 'active' : ''"
+          (click)="clickOnItem($event, j)"
+          (click)="toggleMenu($event)"
+        >
+          <span>{{ dictionary ? dictionary[item.label] : item.label }}</span>
+          <i class="icon-check check"></i>
+        </li>
+      </ul>
+      <ul
+        class="list-group shadow border rounded font-italic no-items"
+        (scroll)="onScroll($event)"
+        [ngClass]="isMenuOpened ? 'open' : ''"
+        (click)="toggleMenu($event)"
+        *ngIf="!selectedItems || selectedItems.length === 0"
+      >
+        No items to show
+      </ul>
+    </div>
+  </div>
+  <!-- DROPDOWN WHITOUT BUTTON  -->
+  <div class="list-show" *ngIf="isShown">
+    <ul class="list-group list-group-flush" (scroll)="onScroll($event)">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center cursor-pointer p-2"
+        *ngFor="let item of selectedItems; let j = index"
+        [value]="item.label"
+        [ngClass]="item.selected === true ? 'active' : ''"
+        (click)="clickOnItem($event, j)"
+        (click)="toggleMenu($event)"
+      >
+        <span>{{ item.label }}</span>
+        <i class="icon-check check"></i>
+      </li>
+    </ul>
+  </div>
+</div>

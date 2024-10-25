@@ -1,0 +1,115 @@
+{
+    "values": [
+        {
+            "id": 152051,
+            "name": "random1",
+            "generated": false,
+            "enabled": false,
+            "order": 1,
+            "status": "INVALID",
+            "filterTemplateId": null,
+            "filterTemplateName": null,
+            "hasAlertAction": null
+        },
+        {
+            "id": 152818,
+            "name": "4444",
+            "generated": false,
+            "enabled": true,
+            "order": 2,
+            "status": "OK",
+            "filterTemplateId": null,
+            "filterTemplateName": null,
+            "hasAlertAction": null
+        },
+        {
+            "id": 152048,
+            "name": "random2",
+            "generated": false,
+            "enabled": false,
+            "order": 3,
+            "status": "INVALID",
+            "filterTemplateId": null,
+            "filterTemplateName": null,
+            "hasAlertAction": null
+        },
+        {
+            "id": 76804,
+            "name": "Relevance_Filter",
+            "generated": true,
+            "enabled": true,
+            "order": 4,
+            "status": "OK",
+            "filterTemplateId": null,
+            "filterTemplateName": null,
+            "hasAlertAction": null
+        },
+        {
+            "id": 76805,
+            "name": "IMAGES Label Assignment",
+            "generated": true,
+            "enabled": true,
+            "order": 5,
+            "status": "OK",
+            "filterTemplateId": null,
+            "filterTemplateName": null,
+            "hasAlertAction": null
+        },
+        {
+            "id": 76806,
+            "name": "Profile Label Assignment",
+            "generated": true,
+            "enabled": true,
+            "order": 6,
+            "status": "OK",
+            "filterTemplateId": null,
+            "filterTemplateName": null,
+            "hasAlertAction": null
+        },
+        {
+            "id": 76807,
+            "name": "Tag filter",
+            "generated": true,
+            "enabled": true,
+            "order": 7,
+            "status": "OK",
+            "filterTemplateId": null,
+            "filterTemplateName": null,
+            "hasAlertAction": null
+        },
+        {
+            "id": 152821,
+            "name": "seven7",
+            "generated": false,
+            "enabled": true,
+            "order": 8,
+            "status": "OK",
+            "filterTemplateId": null,
+            "filterTemplateName": null,
+            "hasAlertAction": null
+        },
+        {
+            "id": 152904,
+            "name": "test",
+            "generated": false,
+            "enabled": true,
+            "order": 9,
+            "status": "OK",
+            "filterTemplateId": null,
+            "filterTemplateName": null,
+            "hasAlertAction": null
+        },
+        {
+            "id": 152820,
+            "name": "six6",
+            "generated": false,
+            "enabled": true,
+            "order": 10,
+            "status": "OK",
+            "filterTemplateId": null,
+            "filterTemplateName": null,
+            "hasAlertAction": null
+        }
+    ],
+    "total": 13
+}

@@ -1,0 +1,70 @@
+<div class="modal" [ngClass]="modalClass" (click)="clickOutside($event)" id="modal-container">
+  <div class="modal-dialog overflow-hidden" [ngClass]="customClass" #modalCard>
+    <div class="modal-content">
+      <div class="modal-header p-1" [ngClass]="headerClass">
+        <h6 class="ml-1 mb-0 mt-2 float-left">{{ modalTitle }}</h6>
+        <button
+          class="btn btn-circle bg-light text-danger float-right"
+          type="button"
+          (click)="this.abort()"
+          *ngIf="!cancelBtn || closeBtn"
+        >
+          <i class="icon-times"></i>
+        </button>
+      </div>
+      <div class="modal-body" [ngClass]="warning || info ? 'd-flex flex-row align-items-center' : ''">
+        <div *ngIf="warning" class="pr-3 pl-3">
+          <i class="icon-exclamation-triangle"></i>
+        </div>
+        <div *ngIf="info" class="pr-3 pl-4">
+          <i class="icon-info-circle-solid"></i>
+        </div>
+        <div class="center" [ngClass]="warning || info ? 'pl-3' : ''">
+          <span class="words-break" [ngClass]="warning || info ? 'font-weight-bold' : ''">{{ modalBody }}</span>
+          <pre *ngIf="linkBody" class="mt-4">{{ linkBody }}</pre>
+          <span class="" *ngIf="warning || info"><br />{{ warning }}</span>
+          <ng-content></ng-content>
+        </div>
+        <main *ngIf="bodyForPre" class="center">
+          <pre [innerHTML]="bodyForPre"></pre>
+        </main>
+        <main *ngIf="imageBody" class="center">
+          <img src="{{ imageBody }}" alt="" class="image" />
+        </main>
+        <main *ngIf="imageBodyIssue" class="center">
+          <img [src]="imageBodyIssue" alt="" class="image" />
+        </main>
+        <div *ngIf="dorks">
+          <app-dorks-template></app-dorks-template>
+        </div>
+        <div *ngIf="dorksThreathContext">
+          <app-dorks-threat-context-template
+            [dorkFields]="dorkFields"
+            [dorksThreathContextType]="dorksThreathContextType"
+            (changeDork)="setDork($event)"
+          ></app-dorks-threat-context-template>
+        </div>
+      </div>
+      <div class="modal-footer p-1" *ngIf="!hideFooterButtons && (acceptBtn || cancelBtn)">
+        <button
+          class="btn btn-light text-danger btn-sm px-4 ml-1 float-right"
+          *ngIf="cancelBtn"
+          (click)="cancel.emit()"
+          type="button"
+        >
+          {{ cancelBtn }}
+        </button>
+        <button
+          class="btn btn-primary btn-sm px-4 ml-1 float-right blue-bkg"
+          *ngIf="acceptBtn"
+          [disabled]="loadingAccept || disabledAccept"
+          (click)="accept.emit()"
+          type="button"
+        >
+          <i class="icon-spinner rotate mr-1" *ngIf="loadingAccept"></i>
+          {{ acceptBtn }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

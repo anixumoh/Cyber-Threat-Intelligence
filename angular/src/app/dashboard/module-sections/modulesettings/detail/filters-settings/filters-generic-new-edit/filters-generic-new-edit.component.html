@@ -1,0 +1,1304 @@
+<!-- LOADING PROCESS -->
+<div *ngIf="!resource; else tmpl1" class="no-results-box">
+  <i class="icon-spinner rotate"></i>
+  <h6 class="no-results">Loading</h6>
+</div>
+
+<ng-template #tmpl1>
+  <!-- MAIN HEADER TABLE -->
+  <div class="main-header-table border-top border-bottom bg-light p-2 clearfix mb-2" *ngIf="editMode || newMode">
+    <div class="main-header-left">
+      <h6 class="float-left mt-1 mb-0 mr-3">{{ modeText }}</h6>
+    </div>
+    <div class="main-header-right">
+      <button
+        class="btn btn-light btn-sm border text-primary float-right ml-1"
+        type="button"
+        (click)="navigateToList()"
+      >
+        <i class="icon-arrow-left mr-1"></i>
+        Back to list
+      </button>
+      <button
+        class="btn btn-light btn-sm border text-primary float-right ml-1"
+        *ngIf="editMode && !showMode"
+        type="button"
+        (click)="goToShowMode()"
+        id="profileButton"
+      >
+        Go to View Mode
+      </button>
+      <button
+        class="btn btn-light btn-sm border text-primary float-right ml-1"
+        *ngIf="showMode && !this.resource[0].generated && !grants?.isCustomerOrOperator()"
+        type="button"
+        (click)="navigateToEdit(resourceId, false)"
+      >
+        Go to {{ inverseText }}
+      </button>
+    </div>
+  </div>
+  <mat-stepper
+    class="mat-stepper"
+    linear
+    #stepper
+    (selectionChange)="stepHasChanged($event)"
+    *ngIf="editMode || newMode"
+  >
+    <form [formGroup]="termsForm" (ngSubmit)="onSubmit()">
+      <mat-step [completed]="canMoveToActionsStep()">
+        <ng-template matStepLabel
+          ><div>
+            <span
+              >Conditions &nbsp;&nbsp;&nbsp;&nbsp;<br />
+              <span *ngIf="!canMoveToActionsStep()" class="conditions-text">Select at least one</span></span
+            >
+          </div></ng-template
+        >
+        <!-- FORM -->
+        <ng-container *ngIf="editMode || newMode">
+          <!-- GENERAL FORM -->
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="pl-0" style="width: 70%">
+              <div class="form-group">
+                <label>Filter Name*</label>
+                <input
+                  class="form-control"
+                  type="text"
+                  id="name"
+                  #filterName
+                  placeholder="Write here the name"
+                  formControlName="name"
+                  [ngClass]="
+                    !(nameExists && nameTouched) ||
+                    (termsForm.controls.name.errors && termsForm.controls.name.errors.pattern)
+                      ? 'custom-valid-touched'
+                      : ''
+                  "
+                  [attr.disabled]="showMode ? '' : null"
+                />
+                <small class="text-danger" *ngIf="!nameExists && nameTouched && !termsForm.controls.name.valid">
+                  *The NAME of the filter is required
+                </small>
+                <small
+                  class="text-danger"
+                  *ngIf="termsForm.controls.name.errors && termsForm.controls.name.errors.pattern"
+                >
+                  * NAME must not start with ? or *
+                </small>
+              </div>
+            </div>
+            <div class="pl-0" *ngIf="editMode">
+              <label class="d-none d-sm-none d-md-none d-lg-block">&nbsp;</label>
+              <div class="input-group mb-3">
+                <div class="form-control">Enabled</div>
+                <div class="input-group-append">
+                  <span class="input-group-text" style="height: 38px">
+                    <act-switch [(model)]="this.resource[0].enabled" (modelChange)="editEnabled()"> </act-switch>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <app-filter-section
+            [title]="'Filter Conditions'"
+            [addConditionClass]="!isMinCondition && isMinConditionTouched"
+          >
+            <div
+              class="content-section mb-5"
+              [ngClass]="!isMinCondition && isMinConditionTouched ? 'custom-valid-touched' : ''"
+            >
+              <div class="row row-space">
+                <app-generic-list
+                  [searchTerm]="searchTerm"
+                  [title]="'Terms'"
+                  [type]="'termList'"
+                  [typeClick]="'TERM'"
+                  [typeFilter]="'searchTerm'"
+                  [elements]="termList"
+                  [formControlByName]="'termsListInv'"
+                  [inverseId]="'termsListInv'"
+                  [form]="termsForm"
+                  (multiClick)="multiClickFilters($event)"
+                  (searchFilter)="onSearchFilters($event)"
+                  (searchInFilters)="searchInFiltersList($event)"
+                ></app-generic-list>
+                <app-generic-list
+                  [searchTerm]="searchLabels"
+                  [title]="'Labels'"
+                  [type]="'hasLabelList'"
+                  [typeClick]="'HAS_LABEL'"
+                  [typeFilter]="'searchLabels'"
+                  [elements]="hasLabelList"
+                  [formControlByName]="'hasLabelListInv'"
+                  [inverseId]="'hasLabelListInv'"
+                  [form]="termsForm"
+                  (multiClick)="multiClickFilters($event)"
+                  (searchFilter)="onSearchFilters($event)"
+                  (searchInFilters)="searchInFiltersList($event)"
+                ></app-generic-list>
+                <app-generic-list
+                  [haveSearch]="false"
+                  [title]="'Analysis Status'"
+                  [typeClick]="'ANALYSIS_RESULT'"
+                  [elements]="analysisResultArray"
+                  (multiClick)="multiClickFilters($event)"
+                ></app-generic-list>
+                <app-generic-list
+                  [searchTerm]="searchOrigin"
+                  [title]="'Origin'"
+                  [type]="'originList'"
+                  [typeClick]="'ORIGIN'"
+                  [typeFilter]="'searchOrigin'"
+                  [elements]="originList"
+                  [formControlByName]="'originListInv'"
+                  [inverseId]="'originListInv'"
+                  [form]="termsForm"
+                  (multiClick)="multiClickFilters($event)"
+                  (searchFilter)="onSearchFilters($event)"
+                  (searchInFilters)="searchInFiltersList($event)"
+                ></app-generic-list>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between mb-4 condition-extra">
+              <!-- FILTER PHRASE -->
+              <div class="form-group" style="width: 49%">
+                <label for="filterPhrase">Filter Phrase</label>
+                <div class="form-check float-right mb-0">
+                  <mat-slide-toggle [checked]="false" [id]="filterPhraseInv" formControlName="filterPhraseInv"
+                    ><small
+                      class="form-check-label font-weight-normal ml-1"
+                      [ngClass]="termsForm.value.filterPhraseInv ? 'active' : ''"
+                      >Inverse</small
+                    ></mat-slide-toggle
+                  >
+                </div>
+                <textarea
+                  class="form-control"
+                  rows=""
+                  #filterPhraseArea
+                  (keyup)="updateTextArea(filterPhraseArea.value)"
+                  id="filterPhraseArea"
+                  [attr.disabled]="showMode ? '' : null"
+                  >{{ filterPhrase }}</textarea
+                >
+                <small class="text-danger" *ngIf="filterPhraseError">Invalid filter phrase</small>
+              </div>
+              <!-- DOMAIN -->
+              <div class="form-group" style="width: 49%">
+                <label for="domain">Domain</label>
+                <small *ngIf="invalidDomain" class="text-danger">*{{ invalidDomain }}</small>
+                <div class="form-check float-right mb-0">
+                  <mat-slide-toggle [checked]="false" [id]="domainInv" formControlName="domainInv"
+                    ><small
+                      class="form-check-label font-weight-normal ml-1"
+                      [ngClass]="termsForm.value.domainInv ? 'active' : ''"
+                      >Inverse</small
+                    ></mat-slide-toggle
+                  >
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="domain"
+                  placeholder="Write here the domain"
+                  (input)="checkDomainFormat($event)"
+                  formControlName="domain"
+                />
+              </div>
+            </div>
+            <div class="card warning-card">
+              In order to setup your Filter Phrase, please note that Threat Compass uses Lucene syntax. You will find more information here: <a href="https://lucene.apache.org/core/2_9_4/queryparsersyntax.html">https://lucene.apache.org/core/2_9_4/queryparsersyntax.html</a>
+            </div>
+          </app-filter-section>
+          <div class="show-more-section">
+            <mat-accordion class="mb-4">
+              <mat-expansion-panel (expandedChange)="toggleOpenShowMore()">
+                <mat-expansion-panel-header>
+                  <mat-panel-title> Show {{ isOpenShowMore ? 'less' : 'more' }}... </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row row-space row-space-show-more">
+                  <div class="extra-data-section">
+                    <ng-container formGroupName="extraData">
+                      <!-- EXTRADATA KEY -->
+                      <label class="mb-1" [style]="{ marginBottom: 0 }">Extradata</label>
+                      <div class="extra-data-section__card">
+                        <div class="form-check float-right mb-0">
+                          <mat-slide-toggle [checked]="false" [id]="extraDataInv" formControlName="extraDataInv"
+                            ><small
+                              class="form-check-label font-weight-normal ml-1"
+                              [ngClass]="termsForm.value.extraDataInv ? 'active' : ''"
+                              >Inverse</small
+                            ></mat-slide-toggle
+                          >
+                        </div>
+                        <div class="form-group">
+                          <label for="key">Key</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="key"
+                            placeholder="Write here the key"
+                            formControlName="key"
+                          />
+                        </div>
+                        <!-- EXTRADATA VALUE -->
+                        <div class="form-group mb-2" style="margin-top: 24px">
+                          <label for="value">Value</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="value"
+                            placeholder="Write here the value"
+                            formControlName="value"
+                          />
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                  <app-generic-list
+                    [haveSearch]="false"
+                    [haveTooltip]="true"
+                    [propertyForTooltip]="'formats'"
+                    [title]="'File Type'"
+                    [typeClick]="'FILE_TYPE'"
+                    [elements]="fileTypeArray"
+                    (multiClick)="multiClickFilters($event)"
+                  ></app-generic-list>
+                  <app-generic-list
+                    [searchTerm]="searchLanguage"
+                    [title]="'Languages'"
+                    [type]="'languageList'"
+                    [typeClick]="'LANGUAGE'"
+                    [typeFilter]="'searchLanguage'"
+                    [elements]="languageList"
+                    [formControlByName]="'languageListInv'"
+                    [inverseId]="'languageListInv'"
+                    [form]="termsForm"
+                    (multiClick)="multiClickFilters($event)"
+                    (searchFilter)="onSearchFilters($event)"
+                    (searchInFilters)="searchInFiltersList($event)"
+                  ></app-generic-list>
+                  <app-generic-list
+                    [searchTerm]="searchCountry"
+                    [title]="'Countries'"
+                    [type]="'countryList'"
+                    [typeClick]="'COUNTRY'"
+                    [typeFilter]="'searchCountry'"
+                    [elements]="countryList"
+                    [formControlByName]="'countryListInv'"
+                    [inverseId]="'countryListInv'"
+                    [form]="termsForm"
+                    (multiClick)="multiClickFilters($event)"
+                    (searchFilter)="onSearchFilters($event)"
+                    (searchInFilters)="searchInFiltersList($event)"
+                  ></app-generic-list>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </ng-container>
+
+        <div class="sticky-footer">
+          <button
+            class="btn btn-primary btn-sm float-right px-4 mb-4"
+            mat-button
+            matStepperNext
+            [ngClass]="!canMoveToActionsStep() ? 'disabled-btn' : ''"
+            [ngbTooltip]="
+              !canMoveToActionsStep()
+                ? 'You need to select at least one condition to be able to move to the next step'
+                : ''
+            "
+          >
+            Next to actions &gt;
+          </button>
+        </div>
+        <ng-template></ng-template>
+      </mat-step>
+      <mat-step [completed]="canMoveToFinalStep()">
+        <ng-template matStepLabel
+          ><span
+            >Actions &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br /><span
+              *ngIf="!canMoveToFinalStep() && currentStep === 1"
+              class="conditions-text"
+              >Select at least one</span
+            ></span
+          ></ng-template
+        >
+        <app-filter-section [title]="'Filter Actions'">
+          <div
+            class="content-section mb-5"
+            [ngClass]="!isMinCondition && isMinConditionTouched ? 'custom-valid-touched' : ''"
+          >
+            <div class="row row-space">
+              <app-generic-list
+                [haveInverse]="false"
+                [actionPosition]="3"
+                [isMultiClick]="false"
+                [searchTerm]="searchActionLabels"
+                [title]="'Labels'"
+                [type]="'actionLabelList'"
+                [arrayName]="'actionLabelList'"
+                [typeFilter]="'searchActionLabels'"
+                [elements]="actionLabelList"
+                [formControlByName]="'hasLabelListInv'"
+                [inverseId]="'hasLabelListInv'"
+                [form]="termsForm"
+                (multiClick)="multiClickActions($event)"
+                (searchFilter)="onSearchFilters($event)"
+                (searchInFilters)="searchInFiltersList($event)"
+              >
+                <app-labels-temp
+                  component
+                  [type]="'create'"
+                  [createInFilter]="true"
+                  (createLabelEmitter)="onCreateLabel($event)"
+                >
+                </app-labels-temp>
+              </app-generic-list>
+              <app-generic-list
+                [actionPosition]="0"
+                [isMultiClick]="false"
+                [haveSearch]="false"
+                [title]="'Assign result type'"
+                [arrayName]="'analysisResultActionsArray'"
+                [elements]="analysisResultActionsArray"
+                [formControlByName]="'hasLabelListInv'"
+                [inverseId]="'hasLabelListInv'"
+                [form]="termsForm"
+                (multiClick)="multiClickActions($event)"
+                (searchFilter)="onSearchFilters($event)"
+                (searchInFilters)="searchInFiltersList($event)"
+              ></app-generic-list>
+              <div class="actions">
+                <div class="col-md-12" [style]="{ flex: 'auto' }">
+                  <!-- TLP -->
+                  <label>TLP Status</label>
+                  <div class="mb-3">
+                    <div class="form-control">
+                      <span>TLP Color</span>
+                      <i
+                        id="tlp-btn"
+                        class="icon-plus-circle-solid float-right mt-1"
+                        [ngClass]="showAddTLP ? 'icon-times-circle-solid' : 'icon-plus-circle-solid'"
+                        (click)="showAddTLP = !showAddTLP"
+                        *ngIf="resource[0].actions[5].value === ''; else tlp2"
+                        style="cursor: pointer"
+                      ></i>
+                      <ng-template #tlp2>
+                        <i
+                          id="tlp-btn"
+                          *ngIf="!showAddTLP"
+                          class="icon-plus-circle-solid float-right mt-1"
+                          (click)="showAddTLP = !showAddTLP"
+                          [ngClass]="tlpColors[resource[0].actions[5].value]"
+                          style="cursor: pointer"
+                        ></i>
+                        <i
+                          id="tlp-btn"
+                          *ngIf="showAddTLP"
+                          class="icon-plus-circle-solid float-right mt-1"
+                          (click)="showAddTLP = !showAddTLP"
+                          [ngClass]="tlpColors[resource[0].actions[5].value]"
+                          style="cursor: pointer"
+                        ></i>
+                      </ng-template>
+                    </div>
+                    <div #tlpDropdown class="dropdown-container-tlp" *ngIf="showAddTLP">
+                      <ul class="list-group card shadow p-0" [ngClass]="showAddTLP ? 'open' : ''">
+                        <li
+                          class="list-group-item list-group-item-action border-0 px-3 py-2 tlp-status"
+                          *ngFor="let inputControl of tlpArray; let i = index"
+                          (click)="multiClickActions({ index: i, arrayName: 'tlpArray', actionPosition: 5 })"
+                          [ngClass]="inputControl.selected ? 'active' : ''"
+                        >
+                          <i class="icon-lens mt-1" [ngClass]="inputControl.class"></i>
+                          <span class="tlp-text">{{ inputControl.name }}</span>
+                        </li>
+                        <li
+                          class="list-group-item list-group-item-action border-0 px-3 py-2 tlp-status"
+                          (click)="removeTLP()"
+                          [ngClass]="resource[0].actions[5].value === '' ? 'active' : ''"
+                        >
+                          <i class="mt-1">-</i>
+                          <span class="tlp-text">None</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- ASSIGN WEB -->
+                  <div class="form-group">
+                    <label>Rating</label>
+                    <span class="form-control">
+                      <star-rating-blueliv
+                        style="width: 100px"
+                        [rating]="this.resource[0].actions ? this.resource[0].actions[6].value : 0"
+                        [editMode]="showMode"
+                        [newMode]="newMode"
+                        [disabled]="showMode"
+                        [settingFilter]="true"
+                        [id]="resourceId"
+                        [resource]="resource"
+                        (ratingEmit)="markFormAsTouched()"
+                      >
+                      </star-rating-blueliv>
+                    </span>
+                  </div>
+                </div>
+                <div class="col-md-12" [style]="{ flex: 'auto' }">
+                  <!-- STOP FILTER -->
+                  <div class="form-group">
+                    <label>Filter Execution</label>
+                    <div class="input-group mb-3">
+                      <div class="form-control">Stop</div>
+                      <div class="input-group-append">
+                        <span class="input-group-text">
+                          <act-switch
+                            [(model)]="this.resource[0].actions[1].value"
+                            (modelChange)="filterChangeCheckbox(1)"
+                          >
+                          </act-switch>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- DELETE FILTER -->
+                  <div class="form-group">
+                    <label>Filter Execution</label>
+                    <div class="input-group mb-3">
+                      <div class="form-control">Stop & Delete</div>
+                      <div class="input-group-append">
+                        <span class="input-group-text">
+                          <act-switch
+                            [(model)]="this.resource[0].actions[2].value"
+                            (modelChange)="filterChangeCheckbox(2)"
+                          >
+                          </act-switch>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </app-filter-section>
+        <app-filter-section [title]="'Alerts'">
+          <div
+            class="content-section mb-5"
+            [ngClass]="!isMinCondition && isMinConditionTouched ? 'custom-valid-touched' : ''"
+          >
+            <div class="row">
+              <div class="row row-space row-space__alerts">
+                <div class="col-md-12 col-lg-4">
+                  <div class="input-group mb-3">
+                    <div class="form-control">Launch Alert</div>
+                    <div class="input-group-append">
+                      <span class="input-group-text">
+                        <act-switch
+                          [(model)]="this.resource[0].actions[4].value"
+                          (modelChange)="filterChangeCheckbox(4)"
+                        >
+                        </act-switch>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 col-lg-4">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-white">Threshold to overcome</span>
+                    </div>
+                    <input
+                      class="form-control"
+                      #threshold
+                      (keyup)="filterSendAlertText('threshold', threshold.value)"
+                      type="number"
+                      data-toggle="toggle"
+                      value="{{ this.resource[0].actions[4].alertConfiguration.threshold }}"
+                      [disabled]="!resource[0].actions[4].value"
+                      [style.cursor]="resource[0].actions[4].value ? '' : 'not-allowed'"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-12 col-lg-4">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-white">Time interval (minutes)</span>
+                    </div>
+                    <input
+                      class="form-control"
+                      #interval
+                      (keyup)="filterSendAlertText('interval', interval.value)"
+                      type="number"
+                      data-toggle="toggle"
+                      value="{{ this.resource[0].actions[4].alertConfiguration.interval }}"
+                      [disabled]="!resource[0].actions[4].value"
+                      [style.cursor]="resource[0].actions[4].value ? '' : 'not-allowed'"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="resource[0].actions[4].value">
+              <div class="col-md-12 col-lg-4">
+                <div class="input-group mb-3">
+                  <div class="form-control">Send Alert</div>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <act-switch
+                        [(model)]="this.resource[0].actions[4].alertConfiguration.sendAlert"
+                        (modelChange)="filterChangeSendAlertCheckbox('sendAlert')"
+                      >
+                      </act-switch>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text bg-white smaller-input">Send alert maximum, each (mins)</span>
+                  </div>
+                  <input
+                    class="form-control"
+                    #sendAlertInterval
+                    (keyup)="filterSendAlertText('sendAlertInterval', sendAlertInterval.value)"
+                    type="number"
+                    data-toggle="toggle"
+                    value="{{ this.resource[0].actions[4].alertConfiguration.sendAlertInterval }}"
+                    [disabled]="!resource[0].actions[4].alertConfiguration.sendAlert"
+                    [style.cursor]="resource[0].actions[4].alertConfiguration.sendAlert ? '' : 'not-allowed'"
+                    min="1"
+                  />
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <div class="input-group mb-3">
+                  <div class="form-control">Immediate Sending</div>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <act-switch
+                        [(model)]="this.resource[0].actions[4].alertConfiguration.immediateSending"
+                        (modelChange)="filterChangeSendAlertCheckbox('immediateSending')"
+                      >
+                      </act-switch>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card" *ngIf="resource[0].actions[4].alertConfiguration.sendAlert">
+              <div class="card-header p-1 clearfix">
+                <h6 class="text-dark mx-1 mt-1 mb-0 float-left">Alert Recipients</h6>
+                <button
+                  class="btn btn-light btn-sm text-primary float-right"
+                  type="button"
+                  (click)="showAddUser = true"
+                >
+                  <i class="icon-plus-circle-solid"></i>
+                  <span class="ml-1">Add User</span>
+                </button>
+                <button
+                  class="btn btn-light btn-sm text-primary float-right ml-1"
+                  type="button"
+                  (click)="showAddEmail = true"
+                >
+                  <i class="icon-plus-circle-solid"></i>
+                  <span class="ml-1">Add Email</span>
+                </button>
+
+                <div class="input-search input-group input-group-sm ml-3 float-right" *ngIf="showAddUser">
+                  <div class="input-group-prepend">
+                    <button
+                      class="btn btn-light border text-primary"
+                      type="button"
+                      id="button-addon1"
+                      (click)="closeAddInput('user')"
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <input
+                    class="form-control"
+                    type="text"
+                    #textInput
+                    placeholder="Write here user"
+                    (keyup)="searchInList($event)"
+                    required
+                    aria-describedby="button-addon1"
+                  />
+                </div>
+
+                <div class="input-search input-group input-group-sm ml-3 float-right" *ngIf="showAddEmail">
+                  <div class="input-group-prepend">
+                    <button
+                      class="btn btn-light border text-primary"
+                      type="button"
+                      id="button-addon1"
+                      (click)="closeAddInput('email')"
+                    >
+                      Close
+                    </button>
+                  </div>
+                  <input
+                    class="form-control"
+                    type="text"
+                    #textInput
+                    placeholder="Write here e-mail"
+                    required
+                    aria-describedby="button-addon1"
+                  />
+                  <div class="input-group-append">
+                    <button
+                      #dropDownButtonUser
+                      class="btn btn-light border text-primary"
+                      type="button"
+                      id="button-addon1"
+                      (click)="selectEmail(textInput.value)"
+                    >
+                      <i class="icon-plus"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div #dropDownUser class="dropdown-container" *ngIf="isMenuOpened">
+                <ul
+                  class="list-group p-0 list-group-alerts"
+                  [ngClass]="isMenuOpened ? 'open' : ''"
+                  (click)="toggleMenu()"
+                >
+                  <li
+                    class="list-group-item list-group-item-action border-0 px-3 py-2"
+                    *ngFor="let user of values"
+                    [value]="user"
+                    (click)="selectUser(user)"
+                  >
+                    <span>{{ user.username }}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="card-body p-0">
+                <table class="table mb-0" *ngIf="listUsersAdded.length > 0; else tmpl2">
+                  <thead>
+                    <tr>
+                      <th class="pl-3">User</th>
+                      <th>Email</th>
+                      <th class="th-text-center th-70">Enabled</th>
+                      <th class="th-text-center th-70">Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngIf="listUsersAdded?.length > 0">
+                      <tr *ngFor="let user of listUsersAdded; let i = index">
+                        <td class="vertical-middle pl-3">
+                          <p class="mb-0" *ngIf="user.usersName">{{ user.usersName }}</p>
+                          <p class="mb-0" *ngIf="!user.usersName">Custom User</p>
+                        </td>
+                        <td class="vertical-middle">
+                          <p class="mb-0">{{ user.userEmail }}</p>
+                        </td>
+                        <td class="vertical-middle text-center td-70">
+                          <label class="mt-1">
+                            <input
+                              [checked]="user.emailEnabled === true"
+                              [disabled]="showMode"
+                              (click)="userEnabled(i)"
+                              type="checkbox"
+                              data-toggle="toggle"
+                            />
+                          </label>
+                        </td>
+                        <td
+                          class="vertical-middle text-center td-70"
+                          (click)="deleteUser(user.usersId, user.userEmail)"
+                        >
+                          <button class="btn btn-circle">
+                            <i class="icon-delete color-danger" [class.cursor-not-allowed]="showMode"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+                <ng-template #tmpl2>
+                  <div class="card-body text-danger alert-danger">
+                    <i class="icon-exclamation-triangle"></i>
+                    You haven't configured any alerts yet.
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </app-filter-section>
+
+        <div class="sticky-footer">
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-outline-primary btn-sm float-left px-4 mb-4 mr-2" mat-button matStepperPrevious>
+              &lt; Back to conditions
+            </button>
+
+            <button
+              class="btn btn-primary btn-sm float-right px-4 mb-4"
+              mat-button
+              matStepperNext
+              [ngClass]="!canMoveToFinalStep() ? 'disabled-btn' : ''"
+              [ngbTooltip]="
+                !canMoveToFinalStep()
+                  ? 'You need to select at least one action to be able to move to the next step'
+                  : ''
+              "
+            >
+              Next to resume &gt;
+            </button>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Summary</ng-template>
+        <div class="pt-3 pr-3 pl-3 w-100">
+          <h6 class="font-weight-bold text-secondary text-uppercase mt-2 mb-1 border-title">Name</h6>
+          <p class="text-dark mb-0 ml-2 size-title-value">{{ termsForm.value.name }}</p>
+        </div>
+        <mat-accordion class="spaces">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="text-uppercase border-title">Conditions</mat-panel-title>
+            </mat-expansion-panel-header>
+            <ul class="list-user-info list-group-flush list-grid">
+              <app-item
+                *ngIf="filterPhrase && filterPhrase !== ''"
+                [icon]="'icon-code'"
+                [title]="'Filter Phrase'"
+                [isInverse]="termsForm.value.filterPhraseInv"
+                [oneElement]="filterPhrase"
+                [isArrayElements]="false"
+                [isBadge]="false"
+              >
+              </app-item>
+              <app-item
+                *ngIf="termsForm.value.domain"
+                [icon]="'icon-code'"
+                [title]="'Domain'"
+                [isInverse]="termsForm.value.domainInv"
+                [oneElement]="termsForm.value.domain"
+                [isArrayElements]="false"
+              >
+              </app-item>
+              <app-item
+                *ngIf="termsForm.value.extraData.key && termsForm.value.extraData.value"
+                [icon]="'icon-code'"
+                [title]="'Extradata'"
+                [isInverse]="termsForm.value.extraDataInv"
+                [oneElement]="termsForm.value.extraData"
+                [isArrayElements]="false"
+                [isKeyAndValue]="true"
+              >
+              </app-item>
+              <app-item
+                *ngIf="resource[0].conditions[0].value.length > 0"
+                [icon]="'icon-code'"
+                [title]="'Analysis status'"
+                [elements]="analysisResultArray"
+                [valueFromName]="true"
+              >
+              </app-item>
+              <app-item
+                *ngIf="resource[0].conditions[2].value.length > 0"
+                [icon]="'icon-file-solid'"
+                [title]="'File Type'"
+                [elements]="resource[0].conditions[2].value"
+                [fileTypeArray]="fileTypeArray"
+              >
+              </app-item>
+              <app-item
+                *ngIf="selectedPlugins.length > 0"
+                [icon]="'icon-file-solid'"
+                [title]="'Origin'"
+                [isInverse]="termsForm.value.originListInv"
+                [elements]="selectedPlugins"
+              >
+              </app-item>
+              <app-item
+                *ngIf="selectedLanguages.length > 0"
+                [icon]="'icon-language'"
+                [title]="'Language'"
+                [isInverse]="termsForm.value.languageListInv"
+                [elements]="selectedLanguages"
+                [valueFromLabel]="true"
+              >
+              </app-item>
+              <app-item
+                *ngIf="selectedTerms.length > 0"
+                [icon]="'icon-file-solid'"
+                [title]="'Terms'"
+                [isInverse]="termsForm.value.termsListInv"
+                [elements]="selectedTerms"
+                [valueFromLabel]="true"
+              >
+              </app-item>
+              <app-item
+                *ngIf="selectedCountries.length > 0"
+                [icon]="'icon-globe-map'"
+                [title]="'Countries'"
+                [isInverse]="termsForm.value.countryListInv"
+                [elements]="selectedCountries"
+                [valueFromLabel]="true"
+              >
+              </app-item>
+              <app-item
+                *ngIf="selectedLabels.length > 0"
+                [icon]="'icon-tags'"
+                [title]="'Labels'"
+                [isInverse]="termsForm.value.hasLabelListInv"
+                [elements]="selectedLabels"
+                [isFromLabels]="true"
+              >
+              </app-item>
+            </ul>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion class="spaces">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="text-uppercase border-title"> Actions </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ul class="list-user-info list-group-flush list-grid">
+              <app-item
+                *ngIf="selectedActionLabels.length > 0"
+                [icon]="'icon-tags'"
+                [title]="'Labels'"
+                [elements]="selectedActionLabels"
+                [isFromLabels]="true"
+              >
+              </app-item>
+              <app-item
+                *ngIf="
+                  resource[0].actions[6].value !== '' &&
+                  resource[0].actions[6].value !== 0 &&
+                  resource[0].actions[6].value !== '0'
+                "
+                [icon]="'icon-star'"
+                [title]="'Rating'"
+                [oneElement]="resource"
+                [isArrayElements]="false"
+                [isFromRating]="true"
+              >
+              </app-item>
+              <app-item
+                *ngIf="resource[0].actions[0].value"
+                [icon]="'icon-laptop'"
+                [title]="'Assign Result Type'"
+                [elements]="analysisResultActionsArray"
+                [valueFromName]="true"
+              >
+              </app-item>
+
+              <app-item
+                [icon]="'icon-block'"
+                [title]="'Stop Filter Execution'"
+                [oneElement]="getFilterActionStatus(1)"
+                [isArrayElements]="false"
+              >
+              </app-item>
+              <app-item
+                [icon]="'icon-laptop'"
+                [title]="'Delete & Stop Filter Execution'"
+                [oneElement]="getFilterActionStatus(2)"
+                [isArrayElements]="false"
+              >
+              </app-item>
+              <app-item
+                [icon]="'icon-bullhorn'"
+                [title]="'Launch Alert'"
+                [oneElement]="getFilterActionStatus(4)"
+                [isArrayElements]="false"
+              >
+              </app-item>
+            </ul>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <!-- FILTER ACTION FORM -->
+
+        <div class="sticky-footer">
+          <div class="d-flex justify-content-end">
+            <button class="btn btn-outline-primary btn-sm float-left px-4 mb-4 mr-2" mat-button matStepperPrevious>
+              &lt; Back to actions
+            </button>
+            <button
+              class="btn btn-primary btn-sm float-right px-4 mb-4"
+              *ngIf="newMode"
+              (click)="onSubmit()"
+              [disabled]="loading || filterPhraseError"
+            >
+              <i class="icon-spinner rotate" *ngIf="loading"></i>
+              Create filter
+            </button>
+            <button
+              class="btn btn-primary btn-sm float-right px-4 mb-4 mr-2"
+              *ngIf="editMode"
+              (click)="onSubmit()"
+              [disabled]="loading || filterPhraseError"
+            >
+              <i class="icon-spinner rotate mr-1" *ngIf="loading"></i>
+              Save filter
+            </button>
+            <button
+              class="btn btn-primary btn-sm float-right px-4 mb-4"
+              *ngIf="editMode"
+              (click)="openCloseSaveAsModal()"
+              type="button"
+              [disabled]="loading || filterPhraseError"
+            >
+              Save as...
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </form>
+  </mat-stepper>
+
+  <!-- DESIGN ASIDE -->
+  <ng-container *ngIf="showMode">
+    <div class="aside-container card rounded-0 float-right">
+      <div class="card-header height-header clearfix">
+        <div class="d-flex bg-primary py-2 px-2 rounded float-left mr-2">
+          <i class="icon-filter-solid text-white"></i>
+        </div>
+        <h6 class="text-dark mt-1 mb-0 float-left">
+          <span>Advanced Filters</span>
+          <span class="mx-1">|</span>
+          <small class="text-secondary">SHOW</small>
+        </h6>
+        <button
+          class="btn btn-light btn-sm border text-primary float-right ml-1"
+          type="button"
+          (click)="navigateToEdit(resourceId, true)"
+          [disabled]="isUserUnableToEditFilter()"
+        >
+          <i class="icon-pencil-square mr-1"></i>
+          Edit
+        </button>
+        <button class="btn btn-light btn-sm border text-primary float-right ml-1" type="button" (click)="closeMenu()">
+          <i class="icon-arrow-left mr-1"></i>
+          Back to list
+        </button>
+      </div>
+
+      <div class="card-body automatic-height">
+        <div class="card p-3 mb-4">
+          <h6 class="font-weight-bold text-secondary text-uppercase mt-2 mb-1">Name</h6>
+          <p class="text-dark mb-0">{{ resource[0].name }}</p>
+          <div class="d-block w-100 mt-2" style="border: 2px solid #327abd"></div>
+        </div>
+
+        <div class="card-form card mb-3">
+          <div class="card-header text-primary p-2 clearfix">
+            <h6 class="mb-0 float-left">Filter conditions</h6>
+          </div>
+          <ul class="list-user-info list-group list-group-flush">
+            <li class="list-group-item px-0 py-2" *ngIf="pwdType">
+              <span class="font-weight-bold" style="width: 350px">
+                <i class="icon-info-character bg-primary text-white mr-1" aria-hidden="true"></i>
+              </span>
+              <span class="text-secondary">{{ pwdMessages[pwdType] }}.</span>
+              <div class="text-secondary font-italic">
+                This is an auto-generated filter. This pre-existing condition cannot be edited.
+              </div>
+            </li>
+            <li class="list-group-item d-flex justify-content-between px-0 py-2" *ngIf="filterPhrase">
+              <span class="font-weight-bold" style="width: 350px">
+                <i class="icon-code bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Filter Phrase</span>
+                <i
+                  class="icon-arrow-left ml-2 color-primary"
+                  *ngIf="filterPhraseInv"
+                  ngbTooltip="Inverse search"
+                  placement="right"
+                ></i>
+              </span>
+              <span class="text-secondary">{{ filterPhrase }}</span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between px-0 py-2"
+              *ngIf="resource[0].conditions[3].value.length > 0"
+            >
+              <span class="font-weight-bold" style="width: 350px">
+                <i class="icon-code bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Domain</span>
+                <i
+                  class="icon-arrow-left ml-2 color-primary"
+                  *ngIf="resource[0].conditions[3].inverse"
+                  ngbTooltip="Inverse search"
+                  placement="right"
+                ></i>
+              </span>
+              <span class="text-secondary">{{ resource[0].conditions[3].value[0] }}</span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between px-0 py-2 align-items-center"
+              *ngIf="extraData.key || extraData.value"
+            >
+              <span class="font-weight-bold" style="width: 350px">
+                <i class="icon-code bg-primary text-white mr-1"></i>
+                <span class="text-uppercase">Extradata</span>
+                <i
+                  class="icon-arrow-left ml-2 color-primary"
+                  *ngIf="extraDataInv"
+                  ngbTooltip="Inverse search"
+                  placement="right"
+                ></i>
+              </span>
+              <span>
+                <div>
+                  <span class="badge badge-secondary">Key:</span><span class="ml-1">{{ extraData.key }}</span>
+                </div>
+                <div>
+                  <span class="badge badge-secondary">Value:</span><span class="ml-1">{{ extraData.value }}</span>
+                </div>
+              </span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center px-0 py-2"
+              *ngIf="resource[0].conditions[0].value.length > 0"
+            >
+              <span class="font-weight-bold" style="width: 250px">
+                <i class="icon-code bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Analysis status</span>
+              </span>
+              <span class="text-secondary">
+                <ng-container *ngFor="let type of analysisResultArray">
+                  <span class="badge badge-pill badge-light border ml-1" *ngIf="type.selected">
+                    {{ type.name }}
+                  </span>
+                </ng-container>
+              </span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center px-0 py-2"
+              *ngIf="resource[0].conditions[2].value.length > 0"
+            >
+              <span class="font-weight-bold" style="width: 250px">
+                <i class="icon-file-solid bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">File Type</span>
+              </span>
+              <span class="text-secondary">
+                <ng-container *ngFor="let type of resource[0].conditions[2].value">
+                  <span class="badge badge-pill badge-light border ml-1">
+                    {{ fileTypeArray[type].name }}
+                  </span>
+                </ng-container>
+              </span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center px-0 py-2"
+              *ngIf="resource[0].conditions[8].origins.length > 0"
+            >
+              <span class="font-weight-bold" style="width: 250px">
+                <i class="icon-file-solid bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Origin </span>
+                <i
+                  class="icon-arrow-left ml-2 color-primary"
+                  *ngIf="resource[0].conditions[8].inverse"
+                  ngbTooltip="Inverse search"
+                  placement="right"
+                ></i>
+              </span>
+              <span class="text-secondary">
+                <ng-container *ngFor="let type of resource[0].conditions[8].origins">
+                  <span class="badge badge-pill badge-light border ml-1">
+                    {{ type.value || type.type }}
+                  </span>
+                </ng-container>
+              </span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center px-0 py-2"
+              *ngIf="resource[0].conditions[6].value.length > 0"
+            >
+              <span class="font-weight-bold" style="width: 250px">
+                <i class="icon-language bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Language</span>
+                <i
+                  class="icon-arrow-left ml-2 color-primary"
+                  *ngIf="resource[0].conditions[6].inverse"
+                  ngbTooltip="Inverse search"
+                  placement="right"
+                ></i>
+              </span>
+              <span class="text-secondary">
+                <ng-container *ngFor="let type of languageList">
+                  <span class="badge badge-pill badge-light border ml-1" *ngIf="type.selected">
+                    {{ type.label }}
+                  </span>
+                </ng-container>
+              </span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center px-0 py-2"
+              *ngIf="showTermsConditions"
+            >
+              <span class="font-weight-bold" style="width: 350px">
+                <i class="icon-file-solid bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Terms</span>
+                <i
+                  class="icon-arrow-left ml-2 color-primary"
+                  *ngIf="resource[0].conditions[4].inverse"
+                  ngbTooltip="Inverse search"
+                  placement="right"
+                ></i>
+              </span>
+              <span class="text-secondary text-right">
+                <ng-container *ngFor="let availableTerm of termList">
+                  <ng-container *ngIf="availableTerm && availableTerm.selected">
+                    {{ availableTerm.label }}
+                  </ng-container>
+                </ng-container>
+              </span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center px-0 py-2"
+              *ngIf="resource[0].conditions[9].value.length > 0"
+            >
+              <span class="font-weight-bold" style="width: 250px">
+                <i class="icon-globe-map bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Countries</span>
+                <i
+                  class="icon-arrow-left ml-2 color-primary"
+                  *ngIf="resource[0].conditions[9].inverse"
+                  ngbTooltip="Inverse search"
+                  placement="right"
+                ></i>
+              </span>
+              <span class="text-secondary">
+                <ng-container *ngFor="let country of countryList">
+                  <span class="badge badge-pill badge-light border ml-1" *ngIf="country.selected">
+                    {{ country.label }}
+                  </span>
+                </ng-container>
+              </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between px-0 py-2" *ngIf="showLabelsConditions">
+              <span class="font-weight-bold" style="width: 250px">
+                <i class="icon-tags bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Labels</span>
+                <i
+                  class="icon-arrow-left ml-2 color-primary"
+                  *ngIf="resource[0].conditions[7].inverse"
+                  ngbTooltip="Inverse search"
+                  placement="right"
+                ></i>
+              </span>
+              <span class="text-right">
+                <ng-container *ngFor="let label of hasLabelList">
+                  <ng-container *ngIf="label && label.selected">
+                    <app-label-item [label]="label"></app-label-item>
+                  </ng-container>
+                </ng-container>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card-form card mb-3">
+          <div class="card-header text-primary p-2 clearfix">
+            <h6 class="mb-0 float-left">Filter actions</h6>
+          </div>
+          <ul class="list-user-info list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between px-0 py-2" *ngIf="showLabelsActions">
+              <span class="font-weight-bold" style="width: 250px">
+                <i class="icon-tags bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Labels</span>
+              </span>
+              <span class="text-right">
+                <ng-container *ngFor="let label of actionLabelList">
+                  <ng-container class="text-secondary" *ngIf="label && label.selected">
+                    <app-label-item [label]="label"></app-label-item>
+                  </ng-container>
+                </ng-container>
+              </span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center px-0 py-2"
+              *ngIf="resource[0].actions[6].value"
+            >
+              <span class="font-weight-bold">
+                <i class="icon-star bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Rating</span>
+              </span>
+              <span class="text-secondary">
+                <star-rating-blueliv
+                  style="width: 100px"
+                  [rating]="resource[0].actions ? resource[0].actions[6].value : 0"
+                  [disabled]="true"
+                  [resource]="resource"
+                >
+                </star-rating-blueliv>
+              </span>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center px-0 py-2"
+              *ngIf="resource[0].actions[0].value"
+            >
+              <span class="font-weight-bold">
+                <i class="icon-laptop bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Assign Result Type</span>
+              </span>
+              <span class="text-secondary">
+                <ng-container *ngFor="let inputControl of analysisResultActionsArray">
+                  <ng-container *ngIf="inputControl && inputControl.selected">{{ inputControl.name }}</ng-container>
+                </ng-container>
+              </span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+              <span class="font-weight-bold">
+                <i class="icon-block bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Stop Filter Execution</span>
+              </span>
+              <span class="text-secondary">{{ getFilterActionStatus(1) }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+              <span class="font-weight-bold">
+                <i class="icon-laptop bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Delete & Stop Filter Execution</span>
+              </span>
+              <span class="text-secondary">{{ getFilterActionStatus(2) }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+              <span class="font-weight-bold">
+                <i class="icon-bullhorn bg-primary text-white mr-1" aria-hidden="true"></i>
+                <span class="text-uppercase">Launch Alert</span>
+              </span>
+              <span class="text-secondary">{{ getFilterActionStatus(4) }}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>
+
+<modal-window
+  *ngIf="saveAsModal"
+  [acceptBtn]="'Save'"
+  [cancelBtn]="'Cancel'"
+  (accept)="saveAs(filterName.value)"
+  (cancel)="openCloseSaveAsModal()"
+  [modalTitle]="'Save as filter'"
+>
+  <div class="card mb-4" *ngIf="!termsForm.touched">
+    <div class="alert-table mb-0 d-flex" style="background-color: #e2d6604a; color: #6e6014">
+      <i class="icon-info-circle-solid mr-3" style="margin-top: 4px"></i>
+      <span class="font-weight-bold">
+        You have not made any changes. Are you sure you want to keep this filter as new?</span
+      >
+    </div>
+  </div>
+  <div>
+    <label>Filter Name</label>
+    <input class="form-control" type="text" id="name" #filterName placeholder="Write the name for the new filter" />
+  </div>
+</modal-window>

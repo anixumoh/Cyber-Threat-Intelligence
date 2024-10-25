@@ -1,0 +1,35 @@
+<div *ngIf="currentUser" style="transition-timing-function: ease-in; transition: 0.2s; transform: translateY(130%)">
+  <div class="aside-container card rounded-0 float-right">
+    <div class="user-letter">
+      {{ currentUser.username[0]?.toUpperCase() || 'U' }}
+    </div>
+
+    <div class="user-info">
+      <div>{{ currentUser.name }}</div>
+      <div>{{ currentUser.email }}</div>
+    </div>
+
+    <div class="user-actions">
+      <div class="user-action">
+        <a class="btn btn-outline-primary" routerLink="/profile/account" (click)="close()">
+          <i class="icon-mode_edit mr-1"></i>
+          <span>Account settings</span>
+        </a>
+      </div>
+
+      <div class="user-action">
+        <a class="btn btn-outline-primary" routerLink="/profile/personalization" (click)="close()">
+          <i class="icon-dvr mr-1"></i>
+          <span>Personalization</span>
+        </a>
+      </div>
+
+      <div class="user-action">
+        <button class="btn btn-outline-danger" (click)="logout()">
+          <i class="icon-sign-out mr-1"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

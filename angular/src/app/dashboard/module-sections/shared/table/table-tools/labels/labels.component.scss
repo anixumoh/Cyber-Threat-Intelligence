@@ -1,0 +1,104 @@
+@import 'src/scss/variables';
+
+// BUTTON
+.filter-container {
+  position: relative;
+  button {
+    display: flex;
+    align-items: center;
+  }
+  .icon-angle-down {
+    margin-left: 5px;
+  }
+}
+// DROPDOWN
+.dropdown-div-header {
+  .custom-input-search {
+    background: white url('./../../../../../../../assets/search_black.png') no-repeat;
+    background-position: 10px 50%;
+    padding-left: 34px;
+    width: 100%;
+    border-radius: $border-radius;
+    border: 1px solid $light;
+    height: 35px;
+    font-size: 14px;
+    font-weight: $font-weight-thin;
+    display: block;
+  }
+  input[placeholder],
+  [placeholder],
+  *[placeholder] {
+    color: red !important;
+  }
+}
+
+.dropdown-div-list {
+  position: absolute;
+  top: 35px;
+  z-index: 5;
+  width: 400px;
+  margin: 0;
+  padding: 0;
+  transition: height 0.3s;
+  border-radius: $border-radius;
+  border: 1px solid $light;
+  background-color: $white;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.13);
+  header {
+    border-bottom: 1px solid $light;
+    input {
+      border: none;
+    }
+  }
+  .dropdown-div-main {
+    overflow-y: scroll !important;
+    max-height: 200px;
+    border-bottom: 1px solid $light;
+    .labels-list {
+      .labels-list-item {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid $light;
+        list-style-type: none;
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+        .label {
+          font-size: 10px !important;
+          margin-left: 8px !important;
+        }
+      }
+    }
+  }
+  .dropdown-div-footer {
+    margin-top: 1px;
+    background-color: $light;
+  }
+}
+// ADD LABEL
+.add-labels-box {
+  background-color: $bg-blueliv;
+  border-top: 1px solid $light;
+  padding: 05px;
+  .add-labels {
+    background-color: $white;
+    border: 1px solid $light;
+    border-radius: 2px;
+    padding: 05px;
+    .form-box {
+      span {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 14px;
+        font-weight: $font-weight-regular;
+        display: block;
+      }
+      input {
+        font-family: 'Open Sans', sans-serif;
+        width: 100%;
+        border-radius: 2px;
+        border: 1px solid $light;
+        font-size: 14;
+        font-weight: $font-weight-thin;
+      }
+    }
+  }
+}

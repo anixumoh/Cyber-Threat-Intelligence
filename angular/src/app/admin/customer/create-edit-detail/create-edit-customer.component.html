@@ -1,0 +1,401 @@
+<modal-window [modalTitle]="getTitle()" [acceptBtn]="type === 'edit' || type === 'create' ? 'Save' : undefined"
+  [cancelBtn]="type === 'edit' || type === 'create' ? 'Cancel' : undefined"
+  [customClass]="type === 'edit' || type === 'details' ? 'modal-dark-web' : 'modal-customer'"
+  [loadingAccept]="isButtonLoading" (accept)="createEdit()" (cancel)="cancelCreateEdit()">
+  <ng-container *ngIf="!loadingDetails; else loadingTemplate">
+    <button class="btn btn-sm btn-light text-primary mb-3" *ngIf="type === 'details'" (click)="editMode()">
+      <i class="icon-mode_edit mr-2"></i>Edit
+    </button>
+    <div class="form-container">
+      <form [formGroup]="customerForm">
+        <div class="input-container">
+          <label for="name">Customer</label>
+          <input type="text" placeholder="Name" formControlName="name" id="name" />
+        </div>
+        <div *ngIf="
+            customerForm.controls['name'].invalid &&
+            (customerForm.controls['name'].dirty || customerForm.controls['name'].touched)
+          " class="form-text form-error">
+          <small *ngIf="customerForm.controls['name'].errors.pattern" class="text-danger">Invalid name. Must be at least
+            3 characters.</small>
+          <small *ngIf="customerForm.controls['name'].errors.required" class="text-danger">A name is required.</small>
+        </div>
+        <div class="input-container">
+          <label for="type">Type</label>
+          <select name="type" id="" (change)="changeType($event)" [disabled]="type === 'details'">
+            <option disabled value="" selected>-- Select --</option>
+            <option [value]="item.id" *ngFor="let item of customerTypes" [selected]="
+                customerForm &&
+                customerForm.controls['customerTypeId'] &&
+                customerForm.controls['customerTypeId'].value &&
+                customerForm.controls['customerTypeId'].value === item.id
+                  ? true
+                  : false
+              ">
+              {{ item.name }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="
+            customerForm.controls['customerTypeId'].invalid &&
+            (customerForm.controls['customerTypeId'].dirty || customerForm.controls['customerTypeId'].touched)
+          " class="form-text form-error">
+          <small *ngIf="customerForm.controls['customerTypeId'].errors.required" class="text-danger">A type is
+            required.</small>
+        </div>
+
+        <div class="input-container">
+          <label for="type">Allowed Modules</label>
+          <ul class="list-group card overflow-auto" style="width: 215px"
+            [ngClass]="type === 'details' ? 'disabled-list' : ''">
+            <li class="list-group-item d-flex justify-content-between align-items-center" (click)="selectAllModules()">
+              Any
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let item of moduleTypes" (click)="changeModules(item.type)"
+              [ngClass]="indexTypes(item.type) === -1 ? '' : 'active'"
+              [class.disabled]="item.type === 'EXPLORER' && indexTypes('THREAT_CONTEXT') > -1">
+              <span>{{ item.name }}</span>
+              <i class="icon-check"></i>
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="
+            customerForm.controls['modules'].invalid &&
+            (customerForm.controls['modules'].dirty || customerForm.controls['modules'].touched)
+          " class="form-text form-error">
+          <small *ngIf="customerForm.controls['modules'].errors.required" class="text-danger">You need to select at
+            least one module.</small>
+        </div>
+
+        <div class="input-container" *ngIf="hasCreditCardModule()">
+          <label for="">&nbsp;</label>
+          <ng-container class="d-flex">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" (change)="changeBincodes(true)"
+                [disabled]="type === 'details'" [checked]="customerForm.controls['isBincodes'].value === true" />
+              <label class="form-check-label" for="flexRadioDefault1"> Bincodes </label>
+            </div>
+            <div class="form-check ml-2">
+              <input class="form-check-input" type="radio" (change)="changeBincodes(false)"
+                [disabled]="type === 'details'" [checked]="customerForm.controls['isBincodes'].value === false" />
+              <label class="form-check-label" for="flexRadioDefault2"> Credit Cards </label>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="input-container">
+          <label for="type">Band</label>
+          <select name="type" id="" (change)="changeBand($event)" [disabled]="type === 'details'">
+            <option disabled value="null" selected>-- Select --</option>
+            <option [value]="item.id" *ngFor="let item of bands" [selected]="
+                customerForm &&
+                customerForm.controls['band'] &&
+                customerForm.controls['band'].value &&
+                customerForm.controls['band'].value === item.id
+                  ? true
+                  : false
+              ">
+              {{ item.name }}
+              <span *ngIf="customBandId && customBandId.toString() === item.id.toString()"> (Custom values)</span>
+            </option>
+          </select>
+          <button class="btn btn-circle btn-band" (click)="openEditBand('edit')"
+            *ngIf="customerForm && customerForm.controls['band'] && customerForm.controls['band'].value">
+            <i class="text-primary" [ngClass]="type === 'details' ? 'icon-search' : 'icon-mode_edit '"></i>
+          </button>
+        </div>
+        <div *ngIf="
+            customerForm.controls['band'].invalid &&
+            (customerForm.controls['band'].dirty || customerForm.controls['band'].touched)
+          " class="form-text form-error">
+          <small *ngIf="customerForm.controls['band'].errors.required" class="text-danger">You need to select one
+            band.</small>
+        </div>
+
+        <div class="input-container">
+          <label for="">Contract Dates</label>
+          <div (click)="openCloseDate()" *ngIf="type !== 'details'; else detailsDates">
+            <div class="border rounded p-1 d-flex justify-content-center">
+              <div class="mr-2">
+                <input-control [type]="'date'"
+                  [showMessage]="!customerForm.controls['since'].valid && customerForm.controls['since'].touched"
+                  [msjError]="'Insert a date after the current one'" [control]="customerForm.controls['since']"
+                  [isDisabled]="type === 'details'">
+                </input-control>
+              </div>
+              <input-control [type]="'date'" [customClass]="'customer-datepicker'"
+                [showMessage]="!customerForm.controls['to'].valid && customerForm.controls['to'].touched"
+                [msjError]="'Insert a date after the current one'" [control]="customerForm.controls['to']"
+                [isDisabled]="type === 'details'">
+              </input-control>
+            </div>
+          </div>
+          <ng-template #detailsDates>
+            <input disabled style="width: 196px" type="text" [value]="
+                customerForm.controls['since'].value && customerForm.controls['to'].value
+                  ? customerForm.controls['since'].value + ' - ' + customerForm.controls['to'].value
+                  : ''
+              " />
+          </ng-template>
+        </div>
+        <div *ngIf="
+            customerForm.controls['since'].invalid &&
+            (customerForm.controls['since'].dirty || customerForm.controls['since'].touched)
+          " class="form-text form-error">
+          <small *ngIf="customerForm.controls['since'].errors.required" class="text-danger">Please provide a starting
+            date</small>
+        </div>
+        <div *ngIf="
+            customerForm.controls['to'].invalid &&
+            (customerForm.controls['to'].dirty || customerForm.controls['to'].touched)
+          " class="form-text form-error">
+          <small *ngIf="customerForm.controls['to'].errors.required" class="text-danger">Please provide an ending
+            date</small>
+        </div>
+        <div class="input-container">
+          <label for="">Active</label>
+          <input-control [type]="'boolean'" [control]="customerForm.controls['active']"
+            [isDisabled]="type === 'details'"></input-control>
+        </div>
+        <div class="input-container">
+          <label for="">Apply contract</label>
+          <input-control [type]="'boolean'" [control]="customerForm.controls['enforcing']"
+            [isDisabled]="type === 'details'"></input-control>
+        </div>
+      </form>
+    </div>
+    <div class="table-container" *ngIf="type === 'edit' || type === 'details'">
+      <app-table [items]="modulesTable" [loading]="loadingDetails" class="table-fixed"
+        noItems="This customer has not created any module">
+        <thead>
+          <tr>
+            <th class="text-center" style="width: 13%">Module Type</th>
+            <th class="text-center">Id</th>
+            <th class="text-center">Invoicing</th>
+            <th class="text-center">Trial</th>
+            <th class="text-center">Domains</th>
+            <th class="text-center">IP</th>
+            <th class="text-center">Keywords</th>
+            <th class="text-center">Bin codes</th>
+            <th class="text-center">Credit Cards</th>
+            <th class="text-center">E-mails</th>
+            <th class="text-center">Employees</th>
+            <th class="text-center">CPEs</th>
+            <th class="text-center">Cloud Storage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of modulesTable">
+            <ng-container *ngFor="let mod of item.modules; let i = index">
+              <tr [ngClass]="isContractedModule(mod.moduleType) ? '' : 'red-background'">
+                <td *ngIf="mod.show" class="text-center font-weight-bold title-row text-uppercase"
+                  [attr.rowspan]="item.modules.length" style="vertical-align: middle">
+                  {{ moduleDictionary[item.moduleType] }}
+                </td>
+                <td class="text-center">
+                  <span *ngIf="mod.deleted" ngbTooltip="This module was deleted
+
+              ">{{ mod.id }}</span>
+                  <a [href]="mod.link" target="_blank" class="cursor-pointer" *ngIf="!mod.deleted">{{ mod.id }}</a>
+                </td>
+                <td class="text-center">
+                  <select [disabled]="type === 'details' || mod.deleted" (change)="changeInvoicing($event, mod.id)">
+                    <option value="yes" [selected]="mod.invoicing">Yes</option>
+                    <option value="no" [selected]="!mod.invoicing">No</option>
+                  </select>
+                </td>
+                <td class="text-center">
+                  <app-action-circle [icon]="'icon-lens'" [colorIcon]="item.trial ? 'text-success' : 'text-danger'"
+                    [tooltip]="item.trial ? 'Trial module' : 'Not a trial module'">
+                  </app-action-circle>
+                </td>
+                <td class="text-center">{{ mod.domains || '-' }}</td>
+                <td class="text-center">{{ mod.ip || '-' }}</td>
+                <td class="text-center">{{ mod.keywords || '-' }}</td>
+                <td class="text-center">{{ mod.binCodes || '-' }}</td>
+                <td class="text-center">{{ mod.creditCardsPerYear || '-' }}</td>
+                <td class="text-center">{{ mod.emails || '-' }}</td>
+                <td class="text-center">{{ mod.employees || '-' }}</td>
+                <td class="text-center">{{ mod.cpes || '-' }}</td>
+                <td class="text-center" style="vertical-align: middle">{{ mod.storage || '-' }}</td>
+              </tr>
+            </ng-container>
+            <tr *ngIf="item && isContractedModule(item.moduleType)">
+              <td class="font-weight-bold title-row" colspan="4">MODULE TYPE TOTALS</td>
+              <td class="text-center title-row" [ngClass]="
+                  item && item.total && item.total.rootDomains > bandForm.controls['rootDomains'].value
+                    ? 'text-danger'
+                    : ''
+                ">
+                {{ item && item.total && item.total.rootDomains ? item.total.rootDomains : '-' }}
+              </td>
+              <td class="text-center title-row"
+                [ngClass]="item && item.total && item.total.ips > bandForm.controls['ips'].value ? 'text-danger' : ''">
+                {{ item && item.total && item.total.ips ? item.total.ips : '-' }}
+              </td>
+              <td class="text-center title-row" [ngClass]="
+                  item && item.total && item.total.keywords > bandForm.controls['keywords'].value ? 'text-danger' : ''
+                ">
+                {{ item && item.total && item.total.keywords ? item.total.keywords : '-' }}
+              </td>
+              <td class="text-center title-row" [ngClass]="
+              item && item.total && item.total.binCodes > bandForm.controls['binCodes'].value ? 'text-danger' : ''
+            ">
+                {{ item && item.total && item.total.binCodes ? item.total.binCodes : '-' }}
+              </td>
+              <td class="text-center title-row" [ngClass]="
+              item && item.total && item.total.creditCardsPerYear > bandForm.controls['creditCardsPerYear'].value ? 'text-danger' : ''
+            ">
+                {{ item && item.total && item.total.creditCardsPerYear ? item.total.creditCardsPerYear : '-' }}
+              </td>
+              <td class="text-center title-row" [ngClass]="
+              item && item.total && item.total.emails > bandForm.controls['emails'].value ? 'text-danger' : ''
+            ">
+                {{ item && item.total && item.total.emails ? item.total.emails : '-' }}
+              </td>
+              <td class="text-center title-row" [ngClass]="
+              item && item.total && item.total.employees > bandForm.controls['employees'].value ? 'text-danger' : ''
+            ">
+                {{ item && item.total && item.total.employees ? item.total.employees : '-' }}
+              </td>
+              <td class="text-center title-row" [ngClass]="
+              item && item.total && item.total.cpes > bandForm.controls['cpes'].value ? 'text-danger' : ''
+            ">
+              {{ item && item.total && item.total.cpes ? item.total.cpes : '-' }}
+              </td>
+
+              <td class="text-center title-row" [ngClass]="
+              item && item.total && item.total.storage > bandForm.controls['storage'].value ? 'text-danger' : ''
+            ">
+                {{ item && item.total && item.total.storage ? item.total.storage : '-' }}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="11" style="padding: 0px !important"></td>
+            </tr>
+          </ng-container>
+          <tr>
+            <td *ngIf="!bandForm && !customerFor && !customerForm.band; else bandInfo" colspan="11">
+              Please select a band
+            </td>
+            <ng-template #bandInfo>
+              <td class="text-center title-row font-weight-bold">BAND</td>
+              <td class="text-center font-weight-bold title-row">{{ bandForm.controls['name'].value || '-' }}</td>
+              <td class="text-center title-row"></td>
+              <td class="text-center title-row"></td>
+
+              <td class="text-center title-row">{{ bandForm.controls['rootDomains'].value || '-' }}</td>
+              <td class="text-center title-row">{{ bandForm.controls['ips'].value }}</td>
+              <td class="text-center title-row">{{ bandForm.controls['keywords'].value || '-' }}</td>
+              <td class="text-center title-row">{{ bandForm.controls['binCodes'].value || '-' }}</td>
+              <td class="text-center title-row">{{ bandForm.controls['creditCardsPerYear'].value || '-' }}</td>
+              <td class="text-center title-row">{{ bandForm.controls['emails'].value || '-' }}</td>
+              <td class="text-center title-row">{{ bandForm.controls['employees'].value || '-' }}</td>
+              <td class="text-center title-row">{{ bandForm.controls['cpes'].value || '-' }}</td>
+              <td class="text-center title-row">{{ bandForm.controls['storage'].value || '-' }}</td>
+            </ng-template>
+          </tr>
+          <tr>
+            <td class="text-center font-weight-bold title-row">TOTAL</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-center title-row">
+              {{ data && data.total && data.total.rootDomains ? data.total.rootDomains : '-' }}
+            </td>
+            <td class="text-center title-row">
+              {{ data && data.total && data.total.ips ? data.total.ips : '-' }}
+            </td>
+            <td class="text-center title-row">
+              {{ data && data.total && data.total.keywords ? data.total.keywords : '-' }}
+            </td>
+            <td class="text-center title-row">
+              {{ data && data.total && data.total.binCodes ? data.total.binCodes : '-' }}
+            </td>
+            <td class="text-center title-row">
+              {{ data && data.total && data.total.creditCardsPerYear ? data.total.creditCardsPerYear : '-' }}
+            </td>
+            <td class="text-center title-row">
+              {{ data && data.total && data.total.emails ? data.total.emails : '-' }}
+            </td>
+            <td class="text-center title-row">
+              {{ data && data.total && data.total.employees ? data.total.employees : '-' }}
+            </td>
+            <td class="text-center title-row">
+              {{ data && data.total && data.total.cpes ? data.total.cpes : '-' }}
+            </td>
+            <td class="text-center title-row">
+              {{ data && data.total && data.total.storage ? data.total.storage : '-' }}
+            </td>
+          </tr>
+        </tbody>
+      </app-table>
+    </div>
+  </ng-container>
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <i class="icon-spinner rotate"></i>
+    </div>
+  </ng-template>
+  <modal-window *ngIf="isBandModalOpen" [modalTitle]="'Current Limits'" [acceptBtn]="'Save'" [cancelBtn]="'Cancel'"
+    [disabledAccept]="!bandForm.dirty && !canSaveBand" [loadingAccept]="isButtonLoading"
+    (accept)="confirmCreateEditBand()" (cancel)="cancelCreateEditBand()">
+    <div class="band-container">
+      <button class="btn btn-sm btn-light text-primary mb-3"
+        *ngIf="(showResetButton || bandForm.dirty) && type !== 'details'" (click)="resetBandValues()">
+        Reset default values
+      </button>
+      <form [formGroup]="bandForm">
+        <div class="band-title">
+          <div>DEFAULT BAND</div>
+          <input type="text" formControlName="name" />
+        </div>
+        <div class="bincodes-container" *ngIf="hasCreditCardModule()">
+          <div>
+            <input type="checkbox" class="mr-2" disabled
+              [checked]="customerForm.controls['isBincodes'].value === false" /><label for="">Credit Cards</label>
+          </div>
+          <div>
+            <input type="checkbox" class="mr-2" disabled
+              [checked]="customerForm.controls['isBincodes'].value === true" /><label for="">Bincodes</label>
+          </div>
+        </div>
+        <div class="band-table">
+          <app-table [loading]="loadingDetails" [items]="bands" class="table-fixed">
+            <thead>
+              <tr>
+                <th class="">Description</th>
+                <th class="text-center">High Limit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let band of bandRows">
+                <ng-container *ngIf="
+                    (band.name !== 'BINCODES' && band.name !== 'CREDIT CARDS') ||
+                    (band.name === 'BINCODES' && hasCreditCardModule()) ||
+                    (band.name === 'CREDIT CARDS' && hasCreditCardModule())
+                  ">
+                  <td class="align-middle truncate-table pl-4">
+                    <app-large-text [value]="band.name" placement="top"></app-large-text>
+                  </td>
+                  <td class="align-middle truncate-table pl-4">
+                    <input [type]="band.name !== 'STORAGE' ? 'number' : 'text'" [formControlName]="band.value"
+                      class="text-center" />
+                  </td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </app-table>
+        </div>
+      </form>
+    </div>
+  </modal-window>
+
+  <modal-window modalTitle="Confirmation"
+    [modalBody]="'Changing the band to a lower limit would have serious impact on the customer.'"
+    *ngIf="isBandConfirmationOpen" acceptBtn="Yes" [warning]="'Would you like to proceed?'"
+    [loadingAccept]="isBandConfirmationLoading" cancelBtn="No" (accept)="createEditCustomerBand()"
+    (cancel)="isBandConfirmationOpen = false">
+  </modal-window>
+</modal-window>

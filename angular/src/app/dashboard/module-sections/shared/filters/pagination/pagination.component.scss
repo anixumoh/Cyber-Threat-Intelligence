@@ -1,0 +1,56 @@
+@import 'src/scss/variables';
+
+//HEADER
+.list-group {
+  position: absolute;
+  top: 32px;
+  right: 0;
+  z-index: 1040;
+  width: 200px;
+  transition: height 0.3s;
+  overflow: hidden;
+  visibility: hidden;
+  &.right-position {
+    visibility: visible;
+  }
+  &.left-position {
+    visibility: visible;
+  }
+  .list-group-item {
+    .icon-check {
+      display: none;
+    }
+    &.active {
+      background-color: $light;
+      color: $primary;
+      .icon-check {
+        display: block;
+      }
+    }
+  }
+}
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+//FOOTER
+.pagination-footer {
+  .pagination-info {
+    font-weight: $font-weight-regular;
+    padding-top: 12px;
+    margin-bottom: 0;
+    span {
+      margin-left: 8px;
+      font-weight: $font-weight-thin;
+    }
+  }
+}
+.page-item {
+  .page-link.active {
+    color: $white !important;
+    background-color: $primary;
+    pointer-events: none;
+  }
+}

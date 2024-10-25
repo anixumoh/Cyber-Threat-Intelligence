@@ -1,0 +1,67 @@
+<modal-window
+  [acceptBtn]="'Edit'"
+  [cancelBtn]="'Close'"
+  [modalTitle]="'User Detail'"
+  (accept)="goToEdit()"
+  (cancel)="closeModal()"
+>
+  <div class="modal-body p-0">
+    <div *ngIf="selectedUser.firstBlock.length === 0">
+      <i class="icon-spinner rotate"></i>
+      <h3 class="no-results">Loading</h3>
+    </div>
+    <ul class="list-group mt-5 mb-4 cursor-default">
+      <li class="list-group-item bg-light text-primary">Basic Info</li>
+      <li
+        *ngFor="let data of selectedUser.firstBlock"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        {{ data.type }}:
+        <span class="font-weight-thin">{{ data.value }}</span>
+      </li>
+    </ul>
+    <ul class="list-group mb-4">
+      <li class="list-group-item bg-light text-primary">Contact</li>
+      <li
+        *ngFor="let data of selectedUser.secondBlock"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        {{ data.type }}:
+        <div [ngSwitch]="data.type">
+          <span *ngSwitchCase="'Updated At'" class="font-weight-thin">{{ data.value | timezone }}</span>
+          <span *ngSwitchCase="'Last Login At'" class="font-weight-thin">{{ data.value | timezone }}</span>
+          <span *ngSwitchCase="'Created At'" class="font-weight-thin">{{ data.value | timezone }}</span>
+          <span *ngSwitchCase="'Last Password Change Time'" class="font-weight-thin">{{ data.value | timezone }}</span>
+          <span *ngSwitchDefault class="font-weight-thin">{{ data.value }}</span>
+        </div>
+      </li>
+    </ul>
+    <ul class="list-group mb-4">
+      <li class="list-group-item bg-light text-primary">General</li>
+      <li
+        *ngFor="let data of selectedUser.thirdBlock"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        {{ data.type }}:
+        <div [ngSwitch]="data.type">
+          <span *ngSwitchCase="'Last Login At'" class="font-weight-thin">{{ data.value | timezone }}</span>
+          <span *ngSwitchCase="'Last Password Change Time'" class="font-weight-thin">{{ data.value | timezone }}</span>
+          <span *ngSwitchDefault class="font-weight-thin">{{ data.value }}</span>
+        </div>
+      </li>
+    </ul>
+    <ul class="list-group mb-4">
+      <li class="list-group-item bg-light text-primary">Creation</li>
+      <li
+        *ngFor="let data of selectedUser.fourthBlock"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        {{ data.type }}:
+        <div [ngSwitch]="data.type">
+          <span *ngSwitchCase="'Updated At'" class="font-weight-thin">{{ data.value | timezone }}</span>
+          <span *ngSwitchCase="'Created At'" class="font-weight-thin">{{ data.value | timezone }}</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</modal-window>

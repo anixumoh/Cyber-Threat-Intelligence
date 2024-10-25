@@ -1,0 +1,6 @@
+@import "src/scss/variables";
+
+// INPUT ERROR
+input.ng-invalid.ng-touched{
+  border: 1px solid $danger;
+}

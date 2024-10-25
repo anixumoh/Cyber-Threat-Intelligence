@@ -1,0 +1,285 @@
+<div class="card rounded-top-0 padding-20 text-dark">
+  <div class="margin-bottom-10">
+    <div class="title-drag">
+      <h3 class="panel-title">Select your Assets</h3>
+    </div>
+    <!-- SUB-HEADER LIST -->
+    <div class="row sub-header-list">
+      <div class="buttons-container">
+        <!-- BUTTON -->
+        <button
+          class="btn btn-primary margin-left-05 pull-right"
+          (click)="addNewAsset()"
+          [disabled]="grants.isCustomerOrOperator() || !domain || (domain && !subdomain && !path)"
+        >
+          Add
+        </button>
+        <!-- INPUT -->
+        <input
+          class="input-select-asset pull-right w-50"
+          [(ngModel)]="path"
+          [placeholder]="domain ? 'Insert your path' : 'Select a domain first'"
+          [disabled]="grants.isCustomerOrOperator() || !domain"
+          #pathModel="ngModel"
+          [pattern]="pathRegExp"
+        />
+        <span class="symbol-separator">/</span>
+        <!-- BUTTON -->
+        <button
+          class="btn btn-filter dropdown-toggle pull-right text-dark"
+          (click)="toggleSelect()"
+          [disabled]="grants.isCustomerOrOperator()"
+          [ngbTooltip]="domain ? domain : 'Select a domain'"
+        >
+          {{ domain || 'Select domain' }}
+        </button>
+        <!-- DROPDOWN -->
+        <div class="dropdown-menu pull-right" [ngClass]="isSelectOpen ? 'show' : 'hide'">
+          <ng-container *ngIf="initDomains && initDomains.length > 0">
+            <input #searchDomain class="search-domain" placeholder="search domain" (keyup)="filterDomains($event)" />
+            <div class="list-group padding-0">
+              <div
+                class="list-group-item full-width cursor-pointer"
+                *ngFor="let d of domains"
+                (click)="changeDomain(d)"
+              >
+                .{{ d }}
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!initDomains || initDomains.length === 0">
+            <div class="empty-box">
+              There are no domains to show. Please, configure some in the Settings tab if you would like to classify
+              them.
+            </div>
+          </ng-container>
+        </div>
+        <span class="symbol-separator">.</span>
+        <!-- INPUT -->
+        <input
+          class="input-select-asset pull-right w-50"
+          [(ngModel)]="subdomain"
+          [placeholder]="domain ? 'Insert your subdomain' : 'Select a domain first'"
+          [disabled]="grants.isCustomerOrOperator() || !domain"
+        />
+      </div>
+      <div class="validation-path">
+        <div *ngIf="pathModel?.errors?.pattern || validateYourAsset()" class="validation-path__message">
+          Invalid path or has more than 190 characters.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row setting-classify">
+    <!-- COLUMN LEFT -->
+    <div class="col-md-6">
+      <!-- LIST -->
+      <div class="panel-default setting-classify">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="list-header">Unclassified assets ({{ unclassified.length }})</h3>
+          <div class="mr-2 search-div">
+            <input
+              #inputSearchUnClass
+              class="sb-search-input"
+              placeholder="Search"
+              type="text"
+              value=""
+              name="search"
+              id="search"
+              (keyup)="debounceSearch($event, 'unclassified')"
+            />
+            <button
+              *ngIf="inputSearchUnClass.value.length"
+              class="btn btn-link"
+              type="button"
+              name="clearBtn"
+              (click)="filterUnclassified(''); inputSearchUnClass.value = ''"
+            >
+              <i class="icon-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="list-group classify-list"
+          [dragula]="'bag-one'"
+          id="unclassified"
+          [ngClass]="grants?.isCustomer() ? 'disabled-row' : ''"
+        >
+          <div
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let un of filteredUnclassified"
+          >
+            <ng-template [ngIf]="un.id !== selectedUnclassified?.id" [ngIfElse]="unclassifiedInput">
+              <div class="cut-text">
+                {{ un.value }}
+              </div>
+            </ng-template>
+            <ng-template #unclassifiedInput>
+              <input type="text" [(ngModel)]="selectedUnclassified.value" />
+              <button type="button" (click)="editSelectedUnclassified()">save</button>
+              <button (click)="resetSelectedUnclassified()">cancel</button>
+            </ng-template>
+            <div *ngIf="isEditing">
+              <div (click)="setSelectedUnclassified(un)">edit</div>
+              <div (click)="removeSelectedUnclassified(un)">remove</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- COLUMN RIGHT -->
+    <div class="col-md-6 global-seetings">
+      <!-- LIST ONE -->
+      <div class="title-drag margin-for-search">
+        <h3 class="panel-title">Employee</h3>
+        <div class="search-div">
+          <input
+            #inputSearchEmployee
+            class="sb-search-input"
+            placeholder="Search"
+            type="text"
+            value=""
+            name="searchEmployee"
+            (keyup)="debounceSearch($event, 'employee')"
+          />
+          <button
+            *ngIf="inputSearchEmployee.value.length"
+            class="btn btn-link button-reset"
+            type="button"
+            name="clearBtn"
+            (click)="filterEmployee(''); inputSearchEmployee.value = ''"
+          >
+            <i class="icon-times"></i>
+          </button>
+        </div>
+        <div (click)="toggleEmployee()">
+          <i [ngClass]="displayCollapseEmployee ? 'color-primary' : 'text-dark'" class="icon-info-circle-solid"></i>
+        </div>
+      </div>
+      <div class="height-box margin-bottom-10">
+        <div *ngIf="displayCollapseEmployee" [ngClass]="{ collapsecontent: displayCollapseEmployee }">
+          <div class="height-box-info">
+            <small
+              >Set-up your hosts (external or internal) related to your employees sites to search in live botnets for
+              account credentials from compromised computers used by your partners or external providers. e.g.
+              <span>vpn.mydomain.com || extranetportal.mydomain.com</span></small
+            >
+          </div>
+        </div>
+        <div class="panel-default">
+          <div
+            class="list-group"
+            [dragula]="'bag-one'"
+            id="employee"
+            [ngClass]="grants?.isCustomer() ? 'disabled-row' : ''"
+          >
+            <div class="list-group-item" *ngFor="let emp of filteredEmployee">
+              {{ emp.value }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- LIST TWO -->
+      <div class="title-drag margin-for-search">
+        <h3 class="panel-title">Customer</h3>
+        <div class="title-icon pull-right" (click)="toggleCustomer()">
+          <i [ngClass]="displayCollapseCustomer ? 'color-primary' : 'text-dark'" class="icon-info-circle-solid"></i>
+        </div>
+        <div class="search-div">
+          <input
+            #inputSearchCustomer
+            class="sb-search-input"
+            placeholder="Search"
+            type="text"
+            value=""
+            name="searchCustomer"
+            (keyup)="debounceSearch($event, 'customer')"
+          />
+          <button
+            *ngIf="inputSearchCustomer.value.length"
+            class="btn btn-link button-reset"
+            type="button"
+            name="clearBtn"
+            (click)="filterCustomer(''); inputSearchCustomer.value = ''"
+          >
+            <i class="icon-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="height-box margin-bottom-10">
+        <div *ngIf="displayCollapseCustomer" [ngClass]="{ collapsecontent: displayCollapseCustomer }">
+          <div class="height-box-info">
+            <small
+              >Set-up your external facing hosts related to your customer sites to search in live botnets for leaked
+              data and account credentials from compromised computers used by your customers. e.g.
+              <span>shop.mydomain.com || onlinebanking.mydomain.com</span></small
+            >
+          </div>
+        </div>
+        <div class="panel-default">
+          <div
+            class="list-group"
+            [dragula]="'bag-one'"
+            id="customer"
+            [ngClass]="grants?.isCustomer() ? 'disabled-row' : ''"
+          >
+            <div class="list-group-item" *ngFor="let cus of filteredCustomer">
+              {{ cus.value }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- LIST THREE -->
+      <div class="title-drag margin-for-search">
+        <h3 class="panel-title">External</h3>
+        <div class="title-icon pull-right" (click)="toggleExternal()">
+          <i [ngClass]="displayCollapseExternal ? 'color-primary' : 'text-dark'" class="icon-info-circle-solid"></i>
+        </div>
+        <div class="search-div">
+          <input
+            #inputSearchExternal
+            class="sb-search-input"
+            placeholder="Search"
+            type="text"
+            value=""
+            name="searchExternal"
+            (keyup)="debounceSearch($event, 'extern')"
+          />
+          <button
+            *ngIf="inputSearchExternal.value.length"
+            class="btn btn-link button-reset"
+            type="button"
+            name="clearBtn"
+            (click)="filterExternal(''); inputSearchExternal.value = ''"
+          >
+            <i class="icon-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="height-box margin-bottom-10">
+        <div *ngIf="displayCollapseExternal" [ngClass]="{ collapsecontent: displayCollapseExternal }">
+          <div class="height-box-info">
+            <small
+              >Set-up your external facing hosts related to your partners or external sites to search in live botnets
+              for account credentials from compromised computers used by your partners or external providers. e.g.
+              <span>partnerportal.mydomain.com || providerportal.mydomain.com"</span></small
+            >
+          </div>
+        </div>
+        <div class="panel-default">
+          <div
+            class="list-group"
+            [dragula]="'bag-one'"
+            id="extern"
+            [ngClass]="grants?.isCustomer() ? 'disabled-row' : ''"
+          >
+            <div class="list-group-item" *ngFor="let ext of filteredExternal">
+              {{ ext.value }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

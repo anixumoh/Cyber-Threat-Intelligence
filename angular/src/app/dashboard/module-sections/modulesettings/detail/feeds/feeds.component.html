@@ -1,0 +1,153 @@
+<!-- LOADING PROCESS -->
+<div *ngIf="!allRequests.closed" class="no-results-box">
+  <i class="icon-spinner rotate"></i>
+  <h6 class="no-results">Loading</h6>
+</div>
+<div *ngIf="allRequests.closed">
+  <div class="card mb-4 w-50">
+    <div class="card-header p-1 clearfix">
+      <h6 class="mt-1 mb-1 ml-1 float-left">Feeds</h6>
+    </div>
+    <div class="card-body p-0">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div class="toggle-button">
+            <input
+              type="checkbox"
+              [checked]="feeds ? feeds.publicFeed : false"
+              (change)="changeStatePublicFeed()"
+              [disabled]="grants?.isCustomerOrOperator()"
+            />
+            <span class="ml-2"> {{ data.texts.publicFeed }}</span>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="toggle-button">
+            <input
+              type="checkbox"
+              [checked]="feeds ? feeds.activateAlerts : false"
+              (change)="changeStateNewCard()"
+              [disabled]="grants?.isCustomerOrOperator()"
+            />
+            <span class="ml-2"> {{ data.texts.newCard }}</span>
+          </div>
+        </li>
+        <li class="list-group-item ml-4" *ngIf="feeds.activateAlerts === true">
+          <div class="toggle-button">
+            <input
+              type="checkbox"
+              [disabled]="!listBanksFeeds || grants?.isCustomerOrOperator()"
+              [checked]="feeds ? feeds.alertBanks : false"
+              (change)="changeStateBankCard()"
+            />
+            <span class="ml-2"> {{ data.texts.bankCard }} </span>
+            <span *ngIf="!listBanksFeeds" class="alert-warning">Please, insert a bank</span>
+          </div>
+        </li>
+        <li class="list-group-item ml-4" *ngIf="feeds.activateAlerts === true">
+          <div class="toggle-button">
+            <input
+              type="checkbox"
+              [disabled]="!listCreditCardsFeeds || grants?.isCustomerOrOperator()"
+              [checked]="feeds ? feeds.alertCorporates : false"
+              (change)="changeStateCorpCard()"
+            />
+            <span class="ml-2"> {{ data.texts.CorpCard }} </span>
+            <span *ngIf="!listCreditCardsFeeds" class="alert-warning">Please, insert a Credit Card</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card mb-4 w-50" *ngIf="feeds.activateAlerts === true">
+    <div class="card-header p-1 clearfix">
+      <h6 class="mt-1 mb-0 ml-1 float-left">List Alert</h6>
+      <button
+        class="btn btn-light btn-sm color-primary float-left ml-1"
+        #dropDownButtonUser
+        [ngClass]="isMenuAlertOpened ? 'is-active' : ''"
+        type="button"
+        name="button"
+        (click)="toggleMenu()"
+        [disabled]="grants?.isCustomerOrOperator()"
+      >
+        <i class="icon-plus-circle-solid mr-1"></i>
+        Add user
+      </button>
+      <div class="dropdown-list">
+        <ul
+          class="list-group list-group-flush border rounded shadow"
+          #dropDownUser
+          [ngClass]="isMenuAlertOpened && !grants?.isCustomerOrOperator() ? 'open' : ''"
+          (click)="toggleMenu()"
+        >
+          <li
+            class="list-group-item list-group-item-action cursor-pointer border-0 p-2"
+            *ngFor="let i of usersList"
+            [value]="i"
+            (click)="selectUser(i)"
+          >
+            <span>{{ i.email }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="form-group mb-0 float-right">
+        <input class="form-control form-control-sm" type="text" placeholder="search" (keyup)="searchInList($event)" />
+      </div>
+    </div>
+    <div class="panel-body p-0 height-list">
+      <!-- NO RESULTS -->
+      <div *ngIf="values.length == 0" class="no-results-box">
+        <img src="assets/default_images/searching.svg" />
+        <h6 class="no-results">"There are no {{ data.name }}"</h6>
+      </div>
+      <!-- TABLE -->
+      <table class="table" *ngIf="values?.length != 0">
+        <thead>
+          <tr>
+            <th class="td-20">
+              <div class="toggle-button">
+                <input
+                  id="all"
+                  [(ngModel)]="selectedAll"
+                  (change)="selectAll()"
+                  type="checkbox"
+                  [disabled]="grants?.isCustomerOrOperator()"
+                />
+              </div>
+            </th>
+            <th>User Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let value of values; let i = index">
+            <td class="vertical-middle td-20">
+              <div class="toggle-button">
+                <input
+                  type="checkbox"
+                  id="value.id"
+                  [(ngModel)]="value.selected"
+                  (change)="checkIfAllSelected()"
+                  [disabled]="grants?.isCustomerOrOperator()"
+                />
+              </div>
+            </td>
+            <td class="vertical-middle">
+              <p class="mb-0">{{ value.value }}</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer p-1">
+      <button
+        class="btn btn-light btn-sm text-danger float-right"
+        (click)="delete()"
+        [disabled]="values.length == 0 || grants?.isCustomerOrOperator()"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</div>

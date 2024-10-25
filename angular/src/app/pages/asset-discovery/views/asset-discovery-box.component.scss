@@ -1,0 +1,248 @@
+@import 'src/scss/variables';
+
+.mat-card {
+  padding: 0px !important;
+}
+::ng-deep .assets-card {
+  height: 370px;
+
+  .card-header {
+    background: #f8f9fa;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+
+    .btn-active {
+      background-color: #efefef !important;
+    }
+
+    .vertical-line {
+      border-left: 1px solid #77889942;
+    }
+
+    .checkbox {
+      &--center {
+        margin-top: 6px;
+      }
+    }
+  }
+  .card-body {
+    height: 85%;
+    overflow-y: scroll;
+    padding: 0px !important;
+
+    .list-item {
+      &__discarded {
+        color: #80808091;
+
+        .badge {
+          opacity: 51%;
+        }
+      }
+
+      &__deleted {
+        background-color: #d3d3d300;
+        color: gray;
+        text-decoration: line-through !important;
+      }
+
+      &__old {
+        background-color: #d3d3d321;
+        color: gray;
+      }
+    }
+
+    .badge {
+      &__domain {
+        background-color: #b2b7bb !important;
+        color: white;
+      }
+      &__new {
+        color: $primary;
+      }
+    }
+  }
+
+  .mat-list-text {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px !important;
+  }
+
+  .term-error {
+    max-width: 80%;
+  }
+}
+
+.header {
+  &-title {
+    margin-top: 5px;
+  }
+
+  &-buttons {
+    margin-top: 5px;
+  }
+
+  &-button {
+    margin-right: 6px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding: 0 2px 0 5px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &-search {
+      border: none;
+    }
+  }
+}
+
+.assets-card-body::-webkit-scrollbar {
+  width: 3px;
+  background-color: $white;
+}
+.assets-card-body::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.assets-card-body::-webkit-scrollbar-thumb {
+  background-color: #084951;
+}
+
+.form-control-sm {
+  height: 30px;
+}
+
+.no-hidden {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  visibility: visible;
+}
+
+::ng-deep {
+  .mat-form-field-infix {
+    width: 100px !important;
+    border-top: 0 !important;
+  }
+
+  .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    opacity: 0.03 !important;
+    background-color: $primary;
+  }
+
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: $primary;
+  }
+
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: $primary;
+  }
+
+  .mat-pseudo-checkbox-checked {
+    background-color: $primary !important;
+  }
+
+  .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    opacity: 0.03 !important;
+    background-color: $primary;
+  }
+
+  .mat-checkbox-checked.mat-accent .mat-checkbox-background,
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: $primary;
+  }
+
+  .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+    background-color: $primary;
+  }
+
+  .mat-form-field-appearance-legacy {
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+    .mat-form-field-underline {
+      display: none;
+    }
+    .mat-form-field-label {
+      top: 19px;
+    }
+  }
+
+  .mat-select-trigger {
+    top: 2px;
+  }
+}
+
+.list-group {
+  position: absolute;
+  z-index: 9;
+  transition: height 0.3s;
+  overflow: hidden;
+
+  &--sort {
+    top: 44px;
+    right: 0px;
+  }
+
+  &--filter {
+    top: 44px;
+    right: 34px;
+  }
+
+  &--select {
+    top: 6px;
+    left: 37px;
+  }
+
+  &.open {
+    visibility: visible;
+  }
+
+  .list-group-item {
+    width: 100px;
+
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: transparent;
+    }
+
+    &--select {
+      width: 120px;
+    }
+  }
+
+  .border-bottom {
+    border-bottom: 2px solid lightgray !important;
+  }
+
+  .list-group-item.active {
+    width: 100px;
+    background-color: $light;
+    color: $primary;
+    font-weight: bold;
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: $primary;
+    }
+  }
+}
+
+.icon-add {
+  font-size: 25px !important;
+}
+
+.no-data-box {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

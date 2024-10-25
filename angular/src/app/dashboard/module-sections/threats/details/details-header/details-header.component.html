@@ -1,0 +1,275 @@
+<div class="row details-header">
+  <div [ngClass]="numColumns" *ngFor="let c of headerData">
+    <ul class="list-user-info list-group list-group-flush">
+      <ng-container *ngFor="let r of c; let last = last; let i = index">
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center px-0 py-2"
+          *ngIf="
+            (isResourceValue(r.value) && _resource[r.value] !== '') ||
+            (r.isBoolean && (_resource[r.value] == false || _resource[r.value] == true))
+          "
+        >
+          <p
+            class="mb-0"
+            [ngClass]="resource[r.value] && r.value == 'url' ? 'url-width' : 'title-width'"
+            style="display: flex; align-items: center"
+          >
+            <!-- ITEM ICONS -->
+            <i class="icon-tag bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value === 'labels'"> </i>
+            <i
+              class="icon-globe bg-primary text-white mr-2"
+              *ngIf="
+                (resource[r.value] && r.value === 'leakFoundAt') ||
+                r.value === 'domain' ||
+                r.value === 'domain_type' ||
+                r.value === 'leakOrigin'
+              "
+            >
+            </i>
+            <i
+              class="icon-clock bg-primary text-white mr-2"
+              *ngIf="
+                (resource[r.value] && r.isDate && r.name == header_dates.created_at) ||
+                (resource[r.value] && r.isDate && r.name == header_dates.updated_at) ||
+                (resource[r.value] && r.isDate && r.name == header_dates.checked_at) ||
+                (resource[r.value] && r.isDate && r.name == header_dates.changed_at) ||
+                (resource[r.value] && r.isDate && r.name == header_dates.uploaded_at) ||
+                (resource[r.value] && r.isDate && r.name == header_dates.date)
+              "
+            >
+            </i>
+            <i class="icon-globe bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value === 'countries_id'">
+            </i>
+            <i class="icon-code bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value === 'content_type'">
+            </i>
+            <i class="icon-flag bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value === 'language_id'"> </i>
+            <i class="icon-file-alt bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value === 'search_words'">
+            </i>
+            <i
+              class="icon-id-card bg-primary text-white mr-2"
+              *ngIf="(resource[r.value] && r.value === 'title') || r.value == 'num_cards' || r.value === 'credit_cards'"
+            >
+            </i>
+            <i class="icon-link bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'url'"> </i>
+            <i class="icon-arrows-h bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'transform'">
+            </i>
+            <i class="icon-calendar bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'leakDate'"> </i>
+            <i class="icon-file-alt bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'file'"> </i>
+            <i
+              class="icon-lock bg-primary text-white mr-2"
+              *ngIf="
+                (resource[r.value] && r.value == 'md5') ||
+                r.value == 'sha1' ||
+                r.value == 'sha256' ||
+                r.value == 'ssdeep'
+              "
+            >
+            </i>
+            <i class="icon-laptop bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'architecture'">
+            </i>
+            <i class="icon-arrows-alt bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'size'"> </i>
+            <i class="icon-bug bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'malware'"> </i>
+            <i
+              class="icon-folder-open-solid bg-primary text-white mr-2"
+              *ngIf="resource[r.value] && r.value == 'fileType'"
+            >
+            </i>
+            <i class="icon-clock bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'submitted'"> </i>
+            <i class="icon-code bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'yara'"> </i>
+            <i class="icon-archive bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'packer'"> </i>
+            <i
+              class="icon-envelope-solid bg-primary text-white mr-2"
+              *ngIf="isResourceValue(r.value) && r.value == 'email'"
+            >
+            </i>
+            <i
+              class="icon-user-solid bg-primary text-white mr-2"
+              *ngIf="
+                (isResourceValue(r.value) && r.value == 'employee') || r.value == 'customer' || r.value == 'external'
+              "
+            >
+            </i>
+            <i class="icon-cloud-solid bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'num_cred'">
+            </i>
+            <i class="icon-star bg-primary text-white mr-2" *ngIf="resource[r.value] && r.value == 'resource_type'">
+            </i>
+            <i
+              class="icon-star bg-primary text-white mr-2"
+              *ngIf="isResourceValue(r.value) && r.value == 'user_rating'"
+            >
+            </i>
+            <i
+              class="icon-exclamation-triangle bg-primary text-white mr-2"
+              *ngIf="isResourceValue(r.value) && r.value == 'severity'"
+            >
+            </i>
+            <i
+              class="icon-error bg-primary text-white mr-2"
+              *ngIf="resource[r.value] && r.value === 'analysis_calc_result'"
+            >
+            </i>
+            <!-- ITEM TITLE -->
+            <strong class="text-dark"> {{ r.name }}:</strong>
+          </p>
+          <!-- CRED TYPE-->
+          <p class="hash text-right text-secondary mb-0" *ngIf="resource[r.value] && r.value === 'resource_type'">
+            {{ typesDictionary[resource[r.value]] }}
+          </p>
+          <!-- TITLE -->
+          <p class="hash text-right mb-0" *ngIf="resource[r.value] && r.value === 'title'">
+            {{ resource[r.value] }}
+          </p>
+          <!-- RATING -->
+          <div class="rating-box border rounded" *ngIf="isResourceValue(r.value) && r.value === 'user_rating'">
+            <star-rating-blueliv
+              [rating]="resource[r.value]"
+              [id]="resource.id"
+              [resource]="resource"
+              [isResource]="true"
+              (ratingEmit)="onChangeRating($event)"
+            >
+            </star-rating-blueliv>
+          </div>
+          <!-- SEVERITY -->
+          <div class="" *ngIf="isResourceValue(r.value) && r.value === 'severity'">
+            <app-severity [severity]="resource?.severity"> </app-severity>
+          </div>
+          <!-- INFORM STATUS -->
+          <div class="" *ngIf="isResourceValue(r.value) && r.value === 'analysis_calc_result'">
+            <app-inform
+              [status]="resource.analysis_calc_result"
+              [resource]="resource"
+              [showIcons]="false"
+              [isButton]="true"
+              [position]="'left'"
+              (informEmit)="onChangeInform($event)"
+            >
+            </app-inform>
+          </div>
+          <!-- SELECT LANGUAGE -->
+          <div class="" *ngIf="isResourceValue(r.value) && r.value === 'language_id'">
+            <app-select-language
+              *ngIf="moduleName != 'credential'"
+              [resource]="resource"
+              (selectLanguageEmit)="onChangeLanguage($event)"
+            >
+            </app-select-language>
+          </div>
+          <!-- URL -->
+          <div class="download-box" *ngIf="resource[r.value] && r.value === 'url'">
+            <button
+              class="btn btn-circle bg-light text-primary mr-1"
+              [copyClipboard]="resource[r.value]"
+              [ngbTooltip]="'Copy to clipboard'"
+            >
+              <i class="icon-copy"></i>
+            </button>
+            <a class="hash text-right" href="{{ resource[r.value] }}" target="_blank">
+              {{ resource[r.value] }}
+            </a>
+          </div>
+          <!-- FILE -->
+          <div *ngIf="resource[r.value] && r.value === 'file'" class="download-box">
+            <button
+              class="btn btn-circle bg-light text-primary mr-1 position-relative"
+              (click)="clickFile()"
+              [ngbTooltip]="'Download file'"
+            >
+              <i class="icon-download" *ngIf="!loadingDownload"></i>
+              <div>
+                <i class="icon-spinner rotate" *ngIf="loadingDownload"></i>
+              </div>
+            </button>
+            <a class="hash text-right">
+              {{ resource[r.value] }}
+            </a>
+          </div>
+          <!-- LABELS -->
+          <div *ngIf="resource[r.value] && r.value === 'labels'">
+            <div class="hash text-right" *ngIf="resource[r.value]">
+              <ng-container *ngFor="let label of resource[r.value]; let i = index">
+                <app-label-item [label]="label" [labelProperty]="labelProperty"> </app-label-item>
+              </ng-container>
+            </div>
+          </div>
+          <!-- ITEMS -->
+          <p class="hash text-right text-secondary mb-0" *ngIf="isNormalItem(r)">
+            <button
+              *ngIf="r.value === 'leakOrigin' || r.value === 'leakFoundAt'"
+              class="btn btn-circle bg-light text-primary"
+              [copyClipboard]="resource[r.value]"
+            >
+              <i class="icon-copy"></i>
+            </button>
+            <a
+              *ngIf="r.value === 'leakOrigin' || r.value === 'leakFoundAt'; else normalItem"
+              [href]="resource[r.value]"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ resource[r.value] }}
+            </a>
+            <ng-template #normalItem>{{ resource[r.value] }}</ng-template>
+          </p>
+          <!-- DATE -->
+          <p class="text-secondary mb-0" *ngIf="resource[r.value] && r.isDate">
+            {{ getDate(resource[r.value]) }}
+          </p>
+          <!-- CREDIT CARD -->
+          <div *ngIf="_resource[r.value] && r.value === 'sources'">
+            <span class="d-flex align-items-center" *ngFor="let source of resource[r.value]">
+              <i class="icon-lens"></i>
+              <app-tcx-linkeable [value]="source" checkForActors="true" [isCreditCard]="true"></app-tcx-linkeable>
+            </span>
+          </div>
+          <!-- ITEM -->
+          <p class="text-secondary mb-0" *ngIf="r.isBoolean && !isNormalItem(r)">
+            {{ _resource[r.value] }}
+          </p>
+          <!-- CREDENTIAL -->
+          <p class="text-secondary mb-0" *ngIf="_resource[r.value] && r.value == 'credentialsLength'">
+            {{ _resource.credentials ? _resource.credentials.length : 0 }}
+          </p>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</div>
+<!-- MALWARE PCAP -->
+<ng-container *ngIf="moduleName === 'malware'">
+  <div class="mt-4 border-top pt-2 clearfix">
+    <button class="btn btn-primary btn-sm float-right" (click)="downloadPCAP()">
+      <i class="icon-download mr-2" aria-hidden="true"></i>
+      Download PCAP
+    </button>
+  </div>
+</ng-container>
+<!-- MODAL -->
+<modal-window
+  modalTitle="File"
+  [imageBody]="file"
+  *ngIf="fileSelected"
+  [customClass]="'modal-big'"
+  cancelBtn="Close"
+  (cancel)="fileSelected = false"
+>
+</modal-window>
+
+<modal-window
+  modalTitle="Information"
+  modalClass="modal--to-front"
+  *ngIf="showModal && canRiseTcxLinkeableModal"
+  cancelBtn="Close"
+  (cancel)="closeModal()"
+>
+  <p>
+    Unfortunately, the additional contextual information about this threat cannot be provided because the
+    {{ modalType === 'tcx' ? 'Threat Context' : 'Dark Web' }}
+    module is not active in your organization.
+  </p>
+  <br />
+  <p>
+    If you are interested in how the {{ modalType === 'tcx' ? 'Threat Context' : 'Dark Web' }} module could help you
+    with your investigations, please, contact: <a href="mailto:sales@blueliv.com" target="_blank">sales@blueliv.com</a>.
+  </p>
+</modal-window>

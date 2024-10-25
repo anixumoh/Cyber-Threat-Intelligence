@@ -1,0 +1,36 @@
+{
+  "extends": "./.svelte-kit/tsconfig.json",
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2020",
+    "module": "esnext",
+    "lib": ["es2020", "dom", "dom.iterable"],
+    "typeRoots": ["node_modules/@types"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "plugins": [{ "name": "vite-plugin-iso-import" }],
+    "paths": {
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      "$stores": ["src/stores"],
+      "$stores/*": ["src/stores/*"],
+      "$src": ["src"],
+      "$src/*": ["src/*"]
+    },
+    "rootDirs": [".", "./.svelte-kit/types"],
+    "types": ["node", "svelte"]
+  },
+  "angularCompilerOptions": {
+    "allowEmptyCodegenFiles": true,
+    "strictTemplates": true
+  },
+  "include": ["src/**/*"]
+}

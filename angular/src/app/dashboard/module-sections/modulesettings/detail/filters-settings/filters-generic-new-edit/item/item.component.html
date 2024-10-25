@@ -1,0 +1,44 @@
+<li class="list-items d-flex justify-content-between align-items-center">
+  <span class="font-weight-bold width-header">
+    <i class="bg-primary text-white mr-1" [ngClass]="icon" aria-hidden="true"></i>
+    <span class="text-uppercase margin-title">{{ title }}</span>
+    <i class="icon-arrow-left ml-2 color-primary" *ngIf="isInverse" ngbTooltip="Inverse search" placement="right"></i>
+  </span>
+  <span class="text-secondary align-right" *ngIf="!isKeyAndValue" style="max-width: 251px">
+    <ng-container *ngIf="!isArrayElements">
+      <ng-container *ngIf="isFromRating">
+        <star-rating-blueliv
+          style="width: 100px"
+          [rating]="oneElement[0].actions ? oneElement[0].actions[6].value : 0"
+          [disabled]="true"
+          [resource]="oneElement"
+        >
+        </star-rating-blueliv>
+      </ng-container>
+      <ng-container *ngIf="!isFromRating">
+        <span [ngClass]="isBadge ? 'badge badge-pill badge-light' : ''" class="border ml-1 text-ellipsis--3"
+          >{{ oneElement }}
+        </span>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="isArrayElements">
+      <ng-container *ngFor="let element of elements">
+        <span
+          class="badge badge-pill badge-light border ml-1"
+          *ngIf="(element?.selected && !isFromLabels) || fileTypeArray"
+        >
+          {{ getValue(element) }}
+        </span>
+        <app-label-item *ngIf="isFromLabels" [label]="element"></app-label-item>
+      </ng-container>
+    </ng-container>
+  </span>
+  <span *ngIf="isKeyAndValue">
+    <div>
+      <span class="badge badge-secondary">Key:</span><span class="ml-1">{{ oneElement.key }}</span>
+    </div>
+    <div>
+      <span class="badge badge-secondary">Value:</span><span class="ml-1">{{ oneElement.value }}</span>
+    </div>
+  </span>
+</li>

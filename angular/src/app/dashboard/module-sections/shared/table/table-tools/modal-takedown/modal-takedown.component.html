@@ -1,0 +1,51 @@
+<div class="overlay" [style.zIndex]="10000" *ngIf="openModal">
+  <div class="modal panel panel-default" [ngClass]="customClass">
+    <div class="panel-heading">
+      <h3 class="panel-title pull-left">Takedown</h3>
+      <div class="pull-right action-buttons">
+        <div class="btn-group pull-right">
+          <!-- BUTTON -->
+          <button class="btn btn-link" (click)="closeTakedown()">
+            <i class="icon-close"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- PANEL BODY -->
+    <div class="panel-body">
+      <div class="center">
+        <div *ngIf="isLoading" class="no-results-box">
+          <i class="icon-spinner rotate"></i>
+          <h3 class="no-results">Loading</h3>
+        </div>
+        <div *ngIf="!isLoading" class="row">
+          <div class="col-md-12">
+            <textarea
+              class="general-input reason"
+              placeholder="Specify the reason for this takedown"
+              [(ngModel)]="takedown.reason.text"
+            >
+            </textarea>
+            <span class="error-text text-center" *ngIf="takedown.reason.errorMessage">
+              {{ takedown.reason.errorMessage }}
+            </span>
+            <textarea
+              class="general-input email"
+              placeholder="Please write the notification email list"
+              [(ngModel)]="takedown.email.values"
+            >
+            </textarea>
+            <span class="error-text text-center" *ngIf="takedown.email.errorMessage">
+              {{ takedown.email.errorMessage }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- PANEL FOOTER -->
+    <div class="panel-footer">
+      <button class="btn btn-filter" nohref (click)="saveTakedown()">Send</button>
+      <button (click)="closeTakedown()" class="btn btn-default" type="button" name="">Cancel</button>
+    </div>
+  </div>
+</div>

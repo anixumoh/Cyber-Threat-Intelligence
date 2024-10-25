@@ -1,0 +1,46 @@
+<!-- WITH AVATAR -->
+<div class="row">
+  <div class="col-md-4">
+    <!-- IMAGE -->
+    <img *ngIf="headerData[0][0] && headerData[0][0].isAvatar" class="img-thumbnail" [src]="resource.downloadedImage" />
+  </div>
+  <div class="col-md-8">
+    <ul class="list-group list-group-flush details-header">
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let r of headerData[1]">
+        <div
+          class="left-item"
+          *ngIf="
+            (resource[r.value] && resource[r.value] != '') ||
+            (r.isBoolean && (resource[r.value] == false || resource[r.value] == true)) ||
+            r.isAvatar == true
+          "
+        >
+          <!-- ICONS -->
+          <i class="icon-clock bg-primary text-white mr-1" *ngIf="r.value === 'createdAt'"> </i>
+          <i class="icon-search bg-primary text-white mr-1" *ngIf="r.value === 'searchPhrase'"> </i>
+          <i class="icon-code bg-primary text-white mr-1" *ngIf="r.value === 'searchEngines'"> </i>
+          <i class="icon-globe bg-primary text-white mr-1" *ngIf="r.value === 'searchTwitter'"> </i>
+          <!-- TITLE -->
+          <strong class="text-dark text-uppercase" *ngIf="!r.isAvatar">{{ r.name }}:</strong>
+        </div>
+        <!-- VALUE -->
+
+        <p
+          class="text-secondary mb-0"
+          *ngIf="
+            r.value === 'searchEngines' || r.value === 'searchFacebook' || r.value === 'searchTwitter';
+            else generalValue
+          "
+        >
+          <app-enable-disable [ngClass]="'cursor-not-allowed'" [status]="resource[r.value]" [interactive]="false">
+          </app-enable-disable>
+        </p>
+        <ng-template #generalValue>
+          <p class="text-secondary mb-0" *ngIf="resource[r.value]">
+            {{ resource[r.value] }}
+          </p>
+        </ng-template>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<modal-window
+  zIndex="1050"
+  *ngIf="open"
+  [acceptBtn]="mode === viewMode.form ? 'Save' : false"
+  cancelBtn="Close"
+  [modalTitle]="mode === viewMode.form ? 'Assign to an incident' : 'List of incidents'"
+  (accept)="saveModal()"
+  (cancel)="closeModal()"
+  [disabledAccept]="isDisabledAcceptBtn"
+>
+  <div class="modal-incident">
+    <div class="modal-chart-container">
+      <app-overlay [loading]="loading" [minHeight]="loading ? 160 : 'auto'">
+        <div *ngIf="mode === viewMode.list">
+          <app-basic-list
+            [items]="assignedIssues"
+            [key]="'title'"
+            [canRemove]="true"
+            (onRemove)="removeIssueFromResource($event)"
+            (onClick)="navigateToIssue($event)"
+          ></app-basic-list>
+          <button class="btn btn-link" nohref (click)="switchMode($event, viewMode.form)">
+            <i class="icon-plus-circle-solid mr-1"></i>
+            Add Incident
+          </button>
+        </div>
+
+        <div class="card" *ngIf="mode === viewMode.form">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item" (click)="enableType()">
+                <a class="nav-link" [ngClass]="{ active: !fromExisting }">New incident</a>
+              </li>
+              <li class="nav-item" (click)="enableIncident()">
+                <a class="nav-link" [ngClass]="{ active: fromExisting }">Existing incident</a>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body">
+            <div [style.display]="!fromExisting ? 'block' : 'none'">
+              <div class="form-group">
+                <label class="indented" for="name">Name</label>
+                <input id="name" class="form-control" [(ngModel)]="data.title" type="text" name="name" />
+              </div>
+              <div>
+                <app-search-dropdown
+                  [isDisabled]="typeDisabled"
+                  [placeholder]="'Select Incident Type'"
+                  [options]="types"
+                  (selectedEvent)="onNewIssueType($event)"
+                  (debounceSearchEvent)="filterIssuesType($event)"
+                ></app-search-dropdown>
+                <app-search-dropdown
+                  [placeholder]="'Select a user'"
+                  [isLoading]="isLoadingUsers"
+                  [options]="usersList"
+                  (selectedEvent)="getSelectedUser($event)"
+                  (debounceSearchEvent)="debounceSearch($event)"
+                ></app-search-dropdown>
+              </div>
+            </div>
+
+            <div [style.display]="fromExisting ? 'block' : 'none'">
+              <app-overlay [loading]="!existingIssuesLoaded">
+                <app-search-dropdown
+                  [isDisabled]="!existingIssuesLoaded"
+                  [placeholder]="'Select Incident'"
+                  [options]="filteredIssuesList"
+                  (selectedEvent)="onExistingIssue($event)"
+                  (debounceSearchEvent)="filterIssuesList($event)"
+                ></app-search-dropdown>
+              </app-overlay>
+            </div>
+          </div>
+        </div>
+      </app-overlay>
+    </div>
+  </div>
+</modal-window>

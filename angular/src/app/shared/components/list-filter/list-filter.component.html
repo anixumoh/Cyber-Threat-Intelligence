@@ -1,0 +1,182 @@
+<div class="d-flex justify-content-end">
+  <div class="mr-1">
+    <app-date-picker-range
+      *ngIf="showCalendar"
+      (resetDateSelected)="resetDates()"
+      (submitDateFilter)="onDateFilter($event)"
+      [disabled]="isCurrentContextLoading"
+    ></app-date-picker-range>
+    <app-select
+      *ngIf="!showCalendar"
+      [items]="days"
+      [model]="defaultDay"
+      [icon]="'icon-calendar'"
+      [placement]="'bottom-right'"
+      [highlight]="defaultDay !== 15"
+      id="daysDropdown"
+      [showText]="true"
+      (onChange)="onChangeRangeDays($event)"
+    >
+    </app-select>
+  </div>
+  <div
+    class="d-block"
+    tabindex="0"
+    [ngbTooltip]="isSearchBoxActive() ? 'Clear search field and click magnifier to enable filters' : ''"
+  >
+    <button
+      nohref
+      class="btn btn-light btn-sm border mr-1"
+      [ngClass]="{ 'btn--active': isFilterActive() }"
+      (click)="openFilters()"
+      [disabled]="isSearchBoxActive()"
+    >
+      <i class="icon-filter-solid mr-2"></i>Filters
+      <i class="ml-2" [ngClass]="isFiltersOpen ? 'icon-arrow-up' : 'icon-arrow-down'"></i>
+    </button>
+  </div>
+
+  <!-- INPUT SEARCH -->
+  <div
+    class="d-block"
+    tabindex="0"
+    [ngbTooltip]="isFilterActive() ? 'Press Clear All and then Filters to enable free text search' : ''"
+  >
+    <button
+      nohref
+      class="btn btn-light btn-sm border"
+      [ngClass]="{ 'btn--active': isSearchBoxActive() }"
+      (click)="openSearch()"
+      [disabled]="isFilterActive()"
+    >
+      <i class="icon-search icon-no-text"></i>
+    </button>
+  </div>
+</div>
+
+<div class="filters-container">
+  <div *ngIf="isFiltersOpen" class="d-flex align-items-center justify-content-end">
+    <div class="border-right ml-1 pl-2 mr-1">
+      <button
+        class="btn btn-light btn-sm btn-danger text-danger mr-1"
+        type="button"
+        name="button"
+        (click)="resetFilters()"
+      >
+        <img src="assets/icons/refresh_filters.svg" style="width: 15px" alt="Reset filters" class="mr-1" /> Clear All
+      </button>
+    </div>
+    <div class="mr-1">
+      <app-select
+        [items]="readFilters"
+        [highlight]="filters.read !== readFilters[0].value"
+        [model]="filters.read"
+        [id]="'readFilterDropdown'"
+        [icon]="'icon-eye'"
+        (onChange)="onReadFilter($event)"
+      >
+      </app-select>
+    </div>
+
+    <button
+      class="btn btn-light btn-sm mr-1 d-xl-border"
+      [ngClass]="filters.labels || filters.labelsAnd || filters.excludeLabels ? 'btn--active' : ''"
+      (click)="openLabelFilterModal()"
+    >
+      <i class="icon-tags d-xl-none"></i>
+      <span class="d-none d-xl-block">Labels</span>
+    </button>
+
+    <div class="mr-1">
+      <app-select
+        [items]="searchWords"
+        [highlight]="filters.terms && filters.terms.length > 0"
+        [label]="'Search Words'"
+        [model]="filters.terms"
+        [id]="'termsFilterDropdown'"
+        [icon]="'icon-file-alt'"
+        [class]="'overflow'"
+        [loading]="loadingSearchWords"
+        (onChange)="onSearchWordsFilter($event)"
+      >
+      </app-select>
+    </div>
+
+    <div class="mr-1">
+      <app-select
+        [items]="statusFilters"
+        [highlight]="!isStatusFilterDefault()"
+        [label]="'Status'"
+        [model]="filters.status"
+        [id]="'statusFilterDropdown'"
+        [icon]="'icon-error'"
+        (onChange)="onStatusFilter($event)"
+      >
+      </app-select>
+    </div>
+
+    <button
+      class="btn btn-light btn-sm d-xl-border mr-0 mr-xl-1"
+      (click)="onFavoriteFilter()"
+      [ngClass]="{ 'btn--active': filters.favorite }"
+    >
+      <i class="icon-bookmark-solid d-xl-none"></i>
+      <span class="d-none d-xl-block">Favorite</span>
+    </button>
+    <ng-container *ngIf="roles && !roles.trial">
+      <button
+        class="btn btn-light btn-sm d-xl-border mr-0 mr-xl-1"
+        (click)="onFollowedFilter()"
+        [ngClass]="{ 'btn--active': filters.followed }"
+      >
+        <i class="icon-clock d-xl-none"></i>
+        <span class="d-none d-xl-block">Followed</span>
+      </button>
+      <button
+        class="btn btn-light btn-sm d-xl-border ml-n1"
+        (click)="onIncidentsFilter()"
+        [ngClass]="{ 'btn--active': filters.incidents }"
+        style="margin-left: -2.4px"
+      >
+        <i class="icon-exclamation-triangle d-xl-none"></i>
+        <span class="d-none d-xl-block">Incidents</span>
+      </button>
+    </ng-container>
+  </div>
+  <div *ngIf="isSearchOpen">
+    <div class="input-group input-group-sm" style="width: 200px; float: right">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search..."
+        style="height: 31px"
+        [(ngModel)]="searchedText"
+        (ngModelChange)="search()"
+        [disabled]="isCurrentContextLoading"
+        #searchInput
+      />
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-secondary border"
+          type="button"
+          name="clearBtn"
+          (click)="onClearSearchTerm()"
+          [disabled]="isCurrentContextLoading"
+        >
+          <i class="icon-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-modal-label-filter
+  [open]="isFilterLabelModealOpen"
+  [organizationId]="orgId"
+  [moduleId]="modId"
+  [moduleType]="modType"
+  [selectedLabels]="filters.labels || filters.labelsAnd || filters.excludeLabels ? true : false"
+  (onClose)="closeLabelFilterModal()"
+  (onFilter)="onLabelsFilter($event)"
+  [defaultDay]="defaultDay"
+>
+</app-modal-label-filter>

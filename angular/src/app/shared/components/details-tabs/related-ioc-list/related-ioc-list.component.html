@@ -1,0 +1,137 @@
+<div class="mb-5">
+  <div class="mb-2 action-table">
+    <div class="d-flex justify-content-between">
+      <div class="d-flex">
+        <div class="pr-3">
+          <div class="button-action" ngbDropdown *ngIf="items?.length > 0">
+            <button
+              ngbDropdownToggle
+              [disabled]="!hasSomeChecked()"
+              class="btn btn-light btn-sm border px-2 btn-actions"
+              [ngClass]="{ pulse: hasSomeChecked() }"
+              type="button"
+              id="actionsButtonDropdown"
+              name="button"
+            >
+              <i class="icon-ellipsis-v px-1"></i>
+            </button>
+            <div ngbDropdownMenu class="actions-dropdown-menu">
+              <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded">
+                <li
+                  class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                  (click)="exportToCSV()"
+                >
+                  <i class="icon-share-square mr-2"></i>
+                  <span>Export to CSV</span>
+                </li>
+                <li
+                  class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                  (click)="exportToJson()"
+                >
+                  <i class="icon-share-square mr-2"></i>
+                  <span>Export to JSON</span>
+                </li>
+                <li
+                  class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                  (click)="tryCopyToClipboard()"
+                >
+                  <i class="icon-copy mr-2"></i>
+                  <span>Copy to clipboard</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <h4 *ngIf="showTitle">Related IOCs</h4>
+      </div>
+
+      <div>
+        <app-select
+          *ngIf="items?.length > 0"
+          [items]="limits"
+          [model]="limit"
+          [icon]="'icon-format_list_bulleted'"
+          [placement]="'bottom-right'"
+          id="limitDropdown"
+          (onChange)="onChangeLimit($event)"
+        >
+        </app-select>
+      </div>
+    </div>
+  </div>
+
+  <div style="position: relative">
+    <app-table [items]="items" [loading]="loading" class="table-fixed" sm="true" noItems="No data found">
+      <thead>
+        <tr>
+          <th class="text-center td-40">
+            <input type="checkbox" [(ngModel)]="bulk" (click)="setCheckedState($event)" />
+          </th>
+          <th class="text-center td-60">Risk</th>
+          <th class="text-center td-130">Type</th>
+          <th class="text-center">Subtypes</th>
+          <th>Value</th>
+          <th class="text-center td-150">First Seen</th>
+          <th class="text-center td-150">Last Seen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items" class="cursor-pointer" (click)="details($event, item)">
+          <td class="text-center td-40 vertical-middle cursor-default" (click)="$event.stopImmediatePropagation()">
+            <input type="checkbox" class="cursor-pointer" [(ngModel)]="item.fxSelected" (click)="setChecked()" />
+          </td>
+          <td class="text-center align-middle">
+            <span *ngIf="item.risk === '-'" class="green-text">N/A</span>
+            <app-score-color *ngIf="item.risk !== '-'" [scoreData]="item.risk"></app-score-color>
+          </td>
+          <td class="text-center">
+            {{ item.type }}
+            <div *ngIf="item.type === 'Malware'">
+              <span class="text-primary" (click)="seeMalwareReport(item, $event)">(see report)</span>
+            </div>
+          </td>
+          <td class="text-center align-middle">
+            {{ item.ioc_types.join(', ') }}
+          </td>
+          <td class="align-middle">
+            <app-copy-to-clipboard [value]="item.value" [tooltip]="true"></app-copy-to-clipboard>
+          </td>
+          <td class="text-center td-150 align-middle">{{ item.first_seen | date: 'dd/MM/yyyy' }}</td>
+          <td class="text-center td-150 align-middle">{{ item.last_seen | date: 'dd/MM/yyyy' }}</td>
+        </tr>
+      </tbody>
+    </app-table>
+
+    <div class="mt-3 mb-4">
+      <app-pagination-x [page]="page" [count]="count" [pageSize]="limit" (pageChange)="onPageChange($event)">
+      </app-pagination-x>
+    </div>
+  </div>
+
+  <modal-window
+    [modalTitle]="'Warning'"
+    [warning]="
+      'The selected elements might include malicious indicators and/or links. Do you prefer to modify (defang) those malicious elements before being exported?'
+    "
+    [acceptBtn]="'Yes'"
+    *ngIf="defangExportType"
+    [cancelBtn]="'No'"
+    (accept)="onConfirmDefangConfirmationPopup()"
+    (cancel)="onCancelDefangConfirmationPopup($event)"
+  >
+  </modal-window>
+
+  <modal-window
+    [modalTitle]="'Warning'"
+    [warning]="
+      'The selected elements might include malicious indicators and/or links. Do you prefer to modify (defang) those malicious elements before being copied to the clipboard?'
+    "
+    [acceptBtn]="'Yes'"
+    *ngIf="showDefangCopyToClipboardPopup"
+    [cancelBtn]="'No'"
+    (accept)="copyToClipboardDefang(true)"
+    (cancel)="onCancelCopyToClipboardDefandPopup($event)"
+  >
+  </modal-window>
+</div>

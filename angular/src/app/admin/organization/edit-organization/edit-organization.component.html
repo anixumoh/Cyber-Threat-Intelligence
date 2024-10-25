@@ -1,0 +1,383 @@
+<modal-window
+  (cancel)="closeModal()"
+  [customClass]="tabActive !== arrayTabs[0] ? 'modal-xl' : 'modal-xl'"
+  [modalTitle]="'Detail Organization'"
+>
+  <main-header-v1 [arrayTabs]="arrayTabs" [(active)]="tabActive" (activeChange)="activeChange($event)"></main-header-v1>
+  <div class="modal-body pt-0">
+    <ng-template [ngIf]="tabActive === arrayTabs[4]">
+      <ng-container *ngTemplateOutlet="template_grants"></ng-container>
+    </ng-template>
+    <ng-template [ngIf]="tabActive === 'Blacklist'">
+      <ng-container *ngTemplateOutlet="black_list"></ng-container>
+    </ng-template>
+    <ng-template [ngIf]="tabActive === arrayTabs[0]">
+      <div *ngIf="isLoading; else loaded" class="centerLoading minHeight">
+        <div class="inner text-center">
+          <i class="icon-spinner rotate text-primary"></i>
+          <h3 class="no-results text-primary">Loading</h3>
+        </div>
+      </div>
+      <ng-template #loaded>
+        <div *ngIf="form">
+          <div class="date-create">
+            <div class="bg-light border-top border-bottom p-2 mb-4 clearfix">
+              <h6 class="mt-1 mb-0 float-left">
+                <span class="text-dark"> Created:</span>
+                <span class="badge badge-dark ml-1">{{ values.created_at | date }}</span>
+              </h6>
+              <h6 class="mt-1 float-left" *ngIf="form.get('trial').value">
+                <span class="text-dark ml-2"> End Trial Date:</span>
+                <span *ngIf="!trialHasExpired" class="badge badge-dark ml-1">{{
+                  values.trialExpirationDate | date
+                }}</span>
+                <span
+                  *ngIf="trialHasExpired"
+                  class="badge badge-danger ml-1"
+                  [ngbTooltip]="'Trial has expired, no new data will be retrieved after this date.'"
+                  >{{ values.trialExpirationDate | date }}</span
+                >
+              </h6>
+              <span class="float-right border rounded p-1 pl-3 pr-3 ml-2">
+                <input-control
+                  [isDisabled]="!canEnableOrganization"
+                  [type]="'checkbox'"
+                  [label]="'Enabled'"
+                  [customClass]="'float-left mt-1 mr-1'"
+                  [control]="form.controls['enabled']"
+                >
+                </input-control>
+              </span>
+              <span
+                class="float-right border rounded p-1 pl-3 pr-3 ml-2"
+                *ngIf="grants.roles.master || grants.roles.superadmin"
+              >
+                <input-control
+                  [type]="'checkbox'"
+                  [label]="'Trial'"
+                  [customClass]="'float-left mt-1 mr-1'"
+                  [control]="form.controls['trial']"
+                >
+                </input-control>
+              </span>
+              <span
+                class="float-right border rounded p-1 pl-4 pb-0 ml-2"
+                *ngIf="grants.roles.master || grants.roles.superadmin || grants.roles.admin"
+              >
+                <input-control
+                  [type]="'checkbox'"
+                  [label]="'2FA'"
+                  [customClass]="'float-left mt-1 mr-1'"
+                  [control]="form.controls['enabledMfa']"
+                >
+                </input-control>
+              </span>
+              <span
+                class="float-right border rounded p-1 pl-4 pb-0 ml-2 d-flex"
+                *ngIf="grants.roles.master || grants.roles.superadmin || grants.roles.admin"
+              >
+                <input-control
+                  [type]="'checkbox'"
+                  [label]="'User Worked On Level'"
+                  [customClass]="'float-left mt-1 mr-1'"
+                  [control]="form.controls['userWorkedOn']"
+                >
+                </input-control>
+              <i
+              class="icon-info-circle-solid mt-1 ml-1"
+              [ngbTooltip]="'If checked, only the user that is working on a threat will be able to see the `Worked on` checkmark.'"
+              tooltipClass="font-12"
+            >
+            </i>
+              </span>
+            </div>
+          </div>
+          <div class="row mb-5">
+            <div class="col-md-6 col-sm-12 d-flex align-items-center">
+              <input-control class="flex-1" [maxlength]="MAX_ORG_NAME_LENGTH" [label]="'Name'" [isDisabled]="false" [control]="form.controls['name']"> </input-control>
+              <div *ngIf="values.name.length !=0 || !form.controls['name'].dirty" class="mt-4 ml-1">
+                {{ values.name.length  }} / {{MAX_ORG_NAME_LENGTH}}
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12 d-flex justify-content-between">
+              <div
+                *ngIf="grants.roles.master || grants.roles.superadmin"
+                class="form-group mb-0 align-middle customer-input"
+              >
+                <i class="icon-spinner rotate text-primary ml-2 loading-info" *ngIf="isLoadingCustomer"></i>
+                <input-control
+                  data-bv="customer"
+                  [label]="'Customer (*)'"
+                  [type]="'dropdown'"
+                  [isDisabled]="isLoadingCustomer"
+                  [valueDropdown]="selectedCustomer"
+                  [optionsSelect]="customerList"
+                  [openDropdown]="openDropdown"
+                  [control]="form.controls['customerId']"
+                  (onResetValue)="resetCustomer()"
+                  [showMessage]="noCustomerValidation"
+                  (onCloseDropdown)="
+                    this.openDropdown = false; this.customerError = false; this.noCustomerValidation = false
+                  "
+                  (keyup)="debounceSearch($event)"
+                >
+                </input-control>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header text-primary bg-light clearfix">
+              <h6 class="mb-0 float-left">First Contact</h6>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-3 mb-3">
+                <input-control [label]="'Title'" [control]="firstContact.controls['title']"> </input-control>
+              </div>
+              <div class="col-9 mb-3">
+                <input-control [label]="'First Name (*)'" [control]="firstContact.controls['firstName']">
+                </input-control>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input-control [label]="'Surname (*)'" [control]="firstContact.controls['lastName']"> </input-control>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input-control [label]="'Phone'" [control]="firstContact.controls['phone']"> </input-control>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input-control [label]="'Email (*)'" [control]="firstContact.controls['email']"> </input-control>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input-control
+                  [optionsSelect]="listCountry"
+                  [valueSelect]="'id'"
+                  [viewSelect]="'name'"
+                  [type]="'select'"
+                  [label]="'Country (*)'"
+                  [control]="firstContact.controls['country']"
+                >
+                </input-control>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button
+            class="btn btn-primary float-right"
+            [disabled]="(!form.dirty && !firstContact.dirty && !checkboxTouched) || form.invalid || isUpdating"
+            (click)="this.newUpdate()"
+          >
+            {{ isUpdating ? 'Loading' : 'Save' }}
+            <i *ngIf="isUpdating" class="icon-spinner rotate ml-2"></i>
+          </button>
+        </div>
+      </ng-template>
+    </ng-template>
+    <app-list-labels [idOrg]="values.id" *ngIf="tabActive === arrayTabs[3]"></app-list-labels>
+    <app-list-filters [idOrg]="values.id" *ngIf="tabActive === arrayTabs[2]"></app-list-filters>
+  </div>
+  <app-org-users
+    [isOpen]="showUsers"
+    [userSelected]="userSelected"
+    (closeModal)="onCloseModal($event)"
+    (addUserToOrg)="addUserToOrg($event)"
+    (removeUser)="removeUser($event)"
+    (existUsers)="getExistUsers($event)"
+  ></app-org-users>
+</modal-window>
+
+<!--TEMPLATE FOR HEADER USER LIST -->
+<ng-template #HeaderTitleUserSelected>
+  <button
+    class="btn btn-light btn-sm text-primary float-left mr-1"
+    (click)="showUsers = true"
+    [disabled]="!existUsers"
+    type="button"
+    data-toggle="tooltip"
+    data-placement="top"
+    title="Add User"
+  >
+    <i class="icon-plus-circle-solid" aria-hidden="true"></i>
+    <span class="pr-1 ml-1">Add User</span>
+  </button>
+</ng-template>
+
+<!--TEMPLATE FOR HEADER BLACKLIST-->
+<ng-template #HeaderTitleBlackList>
+  <button
+    class="btn btn-light btn-sm text-primary float-left mr-1"
+    (click)="openEditBlacklist($event, false)"
+    [disabled]="!existUsers"
+    type="button"
+    data-toggle="tooltip"
+    data-placement="top"
+    title="Add User"
+  >
+    <i class="icon-plus-circle-solid" aria-hidden="true"></i>
+    <span class="pr-1 ml-1">Add new Blacklist entry</span>
+  </button>
+</ng-template>
+
+<!--TEMPLATE FOR BLACKLIST-->
+<ng-template #black_list>
+  <app-table-admin
+    [isRowSelected]="false"
+    [isPaginate]="true"
+    (editEmitter)="openEditBlacklist($event, true)"
+    (deleteEmmiter)="itemSelected = $event; confirmation['delete'] = true"
+    [template_header]="[HeaderTitleBlackList]"
+    [template_outlet]="{ createdAt: templateCreatedAt }"
+    (reloadEmitter)="reloadBlacklistData()"
+    (rowClick)="clickOnARow($event)"
+    [(table)]="tableBlackList"
+    #adminTable
+  >
+  </app-table-admin>
+</ng-template>
+
+<ng-template #templateCreatedAt let-item>
+  {{ item?.createdAt | timezone }}
+</ng-template>
+
+<ng-template #template_grants>
+  <app-table-admin
+    [isRowSelected]="false"
+    [hiddenBody]="true"
+    [isPaginate]="false"
+    [template_header]="[HeaderTitleUserSelected]"
+    [(table)]="tableUserSelected"
+  >
+    <tbody>
+      <ng-template ngFor let-ssg let-o="index" [ngForOf]="userSelected">
+        <tr class="text-secondary">
+          <td
+            class="align-middle"
+            style="vertical-align: top !important"
+            [attr.rowspan]="rowsSpan(perms(ssg).superSearchGrants)"
+          >
+            <span class="float-left">
+              <app-action-circle
+                *ngIf="!loadingUser.loadingDelete || ssg.userId !== loadingUser.user"
+                (clickEvent)="removeUser({ user: ssg, index: o })"
+                [icon]="'icon-delete'"
+                [colorIcon]="'text-danger'"
+                [tooltip]="'Remove'"
+                [placement]="'right-bottom'"
+              >
+              </app-action-circle>
+              <i *ngIf="loadingUser.loadingDelete && ssg.userId === loadingUser.user" class="icon-spinner rotate"></i>
+            </span>
+
+            <span class="float-left ml-4">
+              <h6>{{ ssg.username }}</h6>
+            </span>
+          </td>
+          <td class="align-middle text-center cursor-default">
+            <span>ALL</span>
+          </td>
+          <td class="align-middle text-center">
+            <input
+              [checked]="isChecked(perms(ssg).superSearchGrants, 'analyst')"
+              (click)="onClickSSG(perms(ssg).superSearchGrants, 'analyst', ssg)"
+              [disabled]="isDisableRSG(perms(ssg).superSearchGrants, 'analyst')"
+              type="checkbox"
+            />
+          </td>
+          <td class="align-middle text-center">
+            <input
+              [checked]="isChecked(perms(ssg).superSearchGrants, 'operator')"
+              (click)="onClickSSG(perms(ssg).superSearchGrants, 'operator', ssg)"
+              [disabled]="isDisableRSG(perms(ssg).superSearchGrants, 'operator')"
+              type="checkbox"
+            />
+          </td>
+          <td class="align-middle text-center">
+            <input
+              [checked]="isChecked(perms(ssg).superSearchGrants, 'mssp_customer')"
+              (click)="onClickSSG(perms(ssg).superSearchGrants, 'mssp_customer', ssg)"
+              [disabled]="isDisableRSG(perms(ssg).superSearchGrants, 'mssp_customer')"
+              type="checkbox"
+            />
+          </td>
+        </tr>
+        <ng-template ngFor let-rsg let-i="index" [ngForOf]="ssg.superSearchGrants.reputationalSearchGrants">
+          <tr class="text-secondary" *ngIf="!activeOption(perms(ssg).superSearchGrants)">
+            <td class="align-middle cursor-default">
+              <div>{{ getModuleList(rsg).name }}</div>
+            </td>
+            <td class="align-middle text-center">
+              <input
+                [checked]="isChecked(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'analyst')"
+                (click)="onClickRSG(perms(ssg).superSearchGrants, 'analyst', i)"
+                [disabled]="isDisableRSG(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'analyst')"
+                type="checkbox"
+              />
+            </td>
+            <td class="align-middle text-center">
+              <input
+                [checked]="isChecked(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'operator')"
+                (click)="onClickRSG(perms(ssg).superSearchGrants, 'operator', i)"
+                [disabled]="isDisableRSG(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'operator')"
+                type="checkbox"
+              />
+            </td>
+            <td class="align-middle text-center">
+              <input
+                [checked]="isChecked(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'mssp_customer')"
+                (click)="onClickRSG(perms(ssg).superSearchGrants, 'mssp_customer', i)"
+                [disabled]="isDisableRSG(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'mssp_customer')"
+                type="checkbox"
+              />
+            </td>
+          </tr>
+        </ng-template>
+      </ng-template>
+      <ng-template [ngIf]="!userSelected.length">
+        <ng-container *ngTemplateOutlet="notData_table"></ng-container>
+      </ng-template>
+    </tbody>
+  </app-table-admin>
+</ng-template>
+
+<ng-template #notData_table>
+  <tr>
+    <td colspan="100%">
+      <div class="card-section mt-4 mr-5 ml-5 mb-5">
+        <div class="no-results-box">
+          <img src="assets/default_images/searching.svg" />
+          <h3 class="no-results">There are no results</h3>
+        </div>
+      </div>
+    </td>
+  </tr>
+</ng-template>
+
+<!--MODAL FOR ADD NEW URL/IP/DOMAIN BLACKLIST-->
+<modal-window
+  *ngIf="showAddBlackList"
+  [acceptBtn]="'Save'"
+  [cancelBtn]="'Close'"
+  [zIndex]="902"
+  [modalTitle]="(editionMode ? 'Edit' : 'Add new') + ' URL/IP/DOMAIN'"
+  (accept)="createEditBlacklist(formBlacklist.getRawValue())"
+  (cancel)="showAddBlackList = false; formBlacklist.reset()"
+>
+  <div class="modal-body p-0">
+    <input-control [label]="'URL/IP/DOMAIN'" [control]="formBlacklist.controls['url']"> </input-control>
+  </div>
+</modal-window>
+
+<!--MODAL FOR DELETE CONFIRMATION BLACKLIST-->
+<modal-window
+  [zIndex]="902"
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete ' + itemSelected?.url + ' ?'"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="confirmation['delete'] && itemSelected"
+  [acceptBtn]="'Yes'"
+  [cancelBtn]="'No'"
+  (accept)="deleteConfirmationBacklist(itemSelected)"
+  (cancel)="(confirmation['delete']); itemSelected = null"
+>
+</modal-window>

@@ -1,0 +1,86 @@
+<ng-template #content>
+  <div class="modal-body">
+    <app-overlay [loading]="loading">
+      <div class="card" *ngIf="isFiltering">
+        <div class="card-header">
+          <span>Labels</span>
+          <button *ngIf="okText === 'Assign Labels'" class="btn btn-light btn-sm text-primary" (click)="startAdd()">
+            <i class="icon-plus-circle-solid mr-1"></i> Add Label
+          </button>
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="form-group">
+              <input class="form-control" [(ngModel)]="textToSearch" placeholder="Search Label" />
+            </div>
+
+            <ul class="list-group app-basic-list">
+              <li
+                class="list-group-item padding-0"
+                *ngFor="let label of labels | filter: textToSearch:'label'; let index = index"
+                (click)="click(label, $event)"
+              >
+                <div
+                  class="app-basic-list__item"
+                  [ngClass]="label.fxSelected && okText === 'Assign Labels' ? 'app-basic-list__item--active' : ''"
+                >
+                  <app-label-item [label]="label"></app-label-item>
+                  <i class="icon-check mr-2 ml-auto invisible"></i>
+                  <div class="app-basic-list__buttons">
+                    <ng-container *ngIf="okText !== 'Assign Labels'">
+                      <span class="mr-2 label-btns" *ngIf="label.fxSelected">
+                        <label for="or{{ label.id }}" class="label-checkbox">OR</label>
+                        <input
+                          name="or{{ label.id }}"
+                          type="radio"
+                          [checked]="!label.strict && !label.excluded"
+                          (click)="updateLabel(label, 'or')"
+                        />
+                      </span>
+                      <span class="mr-2 label-btns" *ngIf="label.fxSelected">
+                        <label for="and{{ label.id }}" class="label-checkbox">AND</label>
+                        <input
+                          name="and{{ label.id }}"
+                          type="radio"
+                          [checked]="label.strict && !label.excluded"
+                          (click)="updateLabel(label, 'and')"
+                        />
+                      </span>
+                      <span class="mr-1 label-btns" *ngIf="label.fxSelected">
+                        <label for="not{{ label.id }}" class="label-checkbox">NOT</label>
+                        <input
+                          name="not{{ label.id }}"
+                          type="radio"
+                          [checked]="!label.strict && label.excluded"
+                          (click)="updateLabel(label, 'not')"
+                        />
+                      </span>
+                    </ng-container>
+                    <button
+                      class="btn btn-circle bg-light text-primary"
+                      (click)="startEdit(label)"
+                      *ngIf="!grants?.isCustomer()"
+                    >
+                      <i class="icon-mode_edit"></i>
+                    </button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-footer d-flex align-items-center justify-content-end">
+          <button class="btn btn-light text-danger btn-sm mr-2" (click)="closeModal()">Cancel</button>
+          <button class="btn btn-primary btn-sm" (click)="filter()">{{ okText }}</button>
+        </div>
+      </div>
+      <app-manage-label
+        [label]="label"
+        *ngIf="!isFiltering"
+        (onDestroy)="onLabelDestroy($event)"
+        (onCancel)="backToList()"
+        (onSave)="onLabelSave($event)"
+      ></app-manage-label>
+    </app-overlay>
+  </div>
+</ng-template>

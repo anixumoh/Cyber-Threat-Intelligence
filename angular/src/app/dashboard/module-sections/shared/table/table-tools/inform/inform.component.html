@@ -1,0 +1,85 @@
+<ng-container *ngIf="!isTrial">
+  <div>
+    <div class="btn-group">
+      <button
+        *ngIf="!multipleTreatment && isButton"
+        class="btn btn-light btn-sm link-filter float-left"
+        nohref
+        [ngClass]="informClass(status, true)"
+        [class.cursor-not-allowed]="grants?.isCustomer()"
+        (click)="showInform()"
+      >
+        {{ status }}
+      </button>
+      <a
+        *ngIf="!multipleTreatment && !isButton && !icons"
+        class="inform-no-icon float-left mr-1"
+        nohref
+        [ngClass]="informClass(status)"
+        [class.cursor-not-allowed]="grants?.isCustomer()"
+        (click)="showInform()"
+      >
+        {{ status }}
+      </a>
+      <button
+        class="btn btn-circle"
+        *ngIf="!multipleTreatment && !isButton && icons"
+        [ngClass]="informClass(status)"
+        nohref
+        (click)="showInform()"
+      >
+        <i class="icon-error {{ status }}"></i>
+      </button>
+      <button
+        *ngIf="multipleTreatment"
+        class="btn btn-filter showing_icons_link float-left mr-1"
+        data-toggle="dropdown"
+        [ngClass]="informClass(status)"
+        (click)="showInform()"
+      >
+        Mark Status
+      </button>
+    </div>
+    <div class="relative">
+      <ul
+        class="list-group border rounded shadow"
+        [class.last-item]="isLast"
+        [ngClass]="position != '' ? position : ''"
+        *ngIf="informVisible"
+      >
+        <li
+          class="list-group-item list-group-item-action d-flex align-items-center text-left border-0 px-2 py-2"
+          *ngIf="statusSelected != 'NOT_IMPORTANT'"
+          (click)="updateStatus($event, 'NOT_IMPORTANT')"
+        >
+          <i class="icon-error text-dark mr-2"></i>
+          <span class="text-dark">NOT IMPORTANT</span>
+        </li>
+        <li
+          class="list-group-item list-group-item-action d-flex align-items-center text-left border-0 px-2 py-2"
+          *ngIf="statusSelected != 'POSITIVE'"
+          (click)="updateStatus($event, 'POSITIVE')"
+        >
+          <i class="icon-error text-success mr-2"></i>
+          <span class="text-success">POSITIVE</span>
+        </li>
+        <li
+          class="list-group-item list-group-item-action d-flex align-items-center text-left border-0 px-2 py-2"
+          *ngIf="statusSelected != 'INFORMATIVE'"
+          (click)="updateStatus($event, 'INFORMATIVE')"
+        >
+          <i class="icon-error text-primary mr-2"></i>
+          <span class="text-primary">INFORMATIVE</span>
+        </li>
+        <li
+          class="list-group-item list-group-item-action d-flex align-items-center text-left border-0 px-2 py-2"
+          *ngIf="statusSelected != 'NEGATIVE'"
+          (click)="updateStatus($event, 'NEGATIVE')"
+        >
+          <i class="icon-error text-danger mr-2"></i>
+          <span class="text-danger">NEGATIVE</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</ng-container>

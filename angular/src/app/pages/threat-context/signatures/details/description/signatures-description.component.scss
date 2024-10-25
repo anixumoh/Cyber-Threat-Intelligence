@@ -1,0 +1,23 @@
+@import 'src/scss/variables';
+
+.input-group {
+  input {
+    height: 31px;
+    font-size: 14px !important;
+  }
+}
+
+.list-group-item {
+  i {
+    font-size: 6px;
+    margin: 8px 10px 0 0;
+  }
+}
+
+.description .textedit-content ::ng-deep {
+  ol,
+  ul {
+    margin-bottom: 20px;
+    list-style-type: disc !important;
+  }
+}

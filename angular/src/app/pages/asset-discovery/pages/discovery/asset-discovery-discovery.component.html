@@ -1,0 +1,122 @@
+<div class="modal" *ngIf="progressBar">
+  <div class="mb-3" *ngIf="progressBar">Adding settings...</div>
+  <mat-progress-bar mode="indeterminate" class="w-50" *ngIf="progressBar"></mat-progress-bar>
+</div>
+
+<div class="main-header row align-items-end mt-4 mb-3 clearfix">
+  <div class="main-header-left col float-left">
+    <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-3 mt-1">Assets Discovery</h6>
+    <h5 class="text-dark mb-0">Discovery</h5>
+  </div>
+  <div class="main-header-right col float-right">
+    <button
+      class="float-right btn btn-primary"
+      [matTooltip]="getDiscoveryTooltip()"
+      (click)="runDiscovery()"
+      [ngClass]="!canLaunchDiscovery ? 'discovery-btn--disabled' : ''"
+    >
+      Discovery
+    </button>
+  </div>
+</div>
+
+<mat-tab-group (selectedTabChange)="tabChange($event)">
+  <mat-tab label="Graph">
+    <ng-container *ngIf="isNotStarted; else discoveryData">
+      <div class="d-flex flex-column justify-content-center align-items-center" style="height: 400px">
+        <div><i class="icon-info-circle-solid text-primary mb-4" style="font-size: 44px"></i></div>
+        <div style="width: 80%; text-align: center">
+          <span>You haven't launched any discovery yet.</span
+          ><span>{{
+            configuredDomains.length
+              ? ' Click on the "Discovery" button to start one.'
+              : ' First you will need to add some Settings and then click on the "Discovery" button to start one.'
+          }}</span>
+        </div>
+      </div>
+    </ng-container>
+    <ng-template #discoveryData>
+      <div class="float-left d-flex flex-column legend-container" *ngIf="areThereDomains">
+        <span class="d-flex align-items-center"><i class="icon-lens mr-2 legend--domain"></i>Domain</span>
+        <span class="d-flex align-items-center"><i class="icon-lens mr-2 legend--subdomain"></i>Subdomain</span>
+        <span class="d-flex align-items-center"><i class="icon-lens mr-2 legend--ip"></i>IP</span>
+      </div>
+      <mat-slide-toggle
+        class="toggle-container"
+        (toggleChange)="toggleShowAll()"
+        [checked]="showAll"
+        [disabled]="discoveryStatus !== 'FINISHED'"
+        *ngIf="areThereDomains"
+        [matTooltip]="
+          showAll
+            ? ''
+            : 'If you select this option, please have into account that you are about to load a large dataset and this might slow down your browser'
+        "
+        ><span>Show all</span></mat-slide-toggle
+      >
+
+      <div class="domain-options-container">
+        <mat-button-toggle-group *ngIf="areThereDomains; else loadingDomains">
+          <mat-button-toggle
+            *ngFor="let domain of configuredDomains"
+            [value]="domain.id"
+            [checked]="domain.id === activeTab"
+            [matTooltip]="getDomainTooltip(domain.status)"
+            [disabled]="domain.status === 'pending'"
+            (click)="reloadChart(domain.id, domain.status === 'pending')"
+            >{{ domain.value }}</mat-button-toggle
+          >
+        </mat-button-toggle-group>
+        <div class="message mt-2 mb-3" *ngIf="areThereDomains">
+          <span>{{ getInfoMessage() }}</span>
+        </div>
+
+        <ng-template #loadingDomains>
+          <!-- <i class="icon-spinner rotate"></i> -->
+          <!---->
+          <span>You haven’t launched any discovery yet</span>
+        </ng-template>
+      </div>
+      <div id="graphDiv" #graphDiv class="graph"></div>
+      <div id="hovertooltip"></div>
+      <div id="clicktooltip"></div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Table" [disabled]="isTableDisabled">
+    <div class="filters-box mt-4 d-flex justify-content-between">
+      <div>
+        <mat-form-field appearance="fill" class="mr-2" style="width: 170px">
+          <mat-label>Filter by domain</mat-label>
+          <mat-select multiple>
+            <mat-option
+              *ngFor="let filter of configuredDomains"
+              [value]="filter.value"
+              [disabled]="filter.disabled"
+              (click)="changeDomain(filter.value)"
+              >{{ filter.value }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="grid-container">
+      <ng-container *ngFor="let data of allowedData">
+        <app-asset-discovery-box
+          [items]="tableData[data]"
+          [label]="'value'"
+          [canAdd]="false"
+          [deleteType]="'discard'"
+          [itemsType]="data"
+          [sortByOptions]="sortByOptions"
+          [filterByOptions]="filterByOptions"
+          [canSearch]="true"
+          [allowedModules]="allowedModules"
+          (addToSettingsBulkEvent)="addToSettingsInBulk($event)"
+          (discardEvent)="disCardItems($event)"
+          (changeParamsEvent)="changeParams($event)"
+          [loadingItems]="loading"
+        ></app-asset-discovery-box>
+      </ng-container>
+    </div>
+  </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,259 @@
+<div class="alert-bin alert-danger border-danger text-danger" role="alert" *ngIf="bankObject.errorBin">
+  <i class="icon-exclamation-triangle float-left mr-3 mt-1"></i>
+  <p>{{ bankObject.errorBin }}</p>
+  <p></p>
+</div>
+
+<div class="settings-parameter card mb-4">
+  <div class="card-header border-bottom-0 bg-light px-2 py-1 box-header">
+    <div>
+      <div class="form-check mt-2 mb-0 float-left">
+        <ng-template
+          let-dataInf
+          let-isSelectedAllInf="isSelectedAll"
+          let-ctrl="controller"
+          (updateSelectAll)="updateSelectAll($event)"
+          (updateElement)="updateElement($event)"
+          [appInfiniteScrollConsumer]="infiniteElement"
+        >
+          <input
+            class="form-check-input mt-0"
+            type="checkbox"
+            [disabled]="!dataInf || !dataInf.length || grants.isCustomerOrOperator()"
+            [ngModel]="isSelectedAllInf"
+            (input)="ctrl.selectAll($event)"
+          />
+        </ng-template>
+      </div>
+      <ng-template [appToggle]="searchTemplate">
+        <h6 class="title-card text-dark text-uppercase float-left">{{ parameterObject?.parameterName }}</h6>
+
+        <button
+          class="btn btn-light btn-sm ml-1 float-left"
+          (click)="openCloseBincodesModal('addBank')"
+          *ngIf="!grants?.isCustomerOrOperator()"
+        >
+          <i class="icon-plus-circle-solid text-primary add-bank-icon"></i>
+          Add Bank
+        </button>
+      </ng-template>
+    </div>
+    <button class="btn btn-circle bg-light ml-1 float-right" #buttonSearch>
+      <i class="icon-search text-primary"></i>
+    </button>
+    <ng-template
+      [appToggleContains]="buttonSearch"
+      #searchTemplate="appToggleContains"
+      (isShowEmitter)="openCloseSearch($event)"
+    >
+      <div class="content-search">
+        <div class="form-group mb-0">
+          <input class="form-control form-control-sm" placeholder="Search Bank" (keyup)="searchInList($event)" />
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <!-- INFO -->
+  <div
+    class="card-body height-list border-top p-0"
+    appInfiniteScrollProvider
+    [infiniteCompleteArray]="parameterObject?.parameterData"
+    [infiniteScrollPercent]="20"
+    [infiniteAttribute]="'hide'"
+    [infiniteNum]="10"
+    #infiniteElement="appInfiniteScrollProvider"
+  >
+    <div class="list-parameters">
+      <!-- NO RESULTS -->
+      <div class="no-results-box-md mt-4 p-4" *ngIf="parameterObject?.parameterData.length === 0">
+        <img class="rounded mx-auto d-block mb-2" src="assets/default_images/searching.svg" />
+        <h6 class="mb-0 text-center text-primary">"There are no {{ parameterObject?.parameterName }}"</h6>
+      </div>
+      <!-- LIST -->
+      <ul class="list-group list-group-flush">
+        <ng-template
+          let-dataInf
+          let-ctrl="controller"
+          (updateElement)="updateElement($event)"
+          [appInfiniteScrollConsumer]="infiniteElement"
+        >
+          <ng-container *ngFor="let value of dataInf; let i = index">
+            <ng-container *ngIf="!value.hide && value.isInfinite">
+              <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+                <div
+                  class="form-check mb-0 text-truncate carbon-fix "
+                  [ngbTooltip]="renderValue(value)"
+                  [placement]="i === 0 || dataInf[i - 1].hide ? 'bottom' : 'top'"
+                >
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [(ngModel)]="value.selected"
+                    [disabled]="grants.isCustomerOrOperator()"
+                    (input)="ctrl.selectOne($event, value); checkIfAnySelected()"
+                  />
+                  <span class="text-dark ml-1">{{ renderValue(value) }}</span>
+                </div>
+                <div class="float-right actions-buton-list">
+                  <button
+                    class="btn btn-circle bg-light ml-1 float-left"
+                    (click)="openCloseBincodesModal(value)"
+                    *ngIf="!grants.isCustomerOrOperator()"
+                  >
+                    <i class="icon-plus-circle-solid color-primary"></i>
+                  </button>
+                  <button
+                    class="btn btn-circle bg-light ml-1 float-right"
+                    *ngIf="!grants.isCustomerOrOperator()"
+                    (click)="openConfirmationModal(i)"
+                  >
+                    <i class="icon-delete bglight text-danger"></i>
+                  </button>
+                </div>
+              </li>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+  <!-- CARD FOOTER - ONLY SELECTED LIST-ITEMS -->
+  <div class="card-footer p-1" *ngIf="parameterObject?.anyChecked">
+    <button class="btn btn-danger btn-sm px-4 float-right" (click)="openDeleteAllConfirmationModal()">
+      Delete
+    </button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" [style.zIndex]="999" *ngIf="bankObject.isOpenBinCodeModal">
+  <div class="modal">
+    <div class="modal-content">
+      <div class="modal-header clearfix">
+        <h6 class="mb-0 mt-1 float-left">BinCodes</h6>
+        <button class="close pt-2" type="button">
+          <i class="icon-times color-danger" (click)="openCloseBincodesModal('close')"></i>
+        </button>
+      </div>
+      <div class="modal-body p-0">
+        <ng-template [ngIf]="bankObject.editBank" [ngIfElse]="noediting">
+          <div class="bg-light border-bottom bank-name">
+            <div class="input-group input-group-sm">
+              <input
+                class="form-control"
+                type="text"
+                placeholder="{{ bankObject.inputBankPlaceholder }}"
+                [disabled]="grants.isCustomerOrOperator()"
+                [(ngModel)]="bankObject.inputBank"
+                (ngModelChange)="onInputChange($event)"
+              />
+            </div>
+          </div>
+        </ng-template>
+        <ng-template #noediting>
+          <div class="bg-light border-bottom bank-name">
+            {{ bankObject.actualBank }}
+            <i class="icon-pencil-square color-primary" (click)="editBankName()"></i>
+          </div>
+        </ng-template>
+
+        <div class="bg-light border-bottom add-bincode">
+          <div class="input-group input-group-sm">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="BinCode"
+              [disabled]="grants.isCustomerOrOperator()"
+              [(ngModel)]="bankObject.inputBinCode"
+              (ngModelChange)="checkBinCodes()"
+              [ngClass]="bincodesError ? 'border-danger' : ''"
+            />
+            <div class="input-group-append">
+              <span
+                class="block-error"
+                ngbTooltip="To add multiple binCodes, separate them with a comma, no spaces allowed."
+                placement="left"
+                ><i class="icon-error text-primary"></i
+              ></span>
+              <button
+                class="btn btn-light text-primary border"
+                type="button"
+                *ngIf="!grants?.isCustomerOrOperator()"
+                [disabled]="bincodesError || !bankObject.inputBinCode"
+                (click)="addBinCode()"
+              >
+                Add binCodes
+              </button>
+            </div>
+          </div>
+          <span *ngIf="bincodesError" class="ml-2 text-danger">* Bincodes can only contain numbers.</span>
+        </div>
+        <div class="content-list" *ngIf="bankObject.binCodes && bankObject.binCodes.length > 0">
+          <ul class="list-group list-group-flush">
+            <li
+              class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 p-2"
+              *ngFor="let bincode of bankObject.binCodes"
+            >
+              <input
+                class="text-center ml-2"
+                type="checkbox"
+                [disabled]="grants.isCustomerOrOperator()"
+                (input)="checkedBincode(bincode)"
+              />
+              <span class="text-dark ml-2 w-75">{{ bincode }}</span>
+              <button
+                class="btn btn-circle bg-light"
+                *ngIf="!grants?.isCustomerOrOperator()"
+                (click)="deleteBincode(bincode)"
+              >
+                <i class="icon-delete color-danger"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer bg-light">
+        <button
+          class="btn btn-outline-danger btn-sm float-left"
+          [disabled]="grants.isCustomerOrOperator()"
+          *ngIf="selectedBincodes.length > 0 && !grants?.isCustomerOrOperator()"
+          (click)="deleteMultipleBincodes()"
+        >
+          Delete
+        </button>
+        <button
+          class="btn btn-primary btn-sm float-right"
+          *ngIf="!grants.isCustomerOrOperator()"
+          (click)="applySaveOrDeleteBincodes()"
+          [disabled]="bincodesError || (nameBank === '' && bankObject.editBank) || bankObject.binCodes.length === 0"
+        >
+          Apply
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete this bank?'"
+  [warning]="'This action cannot be undone.'"
+  [acceptBtn]="'Yes'"
+  *ngIf="deleteConfirmation"
+  [cancelBtn]="'No'"
+  (accept)="deleteOne(bankIndex); checkIfAnySelected()"
+  (cancel)="closeConfirmation()"
+>
+</modal-window>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete all banks?'"
+  [warning]="'This action cannot be undone.'"
+  [acceptBtn]="'Yes'"
+  *ngIf="deleteAllConfirmation"
+  [cancelBtn]="'No'"
+  (accept)="delete(); checkIfAnySelected()"
+  (cancel)="closeConfirmation()"
+>
+</modal-window>

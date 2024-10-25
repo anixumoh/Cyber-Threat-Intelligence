@@ -1,0 +1,73 @@
+@import 'src/scss/variables';
+
+// BUTTON
+.buttonActive {
+  background-color: rgba(50, 122, 189, 0.2);
+  border: 1px solid rgba(50, 122, 189, 0.5) !important;
+  color: $primary !important;
+}
+// DROPDOWN
+.multi-select-component {
+  position: relative;
+}
+
+.list-dropdown {
+  .list-group {
+    width: 200px;
+    max-height: 200px;
+    position: absolute;
+    visibility: hidden;
+    top: 31px;
+    z-index: 1040;
+    display: none;
+    &.open {
+      visibility: visible;
+      display: block;
+      overflow: auto;
+    }
+    .check {
+      display: none;
+    }
+    .list-group-item:hover {
+      background-color: #eaf1f8;
+      color: $primary;
+    }
+    .list-group-item.active {
+      background-color: #eaf1f8;
+      color: $primary;
+      .check {
+        display: block;
+      }
+    }
+  }
+}
+
+// DROPDOWN WHITOUT BUTTON
+.list-show {
+  height: 200px;
+  overflow: auto;
+  .list-group {
+    .list-group-item {
+      .check {
+        display: none;
+      }
+      &.active {
+        background-color: $light;
+        color: $primary;
+        border-color: $border;
+        .check {
+          display: block;
+          color: $primary;
+        }
+      }
+    }
+  }
+}
+.no-items {
+  height: 66px;
+  width: 147px;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background-color: $light;
+}

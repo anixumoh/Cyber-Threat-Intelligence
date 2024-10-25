@@ -1,0 +1,1088 @@
+# This is the new CTIP API
+swagger: '2.0'
+info:
+  title: CTIP PHISHING API
+  description: API for the PHISHING
+  version: "1.0.0"
+host: new-ui-pre.blueliv.com
+schemes:
+  - https
+basePath: /api/v2
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /organization/{organizationId}/module/{moduleId}/phishing/resource:
+#GET -> Get a paginable list of resources
+    get:
+      summary: List resources
+      description: Get a paginable list of resources
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: page
+          in: query
+          description: Page
+          required: false
+          type: integer
+        - name: maxRows
+          in: query
+          description: Max rows
+          required: false
+          type: integer
+        - name: since
+          in: query
+          description: Since date in milliseconds
+          required: false
+          type: integer
+        - name: to
+          in: query
+          description: To date in milliseconds
+          required: false
+          type: integer
+          format: int64
+        - name: analysisCalcResult
+          in: query
+          description: Analysis Result
+          required: false
+          type: string
+        - name: labels
+          in: query
+          description: Labels
+          required: false
+          type: string
+        - name: read
+          in: query
+          description: 0 - Both, 1 - Only read, 2 - Only unread
+          required: false
+          type: integer
+        - name: starred
+          in: query
+          description: Show only starred resources (true)
+          required: false
+          type: string
+        - name: q
+          in: query
+          description: Key word for search
+          required: false
+          type: string
+      tags:
+        - List
+      responses:
+        200:
+          description: JSON containing a list of resources
+          schema:
+            type: object
+            properties:
+              total_resources:
+                type: integer
+                format: int32
+              list:
+                type: array
+                items:
+                  title: Phishing
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    title:
+                      type: string
+                    url:
+                      type: string
+                    created_at:
+                      type: integer
+                      format: int64
+                    checked_at:
+                      type: integer
+                      format: int64
+                    changed_at:
+                      type: integer
+                      format: int64
+                    content_type:
+                      type: string
+                    countries_id:
+                      type: string
+                    fav:
+                      type: string
+                    issued:
+                      description: Indicates if this resource has issues
+                      type: boolean
+                    read:
+                      description: Indicates if this resources has been read or notification_date
+                      type: boolean
+                    tlpStatus:
+                      type: string
+                    labels:
+                      type: array
+                      items:
+                        title: Label
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name: 
+                            type: string
+                          type:
+                            type: string
+          examples: 
+            application/json: 
+             {
+                "total_resources": 1,
+                "list": [
+                          {
+                            "id": 49776,
+                            "url": "http://foo.bar",
+                            "title": "Phishing",
+                            "content_type": "image/gif",
+                            "countries_id": "US",
+                            "analysis_result": "NEGATIVE",
+                            "analysis_calc_result": "NEGATIVE",
+                            "created_at": 1492013065000,
+                            "checked_at": 1492013065000,
+                            "changed_at": 1492013065000,
+                            "read": false,
+                            "fav": "NOT_STARRED",
+                            "issued": false,
+                            "labels": [
+                              {
+                                "id": 261,
+                                "name": "Phishing",
+                                "type": "MODULE_LABEL"
+                              }
+                            ],
+                            "tlpStatus": "AMBER"
+                          },
+                        ]
+             }
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+# DELETE -> Delete resources
+    delete:
+      summary: Delete
+      description: Delete resources
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ResourceList'
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Resources succesfully deleted
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/{resourceId}/tlpStatus/{status}:
+#PUT -> Sets a new TLP status
+    put:
+      summary: Set TLP
+      description: Sets a new TLP status
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+        - name: status
+          in: path
+          description: New TLP status
+          required: true
+          type: integer
+
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Mark as no read succesfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/markAs:
+#PUT -> Mark resources as read/unread
+    put:
+      summary: Mark as
+      description: Mark resources as read or no read
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/MarkAsObject'
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Mark as no read succesfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/rating:
+#PUT -> Rate a resource
+    put:
+      summary: Rating
+      description: Set new rating for the resources
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RatingObject'
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Rating saved correctly
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/fav:
+#PUT -> Mark a resource as favorite
+    put:
+      summary: Favorite
+      description: Mark a resource as favorite
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FavObject'
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Resource favorited succesfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/{resourcesId}/issue/{issueId}:
+# DELETE -> Remove an issue from resource
+    delete:
+      summary: Issue
+      description: Remove issue from resources
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourcesId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+        - name: issueId
+          in: path
+          description: Issue id
+          required: true
+          type: integer
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Issue removed succesfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/{resourceId}/issue:
+# GET -> Get issue list by resource id
+    get:
+      summary: Detail
+      description: Get list of issues
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+      tags:
+        - List
+      responses:    
+        200:
+          description: JSON contaning list of issues
+          schema:
+            title: List
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                title:
+                  type: string
+                description:
+                  type: string
+                typeId:
+                  type: string
+                remediationTips:
+                  type: string
+                status:
+                  type: string
+                risk:
+                  type: string
+                activities:
+                  type: integer
+                module_id:
+                  type: integer
+                organitazion_id:
+                  type: integer
+                creation_date:
+                  type: integer
+                  format: int64
+                checked_at:
+                  type: integer
+                  format: int64
+                notification_date:
+                  type: integer
+                  format: int64
+                lastUpdateUser:
+                  type: string
+                reputationalSearchId: #Module Id
+                  type: integer
+                superSearchId: #Organization Id
+                  type: integer
+                searchType:
+                  type: string
+                labels:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      type:
+                        type: string
+                    
+          examples: 
+            application/json: 
+              [
+                {
+                  id: 1,
+                  title: "",
+                  description: "",
+                  typeId: "",
+                  remediationTips: "",
+                  status: "",
+                  risk: "",
+                  activities: 0,
+                  creation_date: 1485734400,
+                  changed_at: 1485734400,
+                  notification_date: 1485734400,
+                  last_update_user: "",
+                  reputationalSearchId: 0,
+                  superSearchId: 0,
+                  labels: [
+                      {
+                          id: 15412,
+                          name: "incident",
+                          type: "GLOBAL"
+                      }
+                  ]
+                }
+              ]
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/issue/list:
+# GET -> Get issue list by module id
+    get:
+      summary: Detail
+      description: Get list of issues
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+      tags:
+        - List
+      responses:    
+        200:
+          description: JSON contaning list of issues
+          schema:
+            title: List
+            type: array
+            items:
+              type: object
+              properties:
+                value:
+                  type: string
+                label:
+                  type: string
+          examples: 
+            application/json: 
+              [
+                {
+                  "value": "6",
+                  "label": "Test issue"
+                },
+                {
+                  "value": "1",
+                  "label": "Stolen credentials"
+                }
+              ]
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/{resourceId}/issue/types:
+# GET -> Get issue types
+    get:
+      summary: Detail
+      description: Get list of types of issues
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+      tags:
+        - List
+      responses:    
+        200:
+          description: JSON contaning list of types
+          schema:
+            title: List
+            type: array
+            items:
+              type: object
+              properties:
+                label:
+                  type: string
+                value:
+                  type: string
+          examples: 
+            application/json: 
+              [
+                {
+                  value: "type1",
+                  label: "Type 1"
+                }
+              ]
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+            
+      
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/label:
+#PUT -> Assign a label to resources
+    put:
+      summary: Label
+      description: Assign a label to resources
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/LabelObject'
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Label assigned succesfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: Label list
+      description: Get label list by organizationId and moduleId
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Label list
+          schema:
+            $ref: '#/definitions/LabelList'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/{resourceId}:
+# GET -> Get detailed information from a specific resource
+    get:
+      summary: Detail
+      description: Get detailed information from a specific resource
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+      tags:
+        - List
+      responses:    
+        200:
+          description: JSON contaning detailed information of a the resource
+          schema:
+            title: Detailed object
+            type: object
+            items:
+              title: Details
+              type: object
+              properties:
+                email:
+                  type: boolean
+                employee:
+                  type: boolean
+                customer:
+                  type: boolean
+                external:
+                  type: boolean
+                id:
+                  type: integer
+                title:
+                  type: string
+                
+          examples: 
+            application/json: 
+             {
+                "email": false,
+                "employee": false,
+                "customer": false,
+                "external": false,
+                "num_cred": 0,
+                "credentials": [],
+                "id": 45298,
+                "title": "Gmail für Android unterstützt ab sofort GIFs über Googles Gboard-Tastatur ⊂·⊃ CURVED.de",
+                "created_at": 1491576055000,
+                "checked_at": 1491901280000,
+                "changed_at": 1491901280000,
+                "read": false,
+                "fav": "NOT_STARRED",
+                "issued": true,
+                "labels": []
+              }
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organization/{organizationId}/module/{moduleId}/phishing/resource/{resourceId}/metadata:
+    get:
+      summary: Metadata (NOT IMPLEMENTED)
+      description: Get metadata header information from a specific resource
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+      tags:
+        - List
+      responses:    
+        200:
+          description: JSON contaning metadata of a the resource
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organization/{organizationId}/module/{moduleId}/phishing/settings:
+#PUT -> Put a value settings
+    put:
+      summary: Put settings
+      description: Put settings for Phishing module
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: settignsObject
+          in: body
+          description: This contains the values to add. For TYPO_KEYWORD_DISTANCE (e.g. example~2 would retrieve -> esemple, ecanple, eexamplee,... )
+          required: true
+          schema:
+            $ref: '#/definitions/SettingsObject'
+      tags:
+        - Settings
+      responses:    
+        200:
+          description: Settigns succesfully updated
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+#DELETE -> Delete a value settings
+    delete:
+      summary: Put settings
+      description: Put settings for Phishing module
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: settignsObject
+          in: body
+          description: This contains the values to delete
+          required: true
+          schema:
+            $ref: '#/definitions/SettingsObject'
+      tags:
+        - Settings
+      responses:    
+        200:
+          description: Settigns succesfully updated
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /organization/{organizationId}/module/{moduleId}/phishing/settings/{settingsParam}:
+#GET -> Get settings for BOTNET module
+    get:
+      summary: Get settings
+      description: Get settings for Phishing module and specified settings param
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: settingsParam
+          in: path
+          description: Settings param to perform action {DOMAIN, KEYWORD, TYPOSQUATTING, TYPO_KEYWORD_REGEX, TYPO_KEYWORD_DISTANCE, ALERT}
+          required: true
+          type: string
+      tags:
+        - Settings
+      responses:    
+        200:
+          description: JSON containing a list of parameters
+          schema:
+            $ref: '#/definitions/SettingsObject'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  Success:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  Resource:
+    type: string
+    description: Resource ID
+  ResourceList:
+    type: array
+    items:
+      $ref: '#/definitions/Resource'
+    example:
+      application/json:
+        ["1","2","3"]
+  MarkAsObject:
+    type: object
+    properties:
+      value:
+        type: boolean
+        description: true to mark as read, false to mark as unread
+      resources:
+        $ref: '#/definitions/Resource'
+    example:
+      application/json:
+        {
+          "read": true,
+          "resources": ["1","2","3"]
+        }
+  RatingObject:
+    type: object
+    properties:
+      value:
+        type: integer
+        format: int32
+        description: Value from 1 to 5
+      resources:
+        $ref: '#/definitions/Resource'
+    example:
+      application/json:
+        {
+          "rate": 5,
+          "resource": "1"
+        }
+  FavObject:
+    type: object
+    properties:
+      value:
+        type: string
+        description: Favorite type (NOT_STARRED, USER_STARRED, GROUP_STARRED, FULL_STARRED)
+      resource:
+        type: integer
+        format: int64
+        description: Resource id
+    example:
+      application/json:
+        {
+          "status": "NOT_STARRED",
+          "resource": "1"
+        }
+  LabelObject:
+    type: object
+    properties:
+      label:
+        type: integer
+        description: Label ID
+      resources:
+        $ref: '#/definitions/Resource'
+    example:
+      application/json:
+        {
+          "label": labelId,
+          "resources": ["1","2","3"]
+        }
+  LabelList:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        label:
+          type: string
+        background_color:
+          type: integer
+          format: int64
+        text_color:
+          type: integer
+          format: int64
+        organization_id:
+          type: integer
+        module_id:
+          type: integer
+    example:
+      application/json:
+        [
+            {
+                "id": 1,
+                "label": "gmail.com",
+                "background_color": 8421504,
+                "text_color": 16777215,
+                "organization_id": 1,
+                "module_id": 1
+            },
+            {
+                "id": 2,
+                "label": "Hacktivism Credentials",
+                "background_color": 16777215,
+                "text_color": 0,
+                "organization_id": 1,
+                "module_id": 1
+            }
+        ]
+  SettingsObject:
+    type: object
+    properties:
+      type:
+        type: string
+      values:
+        type: array
+        description: List of {DOMAIN, IP, EMAIL, ALERT} to be monitorized
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+            value:
+              type: string
+    example:
+      application/json:
+        {
+          "values": [
+            {
+              "value": "domain.com",
+              "id": 7
+            }
+          ],
+          "type": "DOMAIN"
+        }

@@ -1,0 +1,4 @@
+cypress/screenshots
+*.ndjson
+*.tsbuildinfo
+cucumber-report.json

@@ -1,0 +1,45 @@
+<div class="overlay" [style.zIndex]="10000" *ngIf="openModal">
+  <div #modalCard class="modal">
+    <div class="card">
+      <div class="d-flex align-items-center justify-content-between card-header bg-light">
+        <h6 class="text-dark mb-0">COMMENTS</h6>
+        <button class="btn btn-circle bg-light text-danger" (click)="toggleMenu()">
+          <i class="icon-close"></i>
+        </button>
+      </div>
+      <div class="card-body px-0 pb-0">
+        <div class="comment mt-3 mx-3" *ngFor="let item of comments">
+          <div class="media">
+            <div class="btn btn-primary btn-circle btn-xl mr-3">
+              <span class="font-weight-bold">{{ getAvatar(item.creationUsername || item.creation_user) }}</span>
+            </div>
+            <div class="d-flex align-items-top justify-content-between media-body">
+              <span>
+                <h5 class="text-dark mt-1 mb-0">{{ item.creationUsername || item.creation_user }}</h5>
+                <small class="d-flex align-items-center text-secondary mt-1">
+                  <i class="icon-clock mr-1"></i>
+                  <span>
+                    {{ item.creationDate || item.creation_date | date }}
+                  </span>
+                </small>
+                <p class="text-dark mt-2">{{ item.content || item.comment }}</p>
+              </span>
+              <span>
+                <i class="icon-delete text-danger cursor-pointer mt-2" (click)="deleteComment(item)"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-light border-top mt-4 p-3 clearfix">
+          <div class="form-group">
+            <textarea class="form-control" [(ngModel)]="comment" (ngModelChange)="setNewComment()" rows="2"></textarea>
+          </div>
+          <button class="btn btn-primary btn-sm px-4 float-right" [disabled]="!comment" (click)="saveComment()" nohref>
+            Send
+            <i class="icon-paper-plane ml-2"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,158 @@
+<!-- LOADING PROCESS -->
+<div *ngIf="!resource" class="no-results-box">
+  <i class="icon-spinner rotate"></i>
+  <h6 class="no-results">Loading</h6>
+</div>
+
+<div class="card mb-2" *ngIf="resource">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-0 ml-1 float-left">Add Image</h6>
+    <button class="btn btn-light btn-sm border text-primary float-right ml-1" type="button" (click)="navigateToList()">
+      <i class="icon-arrow-left mr-1"></i>
+      Back to list
+    </button>
+    <button
+      class="btn btn-light btn-sm border text-primary float-right ml-1"
+      *ngIf="editMode"
+      type="button"
+      (click)="navigateToDetail('image')"
+    >
+      Detail
+    </button>
+  </div>
+  <div class="card-body">
+    <form *ngIf="resource" [formGroup]="termsForm">
+      <div class="row">
+        <div [ngClass]="!editMode ? 'col-md-6' : 'col-md-12'">
+          <div class="form-group mb-4">
+            <label for="searchPhrase">Search Phrase</label>
+            <input
+              class="form-control form-control-sm"
+              type="text"
+              id="searchPhrase"
+              placeholder="Write here the search phrase"
+              formControlName="searchPhrase"
+            />
+            <span *ngIf="!searchPhrase.valid && (searchPhrase.touched || imageSearchPhraseValid.touched)">
+              <small *ngIf="searchPhrase.errors['required']" class="color-error">
+                <i class="icon-times-circle-solid"></i>
+                This field is required
+              </small>
+              <small *ngIf="searchPhrase.errors['pattern']" class="color-error">
+                <i class="icon-times-circle-solid"></i>
+                Search phrase has to be minimum 3 characters
+              </small>
+            </span>
+          </div>
+          <div class="card">
+            <div class="card-header p-1 clearfix">
+              <h6 class="mb-0 mt-1 ml-1 float-left">Uploaded Logo</h6>
+              <button class="btn btn-circle bg-light float-right" (click)="onChangeImageHelp()">
+                <i class="icon-info-circle-solid text-primary"></i>
+              </button>
+            </div>
+            <div
+              class="card-header alert-info border-0"
+              [ngClass]="{ collapsecontent: showImageHelp }"
+              *ngIf="showImageHelp"
+            >
+              <span class="font-italic">Upload a logo in order to detect the abuse of it</span>
+            </div>
+            <div class="card-body p-2">
+              <img class="img-thumbnail mb-3" *ngIf="downloadedImage" [src]="downloadedImage" />
+              <div *ngIf="!imageValidation.valid && imageValidation.touched">
+                <small class="color-error">
+                  <i class="icon-times-circle-solid"></i>
+                  An image is required
+                </small>
+              </div>
+              <app-uploader-settings
+                (uploadFile)="uploadFile($event)"
+                (deleteFile)="deleteFile()"
+                [status]="filesStatus"
+                [allowedUrl]="false"
+                [uploaderInfo]="false"
+                [multipleSelect]="false"
+                [isDelete]="!editMode"
+                [isModule]="false"
+              >
+              </app-uploader-settings>
+            </div>
+            <div class="card-footer p-1">
+              <button
+                class="btn btn-primary btn-sm float-right"
+                *ngIf="!editMode"
+                type="button"
+                (click)="addImageToList()"
+              >
+                Add image to create
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!editMode" class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header p-1 clearfix">
+              <h6 class="mb-0 mt-1 ml-1 float-left">Images to add</h6>
+              <button class="btn btn-circle bg-light float-right" (click)="onChangeListImageHelp()">
+                <i class="icon-info-circle-solid text-primary"></i>
+              </button>
+            </div>
+            <div
+              class="card-header alert-info px-2 py-1 border-0"
+              *ngIf="showListImageHelp"
+              [ngClass]="{ collapsecontent: showListImageHelp }"
+            >
+              <span class="font-italic text-90"
+                >Add images to the list in order to be able to create terms (up to {{ imageListLimit() }})</span
+              >
+            </div>
+            <div class="card-body p-2">
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center bg-light p-2">
+                  <span class="text-dark">SEARCH PHRASE</span>
+                  <span class="text-dark">DELETE</span>
+                </li>
+                <li
+                  class="list-group-item list-group-item d-flex justify-content-between align-items-center p-2"
+                  *ngFor="let imageToAdd of imagesToAdd; let index = index"
+                >
+                  <div class="form-group mb-0">
+                    <input
+                      class="form-control form-control-sm"
+                      [value]="imageToAdd.searchPhrase"
+                      (input)="updateImageInlist($event, index)"
+                    />
+                  </div>
+                  <button class="btn btn-circle bg-light float-right" (click)="deleteImageFromList(index)">
+                    <i class="icon-delete color-danger"></i>
+                  </button>
+                </li>
+                <li class="list-group-item" *ngIf="isImageListInvalidAndTouched()">
+                  <i class="icon-times-circle-solid mr-1"></i>
+                  There are no images in the list
+                </li>
+                <li class="list-group-item" *ngIf="!isImageListinLimit()">
+                  <i class="icon-times-circle-solid mr-1"></i>
+                  No more images can be added
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer p-1" *ngIf="resource">
+    <button
+      class="btn btn-primary btn-sm px-4 float-right ml-1"
+      *ngIf="!editMode"
+      (click)="onSubmit()"
+      type="button"
+      [disabled]="loading"
+    >
+      <i class="icon-spinner rotate" *ngIf="loading"></i>
+      {{ buttonText() }}
+    </button>
+  </div>
+</div>

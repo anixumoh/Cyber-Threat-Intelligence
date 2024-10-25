@@ -1,0 +1,89 @@
+.card-container {
+  .node-group {
+    // transition: 0.5s ease-in-out;
+    text {
+      fill: #fff;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .node {
+      fill: #000;
+    }
+
+    .node-malware {
+      fill: #1f6607;
+      //background-image: url('/assets/img/virus.png');
+    }
+
+    .node-domain {
+      fill: #095066;
+    }
+
+    .node-fqdn {
+      fill: #095066;
+    }
+
+    .node-crimeserver {
+      fill: #0950f6;
+    }
+
+    .node-campaign {
+      fill: #f00680;
+    }
+
+    .node-threatactor {
+      fill: #f00680;
+    }
+
+    .node-bot {
+      fill: #11811c;
+    }
+
+    .node-ip {
+      fill: #18811c;
+    }
+
+    .node-resource {
+      fill: #ff451c;
+    }
+
+    .node-email {
+      fill: #221f66;
+      //background: url('/assets/img/mail-virus.jpg');
+    }
+
+    .node-exploit-kit {
+      fill: #000000;
+    }
+
+    .node-partner-source {
+      fill: #ff0b30;
+    }
+  }
+}
+
+.panning-rect {
+  fill: #000;
+  cursor: move;
+}
+
+.link-group {
+  .edge {
+    path {
+      stroke: #666 !important;
+    }
+
+    .edge-label {
+      .text-path {
+        stroke: none;
+        font-size: 12px;
+        fill: #000;
+      }
+    }
+  }
+}
+
+.arrow-head {
+  fill: #666;
+}

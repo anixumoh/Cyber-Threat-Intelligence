@@ -1,0 +1,155 @@
+<div class="filter-container multi-select-component">
+  <div [hidden]="hideButtons">
+    <!-- BUTTON RESPONSIVE BIG -->
+    <button
+      #modalButton1
+      *ngIf="!createInFilter"
+      class="btn btn-light btn-sm border d-none d-xl-flex"
+      [ngClass]="_selectedLabels ? 'buttonActive' : ''"
+      type="button"
+      name="button"
+      (click)="toggleMenu(false)"
+    >
+      Labels
+    </button>
+    <button
+      #modalButton3
+      class="btn btn-light text-primary btn-sm d-none d-xl-flex"
+      type="button"
+      name="button"
+      *ngIf="createInFilter"
+      (click)="toggleMenu(false)"
+    >
+      <i class="icon-plus-circle-solid mr-2"></i>
+      New Label
+    </button>
+    <!-- BUTTON RESPONSIVE SMALL -->
+    <button
+      *ngIf="!createInFilter"
+      class="btn btn-light btn-sm d-xl-none"
+      type="button"
+      name="button"
+      #modalButton2
+      (click)="toggleMenu($event)"
+      [ngClass]="_selectedLabels ? 'buttonActive' : ''"
+    >
+      <i class="icon-tags" aria-hidden="true"></i>
+    </button>
+    <button
+      *ngIf="createInFilter"
+      class="btn btn-light text-primary btn-sm d-xl-none"
+      type="button"
+      name="button"
+      #modalButton2
+      (click)="toggleMenu($event)"
+    >
+      <i class="icon-plus-circle-solid" aria-hidden="true"></i>
+    </button>
+  </div>
+  <!-- MODAL -->
+  <div class="overlay" [style.zIndex]="10000" *ngIf="isMenuOpened">
+    <div #modalCard class="modal" [ngClass]="customClass">
+      <div class="card">
+        <div class="card-header bg-light clearfix">
+          <h6 class="text-dark mt-1 mb-0 float-left">Labels</h6>
+          <button
+            #modalButtonNew
+            class="btn btn-light text-primary btn-sm float-right"
+            [disabled]="grants.isCustomerOrOperator()"
+            (click)="toggleModals('create')"
+            *ngIf="_openListModal && actionType"
+          >
+            <i class="icon-plus-circle-solid mr-2"></i>
+            New Label
+          </button>
+          <button
+            #modalButtonBack
+            *ngIf="!createInFilter"
+            class="btn btn-light text-primary btn-sm float-right"
+            (click)="toggleModals('list')"
+            [ngStyle]="{ display: _openCreateModal || _openUpdateModal ? 'block' : 'none' }"
+          >
+            <i class="icon-arrow-left mr-2"></i>
+            To List
+          </button>
+        </div>
+        <div class="card-body">
+          <app-local-filter *ngIf="_openListModal && !createInFilter"> </app-local-filter>
+          <app-labels-list
+            *ngIf="_openListModal && !createInFilter"
+            (updateItem)="updateItem($event)"
+            [filterType]="filterType"
+            [loading]="labelsLoading"
+          ></app-labels-list>
+          <app-labels-create *ngIf="_openCreateModal" [saveData]="saveData || false" (saveLabel)="saveLabel($event)">
+          </app-labels-create>
+          <app-labels-update
+            *ngIf="_openUpdateModal && !createInFilter"
+            [label]="labelToUpdate"
+            [updateData]="updateData || false"
+            (updateLabel)="updateLabel($event)"
+          ></app-labels-update>
+        </div>
+        <div class="card-footer bg-light clearfix">
+          <button
+            class="btn btn-primary btn-sm float-right px-4 ml-2"
+            *ngIf="_openListModal && actionType"
+            (click)="assign()"
+            type="button"
+            name=""
+            [disabled]="grants.isCustomer()"
+          >
+            Assign Label
+          </button>
+          <button
+            class="btn btn-primary btn-sm float-right px-4 ml-2"
+            *ngIf="_openListModal && filterType"
+            (click)="onFilterByLabel()"
+            type="button"
+            name=""
+          >
+            Apply Filter
+          </button>
+          <button
+            class="btn btn-primary btn-sm float-right px-4 ml-2"
+            *ngIf="_openCreateModal"
+            (click)="save()"
+            type="button"
+            name=""
+            [disabled]="grants.isCustomerOrOperator()"
+          >
+            Save
+          </button>
+          <button
+            class="btn btn-primary btn-sm float-right px-4 ml-2"
+            *ngIf="_openUpdateModal"
+            (click)="update()"
+            type="button"
+            name=""
+            [disabled]="grants.isCustomerOrOperator()"
+          >
+            Update
+          </button>
+          <button
+            class="btn btn-light btn-sm text-danger float-right px-4 ml-2"
+            *ngIf="_openUpdateModal"
+            (click)="deleteLabel()"
+            type="button"
+            name=""
+            [disabled]="grants.isCustomerOrOperator()"
+          >
+            Delete
+          </button>
+          <button
+            class="btn btn-light btn-sm text-danger float-right px-4 ml-2"
+            (click)="cancel()"
+            type="button"
+            name=""
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

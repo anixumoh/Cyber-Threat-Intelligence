@@ -1,0 +1,653 @@
+<!-- CAPTCHA -->
+<fieldset>
+  <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+  <div #captchaRef2></div>
+</fieldset>
+
+<div class="blueliv-signup">
+  <nav class="blueliv-signup__header navbar fixed-top navbar-light shadow-sm">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img [src]="appLogo" height="40" />
+      </a>
+      <button
+        class="btn btn-lg btn-outline-blv ml-1"
+        href="https://www.blueliv.com/company/company-contact-page/"
+        type="button"
+      >
+        CONTACT US
+      </button>
+    </div>
+  </nav>
+
+  <ng-container *ngIf="!emailConfirmation && !validation; else confirmation">
+    <div class="blueliv-signup__main">
+      <div class="row no-gutters">
+        <div class="col-md-8">
+          <div class="blueliv-signup__section-video my-5">
+            <h2 class="font-weight-bold text-center">Threat Compass: Trial Version</h2>
+            <h4 class="font-weight-light text-center mb-4">
+              Automated, actionable, targeted cyberthreat intelligence from Blueliv
+            </h4>
+            <div class="blueliv-signup__video-content my-5">
+              <div class="row justify-content-center">
+                <div class="col-8">
+                  <div class="desktop-wrapper"></div>
+                </div>
+              </div>
+            </div>
+            <div class="blueliv-signup__text-content my-5">
+              <div class="row justify-content-center">
+                <div class="col-8">
+                  <h6 class="font-weight-light mb-3">
+                    Try out <strong>Threat Compass</strong> and discover how your company is being targeted by
+                    cyberattackers, and if it’s already been exposed on the dark web.
+                  </h6>
+                  <h6 class="font-weight-light mb-3">
+                    A 14-day limited free trial of our powerful modular threat intelligence platform lets you take
+                    advantage of real-time, actionable intelligence to help detect threats and manage your cyber-risk.
+                  </h6>
+                  <h6 class="font-weight-bold font-italic mb-3">
+                    * Acknowledge Threat Compass real version is much more powerful and detailed than the demo version
+                    you are about to register at. To learn more about its full capabilities
+                    <a class="text-link" href="https://www.blueliv.com/company/company-contact-page/">contact us</a>
+                    or <a class="text-link" href="https://www.blueliv.com/request-a-demo/">request a demo</a>.
+                  </h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="blueliv-signup__section-form p-5">
+            <h4 class="text-center mb-4 form-title">Register Now!</h4>
+            <form [formGroup]="wform">
+              <div class="form-group">
+                <label>First Name *</label>
+                <input formControlName="name" class="form-control" name="name" placeholder="First Name" />
+                <small
+                  *ngIf="
+                    wform.controls['name'].invalid && (wform.controls['name'].dirty || wform.controls['name'].touched)
+                  "
+                  class="form-text"
+                >
+                  <div *ngIf="wform.controls['name'].errors.required">First Name is required.</div>
+                  <div *ngIf="wform.controls['name'].errors.pattern">Only text is allowed.</div>
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label>Last Name *</label>
+                <input
+                  formControlName="firstSurname"
+                  class="form-control"
+                  name="firstSurname"
+                  placeholder="Last Name"
+                />
+                <small
+                  *ngIf="
+                    wform.controls['firstSurname'].invalid &&
+                    (wform.controls['firstSurname'].dirty || wform.controls['firstSurname'].touched)
+                  "
+                  class="form-text"
+                >
+                  <div *ngIf="wform.controls['firstSurname'].errors.required">Last Name is required.</div>
+                  <div *ngIf="wform.controls['firstSurname'].errors.pattern">Only text is allowed.</div>
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label>Company *</label>
+                <input formControlName="job" class="form-control" name="job" placeholder="Company" />
+                <small
+                  *ngIf="
+                    wform.controls['job'].invalid && (wform.controls['job'].dirty || wform.controls['job'].touched)
+                  "
+                  class="form-text"
+                >
+                  <div *ngIf="wform.controls['job'].errors.required">Company is required.</div>
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label>Email Address *</label>
+                <input formControlName="email" class="form-control" name="email" placeholder="Email Address" />
+                <small
+                  *ngIf="
+                    wform.controls['email'].invalid &&
+                    (wform.controls['email'].dirty || wform.controls['email'].touched)
+                  "
+                  class="form-text"
+                >
+                  <div *ngIf="wform.controls['email'].errors.required">Email is required.</div>
+                  <div *ngIf="wform.controls['email'].errors.pattern">Invalid email format.</div>
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label>Phone Number *</label>
+                <input formControlName="telephone" class="form-control" name="telephone" placeholder="Phone Number" />
+                <small
+                  *ngIf="
+                    wform.controls['telephone'].invalid &&
+                    (wform.controls['telephone'].dirty || wform.controls['telephone'].touched)
+                  "
+                  class="form-text"
+                >
+                  <div *ngIf="wform.controls['telephone'].errors.required">Phone number is required.</div>
+                  <div *ngIf="wform.controls['telephone'].errors.pattern">Invalid telephone format.</div>
+                </small>
+              </div>
+
+              <div class="form-group">
+                <label>Password *</label>
+                <input
+                  formControlName="password"
+                  class="form-control"
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                />
+                <small
+                  *ngIf="
+                    wform.controls['password'].invalid &&
+                    (wform.controls['password'].dirty || wform.controls['password'].touched)
+                  "
+                  class="form-text"
+                >
+                  <div *ngIf="wform.controls['password'].errors.required">Password is required.</div>
+                  <div *ngIf="wform.controls['password'].errors.pattern">Invalid password format.</div>
+                </small>
+              </div>
+
+              <div>
+                <input
+                  style="display: none"
+                  id="ads__landing_url__c"
+                  name="ads__landing_url__c"
+                  type="hidden"
+                  #landing
+                />
+              </div>
+              <div>
+                <input
+                  style="display: none"
+                  id="ads__referral_url__c"
+                  name="ads__referral_url__c"
+                  type="hidden"
+                  #referral
+                />
+              </div>
+
+              <div class="captcha">
+                <re-captcha
+                  required
+                  formControlName="captcha"
+                  name="captcha"
+                  (resolved)="resolvedCaptcha($event)"
+                  [siteKey]="key"
+                >
+                </re-captcha>
+              </div>
+
+              <button class="btn btn-blv-form btn-lg btn-block clearfix my-4" (click)="submitForm()">
+                REQUEST TRIAL HERE
+              </button>
+            </form>
+
+            <small class="text-form d-block mb-2 form-message"
+              >By clicking on the submit button, I accept the
+              <a class="link-form" href="#">Privacy and Cookies Policy</a>
+            </small>
+            <strong class="form-message">* Required field</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="blueliv-signup__section-info">
+        <div class="row justify-content-center py-5 no-gutters">
+          <div class="col-8">
+            <h4 class="font-weight-light text-center">
+              Threat Compass is built from a customizable group of targeted modules.
+            </h4>
+            <h4 class="font-weight-light text-center">This limited* trial version offers the following:</h4>
+            <div class="divider-section mt-4 mb-5"></div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="media my-3 p-4">
+                  <img src="assets/icons/sidebar/botnets.svg" class="mr-3" width="30" />
+                  <div class="media-body">
+                    <h5 class="mt-0">Credentials</h5>
+                    <p class="font-weight-light mb-0">
+                      Find actionable intelligence around leaked, stolen and sold user credentials. We locate them in
+                      real-time on the open, deep and dark web, along with information about relevant malware used to
+                      steal the information.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="media my-3 p-4">
+                  <img src="assets/icons/sidebar/credit-card.svg" class="mr-3" width="30" />
+                  <div class="media-body">
+                    <h5 class="mt-0">Credit Cards</h5>
+                    <p class="font-weight-light mb-0">
+                      Learn in real-time about stolen customer credit cards before they’re sold on the Dark Web, and
+                      block them regardless of how they were compromised.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="media my-3 p-4">
+                  <img src="assets/icons/sidebar/dark-web.svg" class="mr-3" width="30" />
+                  <div class="media-body">
+                    <h5 class="mt-0">Targeted Malware</h5>
+                    <p class="font-weight-light mb-0">
+                      Detect malware seeking to steal sensitive information or commit fraud. The aggressive solution
+                      proactively hunts down targeted malware and ‘Man in the Browser’ attacks, aimed specifically at
+                      your organization.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="media my-3 p-4">
+                  <img src="assets/icons/sidebar/hacktivism.svg" class="mr-3" width="30" />
+                  <div class="media-body">
+                    <h5 class="mt-0">Hacktivism Operations</h5>
+                    <p class="font-weight-light mb-0">
+                      Monitor global hacktivism activity on social networks and the open and dark web that can affect
+                      your infrastructure. Using an advanced early-warning system and active geolocator, the module
+                      generates targeted threat intelligence to shield against potential attack vectors.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="blueliv-signup__section-subfooter py-5">
+      <div class="container-fluid">
+        <div class="row align-items-start justify-content-center">
+          <div class="col-md-2">
+            <div class="item-icon text-center mx-2 my-4">
+              <img src="assets/trial-page/ico-actionable.png" class="mx-auto d-block mb-3" height="80" />
+              <b>It's fast</b>
+              <p>Identify undiscovered cyber-threats in a matter of seconds.</p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="item-icon text-center mx-2 my-4">
+              <img src="assets/trial-page/ico-auto.png" class="mx-auto d-block mb-3" height="80" />
+              <b>It's automated</b>
+              <p>No configuration needed for your trial.</p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="item-icon text-center mx-2 my-4">
+              <img src="assets/trial-page/ico-fast.png" class="mx-auto d-block mb-3" height="80" />
+              <b>It's targeted</b>
+              <p>Intelligence relevant to your organization only.</p>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="item-icon text-center mx-2 my-4">
+              <img src="assets/trial-page/ico-target.png" class="mx-auto d-block mb-3" height="80" />
+              <b>It's actionable</b>
+              <p>Your SOC team just needs to take action for remediation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <footer class="blueliv-signup__footer pt-4" *ngIf="true">
+    <div class="blueliv-signup__footer--content-top py-3">
+      <div class="container-fluid">
+        <img src="assets/brand/isotype_blueliv.svg" class="mx-auto d-block my-5" height="30" />
+        <img src="assets/brand/logotype_blueliv_white.svg" class="mx-auto d-block mb-4" height="40" />
+        <div class="d-flex justify-content-center">
+          <a
+            class="font-weight-light mx-3"
+            target="_blank"
+            href="https://www.blueliv.com/products/prevent-cyber-attacks-with-threat-compass-products-blueliv/"
+            >Technology</a
+          >
+          <a class="font-weight-light mx-3" target="_blank" href="https://community.blueliv.com/">Community</a>
+          <a class="font-weight-light mx-3" target="_blank" href="https://sso.blueliv.com/login">Support</a>
+          <a
+            class="font-weight-light mx-3"
+            target="_blank"
+            href="https://www.blueliv.com/cyber-security-and-cyber-threat-intelligence-blog-blueliv/"
+            >Blog</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="blueliv-signup__footer--content-middle py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-2">
+            <ul class="list-unstyled">
+              <li class="my-3">
+                <p class="menu-item">Products</p>
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/prevent-cyber-attacks-with-threat-compass-products-blueliv/"
+                  >Threat Compass</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/threat-intelligence-services-and-tools-blueliv/"
+                  >Threat Intelligent Services</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/threat-context-products-to-prevent-cyber-attacks-blueliv/"
+                  >Threat Context</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/choose-our-credential-theft-protection-products-blueliv/"
+                  >Credentials</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/discover-our-dark-web-monitoring-solutions-blueliv/"
+                  >Dark Web</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/recover-stolen-credit-cards-in-real-time-blueliv/"
+                  >Credit Cards</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/the-best-hacktivism-monitoring-and-prevention-solutions-blueliv/"
+                  >Hacktivism</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/malware-protection-analysis-solution-blueliv/"
+                  >Malware</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/detection-of-false-and-fraud-mobile-apps-blueliv/"
+                  >Mobile Apps</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/social-media-monitoring-online-reputation-blueliv/"
+                  >Social Media</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/data-leakage-prevention-solutions-to-enterprises-blueliv/"
+                  >Data Leakage</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/domain-protection-prevent-attacks-and-more-blueliv/"
+                  >Domain Protection</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/products/modular-intelligence/threat-intelligence-feeds-solutions-to-enterprise-blueliv/"
+                  >Intelligence Feed</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-md-2">
+            <ul class="list-unstyled">
+              <li class="my-3">
+                <p class="menu-item">Solutions</p>
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/solutions/solutions-to-proactive-cyber-threat-monitoring-daily-blueliv/"
+                  >Proactive Ciberthreat Monitoring</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/solutions/discover-our-brand-protection-solutions-to-organizations-blueliv/"
+                  >Brand Protection</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/solutions/fraud-prevention-solutions-to-business-organizations-blueliv/"
+                  >Fraud Prevention</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/solutions/data-breach-protection-and-monitoring-solutions-blueliv/"
+                  >Data Breach Protection</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/solutions/discover-our-counterfeit-detection-solutions-blueliv/"
+                  >Counterfeit Detection</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/solutions/roles/cybersecurity-solutions-for-cisos-blueliv/"
+                  >For CISOs</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/solutions/roles/cyber-security-solutions-for-incident-response-teams-blueliv/"
+                  >For incident Response Teams</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/solutions/roles/cyber-security-solutions-for-soc-teams-blueliv/"
+                  >For SOC Teams</a
+                >
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/solutions/roles/cyber-security-solutions-for-threat-intelligence-teams-blueliv/"
+                  >For Threat Intelligence Team</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-md-2">
+            <ul class="list-unstyled">
+              <li class="my-3">
+                <a class="menu-item" href="https://www.blueliv.com/cyber-security-resources-for-enterprises-blueliv/"
+                  >Resources</a
+                >
+              </li>
+              <li>
+                <a class="submenu-item" href="/resources-page#/datasheet">Datasheets</a>
+              </li>
+              <li>
+                <a class="submenu-item" href="/resources-page/#report">Reports</a>
+              </li>
+              <li>
+                <a class="submenu-item" href="/resources-page/#video">Videos</a>
+              </li>
+              <li>
+                <a class="submenu-item" href="/resources-page/#media">Media</a>
+              </li>
+              <li>
+                <a class="submenu-item" href="https://github.com/blueliv" target="_blank">Documentation</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-md-2">
+            <ul class="list-unstyled">
+              <li class="my-3">
+                <a class="menu-item" href="https://www.blueliv.com/company/">Company</a>
+              </li>
+              <li>
+                <a class="submenu-item" href="https://www.blueliv.com/partners/">Partners</a>
+              </li>
+              <li>
+                <a class="submenu-item" href="https://www.blueliv.com/company/company-contact-page/">Contact Us</a>
+              </li>
+              <li>
+                <a class="submenu-item" href="https://bluelivcareers.teamtailor.com/">Careers</a>
+              </li>
+              <li>
+                <a
+                  class="submenu-item"
+                  href="https://www.blueliv.com/cyber-security-and-cyber-threat-intelligence-blog-blueliv/"
+                  >Blog</a
+                >
+              </li>
+              <li>
+                <a class="submenu-item" href="https://sso.blueliv.com/login">Support</a>
+              </li>
+              <li>
+                <a class="submenu-item" href="https://community.blueliv.com/">Community</a>
+              </li>
+              <li>
+                <a class="submenu-item" href="https://www.blueliv.com/our-platform/rd-projects/">R&D Projects</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-md-4">
+            <p class="menu-item my-3">News and Social</p>
+            <p class="submenu-item">Stay in touch</p>
+            <div class="d-flex justify-content-start">
+              <a class="mr-3" href="https://twitter.com/blueliv" target="_blank">
+                <i class="icon icon-twitter-square" aria-hidden="true"></i>
+              </a>
+              <a class="mr-3" href="https://www.facebook.com/blueliv" target="_blank">
+                <i class="icon icon-facebook-square" aria-hidden="true"></i>
+              </a>
+              <a class="mr-3" href="https://es.linkedin.com/company/blueliv" target="_blank">
+                <i class="icon icon-linkedin-square" aria-hidden="true"></i>
+              </a>
+              <a class="mr-3" href="https://www.youtube.com/channel/UC5gRQXdnjg2HW4QYmI19IAg" target="_blank">
+                <i class="icon icon-youtube-square" aria-hidden="true"></i>
+              </a>
+              <a class="mr-3" href="https://www.blueliv.com/blog-news/" target="_blank">
+                <i class="icon icon-rss-square" aria-hidden="true"></i>
+              </a>
+              <a class="mr-3" href="https://github.com/blueliv" target="_blank">
+                <i class="icon icon-github-square" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="blueliv-signup__footer--content-bottom">
+      <div class="container-fluid">
+        <div class="footer-countries text-center text-light py-3">
+          <div class="d-flex justify-content-center">
+            <p class="text-uppercase mx-2">BARCELONA</p>
+            <p class="text-uppercase mx-2">LONDON</p>
+            <p class="text-uppercase mx-2">SAN FRANCISCO</p>
+            <p class="text-uppercase mx-2">SINGAPORE</p>
+          </div>
+        </div>
+        <div class="footer-copyright text-center text-light py-2">
+          <span class="mr-2">Copyright © Blueliv is a Leap in Value Brand</span>
+          <span>|</span>
+          <a class="mx-2" href="#">Terms of us</a>
+          <span>|</span>
+          <a class="mx-2" href="#">Privacy and Cookies Policy</a>
+          <span>|</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<ng-template #confirmation>
+  <div class="blueliv-signup__confirmation">
+    <div class="row justify-content-center no-gutters">
+      <div class="col-8">
+        <ng-container *ngIf="validation; else loading">
+          <ng-container *ngIf="validToken">
+            <div class="text-center p-5">
+              <img src="assets/trial-page/success-ok.svg" height="250" />
+              <h1 class="font-weight-light my-5">Congratulations. Registration successful</h1>
+              <h3 class="font-weight-light my-4">You can Log in now:</h3>
+              <button class="btn btn-blv" routerLink="/login">LOGIN</button>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!validToken">
+            <div class="text-center p-5">
+              <img src="assets/trial-page/success-token.svg" height="250" />
+              <h1 class="font-weight-light my-5">Token expired</h1>
+              <h3 class="font-weight-light my-4">Please sign up to the free trial again:</h3>
+              <button class="btn btn-blv" (click)="onRefresh()">SIGN UP</button>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <div class="loading">
+    <div class="group">
+      <div class="bigSqr">
+        <div class="square first"></div>
+        <div class="square second"></div>
+        <div class="square third"></div>
+        <div class="square fourth"></div>
+      </div>
+      <div class="text">loading</div>
+    </div>
+  </div>
+</ng-template>

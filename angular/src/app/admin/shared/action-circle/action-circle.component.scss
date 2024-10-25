@@ -1,0 +1,28 @@
+@import 'src/scss/variables';
+.action-circle-sm {
+  width: 16px;
+  height: 16px;
+  padding: 1px 0px;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 0.4;
+  background-color: $danger !important;
+  border: 1px solid $white;
+  &:hover {
+    background-color: $danger !important;
+  }
+}
+
+.icon-sm {
+  font-size: 8px;
+}
+.btn-light {
+  background-color: transparent !important;
+  &:hover {
+    background-color: #e2e6ea !important;
+  }
+}
+
+.disabled {
+  opacity: 0.5;
+}

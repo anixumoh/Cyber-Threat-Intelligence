@@ -1,0 +1,286 @@
+<div class="main-header mt-4 mb-3 clearfix">
+  <div class="row align-items-end justify-content-md-center">
+    <div class="col-md-3">
+      <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-3 mt-1">Indicators</h6>
+      <h5 class="text-dark float-left mb-0">{{ activeModule?.name }}</h5>
+    </div>
+    <div class="col-md-6">
+      <app-ctx-search
+        [tcxType]="'indicators'"
+        [searchText]="searchText"
+        (searchEvent)="search()"
+        [showSaveSearchButton]="showSaveSearchButton"
+        (clearSearchTermEvent)="onClearSearchTerm()"
+        (openModalDorksEvent)="onOpenModalDorks($event)"
+        (searchTextChangeEvent)="onSetSearchTerm($event)"
+      ></app-ctx-search>
+      <div *ngIf="listError" class="text-danger">{{ listError }}</div>
+      <app-tcx-quick-filters
+        [tcxType]="'indicators'"
+        [items]="quickFilters"
+        (changeMethod)="onChangeQuickFilter($event)"
+      ></app-tcx-quick-filters>
+    </div>
+    <div class="col-md-3">
+      <app-info-button [activeModule]="activeModule"></app-info-button>
+    </div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="card shadow-sm mb-4">
+  <div class="d-flex align-items-center justify-content-between rounded-top bg-light p-2 mx-0 fixed-scroll">
+    <div class="d-flex align-items-center">
+      <div class="pr-3 border-right mr-3">
+        <div class="button-action" ngbDropdown>
+          <button
+            ngbDropdownToggle
+            [disabled]="!hasSomeChecked()"
+            class="btn btn-light btn-sm border px-2 float-left btn-actions"
+            [ngClass]="{ pulse: hasSomeChecked() }"
+            type="button"
+            id="actionsButtonDropdown"
+            name="button"
+          >
+            <i class="icon-ellipsis-v px-1"></i>
+          </button>
+          <div ngbDropdownMenu class="actions-dropdown-menu">
+            <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded">
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToCSV()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>Export to CSV</span>
+              </li>
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToJson()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>Export to JSON</span>
+              </li>
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="tryCopyToClipboard()"
+              >
+                <i class="icon-copy mr-2"></i>
+                <span>Copy to clipboard</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <h6 class="d-flex align-items-center margin-0">
+        <span>Indicators showing:</span>
+        <span *ngIf="!loading" class="badge badge-pill badge-primary ml-2">{{ totalResources | number }} results</span>
+        <i class="icon-spinner rotate text-primary ml-2" *ngIf="loading"></i>
+      </h6>
+    </div>
+
+    <div style="flex: 1 1 0">
+      <div class="float-right" *ngIf="items?.length > 0">
+        <app-select
+          [items]="limits"
+          [model]="limit"
+          [icon]="'icon-format_list_bulleted'"
+          [placement]="'bottom-right'"
+          id="limitDropdown"
+          (onChange)="onChangeLimit($event)"
+        >
+        </app-select>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="uiDownloadingByHashState.indexing === downloadingByHashState">
+    <div class="app-component-wrapper">
+      <div>
+        <img src="/assets/default_images/searching.svg" class="robot" alt="" />
+      </div>
+      <div>
+        <div class="text-large">Malware downloaded successfully!</div>
+        <div class="text-medium">Indexing malware, please wait...</div>
+      </div>
+    </div>
+  </div>
+
+  <request-download-malware-by-hash
+    *ngIf="uiDownloadingByHashState.downlading === downloadingByHashState"
+    [hash]="malwareHashToDownload"
+    (completed)="onMalwareDownloadComplete($event)"
+  ></request-download-malware-by-hash>
+
+  <!--    TABLE-->
+  <div>
+    <app-table
+      [items]="items"
+      [loading]="loading"
+      class="table-fixed table--sticky table--sticky-fixed-scroll"
+      *ngIf="uiDownloadingByHashState.listing === downloadingByHashState"
+    >
+      <thead>
+        <tr>
+          <th class="text-center td-30">
+            <input type="checkbox" [(ngModel)]="bulk" (click)="setCheckedState($event)" />
+          </th>
+          <th>
+            <span class="d-flex align-items-center">
+              Indicator
+              <i
+                *ngIf="sort !== 'value' && sort !== '-value'"
+                class="icon-sort ml-1 cursor-pointer"
+                (click)="sortBy('value')"
+              ></i>
+              <i *ngIf="sort === 'value'" class="icon-sort-asc ml-1 cursor-pointer" (click)="sortBy('-value')"></i>
+              <i *ngIf="sort === '-value'" class="icon-sort-desc ml-1 cursor-pointer" (click)="sortBy('value')"></i>
+            </span>
+          </th>
+          <th class="text-center">
+            <span class="d-flex align-items-center justify-content-center">
+              Type
+              <i
+                *ngIf="sort !== 'type' && sort !== '-type'"
+                class="icon-sort ml-1 cursor-pointer"
+                (click)="sortBy('type')"
+              ></i>
+              <i *ngIf="sort === 'type'" class="icon-sort-asc ml-1 cursor-pointer" (click)="sortBy('-type')"></i>
+              <i *ngIf="sort === '-type'" class="icon-sort-desc ml-1 cursor-pointer" (click)="sortBy('type')"></i>
+            </span>
+          </th>
+          <th class="">Tags</th>
+          <th class="text-center">
+            <span class="d-flex align-items-center justify-content-center">
+              First Seen
+              <i
+                *ngIf="sort !== 'first_seen' && sort !== '-first_seen'"
+                class="icon-sort ml-1 cursor-pointer"
+                (click)="sortBy('first_seen')"
+              ></i>
+              <i
+                *ngIf="sort === 'first_seen'"
+                class="icon-sort-asc ml-1 cursor-pointer"
+                (click)="sortBy('-first_seen')"
+              ></i>
+              <i
+                *ngIf="sort === '-first_seen'"
+                class="icon-sort-desc ml-1 cursor-pointer"
+                (click)="sortBy('first_seen')"
+              ></i>
+            </span>
+          </th>
+          <th class="text-center">
+            <span class="d-flex align-items-center justify-content-center">
+              Last Seen
+              <i
+                *ngIf="sort !== 'last_seen' && sort !== '-last_seen'"
+                class="icon-sort ml-1 cursor-pointer"
+                (click)="sortBy('last_seen')"
+              ></i>
+              <i
+                *ngIf="sort === 'last_seen'"
+                class="icon-sort-asc ml-1 cursor-pointer"
+                (click)="sortBy('-last_seen')"
+              ></i>
+              <i
+                *ngIf="sort === '-last_seen'"
+                class="icon-sort-desc ml-1 cursor-pointer"
+                (click)="sortBy('last_seen')"
+              ></i>
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items; let index = index" class="cursor-pointer" (click)="details($event, item)">
+          <td class="text-center td-40 vertical-middle cursor-default" (click)="$event.stopImmediatePropagation()">
+            <input type="checkbox" class="cursor-pointer" [(ngModel)]="item.fxSelected" (click)="setChecked()" />
+          </td>
+          <td class="align-middle">
+            <app-copy-to-clipboard [value]="item.value"></app-copy-to-clipboard>
+          </td>
+          <td class="align-middle text-center">
+            {{ item.type }}
+          </td>
+          <td>{{ getTags(item.tags) }}</td>
+          <td class="align-middle text-center">
+            {{ item.first_seen | date: 'dd/MM/yyyy' }}
+          </td>
+          <td class="align-middle text-center">
+            {{ item.last_seen | date: 'dd/MM/yyyy' }}
+          </td>
+        </tr>
+      </tbody>
+    </app-table>
+  </div>
+</div>
+
+<div class="float-left mt-3 mb-4">
+  <app-pagination-x [page]="page" [count]="count" [pageSize]="limit" (pageChange)="onPageChange($event)">
+  </app-pagination-x>
+</div>
+
+<modal-window
+  modalTitle="Advanced Search: Available Dorks"
+  dorksThreathContext="dorksThreathContext"
+  dorksThreathContextType="indicators"
+  (changeDork)="setDork($event)"
+  *ngIf="openModalDorks"
+  [customClass]="'modal-xl'"
+  [dorkFields]="dorkFields"
+  cancelBtn="Close"
+  [closeBtn]="true"
+  (cancel)="openModalDorks = false"
+>
+</modal-window>
+
+<modal-window
+  [modalTitle]="'Warning'"
+  [warning]="
+    'The selected elements might include malicious indicators and/or links. Do you prefer to modify (defang) those malicious elements before being exported?'
+  "
+  [acceptBtn]="'Yes'"
+  *ngIf="defangExportType"
+  [cancelBtn]="'No'"
+  (accept)="onConfirmDefangConfirmationPopup()"
+  (cancel)="onCancelDefangConfirmationPopup($event)"
+>
+</modal-window>
+
+<modal-window
+  [modalTitle]="'Warning'"
+  [warning]="
+    'The selected elements might include malicious indicators and/or links. Do you prefer to modify (defang) those malicious elements before being copied to the clipboard?'
+  "
+  [acceptBtn]="'Yes'"
+  *ngIf="showDefangCopyToClipboardPopup"
+  [cancelBtn]="'No'"
+  (accept)="copyToClipboardDefang(true)"
+  (cancel)="onCancelCopyToClipboardDefandPopup($event)"
+>
+</modal-window>
+
+<app-modal [show]="showModal" (close)="showModal = false">
+  <div class="modal-content">
+    <div class="card">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title mb-0 pull-left">
+          <i class="icon-blv-warning text-warning" style="font-size: 22px"></i> Warning
+        </h5>
+        <button type="button" class="close pull-right" (click)="showModal = false" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 16px">
+          Unfortunately, the maximum number of elements to be searched was reached. The last element looked up was:
+          <br />
+          <b>{{ lastItem || '' }}</b>
+        </p>
+      </div>
+      <div class="card-footer text-right">
+        <button class="btn btn-light text-danger btn-sm" (click)="showModal = false">Close</button>
+      </div>
+    </div>
+  </div>
+</app-modal>

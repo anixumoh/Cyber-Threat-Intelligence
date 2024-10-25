@@ -1,0 +1,15 @@
+:host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
+  background-color: #00b18e85;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
+  background-color: #00b18f;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked.mat-disabled .mat-slide-toggle-bar {
+  background-color: #00b18e50;
+}
+
+:host ::ng-deep .mat-slide-toggle.mat-checked.mat-disabled .mat-slide-toggle-thumb {
+  background-color: #00b18e85;
+}

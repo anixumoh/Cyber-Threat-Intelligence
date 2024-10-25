@@ -1,0 +1,204 @@
+<div class="padding-20 pb-5">
+  <h5>Customers</h5>
+  <div class="main-header-table border-top bg-light p-2 mx-0">
+    <div class="d-flex align-items-center justify-content-between flex-wrap">
+      <div>
+        <button class="btn btn-sm btn-light text-primary margin-mobile" (click)="openModal('create')">
+          <i class="icon-plus-circle-solid mr-1"></i>
+          New Customer
+        </button>
+      </div>
+      <div class="d-flex align-items-center flex-wrap">
+        <div class="d-flex align-items-center margin-mobile">
+          <input
+            class="sb-search-input"
+            placeholder="Search for customer name"
+            type="search"
+            value=""
+            name="search"
+            id="search"
+            [(ngModel)]="searchedText"
+            (ngModelChange)="search()"
+          />
+          <i class="icon-search input-search"></i>
+        </div>
+        <div class="ml-2">
+          <app-select
+            [items]="limits"
+            [model]="limit"
+            [icon]="'icon-format_list_bulleted'"
+            [placement]="'bottom-right'"
+            id="limitDropdown"
+            (onChange)="onChangeLimit($event)"
+          >
+          </app-select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <ng-container *ngIf="noData">
+      <div class="no-data-box">
+        <span>
+          There was an error retrieving the list of customers. If the problem persists,<br />
+          please contact
+          <a target="_blank" href="https://servicedesk.outpost24.com/servicedesk/customer/portals">support</a>.</span
+        >
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!noData">
+      <app-table [items]="items" [loading]="loading" [isFromAdmin]="true">
+        <thead>
+          <tr>
+            <th class="" style="width: 12%" (click)="setOrder(order.name)">
+              <span class="d-flex align-items-center">
+                Customer <i class="ml-1 cursor-pointer" [ngClass]="getOrderByIcon(order.name)"></i>
+              </span>
+            </th>
+            <th class="text-center" style="width: 10%" (click)="setOrder(order.customerType)">
+              <span class="d-flex align-items-center">
+                Type <i class="ml-1 cursor-pointer" [ngClass]="getOrderByIcon(order.customerType)"></i>
+              </span>
+            </th>
+            <th class="text-center" style="width: 8%">Applied Contract</th>
+            <th class="text-center" style="width: 7%">Band</th>
+            <th class="text-center" style="width: 11%">Custom Limit</th>
+
+            <th class="text-center" style="width: 7%">Modules</th>
+            <th class="text-center" style="width: 12%">Contract Dates</th>
+            <th class="text-center" style="width: 6%">Trials</th>
+            <th class="text-center" style="width: 6%">State</th>
+            <th class="text-center" style="width: 6%">Limits</th>
+            <th class="text-center" style="width: 7%">Overdue</th>
+            <th class="text-center" style="width: 6%"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items">
+            <td class="align-middle truncate-table cursor-pointer" (click)="openModal('details', item.id)">
+              <app-large-text [value]="item.name" placement="right"></app-large-text>
+            </td>
+            <td class="align-middle truncate-table text-center">
+              <app-large-text
+                [value]="item.customerType ? item.customerType.name : '-'"
+                placement="top"
+              ></app-large-text>
+            </td>
+            <td class="align-middle truncate-table text-center">
+              <app-action-circle
+                [icon]="'icon-lens'"
+                [colorIcon]="item.enforcing ? 'text-success' : 'text-danger'"
+                [tooltip]="
+                  item.enforcing
+                    ? 'The contract for this customer is being applied'
+                    : 'The contract for this customer is not being applied'
+                "
+              >
+              </app-action-circle>
+            </td>
+            <td class="align-middle truncate-table text-center">
+              <app-large-text
+                [value]="item.contract && item.contract.band && item.contract.band.name ? item.contract.band.name : ''"
+                placement="top"
+              ></app-large-text>
+            </td>
+            <td class="align-middle truncate-table text-center">
+              <app-action-circle
+                [icon]="'icon-lens'"
+                [colorIcon]="item.contract && item.contract.bandValues ? 'text-success' : 'text-danger'"
+                [tooltip]="
+                  item.contract && item.contract.bandValues
+                    ? 'The band for this customer has custom values'
+                    : 'The band for this customer does not have custom values'
+                "
+              >
+              </app-action-circle>
+            </td>
+            <td class="align-middle truncate-table text-center">
+              <app-large-text
+                [value]="item.customerModules ? getNonDeletedModules(item).length : '0'"
+                placement="top"
+              ></app-large-text>
+            </td>
+
+            <td class="align-middle truncate-table text-center">
+              {{ item.contract ? item.contract.startAt + ' - ' + item.contract.endAt : '-' }}
+            </td>
+
+            <td class="align-middle truncate-table text-center">
+              <app-large-text [value]="item.trials || 0" placement="top"></app-large-text>
+            </td>
+
+            <td class="align-middle truncate-table text-center">
+              <app-action-circle
+                [icon]="'icon-lens'"
+                [colorIcon]="item.active ? 'text-success' : 'text-danger'"
+                [tooltip]="item.active ? 'Active' : 'Disabled'"
+              >
+              </app-action-circle>
+            </td>
+            <td class="align-middle truncate-table text-center">
+              <app-large-text [value]="item.limits || 0" placement="top"></app-large-text>
+            </td>
+            <td class="align-middle truncate-table text-center">
+              <app-action-circle
+                [icon]="'icon-lens'"
+                [colorIcon]="item.contract && !isContractExpired(item) ? 'text-success' : 'text-danger'"
+                [tooltip]="
+                  item.contract && !isContractExpired(item)
+                    ? 'Contract is still valid'
+                    : 'Customer does not have a contract or has expired'
+                "
+              >
+              </app-action-circle>
+            </td>
+
+            <td class="align-middle truncate-table text-center">
+              <button class="btn no-flex btn-circle" (click)="openModal('edit', item.id)">
+                <i class="icon-mode_edit text-primary"></i>
+              </button>
+
+              <button class="btn no-flex btn-circle" (click)="openDeleteModal(item)">
+                <i class="icon-delete text-danger"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </app-table>
+
+      <div class="float-left pt-3">
+        <app-pagination-x [page]="page" [count]="count" [pageSize]="limit" (pageChange)="onPageChange($event)">
+        </app-pagination-x>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<app-create-edit-customer
+  *ngIf="isModalOpen"
+  #createEditCustomerComponent
+  [type]="modalType"
+  [bands]="bands"
+  [loadingDetails]="loadingDetails"
+  [selectedItem]="selectedItem"
+  [isOpen]="isModalOpen"
+  [customerTypes]="types"
+  [data]="selectedItem"
+  (closeModal)="openModal('')"
+  (createEditCustomer)="createEditCustomer($event)"
+  (createEditBand)="createEditBand($event)"
+></app-create-edit-customer>
+
+<modal-window
+  modalTitle="Delete"
+  [modalBody]="'Are you sure you want to delete the selected customer?'"
+  *ngIf="isDeleteConfirmationOpen"
+  acceptBtn="Yes"
+  [warning]="'This action cannot be undone'"
+  [loadingAccept]="iloadingDelete"
+  cancelBtn="No"
+  (accept)="deleteCustomer(customerToDelete.id); isDeleteConfirmationOpen = false"
+  (cancel)="isDeleteConfirmationOpen = false"
+>
+</modal-window>

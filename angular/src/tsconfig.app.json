@@ -1,0 +1,39 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2019", "dom"],
+    "typeRoots": ["node_modules/@types"],
+    "allowSyntheticDefaultImports": true,
+    "types": []
+  },
+  "angularCompilerOptions": {
+    "allowEmptyCodegenFiles": true,
+    "strictTemplates": true
+  },
+  "files": ["main.ts", "polyfills.ts"],
+  "exclude": [
+    ".angular/*",
+    ".svelte-kit/*",
+    "dist/*",
+    "docs/*",
+    "node_modules/*",
+    "**/*.spec.ts",
+    "**/*.mock.ts",
+
+    // Exclude all svelte related
+    "**/*.svelte",
+    "src/lib/*",
+    "src/stores/*",
+    "src/routes/*",
+  ]
+}

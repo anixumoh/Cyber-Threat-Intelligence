@@ -1,0 +1,94 @@
+<!-- MAIN HEADER TABLE -->
+<div class="main-header-table border-top border-bottom bg-light p-2 clearfix mb-2">
+  <div class="main-header-left">
+    <h6 class="float-left mt-1 mb-0 mr-3">Alerts List</h6>
+    <button
+      class="btn btn-light btn-sm text-primary float-left"
+      [ngClass]="isMenuOpened ? 'is-active' : ''"
+      type="button"
+      name="button"
+      [disabled]="grants?.isCustomerOrOperator()"
+      (click)="toggleMenu()"
+      #dropdownButton
+    >
+      <i class="icon-plus-circle-solid mr-1"></i>
+      Add user
+    </button>
+    <div class="dropdown-container float-left" *ngIf="!grants?.isCustomerOrOperator()" #dropdownList>
+      <ul class="list-group list-group-flush border rounded shadow" [ngClass]="isMenuOpened ? 'open' : ''">
+        <ng-container *ngFor="let user of usersList; index as i; trackBy: identify">
+          <li
+            class="list-group-item list-group-item-action border-0 p-2 cursor-pointer"
+            *ngIf="!user.notShow"
+            [value]="user"
+            (click)="selectUser(user)"
+          >
+            <span>{{ user.email }}</span>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+  <div class="main-header-right">
+    <div class="dropdown float-right">
+      <div class="input-group form-group-search input-group-sm float-right ml-2">
+        <input class="form-control" type="text" placeholder="search" (keyup)="searchInList($event)" />
+        <div class="input-group-append">
+          <span class="input-group-text"><i class="icon-search" aria-hidden="true"></i></span>
+        </div>
+      </div>
+      <button
+        class="btn btn-light btn-sm text-danger float-right"
+        *ngIf="!grants?.isCustomerOrOperator()"
+        (click)="delete()"
+        [disabled]="values.length == 0 || grants?.isCustomerOrOperator()"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+<!-- NO RESULTS -->
+<div *ngIf="values.length == 0" class="no-results-box">
+  <img src="assets/default_images/searching.svg" />
+  <h3 class="no-results">"There are no {{ data.name }}"</h3>
+</div>
+<!-- TABLE -->
+<table *ngIf="values.length != 0" class="table">
+  <thead>
+    <tr>
+      <th class="th-30">
+        <!-- CHECKBOX -->
+        <div class="toggle-button">
+          <input
+            id="all"
+            [(ngModel)]="selectedAll"
+            [disabled]="grants?.isCustomerOrOperator()"
+            (change)="selectAll()"
+            type="checkbox"
+          />
+        </div>
+      </th>
+      <th>User Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let value of values; let i = index">
+      <td class="td-30">
+        <!-- CHECKBOX -->
+        <div class="toggle-button">
+          <input
+            type="checkbox"
+            id="value.id"
+            [(ngModel)]="value.selected"
+            [disabled]="grants?.isCustomerOrOperator()"
+            (change)="checkIfAllSelected()"
+          />
+        </div>
+      </td>
+      <td>
+        {{ value.value }}
+      </td>
+    </tr>
+  </tbody>
+</table>

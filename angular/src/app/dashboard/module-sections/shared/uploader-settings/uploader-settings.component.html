@@ -1,0 +1,30 @@
+<div [ngClass]="isModule ? '' : 'settings-edit pull-left'">
+  <div class="uploader">
+    <input
+      class="uploadDefault"
+      type="file"
+      #uploader
+      (change)="uploadFile.emit(uploader.files)"
+      name="fileUpload"
+      multiple="multipleSelect"
+      value=""
+    />
+    <button
+      class="btn btn-light btn-sm text-primary border float-left mr-1"
+      (click)="uploader.click()"
+      type="button"
+      [disabled]="isDisable"
+    >
+      Choose Logo
+    </button>
+    <button
+      class="btn btn-light btn-sm text-danger float-left mr-1"
+      *ngIf="isDelete"
+      type="button"
+      (click)="deleteFile.emit()"
+      [disabled]="isDisable"
+    >
+      Delete Logo
+    </button>
+  </div>
+</div>

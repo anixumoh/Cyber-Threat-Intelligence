@@ -1,0 +1,10 @@
+.breadcrumb-item {
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  i::before {
+    vertical-align: -20%;
+  }
+}

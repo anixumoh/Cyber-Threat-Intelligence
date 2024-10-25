@@ -1,0 +1,55 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "cypress/globals": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": [
+      "tsconfig.eslint.json"
+    ]
+  },
+  "plugins": [
+    "eslint-plugin-jsdoc",
+    "eslint-plugin-prefer-arrow",
+    "@typescript-eslint",
+    "cypress"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:cypress/recommended",
+    "plugin:no-unsanitized/DOM"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "warn",
+    "no-unused-vars": "off",
+    "no-constant-condition": "warn",
+    "no-useless-escape": "warn",
+    "no-control-regex": "warn",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "ignoreRestSiblings": true
+      }
+    ],
+    "no-prototype-builtins": "off",
+    "no-undef": "warn",
+    "prefer-const": "error",
+    "no-console": "warn",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-unsafe-return": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ]
+    }
+  ]
+}

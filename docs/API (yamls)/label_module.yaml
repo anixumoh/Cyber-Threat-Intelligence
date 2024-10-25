@@ -1,0 +1,245 @@
+# This is the new CTIP API
+swagger: '2.0'
+info:
+  title: CTIP LABEL API
+  description: API for the LABEL
+  version: "1.0.0"
+host: new-ui-pre.blueliv.com
+schemes:
+  - https
+basePath: /api/v2
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /organization/{organizationId}/label:
+    post:
+      summary: Create label
+      description: Creates a new label
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          description: Object to create label
+          required: true
+          schema:
+            type: object
+            properties:
+              label:
+                type: string
+              moduleId:
+                type: integer
+              labelTypeId:
+                type: integer
+              bgColorStr:
+                type: string
+              textColorStr:
+                type: string
+              labelProtectedStr:
+                type: boolean
+              prioritized:
+                type: boolean
+
+      tags:
+        - Label
+      responses:    
+        200:
+          description: New label created
+          schema:
+            title: Label object
+            type: object
+            properties:
+              label:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  label:
+                    type: string
+                  background_color:
+                    type: string
+                  text_color:
+                    type: string
+                  organization_id:
+                    type: integer
+                  module_id:
+                    type: integer
+                  labelTypeId:
+                    type: integer
+                  labelProtected:
+                    type: boolean
+                  prioritized:
+                    type: boolean
+          examples:
+            application/json:
+              {
+                "label": {
+                  "id": 234,
+                  "label": "testLabel",
+                  "background_color": 13421772,
+                  "text_color": 15663052,
+                  "organization_id": 1,
+                  "module_id": 1,
+                  "labelTypeId": 2,
+                  "labelProtected": false,
+                  "prioritized": false
+                }
+              }
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organization/{organizationId}/label/{labelId}:
+    delete:
+      summary: Delete a label
+      description: Deletes a label from the system
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: labelId
+          in: path
+          description: Label Id
+          required: true
+          type: integer
+      tags:
+        - Label
+      responses:    
+        200:
+          description: Success
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+    put:
+      summary: Edit label
+      description: Edit an existing label
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: labelId
+          in: path
+          description: Label Id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          description: Object to edit label
+          required: true
+          schema:
+            type: object
+            properties:
+              label:
+                type: string
+              moduleId:
+                type: integer
+              labelTypeId:
+                type: integer
+              bgColorStr:
+                type: string
+              textColorStr:
+                type: string
+              labelProtectedStr:
+                type: boolean
+              prioritized:
+                type: boolean
+      tags:
+        - Label
+      responses:    
+        200:
+          description: New label created
+          schema:
+            title: Label object
+            type: object
+            properties:
+              label:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  label:
+                    type: string
+                  background_color:
+                    type: string
+                  text_color:
+                    type: string
+                  organization_id:
+                    type: integer
+                  module_id:
+                    type: integer
+                  labelTypeId:
+                    type: integer
+                  labelProtected:
+                    type: boolean
+                  prioritized:
+                    type: boolean
+          examples:
+            application/json:
+              {
+                "ok": {
+                  "id": 234,
+                  "label": "testLabel",
+                  "background_color": 13421772,
+                  "text_color": 15663052,
+                  "organization_id": 1,
+                  "module_id": 1,
+                  "labelTypeId": 2,
+                  "labelProtected": false,
+                  "prioritized": false
+                }
+              }
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  Success:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

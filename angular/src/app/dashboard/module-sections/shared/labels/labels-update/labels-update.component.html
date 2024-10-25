@@ -1,0 +1,31 @@
+<div class="form-group">
+  <label>Label Name</label>
+  <input class="form-control" [(ngModel)]="label.label" placeholder="name" />
+</div>
+<div class="form-group">
+  <label>Border color</label>
+  <button
+    class="btn btn-light btn-block text-left"
+    (click)="openDropdown()"
+    [ngClass]="label.bgColorHex ? '' : 'border'"
+    [disabled]="!label.label || label.label === ''"
+    [style.color]="'#1b2734'"
+    [style.border]="'2px solid'"
+    [style.border-color]="label.bgColorHex"
+  >
+    {{ !(label.label && label.bgColorHex) ? 'Select Color' : label.label }}
+  </button>
+  <ul class="dropdown-ul-list form-control" [ngClass]="isDropdownOpen ? 'open' : ''">
+    <li
+      *ngFor="let color of colors"
+      class="dropdown-li-item"
+      [style.border]="'2px solid'"
+      [style.border-color]="color"
+      [style.color]="'#1b2734'"
+      (click)="selectColor(color)"
+    >
+      {{ label.label }}
+      <i *ngIf="label.bgColorHex === color" class="icon-check_box pull-right" aria-hidden="true"></i>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,18 @@
+<div class="inline-calendar">
+  <div *ngFor="let monthInfo of calendarInfo" class="month">
+    <div class="month-name">
+      <span>{{ monthInfo.month }}</span>
+    </div>
+    <div class="month-days">
+      <div
+        *ngFor="let day of monthInfo.days"
+        class="day"
+        [class.empty]="!day"
+        [class.has-data]="day?.hasData"
+        [class.selected]="day?.selected"
+        (click)="selectDay(day?.date)"
+        [title]="day?.dayStr || ''"
+      ></div>
+    </div>
+  </div>
+</div>

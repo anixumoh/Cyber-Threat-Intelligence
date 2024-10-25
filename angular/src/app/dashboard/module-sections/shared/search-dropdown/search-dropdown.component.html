@@ -1,0 +1,35 @@
+<div class="dropdown-container">
+  <label class="indented" for="searchDropdown" *ngIf="labelText">{{ labelText }}</label>
+  <div class="input-group mb-2" id="searchDropdown" #inputDropdown>
+    <input
+      name="dropdown"
+      class="form-control"
+      type="text"
+      [(ngModel)]="dropdown"
+      (keyup)="debounceSearch($event)"
+      [attr.disabled]="isLoading || isDisabled ? true : null"
+      [attr.placeholder]="placeholder"
+      (focus)="onFocus()"
+    />
+    <div (click)="toggleDropdown()" class="input-group-prepend">
+      <div class="input-group-text">
+        <i class="float-right" [ngClass]="isDropDownOpen ? 'icon-arrow-up' : 'icon-arrow-down'"> </i>
+      </div>
+    </div>
+  </div>
+  <ul
+    class="list-group dropdown"
+    [ngClass]="isPositionAbsolute ? 'position-absolute' : ''"
+    *ngIf="isDropDownOpen"
+    [ngStyle]="{ 'width.px': inputDropdown?.offsetWidth }"
+  >
+    <li
+      [ngClass]="item.isActive ? 'activeOption' : ''"
+      (click)="options.length && options[0].value !== '' ? selectOption($event, index, item.value) : ''"
+      *ngFor="let item of options; let index = index"
+      class="item list-group-item"
+    >
+      {{ item.label }}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,19 @@
+<nav *ngIf="items?.length" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li
+      [title]="item.title"
+      class="breadcrumb-item"
+      [ngClass]="{ active: isLast }"
+      *ngFor="let item of items; last as isLast"
+    >
+      <a *ngIf="!isLast" [href]="item.url">
+        <i [class]="item.icon"></i>
+        {{ item.name }}
+      </a>
+      <span *ngIf="isLast">
+        <i [class]="item.icon"></i>
+        {{ item.name }}
+      </span>
+    </li>
+  </ol>
+</nav>

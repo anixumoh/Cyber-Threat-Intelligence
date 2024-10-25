@@ -1,0 +1,12 @@
+<app-table-multiselect
+  [tableMultiselectTitle]="'Labels'"
+  [tableList]="labelsList"
+  [filterLabels]="filterType"
+  (toggle)="onToggle($event)"
+  (update)="update($event)"
+  *ngIf="!loading"
+>
+</app-table-multiselect>
+<div *ngIf="loading" class="loadingLabels">
+  <i class="icon-spinner rotate"></i>
+</div>

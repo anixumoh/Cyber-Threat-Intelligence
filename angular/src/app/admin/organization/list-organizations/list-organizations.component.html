@@ -1,0 +1,252 @@
+<button class="btn btn-sm btn-outline-primary mx-5" (click)="toggleMonitoredAssets()">
+  {{ showMonitoredAssets ? 'Hide' : 'Show' }} monitored assets
+</button>
+
+<div *ngIf="showMonitoredAssets">
+  <ng-container *ngIf="loadingAssets; else loadedAssets">
+    <div class="spinner"><i class="icon-spinner rotate"></i></div>
+  </ng-container>
+  <ng-template #loadedAssets>
+    <div class="monitored-assets-container mx-5">
+      <div *ngFor="let asset of monitoredAssetsList" class="d-flex justify-content-between">
+        <span>{{ asset.name }}</span>
+        <span>{{ instanceSetings[asset.type] || 0 }}</span>
+      </div>
+    </div>
+  </ng-template>
+</div>
+<div class="organizations-container">
+  <main-header-v1 [title]="'Organizations'">
+    <ng-container *ngIf="initMaxRows">
+      <div class="spinner-container spinner" *ngIf="isDisableByAction"><i class="icon-spinner rotate"></i></div>
+      <app-table-admin
+        [template_header]="[HeaderTitle, OtherOptions]"
+        (reloadEmitter)="reloadData()"
+        [isEdit]="false"
+        [isDelete]="false"
+        [hiddenBody]="true"
+        [allItemsSelected]="allItemsSelected"
+        [(table)]="table"
+        (sortEmmiter)="onSort($event)"
+        #adminTable
+      >
+        <tbody>
+          <ng-template [ngIf]="rows.length && !table.isLoading" [ngIfElse]="noData">
+            <ng-template ngFor let-item [ngForOf]="rows">
+              <tr>
+                <td [class]="getClassTD(header, item)">
+                  <span class="d-flex align-items-center">
+                    <input type="checkbox" [(ngModel)]="item['isSelected']" class="cursor-pointer" />
+                  </span>
+                </td>
+                <ng-template ngFor let-header [ngForOf]="table.header">
+                  <td [class]="getClassTD(header, item)">
+                    <span class="d-flex align-items-center" [ngClass]="header.class">
+                      <ng-template [ngIf]="header.isTemplate" [ngIfElse]="notTemplate">
+                        <ng-container *ngIf="header.key === 'show'">
+                          <ng-container *ngTemplateOutlet="templateShow; context: { $implicit: item }"></ng-container>
+                        </ng-container>
+
+                        <ng-container *ngIf="header.key === 'permiss'">
+                          <ng-container
+                            *ngTemplateOutlet="templatePermiss; context: { $implicit: item }"
+                          ></ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="header.key === 'enabled'">
+                          <ng-container
+                            *ngTemplateOutlet="templateEnabled; context: { $implicit: item }"
+                          ></ng-container>
+                        </ng-container>
+
+                        <ng-container *ngIf="header.key === 'delete'">
+                          <ng-container *ngTemplateOutlet="templateDelete; context: { $implicit: item }"></ng-container>
+                        </ng-container>
+
+                        <ng-container *ngIf="header.key === 'edit'">
+                          <ng-container *ngTemplateOutlet="templateEdit; context: { $implicit: item }"></ng-container>
+                        </ng-container>
+                      </ng-template>
+                      <ng-template #notTemplate>
+                        <a (click)="createEdit(item, 'Modules')" class="cursor-pointer">
+                          {{ item[header.key] ? item[header.key] : ' --- ' }}
+                        </a>
+                      </ng-template>
+                    </span>
+                  </td>
+                </ng-template>
+              </tr>
+              <tr *ngIf="viewMod[item.id]">
+                <td colspan="100%">
+                  <app-admin-module-option
+                    [idOrg]="item.id"
+                    [customerId]="item.customerId"
+                    [isOrgDisabled]="!item.enabled"
+                    [isModuleDisabled]="isModuleDisabled"
+                    (changeDisableModule)="changeDisableModules($event)"
+                  >
+                  </app-admin-module-option>
+                </td>
+              </tr>
+            </ng-template>
+          </ng-template>
+
+          <ng-template #noData>
+            <tr>
+              <td colspan="100%">
+                <is-data-is-loading [isLoading]="table.isLoading"></is-data-is-loading>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </app-table-admin>
+    </ng-container>
+  </main-header-v1>
+  <ng-template #templateCreated_at let-item>
+    {{ item['created_at'] | timezone }}
+  </ng-template>
+  <ng-template #templateEnabled let-item>
+    <div class="checkbox-default">
+      <mat-slide-toggle
+        #switchElement
+        (change)="openDisableModal($event, item)"
+        [checked]="item.enabled"
+        [disabled]="item.switchIsDisabled || isUserWithAnalystRole() || switchIsDisabled"
+      ></mat-slide-toggle>
+    </div>
+  </ng-template>
+
+  <ng-template #HeaderTitle>
+    <button
+      type="button"
+      [disabled]="!canCreateNewOrganization"
+      (click)="createEdit()"
+      class="btn btn-light text-primary btn-sm"
+    >
+      <i class="icon-plus-circle-solid mr-1" aria-hidden="true"></i>
+      Add Organization
+    </button>
+    <button
+      type="button"
+      (click)="exportOrganizationSettings()"
+      class="btn btn-light text-primary btn-sm"
+      [disabled]="isUserUnableDownloadSettings()"
+    >
+      <i class="icon-download mr-1" aria-hidden="true"></i>
+      Download settings
+    </button>
+  </ng-template>
+
+  <ng-template #templateEdit let-item>
+    <app-action-circle
+      (clickEvent)="createEdit(item)"
+      [icon]="'icon-mode_edit'"
+      [colorIcon]="'text-primary'"
+      [tooltip]="'Edit'"
+    >
+    </app-action-circle>
+  </ng-template>
+  <ng-template #templateDelete let-item>
+    <app-action-circle
+      (clickEvent)="selected = item; confirmation['delete'] = true"
+      [isLoading]="selected === item && confirmation['delete']"
+      [icon]="'icon-delete'"
+      [colorIcon]="'text-danger'"
+      [tooltip]="'Delete'"
+      [isDisabled]="isUserWithAnalystRole()"
+      [placement]="'left-bottom'"
+    >
+    </app-action-circle>
+  </ng-template>
+  <ng-template #templateShow let-item>
+    <app-action-circle
+      (clickEvent)="viewMod[item.id] = !viewMod[item.id]"
+      [icon]="viewMod[item.id] ? 'icon-level-up' : 'icon-level-down'"
+      [colorIcon]="'text-success'"
+      [tooltip]="'Modules'"
+    >
+    </app-action-circle>
+  </ng-template>
+
+  <ng-template #templatePermiss let-item>
+    <app-action-circle
+      (clickEvent)="createEdit(item, 'Grants')"
+      [icon]="'icon-vpn_key'"
+      [colorIcon]="'text-alert'"
+      [tooltip]="'Permissions'"
+    >
+    </app-action-circle>
+  </ng-template>
+
+  <modal-window
+    [modalTitle]="'Confirmation'"
+    [modalBody]="'Are you sure you want to delete the organization ' + selected?.name + '?'"
+    [warning]="'All the modules settings and organization configuration (users, labels...) will also be deleted.'"
+    *ngIf="confirmation['delete'] && selected"
+    [acceptBtn]="'Yes'"
+    [cancelBtn]="'No'"
+    (accept)="delete(selected)"
+    (cancel)="(confirmation['delete']); selected = null"
+  >
+  </modal-window>
+
+  <modal-window
+    [modalTitle]="'Confirmation'"
+    [modalBody]="'Are you sure you want to disable the organization ' + selected?.name + '?'"
+    [warning]="
+      'This action will delete the Threat context module (and the analysed malware information) and you will not be able to create new ones.'
+    "
+    *ngIf="confirmation['disable'] && selected"
+    [acceptBtn]="'Yes'"
+    [cancelBtn]="'No'"
+    (accept)="selected.enabled = false; enable(selected)"
+    (cancel)="onCloseDisableConfirmationModal()"
+  >
+  </modal-window>
+
+  <ng-template #OtherOptions>
+    <div class="btns-container">
+      <app-action-circle
+        (clickEvent)="enableMultiple(true)"
+        [icon]="'icon-lens'"
+        [isDisabled]="!canCreateNewOrganization || !itemsSelected.length"
+        [colorIcon]="'text-success'"
+        [tooltip]="'Enabled multiple'"
+      >
+      </app-action-circle>
+
+      <app-action-circle
+        (clickEvent)="enableMultiple(false)"
+        [icon]="'icon-lens'"
+        [isDisabled]="!canCreateNewOrganization || !itemsSelected.length"
+        [colorIcon]="'text-danger'"
+        [tooltip]="'Disabled multiple'"
+      >
+      </app-action-circle>
+      <div class="d-flex align-items-center">
+        <input
+          class="btns-container__search-input"
+          placeholder="Search for organizations"
+          type="search"
+          value=""
+          name="search"
+          id="search"
+          [(ngModel)]="searchedText"
+          (ngModelChange)="search()"
+        />
+        <i class="icon-search btns-container__icon-input-search"></i>
+      </div>
+    </div>
+  </ng-template>
+
+  <modal-window
+    [modalTitle]="'Confirmation'"
+    [modalBody]="'Are you sure you want to delete the selected organizations?'"
+    [warning]="'All the modules configuration will also be deleted.'"
+    *ngIf="deleteMultipleConfirmation"
+    [acceptBtn]="'Yes'"
+    [cancelBtn]="'No'"
+    (accept)="deleteMultipleConfirmation = false; deleteMultiple()"
+    (cancel)="deleteMultipleConfirmation = false"
+  >
+  </modal-window>
+</div>

@@ -1,0 +1,264 @@
+<app-table-admin
+  [template_header]="[HeaderTitle, OtherOptions]"
+  (reloadEmitter)="reloadData()"
+  [hiddenBody]="true"
+  [isDelete]="false"
+  [isEdit]="false"
+  [(table)]="table"
+  (sortEmmiter)="onSort($event)"
+  #adminTable
+>
+  <tbody>
+    <ng-template [ngIf]="rows.length && !table.isLoading" [ngIfElse]="noData">
+      <ng-template ngFor let-item [ngForOf]="rows">
+        <tr>
+          <td class="align-middle">
+            <span class="d-flex align-items-center">
+              <input type="checkbox" [(ngModel)]="item['isSelected']" class="cursor-pointer" />
+            </span>
+          </td>
+          <ng-template ngFor let-header [ngForOf]="table.header">
+            <td class="align-middle" [class]="getClassTD(header)">
+              <span class="d-flex align-items-center" [ngClass]="header.class">
+                <ng-template [ngIf]="header.isTemplate" [ngIfElse]="notTemplate">
+                  <!-- STATUS -->
+                  <ng-container *ngIf="header.key === 'status'">
+                    <ng-container *ngTemplateOutlet="templateStatus; context: { $implicit: item }"></ng-container>
+                  </ng-container>
+                  <!-- ROL -->
+                  <ng-container *ngIf="header.key === 'rol'">
+                    <ng-container *ngTemplateOutlet="templateRol; context: { $implicit: item }"></ng-container>
+                  </ng-container>
+                  <!-- LAST LOGIN -->
+                  <ng-container *ngIf="header.key === 'lastLoginAt'">
+                    <ng-container *ngTemplateOutlet="templateLogin; context: { $implicit: item }"></ng-container>
+                  </ng-container>
+                  <!-- RESET MFA -->
+                  <ng-container *ngIf="isSuperadmin && header.key === 'resetMfa'">
+                    <ng-container *ngTemplateOutlet="templateMfa; context: { $implicit: item }"></ng-container>
+                  </ng-container>
+                  <!-- KEYPASS -->
+                  <ng-container *ngIf="header.key === 'keypass'">
+                    <ng-container *ngTemplateOutlet="templatePass; context: { $implicit: item }"></ng-container>
+                  </ng-container>
+                  <!-- DELETE -->
+                  <ng-container *ngIf="header.key === 'delete'">
+                    <ng-container *ngTemplateOutlet="templateDelete; context: { $implicit: item }"></ng-container>
+                  </ng-container>
+                  <!-- EDIT -->
+                  <ng-container *ngIf="header.key === 'edit'">
+                    <ng-container *ngTemplateOutlet="templateEdit; context: { $implicit: item }"></ng-container>
+                  </ng-container>
+                </ng-template>
+                <ng-template #notTemplate>
+                  <a class="cursor-pointer word-break"> {{ item[header.key] ? item[header.key] : ' --- ' }}</a>
+                </ng-template>
+              </span>
+            </td>
+          </ng-template>
+        </tr>
+      </ng-template>
+    </ng-template>
+
+    <ng-template #noData>
+      <tr>
+        <td colspan="100%">
+          <is-data-is-loading [isLoading]="table.isLoading"></is-data-is-loading>
+        </td>
+      </tr>
+    </ng-template>
+  </tbody>
+</app-table-admin>
+
+<ng-template #templateStatus let-item>
+  <div class="w-100 d-flex justify-content-between">
+    <div class="checkbox-default">
+      <act-switch [(model)]="item.isEnabled" (eventUpdate)="enable(item)"></act-switch>
+    </div>
+    <div *ngIf="item.statusWarning" class="ml-1">
+      <app-action-circle [icon]="'icon-blv-warning'" [colorIcon]="'text-warning'" [tooltip]="item.statusWarning">
+      </app-action-circle>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #templateRol let-item>
+  <span
+    *ngIf="item"
+    class="d-flex align-items-center flex-column"
+    [ngbTooltip]="item.status !== 'LOCKED' ? item.masterGrant : 'LOCKED'"
+  >
+    <span>{{ item.masterGrant }}</span>
+  </span>
+</ng-template>
+
+<ng-template #HeaderTitle>
+  <div class="btn-container d-flex">
+    <button (click)="createEdit()" class="btn btn-light text-primary btn-sm">
+      <i class="icon-plus-circle-solid mr-1" aria-hidden="true"></i>
+      Add user
+    </button>
+    <button class="btn btn-light text-primary btn-sm d-flex align-items-center" (click)="isOpenUserChangeStatus = true">
+      Change users' status:
+    </button>
+    <app-action-circle
+      (clickEvent)="enableMultiple(true)"
+      [icon]="'icon-lens'"
+      [isDisabled]="!itemsSelected.length"
+      [colorIcon]="'text-success'"
+      [tooltip]="'Enabled multiple'"
+    >
+    </app-action-circle>
+    <app-action-circle
+      (clickEvent)="enableMultiple(false)"
+      [icon]="'icon-lens'"
+      [isDisabled]="!itemsSelected.length"
+      [colorIcon]="'text-danger'"
+      [tooltip]="'Disabled multiple'"
+    >
+    </app-action-circle>
+  </div>
+</ng-template>
+
+<ng-template #OtherOptions>
+  <div class="btns-container">
+    <div class="d-flex align-items-center">
+      <input
+        class="btns-container__search-input"
+        placeholder="Search for users"
+        type="search"
+        value=""
+        name="search"
+        id="search"
+        [(ngModel)]="searchedText"
+        (ngModelChange)="search()"
+      />
+      <i class="icon-search btns-container__icon-input-search"></i>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #templateLogin let-item>
+  <span *ngIf="item.lastLoginAt; else noLogin">{{ item.lastLoginAt | timezone }}</span>
+  <ng-template #noLogin>---</ng-template>
+</ng-template>
+
+<ng-template #templatePass let-item>
+  <app-action-circle
+    (clickEvent)="instanceFormPass(item)"
+    [icon]="'icon-vpn_key'"
+    [colorIcon]="'text-dark'"
+    [tooltip]="'Change Password'"
+  >
+  </app-action-circle>
+</ng-template>
+
+<ng-template #templateMfa let-item>
+  <app-action-circle
+    (clickEvent)="userSelected = item; confirmation['resetMfa'] = true"
+    [icon]="'icon-lock'"
+    [colorIcon]="'text-dark'"
+    [tooltip]="'Reset 2FA'"
+    [isDisabled]="!item.hasMFA"
+  >
+  </app-action-circle>
+</ng-template>
+
+<ng-template #templateEdit let-item>
+  <app-action-circle
+    (clickEvent)="createEdit(item)"
+    [icon]="'icon-mode_edit'"
+    [colorIcon]="'text-primary'"
+    [tooltip]="'Edit'"
+  >
+  </app-action-circle>
+</ng-template>
+
+<ng-template #templateDelete let-item>
+  <app-action-circle
+    (clickEvent)="userSelected = item; confirmation['delete'] = true"
+    [icon]="'icon-delete'"
+    [colorIcon]="'text-danger'"
+    [tooltip]="'Delete'"
+  >
+  </app-action-circle>
+</ng-template>
+
+<modal-window
+  [modalTitle]="'Change Password'"
+  *ngIf="confirmation['password'] && userSelected"
+  [acceptBtn]="!changeTrue ? 'Update' : null"
+  [cancelBtn]="!changeTrue ? 'Cancel' : 'OK'"
+  (accept)="changePass()"
+  (cancel)="confirmation['password'] = null; userSelected = null; changeTrue = false"
+>
+  <ng-container *ngIf="!changeTrue">
+    <input-control
+      [label]="'New Password'"
+      [type]="'password'"
+      [msjError]="checkPassword()"
+      [control]="form.controls['password1']"
+    >
+    </input-control>
+    <input-control [label]="'Repeat Password'" [type]="'password'" [control]="form.controls['password2']">
+    </input-control>
+  </ng-container>
+  <ng-container *ngIf="changeTrue">
+    <div class="col-md-12 text-center">
+      <i class="icon-check_circle text-success" style="font-size: 60px"></i>
+      <h2 style="font-size: 28px !important">Password was succesfully updated.</h2>
+    </div>
+  </ng-container>
+</modal-window>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete the selected users?'"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="deleteMultipleConfirmation"
+  [acceptBtn]="'Yes'"
+  [cancelBtn]="'No'"
+  (accept)="deleteMultipleConfirmation = false; deleteMultiple()"
+  (cancel)="deleteMultipleConfirmation = false"
+>
+</modal-window>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete the user ' + userSelected?.name + ' ?'"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="confirmation['delete'] && userSelected"
+  [acceptBtn]="'Yes'"
+  [cancelBtn]="'No'"
+  (accept)="deleteAdminUser(userSelected)"
+  (cancel)="confirmation['delete'] = null; userSelected = null"
+>
+</modal-window>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to reset 2FA for the user ' + userSelected?.name + ' ?'"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="confirmation['resetMfa'] && userSelected"
+  [acceptBtn]="'Yes'"
+  [cancelBtn]="'No'"
+  (accept)="resetMfa(userSelected)"
+  (cancel)="confirmation['resetMfa'] = null; userSelected = null"
+>
+</modal-window>
+
+<modal-window
+  *ngIf="isOpenUserChangeStatus"
+  [modalTitle]="'Change users\' status'"
+  (cancel)="isOpenUserChangeStatus = false"
+>
+  <div>
+    <ol>
+      <li>
+        Select the users you want to change status by checking the checkbox or select all showing by clicking in the
+        checkbox on the header of the table.
+      </li>
+      <li>Click on green circle to enable them or red circle to disable them.</li>
+    </ol>
+  </div>
+</modal-window>

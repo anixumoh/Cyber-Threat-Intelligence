@@ -1,0 +1,26 @@
+[
+    {
+        "transform": "Breached",
+        "total": 15
+    },
+    {
+        "transform": "CCShopByBincodes",
+        "total": 2
+    },
+    {
+        "transform": "DarkWeb",
+        "total": 3022
+    },
+    {
+        "transform": "DeepWebSearch",
+        "total": 5781
+    },
+    {
+        "transform": "Manual",
+        "total": 43
+    },
+    {
+        "transform": "Paste",
+        "total": 48
+    }
+]

@@ -1,0 +1,20 @@
+@import "src/scss/variables";
+
+.sub-item{
+  border-bottom:1px solid $light;
+}
+.sub-item:last-child{
+  border-bottom:0;
+}
+.isUrl {
+  cursor: pointer;
+}
+.table{
+  tbody{
+    tr:last-child{
+      td{
+        border-bottom: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,123 @@
+<div class="card mb-2 w-50">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-0 ml-1 float-left">Add Platform</h6>
+    <button class="btn btn-circle bg-light float-right" (click)="toggleShowInfo()">
+      <i class="icon-info-circle-solid color-primary"></i>
+    </button>
+  </div>
+  <div class="card-header px-3 px-2 py-1 alert-info border-0" *ngIf="isShowInfo">
+    <span class="font-italic text-90">{{ data.texts.description }}</span>
+  </div>
+  <div class="card-body p-2">
+    <button class="btn btn-light btn-sm border text-primary float-left mr-1"
+            [disabled]="buttonDisabled || grants.isCustomerOrOperator()"
+            (click)="toggleSelectPartner()"
+            #dropdownPartnersButton>
+            {{ partner || 'Select Platform'}}
+    </button>
+    <div  *ngIf="!grants.isCustomerOrOperator()"
+          [ngClass]="isSelectOpenPartner ? 'show':'hide'">
+          <input  class="m-0 invisible"
+                  placeholder="Search Partner"
+                  (keyup)="searchInPartners($event)"
+                  #dropdownPartnersInput>
+          <div class="dropdown-content" *ngIf="allPartners"  #dropdownPartners>
+            <ul class="list-group list-group-flush border rounded shadow">
+              <li class="list-group-item list-group-item-action border-0 p-2 cursor-pointer"
+                  *ngFor="let partner of allPartners"
+                  (click)="selectPartner(partner)">
+                  {{partner.label}}
+              </li>
+            </ul>
+          </div>
+    </div>
+    <div *ngIf="partner && !grants.isCustomerOrOperator()">
+      <div class="dropdown" #dropdownProducts>
+        <button class="btn btn-light btn-sm border text-primary float-left mr-1"
+                (click)="toggleSelectProducts()">
+                {{ product ||'View Products'}}
+        </button>
+        <div  [ngClass]="isSelectOpenProducts ? 'show':'hide'">
+              <input  class="m-0 invisible"
+                      placeholder="View Products"
+                      (keyup)="searchInProducts($event)">
+              <div class="dropdown-content" *ngIf="partner">
+                <ul class="list-group list-group-flush border rounded shadow">
+                  <li class="list-group-item list-group-item-action border-0 p-2 cursor-pointer"
+                       *ngFor="let product of allProducts"
+                       (click)="selectProduct(product)">
+                       {{product.title}}
+                  </li>
+                </ul>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer p-1">
+    <button class="btn btn-primary btn-sm px-4 pull-right"
+            [disabled]="grants.isCustomerOrOperator()"
+            (click)="addDataProduct()">
+            Add
+    </button>
+  </div>
+</div>
+<div class="card mb-2 w-50">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-0 ml-1 float-left">List Partners</h6>
+    <div class="form-group mb-0 float-right">
+      <input class="form-control form-control-sm"
+              type="text"
+              placeholder="Search"
+              (keyup)="searchInList($event)">
+    </div>
+  </div>
+  <div class="card-body p-0 height-list">
+    <div *ngIf="values.length==0" class="no-results-box">
+      <img src="assets/default_images/searching.svg"/>
+      <h3 class="no-results">"There are no {{data.name}}"</h3>
+    </div>
+    <table class="table table-hover mb-0" *ngIf="values.length!=0">
+      <thead>
+        <tr>
+          <th class="td-30">
+            <div class="toggle-button">
+                <input id="all"
+                        [(ngModel)]="selectedAll"
+                        (change)="selectAll();"
+                        [disabled]="grants.isCustomerOrOperator()"
+                        type="checkbox"/>
+            </div>
+          </th>
+          <th>Partner Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let value of values; let i = index">
+          <td class="vertical-middle td-30">
+            <div class="toggle-button">
+                <input type="checkbox"
+                        id="value.id"
+                        [(ngModel)]="value.selected"
+                        [disabled]="grants.isCustomerOrOperator()"
+                        (change)="checkIfAllSelected();"/>
+            </div>
+          </td>
+          <td>
+            <p class="mb-0" #elem [attr.id]="value.id">
+              {{ value.value.split('~')[0] }}
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer p-1">
+    <button class="btn btn-light btn-sm text-danger float-right"
+            (click)="disableInputs? null:delete()"
+            [disabled]="values.length==0 || grants.isCustomerOrOperator()">
+            Delete
+    </button>
+  </div>
+</div>
+

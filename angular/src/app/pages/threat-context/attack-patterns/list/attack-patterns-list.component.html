@@ -1,0 +1,170 @@
+<div class="main-header mt-4 mb-3 clearfix">
+  <div class="row align-items-end justify-content-md-center">
+    <div class="col-md-3">
+      <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-3 mt-1">Attack Patterns</h6>
+      <h5 class="text-dark float-left mb-0">{{ activeModule?.name }}</h5>
+    </div>
+    <div class="col-md-6">
+      <app-ctx-search
+        [tcxType]="'attackPatterns'"
+        [searchText]="searchText"
+        [showSaveSearchButton]="showSaveSearchButton"
+        (searchEvent)="searchAndList()"
+        (clearSearchTermEvent)="onClearSearchTerm()"
+        (openModalDorksEvent)="onOpenModalDorks($event)"
+        (searchTextChangeEvent)="onSetSearchTerm($event)"
+      ></app-ctx-search>
+      <div *ngIf="listError" class="text-danger">{{ listError }}</div>
+      <app-tcx-quick-filters
+        [tcxType]="'attackPatterns'"
+        [items]="quickFilters"
+        (changeMethod)="onChangeQuickFilter($event)"
+      ></app-tcx-quick-filters>
+    </div>
+    <div class="col-md-3 d-flex justify-content-end">
+      <button
+        [disabled]="loading || isSearching"
+        class="btn btn-light btn-sm border text-primary float-right px-3 mr-2"
+        (click)="toggleListStyle()"
+      >
+        <i class="mr-1" aria-hidden="true" [ngClass]="isDisplayingList ? 'icon-view_comfy' : 'icon-view_list'"></i
+        >{{ isDisplayingList ? 'ATT&CK® Matrix' : 'List' }}
+      </button>
+      <app-info-button [activeModule]="activeModule"></app-info-button>
+    </div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="card shadow-sm mb-4">
+  <div class="d-flex align-items-center justify-content-between rounded-top bg-light p-2 mx-0 fixed-scroll">
+    <div class="d-flex align-items-center">
+      <div class="pr-3 border-right mr-3">
+        <div class="button-action" ngbDropdown>
+          <button
+            ngbDropdownToggle
+            [disabled]="!hasSomeChecked()"
+            class="btn btn-light btn-sm border px-2 float-left btn-actions"
+            [ngClass]="{ pulse: hasSomeChecked() }"
+            type="button"
+            id="actionsButtonDropdown"
+            name="button"
+          >
+            <i class="icon-ellipsis-v px-1"></i>
+          </button>
+          <div ngbDropdownMenu class="actions-dropdown-menu">
+            <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded">
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToCSV()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>Export to CSV</span>
+              </li>
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToJson()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>Export to JSON</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <h6 class="d-flex align-items-center margin-0">
+        <span>Attack Patterns showing:</span>
+        <span *ngIf="!loading" class="badge badge-pill badge-primary ml-2">{{ totalResources | number }} results</span>
+        <i class="icon-spinner rotate text-primary ml-2" *ngIf="loading"></i>
+      </h6>
+    </div>
+
+    <div style="flex: 1 1 0">
+      <div class="float-right" *ngIf="items?.length > 0">
+        <app-select
+          *ngIf="isDisplayingList"
+          [items]="limits"
+          [model]="limit"
+          [icon]="'icon-format_list_bulleted'"
+          [placement]="'bottom-right'"
+          id="limitDropdown"
+          (onChange)="onChangeLimit($event)"
+        >
+        </app-select>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <ng-template [ngIf]="isDisplayingList">
+      <!-- TABLE -->
+      <app-table [items]="items" [loading]="loading" class="table-fixed table--sticky table--sticky-fixed-scroll">
+        <thead>
+          <tr>
+            <th class="text-center td-30">
+              <input type="checkbox" [(ngModel)]="bulk" (click)="setCheckedState($event)" />
+            </th>
+            <th>
+              <span class="d-flex align-items-center">
+                NAME
+                <i
+                  *ngIf="sort !== 'name' && sort !== '-name'"
+                  class="icon-sort ml-1 cursor-pointer"
+                  (click)="sortBy('name')"
+                ></i>
+                <i *ngIf="sort === 'name'" class="icon-sort-asc ml-1 cursor-pointer" (click)="sortBy('-name')"></i>
+                <i *ngIf="sort === '-name'" class="icon-sort-desc ml-1 cursor-pointer" (click)="sortBy('name')"></i>
+              </span>
+            </th>
+            <th class="text-center app-th-10">TYPE</th>
+            <th class="">PURPOSES</th>
+            <th class="text-center app-th-10">SEVERITY</th>
+            <th class="text-center app-th-10">TLP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items; let index = index" class="cursor-pointer" (click)="details($event, item)">
+            <td class="text-center td-40 vertical-middle cursor-default" (click)="$event.stopImmediatePropagation()">
+              <input type="checkbox" class="cursor-pointer" [(ngModel)]="item.fxSelected" (click)="setChecked()" />
+            </td>
+            <td class="align-middle">
+              {{ item.name }}
+            </td>
+            <td class="align-middle text-center">{{ item.capec_id ? 'CAPEC' : 'ATT&CK' }}</td>
+            <td class="align-middle">{{ (item.purposes || []).join(', ') }}</td>
+            <td class="align-middle text-center">{{ item.severity || '-' }}</td>
+            <td class="text-center">
+              <span class="d-flex align-items-center justify-content-center">
+                <app-tlp [status]="item.tlp" [interactive]="false"></app-tlp>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </app-table>
+    </ng-template>
+
+    <!-- DISPLAY AS MATRIX -->
+    <div [ngClass]="isDisplayingList ? 'hidden' : ''">
+      <mitre-attack-navigator [searchQueryParams]="mitreDork"></mitre-attack-navigator>
+    </div>
+  </div>
+</div>
+
+<div class="float-left mt-3 mb-4" *ngIf="isDisplayingList">
+  <app-pagination-x [page]="page" [count]="count" [pageSize]="limit" (pageChange)="onPageChange($event)">
+  </app-pagination-x>
+</div>
+
+<modal-window
+  modalTitle="Advanced Search: Available Dorks"
+  dorksThreathContext="dorksThreathContext"
+  dorksThreathContextType="attack-patterns"
+  (changeDork)="setDork($event)"
+  *ngIf="openModalDorks"
+  [customClass]="'modal-xl'"
+  [dorkFields]="dorkFields"
+  cancelBtn="Close"
+  [closeBtn]="true"
+  (cancel)="openModalDorks = false"
+>
+</modal-window>

@@ -1,0 +1,39 @@
+<div class="col-md-12 col-lg-12">
+  <!-- NO RESULTS DATA -->
+  <div class="card-section mb-4" *ngIf="!model.signature">
+    <h4 class="mb-3">Signature</h4>
+    <div class="no-results-box bg-light">
+      <img src="/assets/default_images/searching.svg" />
+      <h4 class="no-results">No data has been found</h4>
+    </div>
+  </div>
+  <!-- YES RESULTS DATA -->
+  <div class="card-section mb-4" *ngIf="model.signature">
+    <h4 class="mb-3">Signature</h4>
+    <pre class="bg-light border rounded p-3">
+        <code>{{model.signature}}</code>
+      </pre>
+  </div>
+  <!-- NO RESULTS DATA -->
+  <div class="card-section mb-4" *ngIf="!model.references || model.references.length <= 0">
+    <h4 class="mb-3">References</h4>
+    <div class="no-results-box bg-light">
+      <img src="/assets/default_images/searching.svg" />
+      <h4 class="no-results">No data has been found</h4>
+    </div>
+  </div>
+  <!-- YES RESULTS DATA -->
+  <div *ngIf="model.references && model.references.length > 0">
+    <h4 class="mb-3">References</h4>
+    <div class="mb-4">
+      <ul class="list-group m-4">
+        <li class="list-group-item border-0 rounded-0 pl-2 pt-0 pr-2 pb-0" *ngFor="let reference of model.references">
+          <a class="text-primary" href="{{ reference }}" target="_blank">
+            <i class="icon-lens text-90 text-dark float-left"></i>
+            {{ reference }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

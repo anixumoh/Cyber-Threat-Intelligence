@@ -1,0 +1,18 @@
+[
+    {
+        "value": "10",
+        "label": "Information leakage"
+    },
+    {
+        "value": "11",
+        "label": "Targeted attack"
+    },
+    {
+        "value": "17",
+        "label": "Leaked credentials"
+    },
+    {
+        "value": "18",
+        "label": "Hacktivist mention"
+    }
+]

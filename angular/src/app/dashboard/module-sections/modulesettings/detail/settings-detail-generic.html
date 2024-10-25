@@ -1,0 +1,565 @@
+<div class="row">
+  <!-- PARAMETERS -->
+  <div class="col-lg-4">
+    <!-- HEADER -->
+    <div class="settings-parameter card mb-4">
+      <div class="card-header border-bottom-0 bg-light px-2 py-1 clearfix">
+        <div class="form-check mt-2 mb-0 float-left">
+          <input class="form-check-input mt-0" type="checkbox" value="" id="" />
+        </div>
+        <h6 class="title-card text-dark text-uppercase float-left">{{data.name}}</h6>
+        <i class="alert-error icon-error text-danger float-left"> </i>
+        <button class="btn btn-circle bg-light ml-1 float-right" (click)="toggleShowSearch()">
+          <i class="icon-search text-primary"></i>
+        </button>
+        <button class="btn btn-circle bg-light ml-1 float-right" (click)="toggleShowForm()">
+          <i class="icon-plus text-primary"></i>
+        </button>
+        <button class="btn btn-circle bg-light ml-1 float-right" (click)="toggleShowInfo()">
+          <i class="icon-info-character text-primary"></i>
+        </button>
+        <div class="content-search" *ngIf="isShowSearch">
+          <div class="form-group mb-0">
+            <input
+              type="email"
+              class="form-control form-control-sm"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              placeholder="Enter email"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- INFO -->
+      <div class="alert-info px-2 py-1" *ngIf="isShowInfo">
+        <span class="font-italic text-90">{{ data.texts.description }}</span>
+      </div>
+      <!-- FORM GENERIC -->
+      <form class="bg-light p-2 clearfix" *ngIf="isShowForm">
+        <div class="form-group mb-1">
+          <textarea class="form-control form-control-sm" id="" rows="3"></textarea>
+        </div>
+        <button class="btn btn-primary btn-sm px-4 float-right">
+          <span>Add</span>
+        </button>
+      </form>
+      <div class="card-body height-list border-top p-0">
+        <div class="list-parameters">
+          <!-- NO RESULTS -->
+          <div class="no-results-box-md mt-4 p-4" *ngIf="values.length==0">
+            <img class="rounded mx-auto d-block mb-2" src="assets/default_images/searching.svg" />
+            <h6 class="mb-0 text-center text-primary">"There are no {{data.name}}"</h6>
+          </div>
+          <!-- LIST -->
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" value="" id="" />
+                <span class="text-dark ml-1">Siberet</span>
+              </div>
+              <button class="btn btn-circle bg-light ml-1 float-right">
+                <i class="icon-delete bglight text-danger"></i>
+              </button>
+            </li>
+            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" value="" id="" />
+                <span class="text-dark ml-1">Siberet</span>
+              </div>
+              <button class="btn btn-circle bg-light ml-1 float-right">
+                <i class="icon-delete bglight text-danger"></i>
+              </button>
+            </li>
+            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" value="" id="" />
+                <span class="text-dark ml-1">Siberet</span>
+              </div>
+              <button class="btn btn-circle bg-light ml-1 float-right">
+                <i class="icon-delete bglight text-danger"></i>
+              </button>
+            </li>
+            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" value="" id="" />
+                <span class="text-dark ml-1">Siberet</span>
+              </div>
+              <button class="btn btn-circle bg-light ml-1 float-right">
+                <i class="icon-delete bglight text-danger"></i>
+              </button>
+            </li>
+            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" value="" id="" />
+                <span class="text-dark ml-1">Siberet</span>
+              </div>
+              <button class="btn btn-circle bg-light ml-1 float-right">
+                <i class="icon-delete bglight text-danger"></i>
+              </button>
+            </li>
+            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+              <div class="form-check mb-0">
+                <input class="form-check-input" type="checkbox" value="" id="" />
+                <span class="text-dark ml-1">Siberet</span>
+              </div>
+              <button class="btn btn-circle bg-light ml-1 float-right">
+                <i class="icon-delete bglight text-danger"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- CARD FOOTER - ONLY SELECTED LIST-ITEMS -->
+      <div class="card-footer p-1">
+        <button class="btn btn-light btn-sm text-danger px-4 float-right">Delete</button>
+      </div>
+    </div>
+  </div>
+  <!-- MARKETPLACE -->
+  <div class="col-lg-4">
+    <!-- HEADER -->
+    <div class="settings-marketplace card mb-4">
+      <div class="card-header border-bottom-0 bg-light px-2 py-1 clearfix">
+        <h6 class="title-card text-dark text-uppercase float-left">Marketplace</h6>
+        <button class="btn btn-circle bg-light ml-1 float-right" (click)="toggleShowInfo()">
+          <i class="icon-info-character text-primary"></i>
+        </button>
+      </div>
+      <!-- INFO -->
+      <div class="alert-info px-2 py-1" *ngIf="isShowInfo">
+        <span class="font-italic text-90">
+          Select the marketplaces where you want to search mobile apps. Official Markets includes: Google Play, Apple
+          Store, Windows Phone, Blackberry World, Amazon Apps, Samsung Apps, etc. Alternative Markets includes:
+          BlackMarkt, Aptoide, podnova, etc.
+        </span>
+      </div>
+      <!-- LIST -->
+      <div class="bg-light p-2">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Oficial Markets</span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Alternative Markets</span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <label class="input-group-text text-primary" for="inputGroupSelectBank">Country</label>
+              </div>
+              <select class="custom-select" id="inputGroupSelectBank">
+                <option selected>Search Country...</option>
+                <option value="1">Name Country One</option>
+                <option value="2">Name Country Two</option>
+                <option value="3">Name Country Three</option>
+              </select>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- FEEDS -->
+  <div class="col-lg-4">
+    <!-- HEADER -->
+    <div class="settings-feeds card mb-4">
+      <div class="card-header border-bottom-0 bg-light px-2 py-1 clearfix">
+        <h6 class="title-card text-dark text-uppercase float-left">Feeds</h6>
+        <div class="multiselect">
+          <button class="btn btn-light btn-sm text-primary ml-1 float-left" (click)="toggleShowDropdown()">
+            <i class="icon-plus-circle-solid text-primary"></i>
+            <span>Add User</span>
+          </button>
+          <div class="multiselect-content border rounded shadow">
+            <ul class="list-group list-group-flush" *ngIf="isShowDropdown">
+              <li
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 p-2"
+              >
+                <span>Name User</span>
+                <i class="icon-check"></i>
+              </li>
+              <li
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 p-2 active"
+              >
+                <span>Name User</span>
+                <i class="icon-check"></i>
+              </li>
+              <li
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 p-2"
+              >
+                <span>Name User</span>
+                <i class="icon-check"></i>
+              </li>
+              <li
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 p-2 active"
+              >
+                <span>Name User</span>
+                <i class="icon-check"></i>
+              </li>
+              <li
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 p-2"
+              >
+                <span>Name User</span>
+                <i class="icon-check"></i>
+              </li>
+              <li
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center border-0 p-2"
+              >
+                <span>Name User</span>
+                <i class="icon-check"></i>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <button class="btn btn-circle bg-light ml-1 float-right" (click)="toggleShowSearch()">
+          <i class="icon-search text-primary"></i>
+        </button>
+        <button class="btn btn-circle bg-light ml-1 float-right" (click)="toggleShowForm()">
+          <i class="icon-plus text-primary"></i>
+        </button>
+        <button class="btn btn-circle bg-light ml-1 float-right" (click)="toggleShowInfo()">
+          <i class="icon-info-character text-primary"></i>
+        </button>
+        <div class="content-search" *ngIf="isShowSearch">
+          <div class="form-group mb-0">
+            <input
+              type="email"
+              class="form-control form-control-sm"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              placeholder="Enter email"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- INFO -->
+      <div class="alert-info px-2 py-1" *ngIf="isShowInfo">
+        <span class="font-italic text-90"> Info Feeds </span>
+      </div>
+      <form class="bg-light p-2 clearfix" *ngIf="isShowForm">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Do you want to retrieve cards from public feeds?</span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Do you want to be notified if a new card is detected?</span>
+            </div>
+          </li>
+          <li class="list-group-item p-0">
+            <ul class="list-group list-group-flush ml-4">
+              <li class="list-group-item p-2">
+                <div class="form-check mb-0">
+                  <input class="form-check-input" type="checkbox" value="" id="" />
+                  <span class="text-dark ml-1">Bank Card</span>
+                </div>
+              </li>
+              <li class="list-group-item p-2">
+                <div class="form-check mb-0">
+                  <input class="form-check-input" type="checkbox" value="" id="" />
+                  <span class="text-dark ml-1">Corporative Card</span>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </form>
+      <div class="card-body height-list border-top p-0">
+        <div class="list-feeds">
+          <div class="list-parameters">
+            <!-- NO RESULTS -->
+            <div class="no-results-box-md mt-4 p-4">
+              <img class="rounded mx-auto d-block mb-2" src="assets/default_images/searching.svg" />
+              <h6 class="mb-0 text-center text-primary">"There are no Feeds"</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- CARD FOOTER - ONLY SELECTED LIST-ITEMS -->
+      <div class="card-footer p-1">
+        <button class="btn btn-light btn-sm text-danger px-4 float-right">Delete</button>
+      </div>
+    </div>
+  </div>
+  <!-- FILE EXTENSION -->
+  <div class="col-lg-4">
+    <!-- HEADER -->
+    <div class="settings-file-extension card mb-4">
+      <div class="card-header border-bottom-0 bg-light px-2 py-1 clearfix">
+        <h6 class="title-card text-dark text-uppercase float-left">File Extension Filter</h6>
+        <button class="btn btn-circle bg-light ml-1 float-right" (click)="toggleShowInfo()">
+          <i class="icon-info-character text-primary"></i>
+        </button>
+      </div>
+      <!-- INFO -->
+      <div class="alert-info px-2 py-1" *ngIf="isShowInfo">
+        <span class="font-italic text-90"> Info File Extension </span>
+      </div>
+      <!-- LIST -->
+      <div class="bg-light p-2">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Documents</span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Data Files</span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Audio</span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Video</span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Image</span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Compressed</span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Disck Image</span>
+            </div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" value="" id="" />
+              <span class="text-dark ml-1">Other</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- ALERTS -->
+  <div class="col-lg-4">
+    <!-- HEADER -->
+    <div class="settings-alerts card mb-4">
+      <div class="card-header border-bottom-0 bg-light px-2 py-1 clearfix">
+        <h6 class="title-card text-dark text-uppercase float-left">Alerts</h6>
+        <div class="multiselect">
+          <button class="btn btn-light btn-sm text-primary ml-1 float-left" (click)="toggleShowDropdown()">
+            <i class="icon-plus-circle-solid text-primary"></i>
+            <span>Add User</span>
+          </button>
+        </div>
+        <button class="btn btn-circle bg-light ml-1 float-right" (click)="toggleShowSearch()">
+          <i class="icon-search text-primary"></i>
+        </button>
+        <button class="btn btn-circle bg-light ml-1 float-right" (click)="toggleShowInfo()">
+          <i class="icon-info-character text-primary"></i>
+        </button>
+        <div class="content-search" *ngIf="isShowSearch">
+          <div class="form-group mb-0">
+            <input
+              type="email"
+              class="form-control form-control-sm"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              placeholder="Enter email"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- INFO -->
+      <div class="alert-info px-2 py-1" *ngIf="isShowInfo">
+        <span class="font-italic text-90"> Info Alerts </span>
+      </div>
+      <div class="card-body height-list border-top p-0">
+        <div class="list-alerts">
+          <div class="list-alerts">
+            <!-- LIST -->
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+                <div class="form-check mb-0">
+                  <input class="form-check-input" type="checkbox" value="" id="" />
+                  <span class="text-dark ml-1">Name User</span>
+                </div>
+                <button class="btn btn-circle bg-light ml-1 float-right">
+                  <i class="icon-delete bglight text-danger"></i>
+                </button>
+              </li>
+              <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+                <div class="form-check mb-0">
+                  <input class="form-check-input" type="checkbox" value="" id="" />
+                  <span class="text-dark ml-1">Name User</span>
+                </div>
+                <button class="btn btn-circle bg-light ml-1 float-right">
+                  <i class="icon-delete bglight text-danger"></i>
+                </button>
+              </li>
+              <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+                <div class="form-check mb-0">
+                  <input class="form-check-input" type="checkbox" value="" id="" />
+                  <span class="text-dark ml-1">Name User</span>
+                </div>
+                <button class="btn btn-circle bg-light ml-1 float-right">
+                  <i class="icon-delete bglight text-danger"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- CARD FOOTER - ONLY SELECTED LIST-ITEMS -->
+      <div class="card-footer p-1">
+        <button class="btn btn-light btn-sm text-danger px-4 float-right">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-2 w-50">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-0 ml-1 float-left">Insert</h6>
+    <i
+      class="icon-error text-danger mt-1 ml-3 float-left"
+      *ngIf="newdata && !data.validator(newdata) && data.texts.tooltip"
+      [ngbTooltip]="data.texts.tooltip"
+      tooltipClass="font-12"
+    >
+    </i>
+    <button class="btn btn-circle bg-light float-right" (click)="toggleShowInfo()">
+      <i class="icon-info-circle-solid color-primary"></i>
+    </button>
+  </div>
+  <div class="card-header px-3 px-2 py-1 alert-info border-0" *ngIf="isShowInfo">
+    <span class="font-italic text-90">{{ data.texts.description }}</span>
+  </div>
+  <div class="card-body p-0">
+    <div class="form-group mb-0">
+      <textarea
+        class="form-control border-0"
+        [class.is-invalid]="newdata && !data.validator(newdata)"
+        rows="3"
+        [(ngModel)]="newdata"
+        [disabled]="grants?.isCustomerOrOperator()"
+        placeholder="{{ data.texts.area_placeholder }}"
+      >
+      </textarea>
+    </div>
+  </div>
+  <div class="card-footer p-1">
+    <button
+      class="btn btn-primary btn-sm px-4 float-right"
+      [disabled]="grants?.isCustomerOrOperator()"
+      (click)="disableInputs? null:addData();resetInputSelectAll()"
+    >
+      Add
+    </button>
+  </div>
+</div>
+
+<div class="card mb-4 w-50">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-0 ml-1 float-left">{{ data.name }}</h6>
+    <div class="input-group input-group-sm float-right ml-1">
+      <input class="form-control" type="text" placeholder="Search" (keyup)="searchInList($event)" />
+      <div class="input-group-append">
+        <span class="input-group-text"><i class="icon-search" aria-hidden="true"></i></span>
+      </div>
+    </div>
+  </div>
+  <div class="card-body p-0 height-list">
+    <!-- NO RESULTS -->
+    <div *ngIf="values.length==0" class="no-results-box">
+      <img src="assets/default_images/searching.svg" />
+      <h3 class="no-results">"There are no {{data.name}}"</h3>
+    </div>
+    <!-- TABLE -->
+    <table class="table table-header mb-0" *ngIf="values.length!=0">
+      <thead>
+        <tr>
+          <th class="td-30">
+            <div class="toggle-button">
+              <input
+                #inputAll
+                id="all"
+                [(ngModel)]="selectedAll"
+                [disabled]="grants?.isCustomerOrOperator()"
+                (change)="selectAll();"
+                type="checkbox"
+              />
+            </div>
+          </th>
+          <th>{{data.name}}</th>
+          <th *ngIf="data.id === 'typo_keyword_distance'">
+            <span class="pull-right">Distance</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let value of values; let i = index">
+          <td class="vertical-middle td-30">
+            <div class="toggle-button">
+              <input
+                type="checkbox"
+                id="value.id"
+                [(ngModel)]="value.selected"
+                [disabled]="grants?.isCustomerOrOperator()"
+                (change)="checkIfAllSelected();"
+              />
+            </div>
+          </td>
+          Google Buscar en Google o escribir una URL
+
+          <td class="vertical-middle">
+            <p class="mb-0" #elem [attr.id]="value.id">{{ renderValue(value) }}</p>
+          </td>
+          <td class="vertical-middle" *ngIf="data.id === 'typo_keyword_distance' && !value.isLoading">
+            <input
+              type="number"
+              (input)="setDistanceUpdate(value,$event)"
+              class="typo_keyword_input margin-left-40 pull-right"
+              value="{{ value.value.split('~')[1] }}"
+              min="2"
+              [max]="maxDistance(value.value.split('~')[0].length / 2)"
+              [disabled]="disableInputs || grants?.isCustomerOrOperator()"
+            />
+          </td>
+          <td class="vertical-middle" *ngIf="data.id === 'typo_keyword_distance' && value.isLoading">
+            <i class="pull-right icon-spinner rotate"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer p-1">
+    <button
+      class="btn btn-light btn-sm text-danger float-right px-4 ml-2"
+      (click)="disableInputs? null:delete()"
+      [disabled]="values.length==0 || grants?.isCustomerOrOperator()"
+    >
+      Delete
+    </button>
+  </div>
+</div>

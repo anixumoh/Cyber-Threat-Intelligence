@@ -1,0 +1,42 @@
+.middle {
+  //display: table-cell;
+  vertical-align: middle;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 162%;
+}
+
+.customer-input {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.inner {
+  max-width: 50%;
+}
+.centerLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.minHeight {
+  min-height: 200px;
+}
+
+.industry-input {
+  height: 34px;
+  background-color: lightgray;
+  cursor: not-allowed;
+}
+
+.sb-search-input {
+  height: 31px;
+}
+.flex-1{
+  flex:1
+}

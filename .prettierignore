@@ -1,0 +1,6 @@
+package-lock.json
+dist
+angular-cli.json
+.vscode/*
+node_modules
+*.md

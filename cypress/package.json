@@ -1,0 +1,88 @@
+{
+
+  "name": "e2e-test",
+
+  "version": "1.0.0",
+
+  "description": "",
+
+  "scripts": {
+
+    "tll": "npx cypress open --config baseUrl=https://localhost:4200",
+
+    "tlm": "npx cypress open --config baseUrl=https://tcmaster.blueliv.com",
+
+    "test:smoke:local": "npx cypress run --config baseUrl=https://localhost:4200 --spec \"cypress/e2e/smoke_tests/**/*\"",
+
+    "test:smoke:local:open": "npx cypress open --config baseUrl=https://localhost:4200 --spec \"cypress/e2e/smoke_tests/**/*\"",
+
+    "test:smoke:master": "npx cypress run --config baseUrl=https://tcmaster.blueliv.com --spec \"cypress/e2e/smoke_tests/**/*\"",
+
+    "test:smoke:master:open": "npx cypress open --config baseUrl=https://tcmaster.blueliv.com --spec \"cypress/e2e/smoke_tests/**/*\"",
+
+    "test:regression:local": "npx cypress run --config baseUrl=https://localhost:4200 --spec \"cypress/e2e/regression_tests/**/*\"",
+
+    "test:regression:local:open": "npx cypress open --config baseUrl=https://localhost:4200 --spec \"cypress/e2e/regression_tests/**/*\"",
+
+    "test:regression:master": "npx cypress run --config baseUrl=https://tcmaster.blueliv.com --spec \"cypress/e2e/regression_tests/**/*\"",
+
+    "test:regression:master:open": "npx cypress open --config baseUrl=https://tcmaster.blueliv.com --spec \"cypress/e2e/regression_tests/**/*\"",
+
+    "test:instance:local": "npx cypress run --config baseUrl=https://localhost:4200 --spec \"cypress/e2e/new_instance/**/*\"",
+
+    "test:instance:local:open": "npx cypress open --config baseUrl=https://localhost:4200 --spec \"cypress/e2e/new_instance/**/*\"",
+
+    "test:instance:master": "npx cypress run --config baseUrl=https://tcmaster.blueliv.com --spec \"cypress/e2e/new_instance/**/*\"",
+
+    "test:instance:master:open": "npx cypress open --config baseUrl=https://tcmaster.blueliv.com --spec \"cypress/e2e/new_instance/**/*\"",
+
+    "build": "tsc",
+
+    "test:types": "tsd"
+
+  },
+
+  "cypress-cucumber-preprocessor": {
+
+    "json": {
+
+      "enabled": true
+
+    },
+
+    "nonGlobalStepDefinitions": true
+
+  },
+
+  "type": "module",
+
+  "dependencies": {
+
+    "-": "^0.0.1",
+
+    "@badeball/cypress-cucumber-preprocessor": "^17.0.0",
+
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+
+    "@faker-js/faker": "^7.6.0",
+
+    "@testing-library/cypress": "^9.0.0",
+
+    "@types/cypress-cucumber-preprocessor": "^4.0.1",
+
+    "cye2e": "^2.0.2",
+
+    "cypress-file-upload": "^5.0.8",
+
+    "typescript": "^5.0.4"
+
+  },
+
+  "devDependencies": {
+
+    "cypress": "^12.17.0"
+
+  }
+
+}
+

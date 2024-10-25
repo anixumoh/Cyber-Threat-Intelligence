@@ -1,0 +1,35 @@
+@import 'src/scss/variables';
+
+.inline-calendar {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  .month {
+    display: flex;
+    .month-name {
+      width: 10ch;
+    }
+    .month-days {
+      display: grid;
+      width: 100%;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+      background-color: rgb(245, 245, 245);
+      .day {
+        border: 2px solid white;
+        &.has-data {
+          background: #327abd;
+          color: white;
+          cursor: pointer;
+        }
+        &.selected {
+          background: black;
+          color: white;
+        }
+        &.empty {
+          background: white;
+        }
+      }
+    }
+  }
+}

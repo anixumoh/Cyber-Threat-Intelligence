@@ -1,0 +1,39 @@
+{
+    "search_words": [],
+    "language_id": "en",
+    "domain_type": "OTHER",
+    "total_retweets": 0,
+    "retweet_info": [],
+    "follow_up": true,
+    "id": 268226862,
+    "module_id": 2902,
+    "module_name": "Dark Web",
+    "module_short_name": "DAW-DW9",
+    "module_type": "DARK_WEB",
+    "url": "http://qwikxx2erhx6qrymued6ox2qkf2yeogjwypqvzoif4fqkljixasr6oid.onion/JFMFofWNY",
+    "title": "Justice for Migrant Families WNY (@JFMFofWNY)|nitter.qwik.space",
+    "content_type": "text/html",
+    "analysis_result": "NOT_PROCESSABLE",
+    "analysis_user_result": "NEGATIVE",
+    "analysis_calc_result": "NEGATIVE",
+    "created_at": 1674612318000,
+    "checked_at": 1681869918000,
+    "changed_at": 1674612318000,
+    "user_rating": 0,
+    "read": true,
+    "userModified": true,
+    "fav": "NOT_STARRED",
+    "issued": true,
+    "labels": [
+        {
+            "id": 6,
+            "name": "Hacktivism Credentials",
+            "background_color": 45960,
+            "text_color": 16777215,
+            "type": "GLOBAL"
+        }
+    ],
+    "sourceType": "TRANSFORM",
+    "followedUp": true,
+    "history": []
+}

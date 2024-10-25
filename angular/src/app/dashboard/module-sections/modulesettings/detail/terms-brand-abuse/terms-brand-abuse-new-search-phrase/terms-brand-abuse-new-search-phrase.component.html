@@ -1,0 +1,97 @@
+<!-- LOADING PROCESS -->
+<div *ngIf="!resource && editMode; else tmpl1" class="no-results-box">
+  <i class="icon-spinner rotate"></i>
+  <h6 class="no-results">Loading</h6>
+</div>
+<ng-template #tmpl1>
+  <form *ngIf="!editMode">
+    <div class="card mb-2">
+      <div class="card-header p-1 clearfix">
+        <h6 class="mt-1 mb-0 ml-1 float-left">Add Search Phrase</h6>
+        <button
+          class="btn btn-light btn-sm border text-primary float-right ml-1"
+          type="button"
+          (click)="navigateToList()"
+        >
+          <i class="icon-arrow-left mr-1"></i>
+          Back to list
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="form-group mb-0">
+          <label for="searchPhrase">Search Phrase</label>
+          <textarea
+            id="searchPhrase"
+            class="form-control form-control-sm"
+            [class.isError]="isTextAreaInvalidAndTouched()"
+            [(ngModel)]="settingListTextArea.text"
+            (ngModelChange)="onChangeTextArea()"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="Write here the search phrases, separated by a line break"
+          >
+          </textarea>
+        </div>
+        <ng-container class="d-flex">
+          <small class="color-error" *ngIf="isMinLength()">
+            <i class="icon-times-circle-solid"></i>
+            Minimun length is 3 characters
+          </small>
+          <span *ngIf="isTextAreaInvalidAndTouched()">
+            <small class="color-error" *ngIf="!isTextListError()">
+              <i class="icon-times-circle-solid"></i>
+              This field is required
+            </small>
+            <small class="color-error" *ngIf="isTextListError()">
+              <i class="icon-times-circle-solid"></i>
+              Some search phrases are not correct
+            </small>
+          </span>
+        </ng-container>
+      </div>
+      <div class="card-footer p-1">
+        <button class="btn btn-primary btn-sm px-4 float-right" type="button" (click)="onSubmit()" [disabled]="loading">
+          <i class="icon-spinner rotate mr-1" *ngIf="loading"></i>
+          {{ buttonText() }}
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <form *ngIf="editMode">
+    <div class="card mb-2">
+      <div class="card-header p-1 clearfix">
+        <h6 class="mt-1 mb-0 ml-1 float-left">Add Search Phrase</h6>
+        <button
+          class="btn btn-light btn-sm border text-primary float-right ml-1"
+          type="button"
+          (click)="navigateToList()"
+        >
+          <i class="icon-arrow-left mr-1"></i>
+          Back to list
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="form-group mb-0">
+          <label for="searchPhrase">Search Phrase</label>
+          <input
+            class="form-control form-control-sm"
+            type="text"
+            name="searchPhrase"
+            [(ngModel)]="searchPhrase"
+            [disabled]="true"
+          />
+        </div>
+      </div>
+      <div class="card-footer" *ngIf="editMode">
+        <button
+          class="btn btn-ligth btn-sm border text-primary float-right"
+          type="button"
+          (click)="navigateToDetail('phrase')"
+        >
+          Detail
+        </button>
+      </div>
+    </div>
+  </form>
+  <ng-template> </ng-template
+></ng-template>

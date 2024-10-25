@@ -1,0 +1,1245 @@
+{
+    "default": {
+        "organizationId": "",
+        "moduleId": "",
+        "language": "",
+        "sidebarStatus": true
+    },
+    "fullStory": "71fe334867774",
+    "defaultRows": 10.0,
+    "openModules": false,
+    "dashboard": {
+        "panelStatus": ""
+    },
+    "lastStory": "/admin",
+    "modules": {
+        "4": {
+            "14": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ],
+                    "modified": "ALL",
+                    "analysisCalcResult": [
+                        "POSITIVE",
+                        "NEGATIVE",
+                        "INFORMATIVE"
+                    ]
+                }
+            },
+            "16": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ],
+                    "modified": "ALL",
+                    "analysisCalcResult": [
+                        "POSITIVE",
+                        "NEGATIVE",
+                        "INFORMATIVE"
+                    ]
+                }
+            },
+            "18": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ],
+                    "modified": "ALL",
+                    "analysisCalcResult": [
+                        "POSITIVE",
+                        "NEGATIVE",
+                        "INFORMATIVE"
+                    ]
+                }
+            },
+            "19": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ],
+                    "modified": "ALL",
+                    "analysisCalcResult": [
+                        "POSITIVE",
+                        "NEGATIVE",
+                        "INFORMATIVE"
+                    ]
+                }
+            },
+            "20": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ],
+                    "modified": "ALL",
+                    "analysisCalcResult": [
+                        "POSITIVE",
+                        "NEGATIVE",
+                        "INFORMATIVE"
+                    ]
+                }
+            },
+            "25": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "55": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "104": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ],
+                    "modified": "ALL",
+                    "analysisCalcResult": [
+                        "POSITIVE",
+                        "NEGATIVE",
+                        "INFORMATIVE"
+                    ]
+                }
+            },
+            "456": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "3230": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "3233": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            }
+        },
+        "291": {
+            "1911": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "3151": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "3559": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            }
+        },
+        "495": {
+            "2976": {
+                "explorer": {
+                    "startScore": 0.3
+                }
+            }
+        },
+        "504": {
+            "2838": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2894": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2895": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2897": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2898": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2899": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2900": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2901": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2902": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ],
+                    "modified": "ALL",
+                    "analysisCalcResult": [
+                        "POSITIVE",
+                        "NEGATIVE",
+                        "INFORMATIVE"
+                    ]
+                }
+            },
+            "2903": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2904": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2905": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2906": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2907": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2908": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2910": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                },
+                "explorer": {}
+            },
+            "2911": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2912": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2913": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2914": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2919": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2920": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2923": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2926": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2971": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2973": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "2978": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "3007": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ],
+                    "modified": "ALL",
+                    "analysisCalcResult": [
+                        "POSITIVE",
+                        "NEGATIVE",
+                        "INFORMATIVE"
+                    ]
+                }
+            },
+            "3055": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "3581": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            },
+            "3599": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ],
+                    "modified": "ALL",
+                    "analysisCalcResult": [
+                        "POSITIVE",
+                        "NEGATIVE",
+                        "INFORMATIVE"
+                    ]
+                }
+            },
+            "3657": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            }
+        },
+        "575": {
+            "3009": {
+                "filters": {
+                    "read": [
+                        0.0
+                    ],
+                    "byState": [
+                        {
+                            "label": "All",
+                            "read": 1.0,
+                            "selected": true
+                        },
+                        {
+                            "label": "Read",
+                            "read": 2.0,
+                            "selected": false
+                        },
+                        {
+                            "label": "Not Read",
+                            "read": 3.0,
+                            "selected": false
+                        }
+                    ]
+                }
+            }
+        },
+        "": {
+            "": {
+                "maxRows": "",
+                "chartStatus": "",
+                "graphState": {
+                    "type": "",
+                    "modifier": ""
+                },
+                "filters": {
+                    "byState": "",
+                    "byLabel": "",
+                    "byStatus": "",
+                    "byOrder": {
+                        "order": "",
+                        "direction": ""
+                    },
+                    "byDate": {
+                        "since": "",
+                        "to": ""
+                    },
+                    "byCountry": "",
+                    "byFavorite": ""
+                }
+            },
+            "dashboard": {
+                "charts": {},
+                "closed": "",
+                "orderId": []
+            }
+        }
+    }
+}

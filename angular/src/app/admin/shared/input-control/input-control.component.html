@@ -1,0 +1,138 @@
+<div class="form-group mb-0 align-middle" *ngIf="control">
+  <label class="mb-0 mr-2" *ngIf="label">{{ label }}</label>
+  <ng-container [ngSwitch]="type">
+    <ng-template [ngSwitchCase]="'checkbox'">
+      <input
+        [type]="type"
+        (input)="changeCheckbox($event)"
+        [checked]="control && control.value"
+        [class]="classCustom"
+        [attr.disabled]="isDisabled ? true : null"
+      />
+    </ng-template>
+    <ng-template [ngSwitchCase]="'password'">
+      <input
+        [type]="type"
+        [class]="classCustom"
+        [maxlength]="maxlength"
+        [minlength]="minLength"
+        [attr.disabled]="isDisabled ? true : null"
+        [formControl]="control"
+        [class.is-invalid]="control && !control.valid && (control.dirty || control.touched)"
+        [placeholder]="placeholder"
+      />
+    </ng-template>
+    <ng-template [ngSwitchCase]="'select'">
+      <select
+        class="form-control form-control-sm"
+        [attr.disabled]="isDisabled ? true : null"
+        [class.is-invalid]="control && !control.valid && (control.dirty || control.touched)"
+        [formControl]="control"
+      >
+        <option disabled selected>-- Select --</option>
+        <option *ngFor="let c of optionsSelect" [value]="valueSelect ? c[valueSelect] : c">
+          <span class="text-capitalize capitalize">{{ viewSelect ? c[viewSelect] : c }}</span>
+        </option>
+      </select>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'dropdown'">
+      <input
+        [type]="text"
+        (ngModelChange)="emitValue($event)"
+        [class]="classCustom"
+        [(ngModel)]="valueDropdown"
+        [class.is-invalid]="showMessage"
+        [attr.disabled]="isDisabled ? true : null"
+      />
+      <i
+        *ngIf="control.value && !isDisabled"
+        class="icon-times text-danger cursor-pointer reset-icon"
+        (click)="resetControl()"
+        [ngbTooltip]="'Reset'"
+      ></i>
+      <div *ngIf="openDropdown">
+        <ul class="company-dropdown">
+          <ng-container *ngIf="optionsSelect && optionsSelect.length; else noItems">
+            <li
+              class="list-group-item list-group-item-action cursor-pointer border-0 p-2"
+              *ngFor="let option of optionsSelect"
+              (click)="selectedValue(option.id, option.name)"
+            >
+              <span class="text-90">{{ option.name }}</span>
+            </li>
+          </ng-container>
+          <ng-template #noItems>
+            <li class="list-group-item list-group-item-action border-0 p-4 font-italic">No results</li>
+          </ng-template>
+        </ul>
+      </div>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'textarea'">
+      <textarea
+        [class]="classCustom"
+        [attr.disabled]="isDisabled ? true : null"
+        [formControl]="control"
+        [class.is-invalid]="control && !control.valid && (control.dirty || control.touched)"
+        [placeholder]="placeholder"
+      ></textarea>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'number'">
+      <input
+        [type]="type"
+        [class]="classCustom"
+        [min]="minNumber"
+        [max]="maxNumber"
+        [attr.disabled]="isDisabled ? true : null"
+        [formControl]="control"
+        [class.is-invalid]="control && !control.valid && (control.dirty || control.touched)"
+        [placeholder]="placeholder"
+      />
+    </ng-template>
+    <ng-template [ngSwitchCase]="'stars'">
+      <div class="bg-light border rounded p-1 pl-3" (mouseout)="valueHover = 0">
+        <div class="text-center">
+          <ng-template ngFor let-info let-i="index" [ngForOf]="numberStars">
+            <i
+              (click)="selectedStars(info)"
+              (mouseover)="valueHover = info"
+              [class.text-primary]="valueHover >= info"
+              [class.icon-star_border]="valueControl('number') < info"
+              [class.icon-star]="valueControl('number') >= info"
+              [class.text-success]="valueControl('number') >= info"
+              class="fa"
+            ></i>
+          </ng-template>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template [ngSwitchCase]="'boolean'">
+      <i
+        (click)="changeSwitch($event)"
+        [class.text-danger]="!control.value"
+        [class.text-success]="control.value"
+        [ngClass]="isDisabled ? 'disabled-switch' : ''"
+        class="icon-lens cursor-pointer"
+        aria-hidden="true"
+      ></i>
+    </ng-template>
+    <ng-template ngSwitchDefault>
+      <input
+        [type]="type"
+        [class]="classCustom"
+        [maxlength]="maxlength"
+        [minlength]="minLength"
+        [attr.disabled]="isDisabled ? true : null"
+        [formControl]="control"
+        [class.is-invalid]="control && !control.valid && (control.dirty || control.touched)"
+        [placeholder]="placeholder"
+      />
+    </ng-template>
+  </ng-container>
+  <small
+    class="form-text {{ msjClass }}"
+    *ngIf="(control && !control.valid && (control.dirty || control.touched)) || showMessage"
+  >
+    {{ msjError ? msjError : 'Please check ' + label }}
+  </small>
+  <small class="form-text text-indo" *ngIf="msjInfo">{{ msjInfo }}</small>
+</div>

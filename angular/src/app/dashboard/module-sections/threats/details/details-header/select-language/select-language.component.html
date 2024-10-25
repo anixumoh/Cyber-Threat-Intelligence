@@ -1,0 +1,7 @@
+<app-select
+    [selectTitle]="languageSelected?.language || 'Select Language'"
+    [selectedItems]="all_languages"
+    [isScroll]="true"
+    [disableScroll]="grants?.isCustomer()"
+    (clickItem)="selectLanguage($event)">
+</app-select>

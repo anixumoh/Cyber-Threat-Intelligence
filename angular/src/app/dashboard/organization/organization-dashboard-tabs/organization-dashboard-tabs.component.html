@@ -1,0 +1,69 @@
+<div class="filter">
+  <app-date-picker-range
+    (resetDateSelected)="resetDates()"
+    (submitDateFilter)="dateRangeFilter($event)"
+    [disabled]="false"
+  ></app-date-picker-range>
+</div>
+<button
+  class="btn btn-sm px-2 dropdown-btn mb-3 mt-3"
+  type="button"
+  name="button"
+  (click)="onActiveTabChange(1)"
+  [ngClass]="isTabActive('global') ? 'dropdown-btn--active' : ''"
+>
+  Global Threats
+</button>
+
+<div class="dropdown-container mb-3">
+  <div class="button-action" ngbDropdown *ngFor="let moduleType of moduleTabTitleList">
+    <button
+      ngbDropdownToggle
+      class="btn btn-sm px-2 dropdown-btn mr-2"
+      type="button"
+      id="actionsButtonDropdown"
+      name="button"
+      [ngClass]="isTabActive(moduleType.type) ? 'dropdown-btn--active' : ''"
+    >
+      {{ typesDictionary[moduleType.type] }}
+    </button>
+    <div ngbDropdownMenu class="actions-dropdown-menu p-0">
+      <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu" style="font-size: 10px">
+        <li
+          (click)="onActiveTabChange(mod)"
+          class="list-group-item list-group-item-action d-flex align-items-center cursor-pointer border-0 px-3 py-2"
+          [ngClass]="isModuleActive(mod.id) ? 'active' : ''"
+          *ngFor="let mod of moduleType.modules"
+        >
+          {{ mod.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!isLoadingTabContent; else spinner">
+  <div class="padding-top-10" *ngIf="activeModuleTab === 1; else modulesChart">
+    <div class="row pb-2">
+      <div class="col-md px-2">
+        <app-assets-monitor-gauge [orgId]="orgId"></app-assets-monitor-gauge>
+      </div>
+    </div>
+    <div class="row margin-top-05 pb-3">
+      <div class="col-md pr-2">
+        <app-dashboard-module-chart [orgID]="orgId" [childCharts]="globalCharts"></app-dashboard-module-chart>
+      </div>
+    </div>
+  </div>
+  <ng-template #modulesChart>
+    <app-dashboard-module-chart
+      [orgID]="orgId"
+      [childCharts]="activeModuleChartsState"
+      (componentDidLoad)="updateChildModulesChartState()"
+    ></app-dashboard-module-chart>
+  </ng-template>
+</div>
+
+<ng-template #spinner>
+  <is-data-is-loading class="mx-auto" [isLoading]="isLoadingTabContent"></is-data-is-loading>
+</ng-template>

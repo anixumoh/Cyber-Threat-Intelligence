@@ -1,0 +1,76 @@
+@import '~scss/variables';
+
+.drawer-container {
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  z-index: 1050;
+  right: 0;
+  top: 0;
+  width: 0;
+  height: 100%;
+  overflow: auto;
+  transition: width 0.4s ease-in-out;
+
+  &--open {
+    width: 100%;
+    .drawer-content {
+      transform: translateX(0);
+      box-shadow: 0 1px 2px rgba(4, 4, 4, 0.8);
+    }
+
+    .drawer-mask {
+      height: 100%;
+      opacity: 0.6;
+    }
+  }
+}
+
+.drawer-mask {
+  position: fixed;
+  width: 100%;
+  height: 0;
+  opacity: 0;
+  background: rgba(0, 0, 0, 1);
+}
+
+.drawer-content {
+  min-width: 400px;
+  height: 100%;
+  position: fixed;
+  background-color: #fff;
+  padding: 0;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 2px;
+    background-color: $white;
+  }
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #084951;
+    outline: 1px solid black;
+  }
+  transform: translateX(100%);
+  transition: transform ease-in-out 0.3s;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  background-color: rgba(#ddd, 0.1);
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+
+  .icon-times {
+    color: #999;
+    cursor: pointer;
+
+    &:hover {
+      color: #444;
+    }
+  }
+}

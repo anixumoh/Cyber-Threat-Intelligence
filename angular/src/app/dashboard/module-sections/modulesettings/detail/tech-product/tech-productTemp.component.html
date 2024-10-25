@@ -1,0 +1,130 @@
+<div class="row">
+  <div class="col-6">
+    <!-- ADD DOMAIN -->
+    <h3 class="panel-title">Add Platform:</h3>
+    <div class="panel panel-default panel-search padding-10">
+      <div class="margin-bottom-05">
+        <div class="row select-assets">
+          <!-- SELECT -->
+          <div class="col-md-12">
+            <div class="dropdown">
+              <button
+                class="btn btn-filter dropdown-toggle margin-bottom-10"
+                [disabled]="buttonDisabled"
+                (click)="toggleSelectPartner()"
+              >
+                {{ partner || 'Select Partner' }}
+              </button>
+              <div class="dropdown-menu cursor-pointer padding-10" [ngClass]="isSelectOpenPartner ? 'show' : 'hide'">
+                <input class="margin-0 search-domain" placeholder="Select Partner" (keyup)="searchInPartners($event)" />
+                <div class="list-group">
+                  <div
+                    class="list-group-item full-width cursor-pointer"
+                    *ngFor="let partner of allPartners"
+                    (click)="selectPartner(partner)"
+                  >
+                    {{ partner.label }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row select-assets">
+          <div *ngIf="partner" class="col-md-12">
+            <div class="dropdown">
+              <button class="btn btn-filter dropdown-toggle margin-bottom-10" (click)="toggleSelectProducts()">
+                {{ product || 'View Products' }}
+              </button>
+              <div class="dropdown-menu cursor-pointer padding-10" [ngClass]="isSelectOpenProducts ? 'show' : 'hide'">
+                <input class="margin-0 search-domain" placeholder="View Products" (keyup)="searchInProducts($event)" />
+                <div *ngIf="partner" class="col-md-12">
+                  <div class="list-group">
+                    <div
+                      class="list-group-item full-width cursor-pointer"
+                      *ngFor="let product of allProducts"
+                      (click)="selectProduct(product)"
+                    >
+                      {{ product.title }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="partner" class="col-md-12">
+              <button class="btn btn-filter pull-right margin-bottom-10" (click)="addDataProduct()">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <!-- DESCRIPTION -->
+    <h3 class="panel-title">Description:</h3>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <p class="">{{ data.texts.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<div class="row">
+  <div class="col-md-12 setting-list">
+    <div class="panel panel-default">
+      <!-- PANEL HEADING -->
+      <div class="panel-heading">
+        <h3 class="panel-title pull-left">LIST PARTNERS</h3>
+        <div class="pull-right action-buttons">
+          <div class="btn-group pull-right">
+            <!-- BUTTON -->
+            <input
+              type="text"
+              class="settings-search-input pull-right"
+              placeholder="search"
+              (keyup)="searchInList($event)"
+            />
+            <!-- DELETE BUTTON -->
+            <button class="btn btn-danger pull-right margin-left-05" (click)="disableInputs ? null : delete()">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- TABLE LIST -->
+      <div class="panel-body main-list">
+        <div class="select-all-list">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="th-70">
+                  <!-- CHECKBOX -->
+                  <div class="toggle-button">
+                    <input id="all" [(ngModel)]="selectedAll" (change)="selectAll()" type="checkbox" />
+                  </div>
+                </th>
+                <th>Partner Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let value of values; let i = index">
+                <td class="td-70">
+                  <!-- CHECKBOX -->
+                  <div class="toggle-button">
+                    <input type="checkbox" id="value.id" [(ngModel)]="value.selected" (change)="checkIfAllSelected()" />
+                  </div>
+                </td>
+                <td>
+                  <p class="custom-control-description" #elem [attr.id]="value.id">
+                    {{ value.value.split('~')[0] }}
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

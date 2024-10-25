@@ -1,0 +1,80 @@
+<div class="card mb-4">
+  <div class="card-header p-1 pl-2 clearfix">
+    <h6 class="mt-1 mb-0 mr-2 float-left">RSS</h6>
+    <button
+      class="btn btn-light btn-sm color-primary float-left mr-1"
+      *ngIf="!grants?.isCustomerOrOperator()"
+      type="button"
+      (click)="createSetting(defaultCreate)"
+    >
+      <i class="icon-plus-circle-solid mr-1"></i>
+      <span class="">Add RSS</span>
+    </button>
+    <app-pagination [paginationComponent]="'header'" [dropPosition]="'right'" [totalResources]="totalResources">
+    </app-pagination>
+  </div>
+  <div class="card-body p-0">
+    <!-- NO RESULTS -->
+    <div *ngIf="values.length == 0" class="no-results-box">
+      <img src="assets/default_images/searching.svg" />
+      <h6 class="no-results">"There are no {{ data.name }}"</h6>
+    </div>
+    <!-- TABLE -->
+    <table class="table table-hover cursor-pointer mb-0" *ngIf="values?.length != 0">
+      <thead>
+        <tr>
+          <ng-container *ngFor="let header of tableHeader">
+            <th [ngClass]="header.class ? header.class : ''">{{ header.value }}</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let it of values; let i = index">
+          <td class="vertical-middle" *ngFor="let t of it.values" [ngClass]="t.class ? t.class : ''">
+            <p
+              class="mb-0"
+              *ngIf="!t.edit && !t.isBoolean && !t.delete && !t.isUrl && !t.isDate"
+              [ngClass]="t.elementClass ? t.elementClass : ''"
+            >
+              {{ t.value }}
+            </p>
+            <p class="mb-0" *ngIf="t.isUrl" [title]="t.url" [ngClass]="t.elementClass ? t.elementClass : ''">
+              {{ t.urlShort }}
+            </p>
+            <p class="mb-0" *ngIf="t.isDate" [class]="t.class" [ngClass]="t.elementClass ? t.elementClass : ''">
+              {{ t.value }}
+            </p>
+            <app-enable-disable
+              [ngClass]="t.elementClass ? t.elementClass : ''"
+              *ngIf="t.isBoolean"
+              [status]="t.booleanAttr"
+              [interactive]="true && !grants?.isCustomerOrOperator()"
+              (setStatus)="setStatus($event, i, t.searchPlace, 'rss')"
+            >
+            </app-enable-disable>
+            <button
+              class="btn btn-circle"
+              *ngIf="t.edit && !grants?.isCustomerOrOperator()"
+              (click)="navigateTo(it.id, actionEdit)"
+              [ngClass]="t.elementClass ? t.elementClass : ''"
+            >
+              <i [ngClass]="t.iconClass" class="fa color-primary"></i>
+            </button>
+            <button
+              class="btn btn-circle"
+              *ngIf="t.delete && !grants?.isCustomerOrOperator()"
+              [ngStyle]="{ cursor: 'pointer' }"
+              (click)="deleteSetting(it.id, i)"
+              [ngClass]="t.elementClass ? t.elementClass : ''"
+            >
+              <i [ngClass]="t.iconClass" class="fa color-danger"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer bg-white p-1" *ngIf="values.length !== 0">
+    <app-pagination [paginationComponent]="'footer'" [totalResources]="totalResources"> </app-pagination>
+  </div>
+</div>

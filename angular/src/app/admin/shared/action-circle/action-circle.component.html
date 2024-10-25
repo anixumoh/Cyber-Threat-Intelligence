@@ -1,0 +1,11 @@
+<button
+  class="btn no-flex btn-circle bg-light {{ superSizeCuston }}"
+  [ngClass]="isDisabled ? 'disabled' : ''"
+  [disabled]="isDisabled"
+  (click)="clicked()"
+  ngbTooltip="{{ tooltip }}"
+  placement="{{ placement }}"
+>
+  <i class="{{ icon }} {{ colorCuston }} {{ iconSize }} cursor-pointer" *ngIf="!isLoading"></i>
+  <i *ngIf="isLoading" class="icon-refresh rotate"></i>
+</button>

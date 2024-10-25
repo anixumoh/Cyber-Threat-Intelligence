@@ -1,0 +1,165 @@
+{
+    "total_resources": 4,
+    "list": [
+        {
+            "num_cards": 1,
+            "id": 312051477,
+            "module_id": 2912,
+            "module_name": "Credit cards1",
+            "module_short_name": "CC-Cc19",
+            "module_type": "CREDIT_CARDS_FULL",
+            "title": "My Bank",
+            "analysis_result": "NEGATIVE",
+            "analysis_calc_result": "NEGATIVE",
+            "created_at": 1691156118000,
+            "checked_at": 1691156118000,
+            "changed_at": 1691156118000,
+            "user_rating": 0,
+            "read": true,
+            "userModified": false,
+            "fav": "NOT_STARRED",
+            "issued": false,
+            "labels": [
+                {
+                    "id": 212,
+                    "name": "CCShop",
+                    "background_color": 16777215,
+                    "text_color": 0,
+                    "type": "MODULE_LABEL"
+                },
+                {
+                    "id": 24779,
+                    "name": "My Bank",
+                    "background_color": 8421504,
+                    "text_color": 16777215,
+                    "type": "MODULE_LABEL"
+                }
+            ],
+            "tlpStatus": "RED",
+            "searchPhrase": "My Bank",
+            "sourceType": "TRANSFORM",
+            "followedUp": false,
+            "history": []
+        },
+        {
+            "num_cards": 2,
+            "id": 312051412,
+            "module_id": 2912,
+            "module_name": "Credit cards1",
+            "module_short_name": "CC-Cc19",
+            "module_type": "CREDIT_CARDS_FULL",
+            "title": "My Bank",
+            "analysis_result": "NEGATIVE",
+            "analysis_calc_result": "NEGATIVE",
+            "created_at": 1691154906000,
+            "checked_at": 1691154906000,
+            "changed_at": 1691154906000,
+            "user_rating": 0,
+            "read": false,
+            "userModified": false,
+            "fav": "NOT_STARRED",
+            "issued": false,
+            "labels": [
+                {
+                    "id": 212,
+                    "name": "CCShop",
+                    "background_color": 16777215,
+                    "text_color": 0,
+                    "type": "MODULE_LABEL"
+                },
+                {
+                    "id": 24779,
+                    "name": "My Bank",
+                    "background_color": 8421504,
+                    "text_color": 16777215,
+                    "type": "MODULE_LABEL"
+                }
+            ],
+            "tlpStatus": "RED",
+            "searchPhrase": "My Bank",
+            "sourceType": "TRANSFORM",
+            "followedUp": false,
+            "history": []
+        },
+        {
+            "num_cards": 1,
+            "id": 312050980,
+            "module_id": 2912,
+            "module_name": "Credit cards1",
+            "module_short_name": "CC-Cc19",
+            "module_type": "CREDIT_CARDS_FULL",
+            "title": "My Bank",
+            "analysis_result": "NEGATIVE",
+            "analysis_calc_result": "NEGATIVE",
+            "created_at": 1691152506000,
+            "checked_at": 1691152506000,
+            "changed_at": 1691152506000,
+            "user_rating": 0,
+            "read": false,
+            "userModified": false,
+            "fav": "NOT_STARRED",
+            "issued": false,
+            "labels": [
+                {
+                    "id": 212,
+                    "name": "CCShop",
+                    "background_color": 16777215,
+                    "text_color": 0,
+                    "type": "MODULE_LABEL"
+                },
+                {
+                    "id": 24779,
+                    "name": "My Bank",
+                    "background_color": 8421504,
+                    "text_color": 16777215,
+                    "type": "MODULE_LABEL"
+                }
+            ],
+            "tlpStatus": "RED",
+            "searchPhrase": "My Bank",
+            "sourceType": "TRANSFORM",
+            "followedUp": false,
+            "history": []
+        },
+        {
+            "num_cards": 1,
+            "id": 158547724,
+            "module_id": 2912,
+            "module_name": "Credit cards1",
+            "module_short_name": "CC-Cc19",
+            "module_type": "CREDIT_CARDS_FULL",
+            "title": "My Bank",
+            "analysis_result": "NEGATIVE",
+            "analysis_calc_result": "NEGATIVE",
+            "created_at": 1667731216000,
+            "checked_at": 1667731216000,
+            "changed_at": 1667731216000,
+            "user_rating": 0,
+            "read": true,
+            "userModified": false,
+            "fav": "NOT_STARRED",
+            "issued": false,
+            "labels": [
+                {
+                    "id": 212,
+                    "name": "CCShop",
+                    "background_color": 16777215,
+                    "text_color": 0,
+                    "type": "MODULE_LABEL"
+                },
+                {
+                    "id": 24779,
+                    "name": "My Bank",
+                    "background_color": 8421504,
+                    "text_color": 16777215,
+                    "type": "MODULE_LABEL"
+                }
+            ],
+            "tlpStatus": "RED",
+            "searchPhrase": "My Bank",
+            "sourceType": "TRANSFORM",
+            "followedUp": false,
+            "history": []
+        }
+    ]
+}

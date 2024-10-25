@@ -1,0 +1,61 @@
+@import 'src/scss/variables';
+
+// GENERAL
+*:focus {
+  outline: none !important;
+}
+.error {
+  color: red;
+}
+
+.title-truncate {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+// MAIN DETAIL
+// button{
+//   border: 1px solid $border;
+// }
+// button.text-danger{
+//   border: 1px solid transparent;
+// }
+.main-header-detail {
+  button {
+    border: 1px solid $border;
+  }
+  .btn-delete {
+    border: 1px solid transparent;
+  }
+  .buttonActive {
+    background-color: rgba(50, 122, 189, 0.2);
+    border: 1px solid rgba(50, 122, 189, 0.5);
+    color: $primary !important;
+  }
+}
+// IMAGES LOADING
+.container-loading-image {
+  width: 200px;
+}
+
+.delete-container {
+  width: 492px;
+  left: -18px;
+  position: relative;
+
+  .block-error {
+    z-index: 1300;
+    cursor: pointer;
+    position: relative;
+    left: 159px;
+    top: -14px;
+  }
+
+  .delete-btn {
+    margin-left: 17px;
+  }
+
+  .block-btn {
+    margin-left: -14px !important;
+  }
+}

@@ -1,0 +1,14 @@
+<div class="card-section mt-4 mr-5 ml-5 mb-5">
+  <ng-container>
+    <div class="no-results-box">
+      <ng-template [ngIf]="!isLoading && errorMsj">
+        <img src="assets/default_images/searching.svg" />
+        <h3 class="no-results">{{ errorMsj }}</h3>
+      </ng-template>
+      <ng-template [ngIf]="isLoading">
+        <i class="icon-spinner rotate"></i>
+        <h3 class="no-results">Loading</h3>
+      </ng-template>
+    </div>
+  </ng-container>
+</div>

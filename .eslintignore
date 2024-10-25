@@ -1,0 +1,15 @@
+package.json
+package-lock.json
+dist
+karma.conf.js
+commitlint.config.js
+cypress/**
+nginx/**
+docs/**
+.svelte-kit/**
+angular/**
+**/*.js
+projects/**/*
+src/assets/**
+src/lib/utils/**
+src/lib/tcx-global-search/**

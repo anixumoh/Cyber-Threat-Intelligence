@@ -1,0 +1,212 @@
+[
+    {
+        "id": 4780,
+        "name": "Credentials",
+        "shortName": "CRED-C16",
+        "enabled": true,
+        "type": "CREDENTIALS",
+        "demoMode": false,
+        "createdAt": 1688636046000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 4781,
+        "name": "Credentials1",
+        "shortName": "CRED-C17",
+        "enabled": true,
+        "type": "CREDENTIALS",
+        "demoMode": false,
+        "createdAt": 1688636056000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 3865,
+        "name": "Credentials3(1)",
+        "shortName": "CRED-C2(1)",
+        "enabled": false,
+        "type": "CREDENTIALS",
+        "demoMode": false,
+        "createdAt": 1683203734000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 3582,
+        "name": "Credentials3nv",
+        "shortName": "CRED-C24",
+        "enabled": true,
+        "type": "CREDENTIALS",
+        "demoMode": false,
+        "createdAt": 1673550673000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 3583,
+        "name": "Credentials4",
+        "shortName": "CRED-C25",
+        "enabled": true,
+        "type": "CREDENTIALS",
+        "demoMode": false,
+        "createdAt": 1673553517000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 3584,
+        "name": "Credentials5",
+        "shortName": "CRED-C26",
+        "enabled": false,
+        "type": "CREDENTIALS",
+        "demoMode": false,
+        "createdAt": 1673553660000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 3585,
+        "name": "Credentials6",
+        "shortName": "CRED-C27",
+        "enabled": false,
+        "type": "CREDENTIALS",
+        "demoMode": false,
+        "createdAt": 1673553739000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 4779,
+        "name": "CredentialsAgain",
+        "shortName": "CRED-C15",
+        "enabled": true,
+        "type": "CREDENTIALS",
+        "demoMode": false,
+        "createdAt": 1688636008000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 2912,
+        "name": "Credit cards1",
+        "shortName": "CC-Cc19",
+        "enabled": true,
+        "type": "CREDIT_CARDS_FULL",
+        "demoMode": false,
+        "createdAt": 1662741218000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 3637,
+        "name": "Credit Cards2",
+        "shortName": "CC-CC31",
+        "enabled": false,
+        "type": "CREDIT_CARDS_FULL",
+        "demoMode": false,
+        "createdAt": 1677155717000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 2914,
+        "name": "Credit cards3",
+        "shortName": "CC-Cc21",
+        "enabled": false,
+        "type": "CREDIT_CARDS_FULL",
+        "demoMode": false,
+        "createdAt": 1662743400000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 2973,
+        "name": "Credit cards4 testzzz",
+        "shortName": "CC-Cc33",
+        "enabled": false,
+        "type": "CREDIT_CARDS_FULL",
+        "demoMode": false,
+        "createdAt": 1664883707000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 2900,
+        "name": "Custom-test",
+        "shortName": "CUS-C7",
+        "enabled": false,
+        "type": "CUSTOM",
+        "demoMode": false,
+        "createdAt": 1662739598000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 2901,
+        "name": "Custom1",
+        "shortName": "CUS-C8",
+        "enabled": false,
+        "type": "CUSTOM",
+        "demoMode": false,
+        "createdAt": 1662739682000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 2902,
+        "name": "Dark Web",
+        "shortName": "DAW-DW9",
+        "enabled": false,
+        "type": "DARK_WEB",
+        "demoMode": false,
+        "createdAt": 1662739706000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 3007,
+        "name": "Dark Web2",
+        "shortName": "DAW-DW38",
+        "enabled": false,
+        "type": "DARK_WEB",
+        "demoMode": false,
+        "createdAt": 1668632260000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 2904,
+        "name": "Domain Protection",
+        "shortName": "DOP-DP11",
+        "enabled": false,
+        "type": "DOMAIN_PROTECTION",
+        "demoMode": false,
+        "createdAt": 1662739835000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 3534,
+        "name": "Domain Protection5",
+        "shortName": "DOP-DP41",
+        "enabled": false,
+        "type": "DOMAIN_PROTECTION",
+        "demoMode": false,
+        "createdAt": 1672829688000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 2910,
+        "name": "Explorer",
+        "shortName": "EXP-0",
+        "enabled": false,
+        "type": "EXPLORER",
+        "demoMode": false,
+        "createdAt": 1662740133000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 4762,
+        "name": "Threat Context",
+        "shortName": "THC-TC21",
+        "enabled": true,
+        "type": "THREAT_CONTEXT",
+        "demoMode": false,
+        "createdAt": 1686660188000,
+        "moduleStrictTokens": []
+    },
+    {
+        "id": 4763,
+        "name": "Typosquatting",
+        "shortName": "DOP-DP17",
+        "enabled": false,
+        "type": "DOMAIN_PROTECTION",
+        "demoMode": false,
+        "createdAt": 1686780289000,
+        "moduleStrictTokens": []
+    }
+]

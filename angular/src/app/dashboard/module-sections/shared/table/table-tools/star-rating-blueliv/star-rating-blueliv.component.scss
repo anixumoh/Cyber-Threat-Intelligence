@@ -1,0 +1,66 @@
+@import 'src/scss/variables';
+
+$color-positive-rating: $success;
+.rating:hover,
+.rating:focus {
+  outline: none;
+}
+$stars-colors: #ffc058;
+$color-negative-rating: $stars-colors;
+$color-ok-rating: $stars-colors;
+$color-positive-rating: $stars-colors;
+$color-default-rating: #999;
+
+:host-context(.table) .rating .star-container svg {
+  z-index: -1;
+}
+
+.star {
+  width: 16px;
+  margin-top: 2px;
+  &.default {
+    svg {
+      fill: $color-default-rating;
+    }
+    i {
+      color: $color-default-rating;
+    }
+  }
+  &.negative {
+    svg {
+      fill: $color-negative-rating;
+    }
+    i {
+      color: $color-negative-rating;
+    }
+  }
+  &.ok {
+    svg {
+      fill: $color-ok-rating;
+    }
+    i {
+      color: $color-ok-rating;
+    }
+  }
+  &.positive {
+    svg {
+      fill: $color-positive-rating;
+    }
+    i {
+      color: $color-positive-rating;
+    }
+  }
+}
+
+.star-container {
+  float: right;
+  width: 100px;
+}
+
+.rating.color-positive .star-container .star svg {
+  fill: $color-ok-rating !important;
+}
+
+.rating.value-1 .star-container .star svg {
+  fill: $color-ok-rating !important;
+}

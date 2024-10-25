@@ -1,0 +1,98 @@
+<div class="action-table">
+  <div class="d-flex justify-content-between">
+    <div class="button-action mb-2" ngbDropdown *ngIf="items?.length > 0">
+      <button
+        ngbDropdownToggle
+        [disabled]="!hasSomeChecked()"
+        class="btn btn-light btn-sm border px-2 btn-actions"
+        [ngClass]="{ 'pulse-blue': hasSomeChecked() }"
+        type="button"
+        id="actionsButtonDropdown"
+        name="button"
+      >
+        <i class="icon-ellipsis-v px-1"></i>
+      </button>
+      <div ngbDropdownMenu class="actions-dropdown-menu">
+        <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded">
+          <li class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2" (click)="exportToCSV()">
+            <i class="icon-share-square mr-2"></i>
+            <span>Export to CSV</span>
+          </li>
+          <li class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2" (click)="exportToJson()">
+            <i class="icon-share-square mr-2"></i>
+            <span>Export to JSON</span>
+          </li>
+          <li
+            class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+            (click)="copyToClipboard('name')"
+          >
+            <i class="icon-copy mr-2"></i>
+            <span>Copy to clipboard</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div>
+      <app-select
+        *ngIf="items?.length > 0"
+        [items]="limits"
+        [model]="limit"
+        [icon]="'icon-format_list_bulleted'"
+        [placement]="'bottom-right'"
+        id="limitDropdown"
+        (onChange)="onChangeLimit($event)"
+      >
+      </app-select>
+    </div>
+  </div>
+
+  <div>
+    <app-table [items]="items" [loading]="loading" class="table-fixed" sm="true" noItems="No data found">
+      <thead>
+        <tr>
+          <th class="text-center td-40">
+            <input type="checkbox" [(ngModel)]="bulk" (click)="setCheckedState($event)" />
+          </th>
+          <th>
+            <span class="d-flex align-items-center">
+              Name
+              <i
+                *ngIf="sort !== 'name' && sort !== '-name'"
+                class="icon-sort ml-1 cursor-pointer"
+                (click)="sortBy('name')"
+              ></i>
+              <i *ngIf="sort === 'name'" class="icon-sort-asc ml-1 cursor-pointer" (click)="sortBy('-name')"></i>
+              <i *ngIf="sort === '-name'" class="icon-sort-desc ml-1 cursor-pointer" (click)="sortBy('name')"></i>
+            </span>
+          </th>
+          <th class="text-center td-130">TLP</th>
+          <th class="td-150 text-center">First Seen</th>
+          <th class="td-150 text-center">Last Seen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items" class="cursor-pointer" (click)="details($event, item)">
+          <td class="text-center td-40 vertical-middle cursor-default" (click)="$event.stopImmediatePropagation()">
+            <input type="checkbox" class="cursor-pointer" [(ngModel)]="item.fxSelected" (click)="setChecked()" />
+          </td>
+          <td class="align-middle">
+            <app-copy-to-clipboard [value]="item.name"></app-copy-to-clipboard>
+          </td>
+          <td class="text-center">
+            <span class="d-flex align-items-center justify-content-center">
+              <app-tlp [status]="item.tlp" [interactive]="false"></app-tlp>
+            </span>
+          </td>
+          <td class="text-center td-150">{{ item.first_seen | date: 'dd/MM/yyyy' }}</td>
+          <td class="text-center td-150">{{ item.last_seen | date: 'dd/MM/yyyy' }}</td>
+        </tr>
+      </tbody>
+    </app-table>
+  </div>
+
+  <div class="float-left mt-3">
+    <app-pagination-x [page]="page" [count]="count" [pageSize]="limit" (pageChange)="onPageChange($event)">
+    </app-pagination-x>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+@import 'src/scss/variables';
+@import '~scss/mixins';
+
+.hide {
+  display: none;
+}
+
+table tbody td:first-child {
+  text-align: left !important;
+}
+
+table tbody td:last-child {
+  word-break: break-all;
+  max-width: 300px;
+}
+
+.input-header {
+  padding-bottom: 1px;
+}
+
+.affected-other-properties {
+  @include verticalBreakEllipsis(1);
+}
+
+.affected-url {
+  @include verticalBreakEllipsis(2);
+}

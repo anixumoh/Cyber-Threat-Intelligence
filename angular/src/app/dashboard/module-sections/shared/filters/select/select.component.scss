@@ -1,0 +1,31 @@
+@import 'src/scss/variables';
+
+.filter-container {
+  position: relative;
+}
+.buttonActive {
+  background-color: rgba(50, 122, 189, 0.2);
+  border: 1px solid rgba(50, 122, 189, 0.5) !important;
+  color: $primary !important;
+}
+.list-group {
+  position: absolute;
+  visibility: hidden;
+  width: 230px;
+  z-index: 1080;
+  .list-group-item {
+    .icon-check {
+      display: none;
+    }
+  }
+  .buttonActiveDropdown {
+    background-color: $light;
+    color: $primary;
+    .icon-check {
+      display: block;
+    }
+  }
+  &.open {
+    visibility: visible;
+  }
+}

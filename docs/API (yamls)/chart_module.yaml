@@ -1,0 +1,296 @@
+# This is the new CTIP API
+swagger: '2.0'
+info:
+  title: CTIP CHART API
+  description: API for the CHARTS
+  version: "1.0.0"
+host: new-ui-pre.blueliv.com
+schemes:
+  - https
+basePath: /api/v2/chart
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+    post:
+      summary: Create
+      description: Create a new Chart
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: newChart
+          in: body
+          description: Object of the new Chart
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+              graphicDataGen:
+                type: integer
+                format: int64
+              graphicStyleId:
+                type: integer
+                format: int64
+              organizationId:
+                type: integer
+                format: int64
+                required: false
+              moduleId:
+                type: integer
+                required: false
+              type:
+                type: integer
+              isPrivate:
+                type: boolean
+      tags:
+        - Chart
+      responses:
+        200:
+          description: Chart successfully created
+          schema:
+            $ref: "#/definitions/ChartData" 
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: List
+      description: List all charts
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+      tags:
+        - Chart
+      responses:    
+        200:
+          description: List returned
+          schema:
+            title: List
+            type: object
+            propeties:
+              total_charts:
+                type: integer
+              list:
+                type: array
+                schema:
+                  $ref: "#/definitions/ChartData"
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{organizationId}:
+    get:
+      summary: List
+      description: List all charts filtered by Organization
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization Id
+          required: true
+          type: integer
+      tags:
+        - Chart
+      responses:    
+        200:
+          description: List returned
+          schema:
+            title: List
+            type: object
+            propeties:
+              total_charts:
+                type: integer
+              list:
+                type: array
+                schema:
+                  $ref: "#/definitions/ChartData"
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{organizationId}/module/{moduleId}:
+    get:
+      summary: List
+      description: List all charts filtered by Organization and Module 
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization Id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module Id
+          required: true
+          type: integer
+      tags:
+        - Chart
+      responses:    
+        200:
+          description: List returned
+          schema:
+            title: List
+            type: object
+            propeties:
+              total_charts:
+                type: integer
+              list:
+                type: array
+                schema:
+                  $ref: "#/definitions/ChartData"
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+  }
+
+  /datagen:
+    get:
+      summary: List
+      description: List all data generators for a chart
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+      tags:
+        - Datagen
+      responses:    
+        200:
+          description: List returned
+          schema:
+            title: List
+            type: object
+            propeties:
+              total_charts:
+                type: integer
+              list:
+                type: array
+                items:
+                  schema:
+                    $ref: "#/definitions/DataGen"
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /datagen/{datagenId}/style:
+    get:
+      summary: List
+      description: List all styles compatible with a data generator
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: datagenId
+          in: path
+          description: Data generator id
+          required: true
+      tags:
+        - Datagen
+      responses:    
+        200:
+          description: List returned
+          schema:
+            title: List
+            type: object
+            propeties:
+              total_charts:
+                type: integer
+              list:
+                type: array
+                items:
+                  schema:
+                    $ref: "#/definitions/Style"
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  Success:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  ChartData:
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      graphDataGenId:
+        type: integer
+      graphStyleId:
+        type: integer
+      reputationalSearchType:
+        type: string
+      graphicConfigurationTemplateId:
+        type: integer
+  DataGen:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      classname:
+        type: string
+      namekey:
+        type: string
+      styleCompatibilities:
+        type: array
+        items:
+          $ref: '#/definitions/Style'
+  Style:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      classname:
+        type: string
+      namekey:
+        type: string
+      nameToShow:
+        type: string
+
+

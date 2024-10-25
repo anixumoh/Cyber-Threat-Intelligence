@@ -1,0 +1,22 @@
+<div class="main-header px-5 clearfix" *ngIf="title || (arrayTabs && arrayTabs.length)">
+  <ul class="nav nav-tabs border-bottom-0">
+    <li class="nav-item ml-0 mr-1" *ngIf="title">
+      <h5 class="mb-0 mt-2 pb-2 cursor-default pl-0 pr-4">{{ title }}</h5>
+    </li>
+    <ng-container *ngIf="arrayTabs && arrayTabs.length > 0">
+      <li class="nav-item ml-1 mr-1" *ngFor="let item of arrayTabs">
+        <a
+          class="nav-link mb-0 pb-2 cursor-pointer"
+          [class.active]="active === item"
+          (click)="changeTabs(item)"
+          aria-selected="true"
+          >{{ item }}
+        </a>
+      </li>
+    </ng-container>
+  </ul>
+</div>
+
+<div [class.mx-5]="title || (arrayTabs && arrayTabs.length)">
+  <ng-content></ng-content>
+</div>

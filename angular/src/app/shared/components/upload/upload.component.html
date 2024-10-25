@@ -1,0 +1,95 @@
+<!-- MAIN HEADER -->
+<div class="main-header mt-4 pb-3 clearfix">
+  <div class="row align-items-end">
+    <div class="main-header-left col float-left">
+      <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-3 mt-1">Sandbox</h6>
+      <h5 class="text-dark mb-0">Threat Context</h5>
+    </div>
+    <div class="main-header-right col-6">
+      <div class="input-group input-group-sm">
+        <div class="input-group-prepend">
+          <button class="btn btn-light btn-sm border" type="button" (click)="inputFileElement.click()">Browse</button>
+        </div>
+        <input
+          class="form-control upload-input font-weight-light"
+          style="height: 31px"
+          type="text"
+          [value]="getFilesNames()"
+          readonly="true"
+          placeholder="Select file to upload (Max. file size: 20mb)"
+        />
+        <div class="input-group-append">
+          <input
+            type="file"
+            multiple="true"
+            #inputFileElement
+            style="display: none"
+            (change)="onFileInputChange($event)"
+          />
+          <button class="btn btn-light btn-sm border text-primary" type="button" [disabled]="!file" (click)="add()">
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="main-header-right col float-right">
+      <!-- BUTTON INFO -->
+    </div>
+  </div>
+</div>
+<!-- CONTENT -->
+<div class="report" [ngClass]="{ 'report--maximazed': maximized, 'report--open': openReport }">
+  <div class="card">
+    <div class="card-header text-white bg-dark">
+      <div class="flex-between-center" style="min-height: 24px">
+        <div>
+          <div *ngIf="isUploading" style="display: flex; flex-direction: column">
+            <div>Uploading ({{ filesPending }}) files</div>
+            <small class="text-muted" style="line-height: 0.4">{{ timeRemaining }}</small>
+          </div>
+          <div *ngIf="!isUploading">Upload Completed</div>
+        </div>
+        <span class="flex-between-center">
+          <i class="icon-arrow-up text-success"></i> uploads:
+          <b class="text-success ml-1 mr-2">{{ filesUploaded }}</b>
+          <i class="icon-times text-danger"></i> errors: <b class="text-danger ml-1 mr-3">{{ filesErrors }}</b>
+
+          <i
+            class="icon-chevron-circle-up-solid cursor-pointer"
+            *ngIf="list && list.length > 0"
+            [ngClass]="{ 'icon-chevron-circle-up-solid': !maximized, 'icon-chevron-circle-down-solid': maximized }"
+            (click)="maximized = !maximized"
+          ></i>
+          <i class="icon-times-circle-solid cursor-pointer" (click)="closeReport()"></i>
+        </span>
+      </div>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item" *ngFor="let item of list">
+        <div class="flex-between-center">
+          <div class="ellipsis">
+            <i class="icon-spinner rotate text-primary" *ngIf="item.inProgress"></i>
+            <i class="icon-check_circle text-success" *ngIf="!item.inProgress && !item.error"></i>
+            <i
+              class="icon-times-circle text-danger"
+              [ngbTooltip]="item.error"
+              *ngIf="!item.inProgress && item.error"
+            ></i>
+            <span [ngbTooltip]="item.file.name">
+              {{ item.file ? item.file.name : '-' }}
+            </span>
+          </div>
+          <span>
+            <i
+              class="icon-refresh text-primary cursor-pointer"
+              *ngIf="!item.inProgress && item.error"
+              (click)="emit([item])"
+            >
+            </i>
+            <i class="icon-delete text-danger cursor-pointer" *ngIf="!item.inProgress" (click)="remove(item)"> </i>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

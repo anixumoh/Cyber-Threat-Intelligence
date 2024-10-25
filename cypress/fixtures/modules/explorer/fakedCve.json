@@ -1,0 +1,150 @@
+{
+    "data": {
+        "attributes": {
+            "bl_score": 6.5,
+            "cvss": {
+                "v3": {
+                    "attackComplexity": "LOW",
+                    "attackVector": "LOCAL",
+                    "availabilityImpact": "HIGH",
+                    "baseScore": 7.8,
+                    "baseSeverity": "HIGH",
+                    "confidentialityImpact": "HIGH",
+                    "integrityImpact": "HIGH",
+                    "privilegesRequired": "NONE",
+                    "scope": "UNCHANGED",
+                    "userInteraction": "REQUIRED",
+                    "vectorString": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H",
+                    "version": "3.1"
+                }
+            },
+            "name": "CVE-2023-28285",
+            "published_at": 1681247700000,
+            "updated_at": 1689988190000,
+            "description": "Microsoft Office Remote Code Execution Vulnerability"
+        },
+        "relationships": {
+            "attack_patterns": {
+                "meta": {
+                    "count": 27
+                }
+            },
+            "campaigns": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "crime_servers": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "malware": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "mentions": {
+                "meta": {
+                    "count": 10
+                }
+            },
+            "signatures": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "sparks": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "tags": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "threat_actors": {
+                "meta": {
+                    "count": 0
+                }
+            },
+            "tools": {
+                "meta": {
+                    "count": 0
+                }
+            }
+        }
+    },
+    "resourceData": {
+        "cve": "CVE-2023-28285",
+        "scoring": 6.8,
+        "publishedAt": 1681247700000,
+        "vendor": "Microsoft",
+        "product": "Microsoft Office",
+        "version": "*",
+        "cpe": "cpe:2.3:a:microsoft:office:*:*:*:*:*:*:*:*",
+        "countAffectedPlatforms": 3,
+        "priority": "MEDIUM",
+        "id": 310209364,
+        "module_id": 2910,
+        "created_at": 1681862400000,
+        "user_rating": 0,
+        "read": false,
+        "userModified": false,
+        "issued": false,
+        "labels": [
+            {
+                "id": 14872,
+                "name": "+0_AMOS_New_Alert",
+                "background_color": 16777215,
+                "text_color": 16711680,
+                "type": "MODULE_LABEL"
+            },
+            {
+                "id": 21433,
+                "name": "111",
+                "background_color": 16777215,
+                "text_color": 0,
+                "type": "MODULE_LABEL"
+            },
+            {
+                "id": 75,
+                "name": "2015apk",
+                "background_color": 7317724,
+                "text_color": 16777215,
+                "type": "MODULE_LABEL"
+            },
+            {
+                "id": 76,
+                "name": "2015apks",
+                "background_color": 7317724,
+                "text_color": 16777215,
+                "type": "MODULE_LABEL"
+            },
+            {
+                "id": 6,
+                "name": "Hacktivism Credentials",
+                "background_color": 45960,
+                "text_color": 16777215,
+                "type": "MODULE_LABEL"
+            },
+            {
+                "id": 11,
+                "name": "Negative Mention",
+                "background_color": 37810,
+                "text_color": 16777215,
+                "type": "MODULE_LABEL"
+            },
+            {
+                "id": 4,
+                "name": "Phishing Domain",
+                "background_color": 37810,
+                "text_color": 16777215,
+                "type": "MODULE_LABEL"
+            }
+        ],
+        "followedUp": false,
+        "history": []
+    }
+}

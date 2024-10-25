@@ -1,0 +1,382 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    font-family: Lato, sans-serif;
+  }
+}
+
+body {
+  font-size: var(--cds-body-short-01-font-size, 0.875rem);
+  font-weight: var(--cds-body-short-01-font-weight, 400);
+  line-height: var(--cds-body-short-01-line-height, 1.28572);
+  letter-spacing: var(--cds-body-short-01-letter-spacing, 0.16px);
+  background-color: var(--cds-ui-background, #ffffff) !important;
+  color: var(--cds-text-01, #161616);
+  transition: background-color 700ms ease;
+}
+
+#svelte-app hr {
+  @apply border-ctip-ui;
+}
+
+#svelte-app {
+  color: var(--cds-text-01, #161616);
+}
+#svelte-app .bx--breadcrumb-item.bx--breadcrumb-item--current a.bx--link,
+#svelte-app .bx--breadcrumb-item.bx--breadcrumb-item--current a.bx--link:hover {
+  color: var(--cds-text-01, #161616);
+}
+
+body,
+input[type='number'],
+.bx--number input[type='number'] {
+  font-family: 'Lato', sans-serif;
+}
+
+/* UTILS */
+.z-10-if-ToolbarBatchActions:has(.bx--batch-actions--active) {
+  z-index: 10 !important;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* bootstrap replacment */
+#svelte-app .border {
+  border: 1px solid var(--cds-ui-03, #e0e0e0) !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: var(--scrollbar-size, 5px);
+  height: var(--scrollbar-size, 5px);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--ctip-interactive);
+}
+
+ul.bx--accordion {
+  margin-bottom: 0;
+}
+
+.bx--accordion__item--active .bx--accordion__content {
+  padding-right: 0;
+}
+
+.break-words {
+  word-break: break-word;
+}
+
+.toolbar-content-clip-path-none .bx--batch-actions:not(.bx--batch-actions--active) ~ .bx--toolbar-content {
+  clip-path: none;
+  -webkit-clip-path: none;
+}
+
+.multiselect-fit .bx--list-box__menu {
+  min-width: 100%;
+  width: fit-content;
+}
+
+.bx--pagination__text {
+  margin-bottom: 0;
+}
+
+/*
+ * TODO
+ * I put this !important because the node_modules/boostrap/scss/mixins/_hover.scss override others
+ * We must delete this !important when we delete Boostrap.
+ * */
+a:hover,
+.bx--btn:hover {
+  text-decoration: none !important;
+}
+
+#svelte-app a:not(.bx--btn):not(.bx--tile) {
+  color: var(--ctip-primary);
+}
+#svelte-app a:not(.bx--btn):not(.bx--tile):hover {
+  color: var(--ctip-primaryHover);
+}
+
+.dark #svelte-app a:not(.bx--btn):not(.bx--tile) {
+  color: var(--ctip-lightBlue);
+}
+.dark #svelte-app a:not(.bx--btn):not(.bx--tile):hover {
+  color: var(--ctip-lightBlueHover);
+}
+
+.bx--loading {
+  display: flex;
+}
+
+#svelte-app .bx--btn--primary.bx--batch-summary__cancel::before {
+  background-color: transparent;
+}
+
+.light .bx--data-table tbody,
+.light .bx--data-table tbody tr,
+.light .bx--data-table tbody tr td {
+  background-color: white;
+}
+.dark .bx--data-table tbody tr.bx--data-table--selected td {
+  background-color: rgb(90, 129, 147);
+}
+
+.bx--data-table tbody tr.bx--data-table--selected td {
+  background-color: #e0e0e0;
+}
+
+.bx--data-table thead {
+  border-bottom: 2px solid var(--ctip-primary);
+}
+.dark .bx--data-table thead {
+  border-bottom: 2px solid var(--ctip-lightBlue);
+}
+
+.bx--data-table td,
+.bx--data-table tbody th {
+  padding-top: var(--cds-spacing-04, 1rem);
+  padding-bottom: var(--cds-spacing-04, 1rem);
+}
+.bx--table-sort {
+  text-align: center;
+  justify-content: center;
+  gap: 5px;
+}
+.bx--table-sort__icon-unsorted {
+  opacity: 1;
+}
+
+.bx--data-table th {
+  text-align: center;
+}
+
+.bx--multi-select__wrapper .bx--checkbox-label {
+  margin: 0;
+}
+
+.bx--checkbox--inline {
+  margin-top: 6px;
+}
+
+.amcharts-amexport-menu {
+  z-index: 10;
+}
+
+/* Break long string words in modals */
+.bx--modal {
+  overflow-wrap: break-word;
+}
+
+#svelte-inspector-host #svelte-inspector-toggle {
+  z-index: 10000;
+  left: 0;
+  margin-left: 50%;
+}
+
+.bx--tooltip__trigger.bx--tooltip__trigger--definition,
+.bx--tooltip--definition .bx--tooltip__trigger {
+  border: none;
+}
+
+.tooltip-wrapper:has(.bx--tooltip.bx--tooltip--shown) {
+  z-index: 100 !important;
+}
+
+.bx--inline-notification__title {
+  word-break: break-word;
+}
+
+.bx--pagination .bx--select-input {
+  line-height: 2rem;
+}
+.bx--batch-summary__para {
+  margin-bottom: 0;
+}
+
+/* FIX for carbon DatePicker collision with tailwind .static */
+#svelte-app .flatpickr-calendar.static {
+  position: absolute;
+}
+
+/* Start with angular colors */
+
+#angular-app .btn-outline-primary {
+  color: rgb(15, 74, 101);
+  border-color: var(--ctip-primary);
+}
+
+#angular-app .btn-outline-primary:hover {
+  color: rgb(90, 129, 147);
+  border-color: var(--ctip-primaryHover);
+  /* background-color: white; */
+}
+
+#angular-app .btn-primary {
+  color: rgb(15, 74, 101) !important;
+  border-color: var(--ctip-primary) !important;
+  background-color: white !important;
+}
+
+#angular-app .btn-primary:hover {
+  color: rgb(90, 129, 147);
+  border-color: var(--ctip-primaryHover);
+  background-color: white;
+}
+
+#angular-app .icon-add {
+  color: var(--ctip-lightBlue);
+}
+
+#angular-app .icon-info {
+  color: var(--ctip-primary);
+}
+
+#angular-app .icon-expand {
+  color: var(--ctip-primary);
+}
+
+#angular-app .btn-light {
+  color: var(--ctip-primary);
+}
+
+#angular-app .badge-primary {
+  color: white;
+  background-color: var(--ctip-primary);
+}
+
+#angular-app .tc-dropdown__btn-icon {
+  color: white;
+  background-color: var(--ctip-primary);
+}
+
+#angular-app .card-border-primary {
+  border-left-color: var(--ctip-primary);
+}
+
+#angular-app .text-primary {
+  color: var(--ctip-primary) !important;
+}
+#angular-app .page-link.text-primary.active {
+  color: white !important;
+}
+
+#angular-app .icon-plus {
+  color: var(--ctip-lightBlue) !important;
+}
+
+#angular-app .bg-danger {
+  color: white;
+  background-color: var(--ctip-primary) !important;
+}
+
+#angular-app .bg-primary {
+  color: white;
+  background-color: var(--ctip-primary) !important;
+}
+
+#angular-app .color-primary {
+  color: var(--ctip-lightBlue) !important;
+}
+
+#angular-app .tc-dropdown__content-link:hover {
+  color: var(--ctip-lightBlue) !important;
+}
+
+#angular-app .app-tabs .nav li {
+  color: var(--ctip-primaryHover) !important;
+}
+
+#angular-app .card-section .card-subsection {
+  border-left-color: var(--ctip-primary);
+}
+
+#angular-app .blue-bkg:hover {
+  color: white;
+  background-color: var(--ctip-primaryHover) !important;
+}
+
+#angular-app .blue-bkg {
+  color: white !important;
+  background-color: var(--ctip-primary) !important;
+}
+
+#angular-app .nav-link:not(.active) {
+  color: var(--ctip-primaryHover) !important;
+}
+
+#angular-app #sidebar .list-group-item.active-element {
+  border-left: var(--ctip-primaryHover) !important;
+  color: var(--ctip-primaryHover);
+}
+
+#angular-app .mat-flat-button.mat-primary:hover,
+.mat-raised-button.mat-primary:hover,
+.mat-fab.mat-primary:hover,
+.mat-mini-fab.mat-primary:hover {
+  background-color: var(--ctip-primaryHover) !important;
+}
+
+#angular-app .mat-flat-button.mat-primary,
+.mat-raised-button.mat-primary,
+.mat-fab.mat-primary,
+.mat-mini-fab.mat-primary {
+  background-color: var(--ctip-primary) !important;
+}
+
+#angular-app .text-danger {
+  color: var(--ctip-danger) !important;
+}
+
+#angular-app .text-danger:hover {
+  color: var(--ctip-dangerHover) !important;
+}
+
+/* SVELTE CVE MODAL  */
+
+#svelte-app .bg-primary {
+  background-color: var(--ctip-primary) !important;
+}
+
+#svelte-app .app-tabs:hover .nav:hover li:hover {
+  color: var(--ctip-primaryHover) !important;
+}
+
+#svelte-app .card-border-primary {
+  border-left-color: var(--ctip-primary);
+}
+
+.mat-calendar-body-selected {
+  background-color: var(--ctip-primary) !important;
+}
+
+.app-tabs .nav li {
+  color: var(--ctip-primary) !important;
+}
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: var(--ctip-primaryHover) !important;
+}
+
+.mat-primary .mat-pseudo-checkbox-checked {
+  background-color: var(--ctip-primary) !important;
+}
+
+#angular-app .mat-pseudo-checkbox-checked {
+  background-color: var(--ctip-primary) !important;
+}
+
+#angular-app .bx--inline-notification--info {
+  background-color: var(--ctip-primary) !important;
+}
+
+/* Angular non-dark mode */
+#angular-app .container-fluid {
+  background-color: white;
+}

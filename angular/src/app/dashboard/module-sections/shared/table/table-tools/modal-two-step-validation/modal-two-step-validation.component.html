@@ -1,0 +1,68 @@
+<div class="overlay" [style.zIndex]="10000" *ngIf="openModal">
+  <div class="modal" [ngClass]="customClass">
+    <div class="card">
+      <div class="card-header bg-light clearfix">
+        <h6 class="float-left mt-1 mb-0">Enable Two Factor Autentication</h6>
+        <button class="btn btn-link btn-sm text-danger float-right" (click)="closeTwoStepValidationModal()">
+          <i class="icon-close"></i>
+        </button>
+      </div>
+      <div class="card-body">
+        <div *ngIf="isLoading" class="no-results-box">
+          <i class="icon-spinner rotate"></i>
+          <h3 class="no-results">Loading</h3>
+        </div>
+        <div *ngIf="!isLoading" class="verification-box">
+          <h6>Enable Verification in 2 Steps</h6>
+          <ol>
+            <li>
+              Get the Google Authenticator app on
+              <a
+                href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"
+                target="_blank"
+                >Google Play (Android)</a
+              >
+              o
+              <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605" target="_blank"
+                >iTunes (IOS)</a
+              >
+            </li>
+            <li>In the app select add an account.</li>
+            <li>Select to scan a barcode.</li>
+          </ol>
+          <img class="mx-auto d-block mb-4" [src]="imageToShow" *ngIf="imageToShow" />
+          <div class="form-group">
+            <label>Enter the 6-digit code you see in the app:</label>
+            <input
+              class="form-control"
+              placeholder="Write your validation code"
+              type="number"
+              [(ngModel)]="verificationCode.reason.text"
+            />
+            <small class="form-text text-danger" *ngIf="verificationCode.reason.errorMessage">{{
+              verificationCode.reason.errorMessage
+            }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer bg-light clearfix">
+        <button
+          class="btn btn-light border-primary text-primary float-right px-4 mr-2"
+          [disabled]="!verificationCode.reason.text"
+          nohref
+          (click)="saveTwoStepValidation()"
+        >
+          Send
+        </button>
+        <button
+          class="btn btn-light text-danger float-right mr-2"
+          (click)="closeTwoStepValidationModal()"
+          type="button"
+          name=""
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

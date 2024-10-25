@@ -1,0 +1,27 @@
+@import 'src/scss/variables';
+
+.arrow-container {
+  .up {
+    position: relative;
+    top: -5px;
+    left: 0;
+    cursor: pointer;
+  }
+  .down {
+    position: relative;
+    top: -13px;
+    left: 0;
+    cursor: pointer;
+  }
+  .is-active {
+    color: $default95;
+  }
+  .not-active {
+    color: $default45;
+  }
+  .order-icon {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+}

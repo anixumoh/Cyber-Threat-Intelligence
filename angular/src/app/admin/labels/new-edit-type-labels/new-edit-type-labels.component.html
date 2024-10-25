@@ -1,0 +1,11 @@
+<modal-window [acceptBtn]="(isNew ? 'Create':'Save')"
+              [cancelBtn]="'Close'"
+              [modalTitle]="(isNew ? 'Create':'Edit') + ' Type - Label'"
+              (accept)="createEdit()"
+              (cancel)="closeModal()">
+  <div class="modal-body">
+    <input-control [label]="'Name'"
+                   [control]="form.controls['name']">
+    </input-control>
+  </div>
+</modal-window>

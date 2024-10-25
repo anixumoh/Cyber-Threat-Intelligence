@@ -1,0 +1,341 @@
+<!-- MAIN HEADER -->
+<div class="mt-4 pb-3 border-bottom mb-3">
+  <div class="main-header row align-items-end clearfix">
+    <div class="main-header-left col float-left">
+      <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-3 mt-1">Create Module</h6>
+      <h5 class="text-dark mb-0">Create</h5>
+    </div>
+  </div>
+</div>
+<div class="row mb-4">
+  <!-- ITEMS MENU -->
+  <div class="col-md-3">
+    <div class="card">
+      <div class="card-header clearfix">
+        <h6 class="mb-0">Select Module Type</h6>
+      </div>
+      <div class="card-body p-0">
+        <ul class="list-group list-group-flush">
+          <div
+            class="card-section mt-4 mr-5 ml-5 mb-5 d-flex flex-column justify-content-center align-items-center loading-container"
+            *ngIf="loading"
+          >
+            <div class="text-primary mb-2 font-weight-bold">Loading...</div>
+            <i class="icon-spinner rotate"></i>
+          </div>
+        </ul>
+        <ul class="list-group list-group-flush" *ngIf="!loading">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let item of typesList"
+            [ngClass]="{ selected: item === selected }"
+            (click)="selectType(item)"
+          >
+            <span>
+              <img class="mr-3 float-left" [src]="item.image" />
+              <h6 class="float-left mt-1">{{ item.name }}</h6>
+            </span>
+            <i class="icon-angle-right float-right"></i>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- ITEMS CONTENT -->
+  <div class="col-md-9">
+    <div class="card d-flex justify-content-center align-items-center h-100" *ngIf="!showForm && selected">
+      <i class="icon-spinner rotate"></i>
+    </div>
+    <div class="card" *ngIf="showForm && !hideGlobalDescription">
+      <div class="card-header clearfix">
+        <h6 class="mb-0">Fill the fields</h6>
+      </div>
+      <div class="card-body">
+        <div class="pb-4 border-bottom mb-4">{{ description }}</div>
+        <div *ngIf="showForm && !showSubtypeDescription && key !== 'custom'">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Name:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [placeholder]="placeholder"
+                  [(ngModel)]="name"
+                  [ngClass]="{ error: errors.name }"
+                  name="name"
+                  [disabled]="key === 'explorer'"
+                />
+                <span class="error" *ngIf="errors.name">{{ errors.name }}</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-group">
+                <label class="w-100 d-block">Short-Name:</label>
+                <div class="input-group-prepend">
+                  <span class="input-group-text rounded-left">{{ prefix }}</span>
+                </div>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Short-name"
+                  [(ngModel)]="shortName"
+                  [ngClass]="{ error: errors.shortName }"
+                  name="shortName"
+                />
+              </div>
+              <span class="error" *ngIf="errors.shortName">{{ errors.shortName }}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="showForm && !showSubtypeDescription && key === 'custom'">
+          <mat-stepper class="mat-stepper" linear #stepper (selectionChange)="onStepChange($event)">
+            <mat-step [completed]="canMoveToNameStep()">
+              <ng-template matStepLabel
+                ><div>
+                  <span>Sources &nbsp;&nbsp;&nbsp;&nbsp;<br /></span
+                  ><span *ngIf="!canMoveToNameStep()" class="conditions-text">Select at least one</span>
+                </div></ng-template
+              >
+              <div class="card">
+                <div class="card-body p-0 height-list" style="height: 350px; overflow: scroll">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th style="font-size: 12px">Name</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="sources?.length != 0">
+                      <tr *ngFor="let transformada of sources; let i = index">
+                        <td class="vertical-middle">
+                          <p class="mb-0">{{ transformada.name }}</p>
+                        </td>
+                        <td class="vertical-middle td-center td-80">
+                          <mat-slide-toggle [(ngModel)]="transformada.checked"></mat-slide-toggle>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </mat-step>
+            <mat-step [completed]="canMoveToSummaryStep()">
+              <ng-template matStepLabel
+                ><div>
+                  <span>Module Name &nbsp;&nbsp;&nbsp;&nbsp;<br /> </span>
+                  <span *ngIf="!canMoveToSummaryStep() && stepIndex === 1" class="conditions-text"
+                    >Fill in the boxes</span
+                  >
+                </div></ng-template
+              >
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Name:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [placeholder]="placeholder"
+                      [(ngModel)]="name"
+                      [ngClass]="{ error: errors.name }"
+                      name="name"
+                    />
+                    <span class="error" *ngIf="errors.name">{{ errors.name }}</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <label class="w-100 d-block">Short-Name:</label>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text rounded-left">{{ prefix }}</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Short-name"
+                      [(ngModel)]="shortName"
+                      [ngClass]="{ error: errors.shortName }"
+                      name="shortName"
+                    />
+                  </div>
+                  <span class="error" *ngIf="errors.shortName">{{ errors.shortName }}</span>
+                </div>
+              </div></mat-step
+            >
+            <mat-step>
+              <ng-template matStepLabel
+                ><div>
+                  <span>Summary</span>
+                </div></ng-template
+              >
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Name:</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [placeholder]="placeholder"
+                      [(ngModel)]="name"
+                      [ngClass]="{ error: errors.name }"
+                      name="name"
+                      disabled
+                    />
+                    <span class="error" *ngIf="errors.name">{{ errors.name }}</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="input-group">
+                    <label class="w-100 d-block">Short-Name:</label>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text rounded-left">{{ prefix }}</span>
+                    </div>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Short-name"
+                      [(ngModel)]="shortName"
+                      [ngClass]="{ error: errors.shortName }"
+                      name="shortName"
+                      disabled
+                    />
+                  </div>
+                  <span class="error" *ngIf="errors.shortName">{{ errors.shortName }}</span>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body p-0 height-list" style="height: 350px; overflow: scroll">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th style="font-size: 12px">Name</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody *ngIf="sources?.length != 0">
+                      <tr *ngFor="let transformada of sources; let i = index">
+                        <td class="vertical-middle">
+                          <p class="mb-0">{{ transformada.name }}</p>
+                        </td>
+                        <td class="vertical-middle td-center td-80">
+                          <mat-slide-toggle disabled [checked]="transformada.checked"></mat-slide-toggle>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div></div
+            ></mat-step>
+          </mat-stepper>
+        </div>
+      </div>
+      <div class="card-footer clearfix">
+        <button
+          *ngIf="key !== 'custom'"
+          data-bv="create"
+          class="btn btn-light btn-sm border text-primary float-right"
+          type="submit"
+          [disabled]="errors.name || errors.shortName"
+          (click)="save()"
+        >
+          Create
+        </button>
+        <div class="d-flex justify-content-end">
+          <button
+            class="btn btn-light btn-sm border text-primary float-right mr-2"
+            *ngIf="key === 'custom' && (stepIndex === 1 || stepIndex === 2)"
+            (click)="goBack(stepper)"
+            type="button"
+          >
+            Previous
+          </button>
+          <button
+            class="btn btn-light btn-sm border text-primary float-right mr-2"
+            *ngIf="key === 'custom' && (stepIndex === 0 || stepIndex === 1)"
+            (click)="goForward(stepper)"
+            type="button"
+            [ngbTooltip]="getNextTooltip()"
+            [ngClass]="!canMoveToNameStep() || !canMoveToSummaryStep() ? 'btn-disabled' : ''"
+          >
+            Next
+          </button>
+
+          <button
+            class="btn btn-primary btn-sm border float-right"
+            data-bv="create"
+            *ngIf="key === 'custom' && stepIndex === 2"
+            type="submit"
+            (click)="save()"
+          >
+            Create
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- MODULE CARDS -->
+    <div class="card" *ngIf="subTypesList">
+      <div class="card-header d-flex justify-content-between">
+        <button
+          class="btn btn-light border btn-sm text-primary"
+          *ngFor="let item of subTypesList"
+          [ngClass]="{ selected: item === subTypeSelected }"
+          (click)="selectSubType(item)"
+        >
+          <i class="icon-credit-card"></i>
+          <span class=""> {{ item.name }}</span>
+        </button>
+      </div>
+      <div class="card-body" *ngIf="showSubtypeDescription">
+        <div class="pb-4 border-bottom mb-4">{{ description }}</div>
+        <div *ngIf="showSubtypeDescription">
+          <form>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Name:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [placeholder]="placeholder"
+                    [(ngModel)]="name"
+                    [ngClass]="{ error: errors.name }"
+                    name="name"
+                  />
+
+                  <span class="error" *ngIf="errors.name">{{ errors.name }}</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="input-group">
+                  <label class="w-100 d-block">Short-Name:</label>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text rounded-left">{{ prefix }}</span>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Short-name"
+                    [(ngModel)]="shortName"
+                    [ngClass]="{ error: errors.shortName }"
+                    name="shortName"
+                  />
+                </div>
+                <span class="error" *ngIf="errors.shortName">{{ errors.shortName }}</span>
+              </div>
+            </div>
+            <button
+              class="btn btn-light border btn-sm text-primary float-right"
+              type="submit"
+              [disabled]="errors.name || errors.shortName || loadingCreate"
+              (click)="save()"
+            >
+              <i class="icon-spinner rotate" *ngIf="loadingCreate"></i>
+              Create
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

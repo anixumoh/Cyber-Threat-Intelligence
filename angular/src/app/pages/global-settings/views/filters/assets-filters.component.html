@@ -1,0 +1,85 @@
+<div class="assets-filters-header">
+  <div class="filters-section">
+    <div class="filter-boxes">
+      <!-- Settings type multiselect -->
+      <div class="form-field-container">
+        <mat-form-field appearance="fill" class="mr-2">
+          <mat-label>Settings Type {{ getSelectedCount('selectedSettingTypes') }}</mat-label>
+          <mat-select [formControl]="selectedSettingTypes" multiple triggerValue="null">
+            <mat-option
+              *ngFor="let setting of settingTypes"
+              [value]="setting"
+              (click)="checkSelection(setting, 'settings_type')"
+              >{{ settingsDictionary[setting] }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Modules type multiselect -->
+      <div class="form-field-container">
+        <mat-form-field appearance="fill" class="mr-2">
+          <mat-label>Module Type {{ getSelectedCount('selectedModuleTypes') }}</mat-label>
+          <mat-select [formControl]="selectedModuleTypes" multiple>
+            <mat-option
+              *ngFor="let module of moduleTypes"
+              [value]="module"
+              (click)="checkSelection(module, 'module_type')"
+              >{{ moduleTypesDictionary[module] }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Tags multiselect -->
+
+      <div class="form-field-container--tag">
+        <mat-form-field appearance="fill" class="mr-2">
+          <mat-label>Tags {{ getSelectedCount('selectedTags') }}</mat-label>
+          <mat-select [formControl]="selectedTags" multiple>
+            <mat-option *ngFor="let tag of tagsList" [value]="tag" (click)="checkSelection(tag, 'tags')">{{
+              tag
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="filter-buttons">
+      <button
+        class="btn btn-outline-primary filter-btn"
+        nohref
+        (click)="applyFilters()"
+        [disabled]="!isViewResetFilters"
+        [ngClass]="isViewResetFilters ? 'disabled-btn' : ''"
+      >
+        Apply
+      </button>
+      <button
+        [matTooltip]="'Reset Filters'"
+        class="btn btn-outline-danger btn-light btn-sm btn-danger text-danger ml-1 filter-btn"
+        type="button"
+        name="button"
+        nohref
+        *ngIf="isViewResetFilters"
+        (click)="resetFilters()"
+      >
+        <img src="assets/icons/refresh_filters.svg" style="width: 15px" alt="Clear All" />
+      </button>
+    </div>
+  </div>
+  <div class="buttons-section"></div>
+  <div class="search-section">
+    <input
+      type="text"
+      class="search-box"
+      placeholder="Search your setting"
+      [formControl]="searchQuery"
+      (keyup.enter)="search()"
+    />
+    <i class="icon-times text-danger reset-icon cursor-pointer" *ngIf="searchQuery.value" (click)="resetQuery()"></i>
+    <button class="btn btn-light btn-sm border mr-0 btn-search" (click)="search()">
+      <i class="icon-search"></i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,148 @@
+<div class="col-md-12 col-lg-12">
+  <div class="action-table">
+    <div class="d-flex justify-content-between">
+      <div class="d-flex">
+        <div class="button-action mr-2" ngbDropdown *ngIf="items?.length > 0">
+          <button
+            ngbDropdownToggle
+            [disabled]="!hasSomeChecked()"
+            class="btn btn-light btn-sm border px-2 btn-actions"
+            [ngClass]="{ 'pulse-blue': hasSomeChecked() }"
+            type="button"
+            id="actionsButtonDropdown"
+            name="button"
+          >
+            <i class="icon-ellipsis-v px-1"></i>
+          </button>
+          <div ngbDropdownMenu class="actions-dropdown-menu">
+            <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded">
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToCSV()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>Export to CSV</span>
+              </li>
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToJson()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>Export to JSON</span>
+              </li>
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="copyToClipboard('title')"
+              >
+                <i class="icon-copy mr-2"></i>
+                <span>Copy to clipboard</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <app-select
+          [items]="mentionsCategories"
+          [highlight]="mentionCategoriesModel && mentionCategoriesModel.length > 0"
+          [label]="'Filter by category'"
+          [icon]="'icon-filter-solid'"
+          [model]="mentionCategoriesModel"
+          [id]="'mentionCateogoriesFilterDropdown'"
+          (onChange)="onCategoryFilter($event)"
+        ></app-select>
+      </div>
+
+      <div>
+        <app-select
+          *ngIf="items?.length > 0"
+          [items]="limits"
+          [model]="limit"
+          [icon]="'icon-format_list_bulleted'"
+          [placement]="'bottom-right'"
+          id="limitDropdown"
+          (onChange)="onChangeLimit($event)"
+        >
+        </app-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-table-container">
+    <div class="empty" *ngIf="!loading && items.length === 0">
+      <div><img src="/assets/default_images/searching.svg" alt="" /></div>
+      <div class="empty__text">No mentions found!</div>
+    </div>
+    <app-overlay [loading]="loading" [minHeight]="loading ? '300px' : 'auto'" *ngIf="loading || items.length > 0">
+      <table class="table2">
+        <thead>
+          <tr class="table2__row table2__row--rounded table2__row--header-gray">
+            <th class="text-center td-40">
+              <input type="checkbox" [(ngModel)]="bulk" (click)="setCheckedState($event)" />
+            </th>
+            <th>Title</th>
+            <th class="text-center td-130">Type</th>
+            <th class="text-center td-150">Date</th>
+            <th class="td-40">Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items" class="table2__row table2__row--rounded" [ngClass]="item.riskClass">
+            <td class="text-center td-40 vertical-middle cursor-default" (click)="$event.stopImmediatePropagation()">
+              <input type="checkbox" class="cursor-pointer" [(ngModel)]="item.fxSelected" (click)="setChecked()" />
+            </td>
+            <td class="vertical-middle pl-2">
+              <p class="mb-0"><app-copy-to-clipboard [value]="item.title"></app-copy-to-clipboard></p>
+              <ng-container *ngFor="let label of item.labels">
+                <span class="badge badge-primary text-uppercase">
+                  {{ label }}
+                </span>
+              </ng-container>
+            </td>
+            <td class="text-center">
+              {{ item.feedSourceCategoryLabel || '' }}
+            </td>
+            <td class="text-center td-150">{{ item.published_at | date: 'dd/MM/yyyy' }}</td>
+            <th class="text-center">
+              <a [href]="item.URL" *ngIf="item.URL && !item.disableLink" target="_blank"
+                ><i class="icon-external-link"></i
+              ></a>
+              <span class="isDisabled" *ngIf="item.URL && item.disableLink">
+                <a [href]="item.URL" (click)="$event.preventDefault(); showLinkWarningModal = true"
+                  ><i class="icon-external-link"></i
+                ></a>
+              </span>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </app-overlay>
+  </div>
+  <div class="float-left mt-3">
+    <app-pagination-x [page]="page" [count]="count" [pageSize]="limit" (pageChange)="onPageChange($event)">
+    </app-pagination-x>
+  </div>
+</div>
+
+<app-modal [show]="showLinkWarningModal" (close)="showLinkWarningModal = false" class="modal--md">
+  <div class="modal-content">
+    <div class="card">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title mb-0 pull-left">
+          <i class="icon-blv-warning text-warning" style="font-size: 22px"></i> Warning
+        </h5>
+        <button type="button" class="close pull-right" (click)="showLinkWarningModal = false" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 16px">
+          This URL could lead to a potentially dangerous website and this is the reason why the link is disabled. We
+          recommend browsing the link using a Virtual Machine.
+        </p>
+      </div>
+      <div class="card-footer text-right">
+        <button class="btn btn-light text-danger btn-sm" (click)="showLinkWarningModal = false">Close</button>
+      </div>
+    </div>
+  </div>
+</app-modal>

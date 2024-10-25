@@ -1,0 +1,1467 @@
+# This is the new CTIP API
+swagger: '2.0'
+info:
+  title: CTIP BOTNET API
+  description: API for the BOTNET
+  version: "1.0.0"
+host: new-ui-pre.blueliv.com
+schemes:
+  - https
+basePath: /api/v2
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /organization/{organizationId}/module/{moduleId}/botnet/resource:
+#GET -> Get a paginable list of resources
+    get:
+      summary: List resources
+      description: Get a paginable list of resources
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: page
+          in: query
+          description: Page
+          required: false
+          type: integer
+        - name: maxRows
+          in: query
+          description: Max rows
+          required: false
+          type: integer
+        - name: since
+          in: query
+          description: Since date in milliseconds
+          required: false
+          type: integer
+        - name: to
+          in: query
+          description: To date in milliseconds
+          required: false
+          type: integer
+          format: int64
+        - name: analysisCalcResult
+          in: query
+          description: Analysis Result
+          required: false
+          type: string
+        - name: labels
+          in: query
+          description: Labels
+          required: false
+          type: string
+        - name: read
+          in: query
+          description: 0 - Both, 1 - Only read, 2 - Only unread
+          required: false
+          type: integer
+        - name: starred
+          in: query
+          description: Show only starred resources (true)
+          required: false
+          type: string
+        - name: q
+          in: query
+          description: Key word for search
+          required: false
+          type: string
+      tags:
+        - List
+      responses:
+        200:
+          description: JSON containing a list of resources
+          schema:
+            type: object
+            properties:
+              total_resources:
+                type: integer
+                format: int32
+              list:
+                type: array
+                items:
+                  title: Botnet
+                  type: object
+                  properties:
+                    email:
+                      type: boolean
+                    employee:
+                      type: boolean
+                    customer:
+                      type: boolean
+                    external:
+                      type: boolean
+                    id:
+                      type: integer
+                      format: int64
+                    title:
+                      type: string
+                    created_at:
+                      type: integer
+                      format: int64
+                    checked_at:
+                      type: integer
+                      format: int64
+                    changed_at:
+                      type: integer
+                      format: int64
+                    num_cred:
+                      type: integer
+                      format: int32
+                    fav:
+                      type: string
+                      description: Indicates if this is a fav resource
+                    issued:
+                      description: Indicates if this resource has issues
+                      type: boolean
+                    read:
+                      description: Indicates if this resources has been read or notification_date
+                      type: boolean
+                    tlpStatus:
+                      type: string
+                      description: Indicates the alert status
+                    labels:
+                      type: array
+                      items:
+                        title: Label
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          name: 
+                            type: string
+                          type:
+                            type: string
+          examples: 
+            application/json: 
+             {
+                "total_resources": 1,
+                "list": [
+                         {
+                            email: false,
+                            employee: false,
+                            customer: false,
+                            external: false,
+                            id: 243636323,
+                            title: "xxxx.yyy",
+                            created_at: 1485734400,
+                            checked_at: 1485734400,
+                            changed_at: 1485734400,
+                            num_cred: 1,
+                            read: true,
+                            fav: "NOT_STARRED",
+                            issued: false,
+                            labels: [
+                                {
+                                  id: 19837,
+                                  name: "gmail.com",
+                                  type: "MODULE_LABEL"
+                                }
+                            ],
+                            tlpStatus: "AMBER"
+                          }
+                        ]
+             }
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+# DELETE -> Delete resources
+    delete:
+      summary: Delete
+      description: Delete resources
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ResourceList'
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Resources succesfully deleted
+          schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/{resourceId}/tlpStatus/{status}:
+#PUT -> Sets a new TLP status
+    put:
+      summary: Set TLP
+      description: Sets a new TLP status
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+        - name: status
+          in: path
+          description: New TLP status
+          required: true
+          type: integer
+
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Mark as no read succesfully
+          schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/markAs:
+#PUT -> Mark resources as read/unread
+    put:
+      summary: Mark as
+      description: Mark resources as read or no read
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/MarkAsObject'
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Mark as no read succesfully
+          schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/rating:
+#PUT -> Rate a resource
+    put:
+      summary: Rating
+      description: Set new rating for the resources
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RatingObject'
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Rating saved correctly
+          schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/fav:
+#PUT -> Mark a resource as favorite
+    put:
+      summary: Favorite
+      description: Mark a resource as favorite
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FavObject'
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Resource favorited succesfully
+          schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/{resourcesId}/issue/{issueId}:
+# DELETE -> Remove an issue from resource
+    delete:
+      summary: Issue
+      description: Remove issue from resources
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourcesId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+        - name: issueId
+          in: path
+          description: Issue id
+          required: true
+          type: integer
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Issue removed succesfully
+          schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/{resourceId}/issue:
+# GET -> Get issue list by resource id
+    get:
+      summary: Detail
+      description: Get list of issues
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+      tags:
+        - List
+      responses:    
+        200:
+          description: JSON contaning list of issues
+          schema:
+            title: List
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                title:
+                  type: string
+                description:
+                  type: string
+                typeId:
+                  type: string
+                remediationTips:
+                  type: string
+                status:
+                  type: string
+                risk:
+                  type: string
+                activities:
+                  type: integer
+                module_id:
+                  type: integer
+                organitazion_id:
+                  type: integer
+                creation_date:
+                  type: integer
+                  format: int64
+                checked_at:
+                  type: integer
+                  format: int64
+                notification_date:
+                  type: integer
+                  format: int64
+                lastUpdateUser:
+                  type: string
+                reputationalSearchId: #Module Id
+                  type: integer
+                superSearchId: #Organization Id
+                  type: integer
+                searchType:
+                  type: string
+                labels:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      type:
+                        type: string
+                    
+          examples: 
+            application/json: 
+              [
+                {
+                  id: 1,
+                  title: "",
+                  description: "",
+                  typeId: "",
+                  remediationTips: "",
+                  status: "",
+                  risk: "",
+                  activities: 0,
+                  creation_date: 1485734400,
+                  changed_at: 1485734400,
+                  notification_date: 1485734400,
+                  last_update_user: "",
+                  reputationalSearchId: 0,
+                  superSearchId: 0,
+                  labels: [
+                      {
+                          id: 15412,
+                          name: "incident",
+                          type: "GLOBAL"
+                      }
+                  ]
+                }
+              ]
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+            
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/issue/list:
+# GET -> Get issue list by module id
+    get:
+      summary: Detail
+      description: Get list of issues
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+      tags:
+        - List
+      responses:    
+        200:
+          description: JSON contaning list of issues
+          schema:
+            title: List
+            type: array
+            items:
+              type: object
+              properties:
+                value:
+                  type: string
+                label:
+                  type: string
+          examples: 
+            application/json: 
+              [
+                {
+                  "value": "6",
+                  "label": "Test issue"
+                },
+                {
+                  "value": "1",
+                  "label": "Stolen credentials"
+                }
+              ]
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+            
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/{resourceId}/issue/types:
+# GET -> Get issue types
+    get:
+      summary: Detail
+      description: Get list of types of issues
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+      tags:
+        - List
+      responses:    
+        200:
+          description: JSON contaning list of types
+          schema:
+            title: List
+            type: array
+            items:
+              type: object
+              properties:
+                label:
+                  type: string
+                value:
+                  type: string
+          examples: 
+            application/json: 
+              [
+                {
+                  value: "type1",
+                  label: "Type 1"
+                }
+              ]
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+            
+      
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/label:
+#PUT -> Assign a label to resources
+    put:
+      summary: Label
+      description: Assign a label to resources
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/LabelObject'
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Label assigned succesfully
+          schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+    get:
+      summary: Label list
+      description: Get label list by organizationId and moduleId
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+      tags:
+        - Utils
+      responses:    
+        200:
+          description: Label list
+          schema:
+            $ref: '#/definitions/LabelList'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/{resourceId}:
+# GET -> Get detailed information from a specific resource
+    get:
+      summary: Detail
+      description: Get detailed information from a specific resource
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+      tags:
+        - List
+      responses:    
+        200:
+          description: JSON contaning detailed information of a the resource
+          schema:
+            title: Detailed object
+            type: object
+            items:
+              title: Details
+              type: object
+              properties:
+                id:
+                  type: integer
+                title:
+                  type: string
+                created_at:
+                  type: integer
+                  format: int64
+                checked_at:
+                  type: integer
+                  format: int64
+                changed_at:
+                  type: integer
+                  format: int64
+                read:
+                  type: boolean
+                fav:
+                  type: string
+                issued:
+                  type: boolean
+                labels:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                      name:
+                        type: string
+                      type:
+                        type: string
+                email:
+                  type: boolean
+                employee:
+                  type: boolean
+                customer:
+                  type: boolean
+                external:
+                  type: boolean
+                num_cred:
+                  type: integer
+                credentials:
+                  type: array
+                  items:
+                    title: Credential
+                    description: There are two different credentials, both are represented
+                    type: object
+                    properties:
+                      # Common attributes
+                      id:
+                        type: string
+                      username: 
+                        type: string
+                      password:
+                        type: string
+                      # only Common credential
+                      portalUrl:
+                        type: string
+                      type:
+                        type: string
+                      isEmail:
+                        type: boolean
+                      reportedAt:
+                        type: integer
+                        format: int64
+                      classification:
+                        type: string
+                      stolenData:
+                        type: array
+                        items:
+                          title: StolenData
+                          type: object
+                          properties:
+                            stolenAt:
+                              type: integer
+                              format: int64
+                            botLongitude:
+                              type: number
+                              format: float
+                            botLatitude:
+                              type: number
+                              format: float
+                      # only Hacktivism credential
+                      email:
+                        type: string
+                      domainUrl:
+                        type: string
+                      ip:
+                        type: string
+                      fullname:
+                        type: string
+                      address:
+                        type: string
+                      telephone:
+                        type: string
+          examples: 
+            application/json: 
+             {
+                email": false,
+                "employee": false,
+                "customer": false,
+                "external": false,
+                "credentials": [
+                  {
+
+                      "id": "5824ee1ae4b022aaab57457a",
+                      "userName": "xxxxxxx@gmail.com",
+                      "userPassword": "yzyzyzyyzyzz",
+                      "portalUrl": "http://www.shine.com/myshine/login/",
+                      "botIp": "14.97.80.115",
+                      "type": "PONY",
+                      "isEmail": false,
+                      "reportedAt": 1485734400,
+                      "classification": "UNCLASSIFIED",
+                      "stolenData": [
+                          {
+                              "stolenAt": 1485734400,
+                              "botLongitude": 72.8258,
+                              "botLatitude": 18.975
+                          }
+                      ]
+                  }
+                ],
+                "id": 243636323,
+                "title": "gmail.com",
+                "created_at": 1485734400,
+                "checked_at": 1485734400,
+                "changed_at": 1485734400,
+                "labels": [
+                    {
+                        "id": 19837,
+                        "name": "gmail.com",
+                        "type": "MODULE_LABEL"
+                    }
+                ]
+              }
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+  /organization/{organizationId}/module/{moduleId}/botnet/resource/{resourceId}/metadata:
+    get:
+      summary: Metadata [NOT IMPLEMENTED]
+      description: Get metadata header information from a specific resource
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: Resource id
+          required: true
+          type: integer
+      tags:
+        - List
+      responses:    
+        200:
+          description: JSON contaning metadata of a the resource
+          schema:
+            title: Detailed object
+            type: object
+            items:
+              title: Details
+              type: object
+              properties:
+                email:
+                  type: boolean
+                employee:
+                  type: boolean
+                customer:
+                  type: boolean
+                external:
+                  type: boolean
+                id:
+                  type: integer
+                  format: int64
+                title:
+                  type: string
+                created_at:
+                  type: integer
+                  format: int64
+                checked_at:
+                  type: integer
+                  format: int64
+                changed_at:
+                  type: integer
+                  format: int64
+                labels:
+                  type: array
+                  items:
+                    title: Label
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name: 
+                        type: string
+                      type:
+                        type: string
+                
+          examples: 
+            application/json: 
+             {
+                email": false,
+                "employee": false,
+                "customer": false,
+                "external": false,
+                "id": 243636323,
+                "title": "gmail.com",
+                "created_at": 1485734400,
+                "checked_at": 1485734400,
+                "changed_at": 1485734400,
+                "labels": [
+                    {
+                        "id": 19837,
+                        "name": "gmail.com",
+                        "type": "MODULE_LABEL"
+                    }
+                ]
+              }
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+  /organization/{organizationId}/module/{moduleId}/botnet/settings:
+#PUT -> Put a value settings
+    put:
+      summary: Put settings
+      description: Put settings for Botnet module
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: settignsObject
+          in: body
+          description: This contains the values to add
+          required: true
+          schema:
+            $ref: '#/definitions/SettingsObject'
+      tags:
+        - Settings
+      responses:    
+        200:
+          description: Settigns succesfully updated
+          schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+#DELETE -> Delete a value settings
+    delete:
+      summary: Put settings
+      description: Put settings for Botnet module
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: settignsObject
+          in: body
+          description: This contains the values to delete
+          required: true
+          schema:
+            $ref: '#/definitions/SettingsObject'
+      tags:
+        - Settings
+      responses:    
+        200:
+          description: Settigns succesfully updated
+          schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+            
+  /organization/{organizationId}/module/{moduleId}/botnet/settings/{settingsParam}:
+#GET -> Get settings for BOTNET module
+    get:
+      summary: Get settings
+      description: Get settings for Botnet module and specified settings param
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: settingsParam
+          in: path
+          description: Settings param to perform action {DOMAIN, IP, EMAIL, ALERT}
+          required: true
+          type: string
+      tags:
+        - Settings
+      responses:    
+        200:
+          description: JSON containing a list of parameters
+          schema:
+            $ref: '#/definitions/SettingsObject'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+  /organization/{organizationId}/module/{moduleId}/botnet/alerts:
+#GET -> Get alert list
+    get:
+      summary: Get alerts
+      description: Get alert list of this module
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          type: string
+        - name: order
+          in: query
+          type: string
+          description: Order by -> ID, CH (Fire at), FN (filter name), ST (status)
+          required: false
+        - name: sort
+          in: query
+          type: boolean
+          description: Activate sort
+          required: false
+        - name: maxRows
+          in: query
+          type: integer
+          description: Number of alerts to return
+          required: false
+      tags:
+        - Alerts
+      responses:    
+        200:
+          description: JSON containing a list of alerts
+          schema:
+            type: object
+            properties:
+              total_resources:
+                type: integer
+                format: int32
+              list:
+                type: array
+                items:
+                  title: Alerts
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    status:
+                      type: string
+                    filterName:
+                      type: string
+                    firingDate:
+                      type: integer
+                      format: int64
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+  /organization/{organizationId}/module/{moduleId}/botnet/alerts/{alertId}:
+#GET -> Get alert details
+    get:
+      summary: Get alert
+      description: Get alert details
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          type: string
+        - name: maxRows
+          in: query
+          type: integer
+          description: Number of alerts to return
+          required: false
+        - name: alertId
+          in: path
+          type: integer
+          description: Alert Id
+          required: true
+      tags:
+        - Alerts
+      responses:    
+        200:
+          description: JSON containing alert details
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              status:
+                type: string
+              filterName:
+                type: string
+              firedAt:
+                type: integer
+                format: int64
+              organizationId:
+                type: integer
+              moduleId:
+                type: integer
+              filterId:
+                type: integer
+              resources:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    url:
+                      type: string
+                    title:
+                      type: string
+                    content_type:
+                      type: string
+                    source_type:
+                      type: string
+                    resource_type:
+                      type: string
+                    web_type:
+                      type: string
+                    organization_id:
+                      type: integer
+                    module_id:
+                      type: integer
+                    analysis_result:
+                      type: string
+                    analysis_calc_result:
+                      type: string
+                    read:
+                      type: boolean
+                    fav:
+                      type: string
+                    issued:
+                      type: boolean
+                    labels:
+                      $ref: '#/definitions/LabelList'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+#DELETE -> Get alert details
+    delete:
+      summary: Delete alert
+      description: Delete alert details
+      parameters:
+        - name: x-cookie
+          in: header
+          description: Authorization token
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: integer
+        - name: alertId
+          in: path
+          type: integer
+          description: Alert Id
+          required: true
+      tags:
+        - Alerts
+      responses:    
+        200:
+          description: Success Request
+          schema:
+            $ref: '#/definitions/Response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Response'
+
+
+definitions:
+  Response:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+        description: Shows the response code
+      message:
+        type: string
+        description: Shows the response message
+      field:
+        type: string
+        description: This field can show a secondary message or the fields that has been modified
+      httpCode:
+        type: integer
+        description: Shows the HTTP response code
+      error:
+        type: boolean
+        description: Indicates if the response is an error message or not
+  Resource:
+    type: string
+    description: Resource ID
+  ResourceList:
+    type: array
+    items:
+      $ref: '#/definitions/Resource'
+    example:
+      application/json:
+        ["1","2","3"]
+  MarkAsObject:
+    type: object
+    properties:
+      value:
+        type: boolean
+        description: true to mark as read, false to mark as unread
+      resources:
+        $ref: '#/definitions/Resource'
+    example:
+      application/json:
+        {
+          "read": true,
+          "resources": ["1","2","3"]
+        }
+  RatingObject:
+    type: object
+    properties:
+      value:
+        type: integer
+        format: int32
+        description: Value from 1 to 5
+      resources:
+        $ref: '#/definitions/Resource'
+    example:
+      application/json:
+        {
+          "rate": 5,
+          "resource": "1"
+        }
+  FavObject:
+    type: object
+    properties:
+      value:
+        type: string
+        description: Favorite type (NOT_STARRED, USER_STARRED, GROUP_STARRED, FULL_STARRED)
+      resource:
+        type: integer
+        format: int64
+        description: Resource id
+    example:
+      application/json:
+        {
+          "status": "NOT_STARRED",
+          "resource": "1"
+        }
+  LabelObject:
+    type: object
+    properties:
+      label:
+        type: integer
+        description: Label ID
+      resources:
+        $ref: '#/definitions/Resource'
+    example:
+      application/json:
+        {
+          "label": labelId,
+          "resources": ["1","2","3"]
+        }
+  LabelList:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        label:
+          type: string
+        background_color:
+          type: integer
+          format: int64
+        text_color:
+          type: integer
+          format: int64
+        organization_id:
+          type: integer
+        module_id:
+          type: integer
+    example:
+      application/json:
+        [
+            {
+                "id": 1,
+                "label": "gmail.com",
+                "background_color": 8421504,
+                "text_color": 16777215,
+                "organization_id": 1,
+                "module_id": 1
+            },
+            {
+                "id": 2,
+                "label": "Hacktivism Credentials",
+                "background_color": 16777215,
+                "text_color": 0,
+                "organization_id": 1,
+                "module_id": 1
+            }
+        ]
+  SettingsObject:
+    type: object
+    properties:
+      type:
+        type: string
+      values:
+        type: array
+        description: List of {DOMAIN, IP, EMAIL, ALERT} to be monitorized
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+            value:
+              type: string
+    example:
+      application/json:
+        {
+          "values": [
+            {
+              "value": "domain.com",
+              "id": 7
+            }
+          ],
+          "type": "DOMAIN"
+        }

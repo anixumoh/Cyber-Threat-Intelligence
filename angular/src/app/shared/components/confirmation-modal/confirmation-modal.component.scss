@@ -1,0 +1,10 @@
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  &.card-footer--no-header {
+    background-color: transparent;
+    border: none;
+  }
+}

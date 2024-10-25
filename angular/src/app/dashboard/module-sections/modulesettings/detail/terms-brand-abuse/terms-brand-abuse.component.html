@@ -1,0 +1,113 @@
+<div class="card mb-4">
+  <div class="card-header p-1 pl-2 clearfix">
+    <h6 class="mt-1 mb-0 mr-2 float-left">Terms</h6>
+    <button
+      class="btn btn-light btn-sm color-primary float-left mr-1"
+      *ngIf="!grants?.isCustomerOrOperator()"
+      type="button"
+      (click)="createSetting(searchPhraseCreate)"
+    >
+      <i class="icon-plus-circle-solid mr-1"></i>
+      <span>Add Search Phrase</span>
+    </button>
+    <button
+      class="btn btn-light btn-sm color-primary float-left mr-1"
+      *ngIf="!grants?.isCustomerOrOperator()"
+      type="button"
+      (click)="createSetting(imageCreate)"
+    >
+      <i class="icon-plus-circle-solid mr-1"></i>
+      <span>Add Image</span>
+    </button>
+    <button
+      class="btn btn-light btn-sm color-primary float-left mr-1"
+      *ngIf="grants?.isMaster() || grants?.isAdminSuperAdmin()"
+      type="button"
+      (click)="createSetting(defaultCreate)"
+    >
+      <i class="icon-plus-circle-solid mr-1"></i>
+      <span>Add Term</span>
+    </button>
+    <div class="float-right">
+      <input
+        type="text"
+        placeholder="Search for terms"
+        class="float-left search-input mr-1"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="searchTerms(searchTerm)"
+      />
+      <div class="main-header-right float-right">
+        <app-pagination [paginationComponent]="'header'" [dropPosition]="'right'" [totalResources]="totalResources">
+        </app-pagination>
+      </div>
+    </div>
+  </div>
+  <div class="card-body p-0">
+    <!-- NO RESULTS -->
+    <div *ngIf="values?.length == 0" class="no-results-box">
+      <img src="assets/default_images/searching.svg" />
+      <h6 class="no-results">"There are no {{ data.name }}"</h6>
+    </div>
+    <!-- TABLE -->
+    <table class="table table-hover cursor-pointer mb-0" *ngIf="values?.length != 0">
+      <thead>
+        <tr *ngIf="!grants?.isCustomerOrOperator()">
+          <ng-container *ngFor="let header of tableHeader">
+            <th [ngClass]="header.class ? header.class : ''">{{ header.value }}</th>
+          </ng-container>
+        </tr>
+        <tr *ngIf="grants?.isCustomerOrOperator()">
+          <ng-container *ngFor="let header of tableHeaderCustomer">
+            <th [ngClass]="header.class ? header.class : ''">{{ header.value }}</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let it of values; let i = index">
+          <td class="vertical-middle" *ngFor="let t of it.values" [ngClass]="t.class ? t.class : ''">
+            <p
+              class="mb-0"
+              [ngClass]="t.elementClass ? t.elementClass : ''"
+              *ngIf="!t.edit && !t.isBoolean && !t.delete"
+              (click)="navigateTo(it.id, it.isImage, actionNavigate)"
+            >
+              {{ t.value }}
+            </p>
+            <button
+              class="btn btn-circle"
+              [ngClass]="t.elementClass ? t.elementClass : ''"
+              *ngIf="t.edit && !grants?.isCustomerOrOperator()"
+              (click)="navigateTo(it.id, it.isImage, actionEdit)"
+            >
+              <i class="icon-pencil-square color-primary"></i>
+            </button>
+            <button
+              class="btn btn-circle"
+              [ngClass]="t.elementClass ? t.elementClass : ''"
+              *ngIf="t.delete && !grants?.isCustomerOrOperator()"
+              (click)="openConfirmationModal(it.name, i, it.termType)"
+            >
+              <i class="fa color-danger" [ngClass]="t.iconClass"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer bg-white p-1" *ngIf="values?.length !== 0">
+    <app-pagination [paginationComponent]="'footer'" [totalResources]="totalResources"> </app-pagination>
+  </div>
+</div>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete this term?'"
+  [warning]="'This action cannot be undone.'"
+  [acceptBtn]="'Yes'"
+  [loadingAccept]="loading"
+  *ngIf="deleteConfirmation"
+  [cancelBtn]="'No'"
+  (accept)="deleteTerm(termToDeleteId, termToDeleteIndex, termToDeleteType)"
+  (cancel)="closeConfirmation()"
+>
+</modal-window>

@@ -1,0 +1,105 @@
+// COLORS BASIC
+$white: #ffffff;
+$black: #000000;
+$gray: #bdbdbd;
+$gray-hover: #899295;
+$gray-middle: #e9ecef;
+$text-muted: #b2b2b2;
+$border: #ced4da;
+// LIGHT
+$light: #f8f9fa;
+$light-hover: #c9c9c9;
+// DARK
+$dark: #1b2734;
+// SECONDARY
+$secondary: #6c757d;
+// PRIMARY
+$primary: #327abd;
+$primary-hover: #2d6ba5;
+// SUCCESS
+$success: #00b18f;
+$success-hover: #009a7c;
+// WARNING
+$warning: #ebcb00;
+$warning-hover: #d3b719;
+// DANGER
+$danger: #dc665a;
+$danger-hover: #bf594e;
+// BLUELIV COLOR
+$default: #1b2734;
+$default-hover: #000000;
+$default-dark: #002027;
+$default-light: #5dbcd1;
+// BLUELIV COLOR SCALE
+$default95: #0e1b29;
+$default90: #1b2734;
+$default85: #27333f;
+$default80: #343f4a;
+$default75: #414b56;
+$default70: #4e5761;
+$default65: #5a636c;
+$default60: #676f77;
+$default55: #747b83;
+$default50: #80878e;
+$default45: #8c9399;
+$default40: #999fa5;
+$default35: #a6abb0;
+$default30: #b2b7bb;
+$default25: #bfc3c6;
+$default20: #cccfd2;
+$default15: #d9dbdd;
+$default10: #e5e7e8;
+$default05: #f2f3f3;
+$default02: #f7f7f9;
+// BACKGROUND
+$bg-blueliv: #f5f5f5;
+$bg-light: #f8f9fa;
+$bg-sidebar: rgb(244, 245, 247);
+// PROGRESS BAR
+$bg-progress-bar: #19b5fe;
+// INFO
+$bg-info: #d1ecf1;
+// SHADOWS
+$module-shadow: 0 3px 1px -1px rgba(0, 0, 0, 0.08);
+$avatar-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0.14);
+$toolbar-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.14);
+$shadow-button: 0 1px 1px rgba(0, 0, 0, 0.08), 0 1px 1px rgba(0, 0, 0, 0.12);
+$shadow-small: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+$shadow-regular: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+$shadow-big: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+// FONTS
+$font-normal: 14px;
+$font-small: 12px;
+$font-weight-thin: 200;
+$font-weight-regular: 400;
+$font-weight-semibold: 500;
+$font-weight-bold: 600;
+$font-table-color: #7e7e7e;
+$dropdown-color: #7e7e7e;
+$placeholder: #bdbdbd;
+
+/* Layout */
+$menu-width: 250px;
+// $toolbar-height: 44px;
+$toolbar-height: 56px;
+$sidebar-width: 350px;
+$module-max-width: 1300px;
+$module-max-width-half: 650px;
+//$module-max-width: calc(100% - 350px);
+//$module-min-width: 880px;
+$module-min-width: 900px;
+$module-min-width-half: 450px;
+$border-radius: 4px;
+// SIDEBAR
+$sidebar-width: 200px;
+/* -- Sidebar preview */
+$preview-sidebar-width: 350px;
+$header-footer-height: 48px;
+$main-height: calc(100vh - 48px - 48px - 44px - 50px);
+$main-max-height: calc(100vh - 48px - 47px - 44px - 50px);
+$main-max-table-height: calc(100vh - 500px);
+$classify-short-box: calc((100vh - 48px - 47px - 44px - 90px) / 3);
+
+/* Breakpoints */
+$tablet-landscape: 1024px;
+$tablet-portrait: 768px;

@@ -1,0 +1,24 @@
+<ul class="timeline">
+  <li *ngFor="let item of timelineData">
+    <div class="timeline-badge primary"><i class="icon-bug"></i></div>
+    <div class="timeline-panel">
+      <div class="timeline-heading">
+        <h6 class="timeline-title">{{ item.title }}</h6>
+        <span>
+          <span class="timeline-text-muted"><i class="icon-clock"></i> {{ item.time }}</span>
+        </span>
+      </div>
+      <div class="timeline-body">
+        <p>
+          <span *ngIf="!isMalware(item) && showDescription">{{ item.description }}</span>
+          <span *ngIf="isMalware(item)">
+            <a class='timeline-a' href="" [routerLink]="buildIndicatorLink(item.description)">{{ item.description }}</a>
+            <span style="white-space: nowrap"
+              >(see <a href="{{ buildReportLink(item.description) }}">Sandbox report</a>)</span
+            >
+          </span>
+        </p>
+      </div>
+    </div>
+  </li>
+</ul>

@@ -1,0 +1,60 @@
+<div class="row p-3">
+  <ng-container *ngIf="_childCharts; else loadingCharts">
+    <div
+      class="col-md-6 mb-3 mt-1 p-0 div-card"
+      *ngFor="let childChart of _childCharts; let i = index"
+      [ngClass]="{ 'pl-3': i % 2 !== 0 }"
+    >
+      <app-chart-card
+        [title]="childChart.title"
+        [chartState]="childChart"
+        [height]="chartHeight"
+        (expandCallBack)="openExpandModal($event)"
+        (downloadCallBack)="downloadChart($event)"
+        [orgId]="orgID"
+      >
+        <ng-container *ngIf="childChart.isDataPresent">
+          <div #chartCard style="height: 100%">
+            <app-state-machine-chart
+              [isLoading]="childChart.isLoading"
+              [isDataPresent]="childChart.isDataPresent"
+              [isError]="childChart.isError"
+              [isRobotSnippet]="true"
+              [chartData]="childChart.detail"
+              [errorClass]=""
+              errorMessage="At the moment there is no data available for this chart"
+              [fontSize]="16"
+              [robotHeight]="70"
+              [isCentral]="true"
+              [divHeight]="chartHeight"
+            >
+            </app-state-machine-chart>
+          </div>
+        </ng-container>
+      </app-chart-card>
+    </div>
+  </ng-container>
+  <ng-template #loadingCharts>
+    <div class="no-results-box">
+      <i class="icon-spinner rotate"></i>
+      <h6 class="no-results">Loading</h6>
+    </div>
+  </ng-template>
+</div>
+<modal-window
+  [customClass]="'modal-xl'"
+  zIndex="1050"
+  *ngIf="expandModal && expandChartData"
+  modalTitle="{{ expandChartData.title || '...' }}"
+  (cancel)="closeExpandModal()"
+>
+  <app-state-machine-chart
+    [isLoading]="false"
+    [isDataPresent]="expandChartData.isDataPresent"
+    [isError]="expandChartData.isError"
+    [chartData]="expandChartData.detail"
+    [isCentral]="true"
+    [divHeight]="360"
+  >
+  </app-state-machine-chart>
+</modal-window>

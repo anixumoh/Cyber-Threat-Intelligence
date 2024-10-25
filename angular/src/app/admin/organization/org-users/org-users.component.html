@@ -1,0 +1,55 @@
+<modal-window *ngIf="isOpen" [cancelBtn]="'Close'" [zIndex]="902" [modalTitle]="'Users'" (cancel)="onCloseModal()">
+  <div class="modal-body p-0">
+    <app-table-admin
+      [isRowSelected]="false"
+      [isEdit]="false"
+      [isDelete]="false"
+      [template_outlet]="{ Users: usersTemplate }"
+      [template_header]="[HeaderTitle]"
+      (reloadEmitter)="reloadData()"
+      [table]="tableUser"
+      #adminTable
+    >
+    </app-table-admin>
+  </div>
+</modal-window>
+
+<ng-template let-item #usersTemplate>
+  <span class="d-flex align-items-center justify-content-between w-100">
+    <span class="font-weight-light">{{ item.username }}</span>
+    <button
+      class="btn btn-light text-primary btn-sm pull-right"
+      *ngIf="!inSelectedUser(item.id)"
+      (click)="selectedUser(item)"
+    >
+      <i class="icon-plus-circle-solid mr-1"></i>
+      Add
+    </button>
+    <button
+      class="btn btn-light text-danger btn-sm pull-right"
+      *ngIf="inSelectedUser(item.id)"
+      (click)="removeUserFromList(item)"
+    >
+      <i class="icon-delete mr-1"></i>
+      Remove
+    </button>
+  </span>
+</ng-template>
+
+<!--TEMPLATE FOR TITLE USER LIST-->
+<ng-template #HeaderTitle>
+  <div class="header-container">
+    <h6 class="mt-1 mr-2">User List</h6>
+    <input
+      class="sb-search-input"
+      placeholder="Search for users"
+      type="search"
+      value=""
+      name="search"
+      id="search"
+      [(ngModel)]="userQuery"
+      #adminTable
+      (keyup)="debounceSearch($event)"
+    />
+  </div>
+</ng-template>

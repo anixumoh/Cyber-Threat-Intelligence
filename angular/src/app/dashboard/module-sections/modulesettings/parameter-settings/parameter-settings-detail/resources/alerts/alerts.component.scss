@@ -1,0 +1,35 @@
+@import "src/scss/variables";
+@import "../generic-parameter/generic-parameter.component.scss";
+
+// INPUT
+.form-group{
+  input{
+    height: 31px;
+  }
+}
+// DROPDOWN
+.dropdown-list{
+  position: relative;
+  z-index: 1000;
+  .list-group {
+    position: absolute;
+    visibility: hidden;
+    &.open {
+      visibility: visible;
+      top: 32px;
+      left: 75px;
+      width: 300px;
+      max-height: 200px;
+      overflow: auto !important;
+    }
+    .list-group-item {
+      &:hover{
+        color:$primary;
+      }
+      &.active {
+        background-color: $light;
+        color:$primary;
+      }
+    }
+  }
+}

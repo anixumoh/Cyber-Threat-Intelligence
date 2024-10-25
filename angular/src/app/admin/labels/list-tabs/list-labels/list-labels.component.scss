@@ -1,0 +1,26 @@
+@import 'src/scss/variables';
+@import '~scss/mixins';
+
+.filter-section {
+  select {
+    height: 31px !important;
+    background-color: $white;
+    border-radius: 4px;
+  }
+}
+
+.text-ligth {
+  color: #80808054;
+}
+
+.input-search {
+  @include ct-input-search();
+}
+
+.org-select {
+  max-width: 140px;
+}
+
+.mod-select {
+  max-width: 100px;
+}

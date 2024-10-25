@@ -1,0 +1,104 @@
+$bem_separator_element: '__';
+$bem_separator_modifier: '--';
+
+/**
+  BEM Mixins
+ */
+@mixin block($bem_item) {
+  .#{$bem_item} {
+    @content;
+  }
+}
+
+@mixin element($bem_item) {
+  $bem_parent: &;
+  $bem_is_parent: str-index('#{$bem_parent}', '#{$bem_separator_modifier}');
+  @if $bem_is_parent != null {
+    $bem_parent_without_modifier: str-slice('#{$bem_parent}', 0, $bem_is_parent - 1);
+
+    #{$bem_parent_without_modifier}#{$bem_separator_element}#{$bem_item} {
+      @content;
+    }
+  } @else {
+    @at-root {
+      #{&}#{$bem_separator_element}#{$bem_item} {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin modifier($bem_item) {
+  $bem_parent: &;
+  @at-root {
+    #{&}#{$bem_separator_modifier}#{$bem_item} {
+      @content;
+    }
+  }
+}
+
+/**
+  Commons Mixins
+ */
+
+// Flexbox display
+@mixin flexbox {
+  display: flex;
+}
+
+// Axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | space-between | space-around
+@mixin justify-content($value: center) {
+  justify-content: $value;
+}
+// Cross-axis Alignment
+// - applies to: flex containers
+// flex-start | flex-end | center | baseline | stretch
+@mixin align-items($value: center) {
+  align-items: $value;
+}
+
+@mixin ct-flex-center() {
+  @include flexbox();
+  @include justify-content(center);
+  @include align-items(center);
+}
+
+// nowrap | wrap | wrap-reverse | inherit | initial | revert | unset
+@mixin ct-flex-wrap($value: wrap) {
+  flex-wrap: $value;
+}
+
+@mixin ct-flex-with-params($justify, $align) {
+  @include flexbox();
+  @include justify-content($justify);
+  @include align-items($align);
+}
+
+@mixin ct-input-search() {
+  margin-left: -22px;
+  margin-right: 4px;
+}
+
+@mixin ct-invalid-error() {
+  @include ct-flex-center();
+  margin-top: 4px;
+}
+
+@mixin tableBorderModifier($statusColor) {
+  @include modifier('border-' + $statusColor) {
+    td:first-of-type {
+      border-left: 4px solid map_get($colors, $statusColor);
+    }
+  }
+}
+
+@mixin verticalBreakEllipsis($linesClamp) {
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $linesClamp;
+}

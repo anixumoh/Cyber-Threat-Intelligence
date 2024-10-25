@@ -1,0 +1,4 @@
+include:
+  - project: operations/project-templates/gitlab-ci-base
+    ref: master
+    file: typescript/gitlab-ci-cd-optos.yaml

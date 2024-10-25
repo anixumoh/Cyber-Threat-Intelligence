@@ -1,0 +1,40 @@
+<app-chart-card [chartState]="state" title="Monitored Assets" [height]="chartHeight" [orgId]="orgId">
+  <div class="custom-control custom-radio ml-3 custom-control-inline">
+    <input type="radio" [(ngModel)]="selectedModule" value="all" (change)="getAssetsChartInfo()" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
+    <label class="custom-control-label" for="customRadioInline1">All modules</label>
+  </div>
+  <div class="custom-control custom-radio custom-control-inline">
+    <input type="radio" [(ngModel)]="selectedModule" value="enabled" (change)="getAssetsChartInfo()" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
+    <label class="custom-control-label" for="customRadioInline2">Enabled modules</label>
+  </div>
+  <div class="custom-control custom-radio custom-control-inline">
+    <input type="radio" [(ngModel)]="selectedModule" (change)="getAssetsChartInfo()" value="disabled" id="customRadioInline3" name="customRadioInline1" class="custom-control-input">
+    <label class="custom-control-label" for="customRadioInline3">Disabled modules</label>
+  </div>
+  <ul class="list-group list-group-flush" *ngIf="!state.isLoading">
+    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+      <h6 class="text-dark mb-0">IPs:</h6>
+      <span class="badge badge-primary badge-pill">{{ state.values.IP | number }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+      <h6 class="text-dark mb-0">IP Ranges:</h6>
+      <span class="badge badge-primary badge-pill">{{ state.values.IP_RANGE | number }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+      <h6 class="text-dark mb-0">Domains:</h6>
+      <span class="badge badge-primary badge-pill">{{ state.values.DOMAIN | number }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+      <h6 class="text-dark mb-0">Subdomains:</h6>
+      <span class="badge badge-primary badge-pill">{{ state.values.SUBDOMAIN | number }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+      <h6 class="text-dark mb-0">Keywords:</h6>
+      <span class="badge badge-primary badge-pill">{{ state.values.KEYWORD | number }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
+      <h6 class="text-dark mb-0">Bincodes:</h6>
+      <span class="badge badge-primary badge-pill">{{ state.values.BINCODES | number }}</span>
+    </li>
+  </ul>
+</app-chart-card>

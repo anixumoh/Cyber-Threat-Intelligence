@@ -1,0 +1,103 @@
+<div class="action-table">
+  <div class="d-flex justify-content-between">
+    <div class="button-action mb-2" ngbDropdown *ngIf="items?.length > 0">
+      <button
+        ngbDropdownToggle
+        [disabled]="!hasSomeChecked()"
+        class="btn btn-light btn-sm border px-2 btn-actions"
+        [ngClass]="{ 'pulse-blue': hasSomeChecked() }"
+        type="button"
+        id="actionsButtonDropdown"
+        name="button"
+      >
+        <i class="icon-ellipsis-v px-1"></i>
+      </button>
+      <div ngbDropdownMenu class="actions-dropdown-menu">
+        <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded">
+          <li class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2" (click)="exportToCSV()">
+            <i class="icon-share-square mr-2"></i>
+            <span>Export to CSV</span>
+          </li>
+          <li class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2" (click)="exportToJson()">
+            <i class="icon-share-square mr-2"></i>
+            <span>Export to JSON</span>
+          </li>
+          <li
+            class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+            (click)="copyToClipboard('name')"
+          >
+            <i class="icon-copy mr-2"></i>
+            <span>Copy to clipboard</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="d-flex" *ngIf="items?.length > 0">
+      <button
+        *ngIf="actorName"
+        [disabled]="loading"
+        class="btn btn-light btn-sm border text-primary float-right px-3 ml-3 mr-2"
+        (click)="toggleListStyle()"
+      >
+        <i class="mr-1" aria-hidden="true" [ngClass]="isDisplayingList ? 'icon-view_comfy' : 'icon-view_list'"></i
+        >{{ isDisplayingList ? 'ATT&CK® Matrix' : 'List' }}
+      </button>
+      <app-select
+        *ngIf="isDisplayingList"
+        [items]="limits"
+        [model]="limit"
+        [icon]="'icon-format_list_bulleted'"
+        [placement]="'bottom-right'"
+        id="limitDropdown"
+        (onChange)="onChangeLimit($event)"
+      >
+      </app-select>
+    </div>
+  </div>
+  <div>
+    <!-- DISPLAY AS lIST -->
+    <ng-template [ngIf]="isDisplayingList">
+      <app-table [items]="items" [loading]="loading" class="table-fixed" sm="true" noItems="No data found">
+        <thead>
+          <tr>
+            <th class="text-center td-40">
+              <input type="checkbox" [(ngModel)]="bulk" (click)="setCheckedState($event)" />
+            </th>
+            <th>Name</th>
+            <th class="text-center td-130">TLP</th>
+            <th class="text-center td-130">Severity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items" class="cursor-pointer" (click)="details($event, item)">
+            <td class="text-center td-40 vertical-middle cursor-default" (click)="$event.stopImmediatePropagation()">
+              <input type="checkbox" class="cursor-pointer" [(ngModel)]="item.fxSelected" (click)="setChecked()" />
+            </td>
+            <td>
+              <app-copy-to-clipboard [value]="item.name"></app-copy-to-clipboard>
+            </td>
+            <td class="text-center">
+              <span class="d-flex align-items-center justify-content-center">
+                <app-tlp [status]="item.tlp" [interactive]="false"></app-tlp>
+              </span>
+            </td>
+            <td class="text-center">
+              {{ item.severity }}
+            </td>
+          </tr>
+        </tbody>
+      </app-table>
+    </ng-template>
+
+    <!-- DISPLAY AS MATRIX -->
+    <div [ngClass]="isDisplayingList ? 'hidden' : ''" *ngIf="items.length > 0 && actorName">
+      <mitre-attack-navigator [searchQueryParams]="actorName"></mitre-attack-navigator>
+    </div>
+  </div>
+
+  <div class="float-left mt-3" *ngIf="isDisplayingList">
+    <app-pagination-x [page]="page" [count]="count" [pageSize]="limit" (pageChange)="onPageChange($event)">
+    </app-pagination-x>
+  </div>
+</div>

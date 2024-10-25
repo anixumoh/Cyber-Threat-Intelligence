@@ -1,0 +1,24 @@
+<div class="main-header row align-items-end mt-4 mb-3 clearfix">
+  <div class="main-header-left col float-left">
+    <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-3 mt-1">Assets Discovery</h6>
+    <h5 class="text-dark mb-0">Settings</h5>
+  </div>
+</div>
+<div class="mb-4">
+  Go to <span (click)="goToDiscovery()" class="cursor-pointer mt-4 color-primary">Discovery</span> to run a new search
+  or see the results.
+</div>
+<div class="grid-container">
+  <ng-container *ngFor="let setting of allowedSettings">
+    <app-asset-discovery-box
+      [items]="items && items[setting] ? items[setting] : []"
+      [label]="'term'"
+      [canAdd]="true"
+      [deleteType]="'delete'"
+      [itemsType]="setting"
+      (addSettingEvent)="addSettings($event)"
+      (deleteEvent)="deleteSettings($event)"
+      [loadingItems]="loading"
+    ></app-asset-discovery-box>
+  </ng-container>
+</div>

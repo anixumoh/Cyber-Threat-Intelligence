@@ -1,0 +1,27 @@
+<div class="card-tab mb-2">
+  <ul class="nav nav-pills border-bottom">
+    <li
+      *ngFor="let key of content; let isFirst = first; let i = index"
+      [class.is-active]="isFirst && isPressed"
+      (click)="onSelect(key)"
+      [ngClass]="currentTab === key ? 'is-active' : ''"
+    >
+      <i *ngIf="key === 'Description'" class="icon-hashtag"></i>
+      <i *ngIf="key === 'Context'" class="icon-newspaper"></i>
+      <i *ngIf="key === 'Threat Actors'" class="icon-users"></i>
+      <i *ngIf="key === 'Attack Patterns'" class="icon-server"></i>
+      <i *ngIf="key === 'Signatures'" class="icon-server"></i>
+      <i *ngIf="key === 'Tools'" class="icon-wrench"></i>
+      <i *ngIf="key === 'CVEs'" class="icon-server"></i>
+      <i *ngIf="key === 'Campaigns'" class="icon-server"></i>
+      <i *ngIf="key === 'Targets'" class="icon-bullseye"></i>
+      {{ key }}
+      <i *ngIf="contentQuantity[i].isLoading; else tmpl1" class="margin-left-05 icon-spinner rotate"></i>
+      <ng-template #tmpl1>
+        {{ contentQuantity[i].length }}
+      </ng-template>
+    </li>
+  </ul>
+</div>
+<!-- TAB CONTENT -->
+<ng-content></ng-content>

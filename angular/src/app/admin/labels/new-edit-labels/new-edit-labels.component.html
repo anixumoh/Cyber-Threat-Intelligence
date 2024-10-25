@@ -1,0 +1,89 @@
+<modal-window
+  [acceptBtn]="isNew ? 'Create' : 'Save'"
+  [cancelBtn]="'Close'"
+  [customClass]="'modal-big'"
+  [modalTitle]="(isNew ? 'Create' : 'Edit') + ' Label'"
+  [loadingAccept]="loading"
+  (accept)="createEdit()"
+  (cancel)="closeModal()"
+>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-6">
+        <input-control class="mb-3" [label]="'Name'" [control]="form.controls['label']"> </input-control>
+        <input-control
+          class="mb-3"
+          [optionsSelect]="listOrg"
+          [label]="'Organization'"
+          [viewSelect]="'name'"
+          [valueSelect]="'id'"
+          [isDisabled]="!isNew"
+          [type]="'select'"
+          [control]="form.controls['organizationId']"
+        >
+        </input-control>
+        <input-control
+          class="mb-3"
+          [optionsSelect]="listModOrg"
+          [label]="'Module'"
+          [viewSelect]="'name'"
+          [valueSelect]="'id'"
+          [isDisabled]="!isNew"
+          [type]="'select'"
+          [control]="form.controls['moduleId']"
+        >
+        </input-control>
+        <input-control
+          class="mb-3"
+          [optionsSelect]="listType"
+          [label]="'Type'"
+          [viewSelect]="'name'"
+          [valueSelect]="'id'"
+          [type]="'select'"
+          [control]="form.controls['labelTypeId']"
+        >
+        </input-control>
+      </div>
+      <div class="col-lg-6">
+        <div class="form-group">
+          <label class="mb-0" for="exampleFormControlSelect2">Border color</label>
+          <select multiple="" class="form-control p-0" style="height: 253px !important" id="exampleFormControlSelect2">
+            <option
+              *ngFor="let color of colors"
+              [style.border]="'2px solid'"
+              [style.border-color]="color"
+              [style.color]="'#1b2734'"
+              (click)="selectColor(color)"
+              class="font-weight-light p-2 text-left"
+            >
+              {{ rgbaToHexa(color) }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="w-100 d-block mb-2"></div>
+      <div *ngIf="canEditProtected" class="col-6">
+        <div class="border rounded p-2 mb-3">
+          <input-control
+            [customClass]="'float-left mt-1 mr-2'"
+            [label]="'Protected Label'"
+            [type]="'checkbox'"
+            [control]="form.controls['labelProtected']"
+          >
+          </input-control>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="border rounded p-2 mb-3">
+          <input-control
+            [customClass]="'float-left mt-1 mr-2'"
+            [label]="'Priority Label'"
+            [type]="'checkbox'"
+            [control]="form.controls['prioritized']"
+          >
+          </input-control>
+        </div>
+      </div>
+    </div>
+  </div>
+</modal-window>

@@ -1,0 +1,60 @@
+<!-- LOADING PROCESS -->
+<div *ngIf="!resource" class="no-results-box">
+  <i class="icon-spinner rotate"></i>
+  <h3 class="no-results">Loading</h3>
+</div>
+<div class="card" *ngIf="resource">
+  <div class="card-header clearfix">
+    <div class="float-right action-buttons">
+      <div class="btn-group pull-right">
+        <button
+          class="btn btn-light btn-sm text-primary float-left mr-1"
+          *ngIf="!grants.isLowRole()"
+          (click)="navigateToEdit()"
+        >
+          <i class="icon-mode_edit"></i>
+          <span class="ml-1">Edit</span>
+        </button>
+        <button
+          class="btn btn-light btn-sm text-primary float-left mr-1"
+          *ngIf="(grants.isMaster() || grants.isSuperAdmin()) && activeOrganization.enabled"
+          (click)="runSearch()"
+        >
+          <i class="icon-cogs"></i>
+          <span class="ml-1">Run Search</span>
+        </button>
+        <button
+        class="btn btn-light btn-sm text-primary float-left mr-1 disabled-btn"
+        *ngIf="(grants.isMaster() || grants.isSuperAdmin()) && !activeOrganization.enabled"
+        [ngbTooltip]="'This organization is disabled so you cannot perform this action'"
+      >
+        <i class="icon-cogs"></i>
+        <span class="ml-1">Run Search</span>
+      </button>
+        <div class="divider-right"></div>
+        <button
+          class="btn btn-light btn-sm border text-primary"
+          (click)="navigateDetails('previous')"
+          [disabled]="!showNavigation || !showPrev"
+        >
+          <i class="icon-angle-left"></i>
+        </button>
+        <button class="btn btn-light btn-sm border text-primary" (click)="navigateToList()">Back to list</button>
+        <button
+          class="btn btn-light btn-sm border text-primary"
+          (click)="navigateDetails('next')"
+          [disabled]="!showNavigation || !showNext"
+        >
+          <i class="icon-angle-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12">
+        <app-module-details-header [headerData]="headerData" [resource]="resource.header"> </app-module-details-header>
+      </div>
+    </div>
+  </div>
+</div>

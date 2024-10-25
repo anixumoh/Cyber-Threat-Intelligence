@@ -1,0 +1,24 @@
+server {
+    listen 8000;
+
+    access_log /var/log/community_access.log;
+    access_log /dev/stdout;
+    error_log /var/log/community_error.log;
+    error_log /dev/stderr;
+
+    server_name localhost;
+
+    location / {
+        alias /app/dist/;
+        index index.html;
+
+        # Simulate production headers
+        add_header Content-Security-Policy "default-src 'self'; block-all-mixed-content; script-src 'self' data: 'unsafe-eval' d3js.org www.amcharts.com connect.facebook.net platform.twitter.com www.blueliv.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/; frame-src 'self' https://www.google.com/recaptcha/; style-src 'unsafe-inline' 'unsafe-eval' 'self' stackpath.bootstrapcdn.com www.blueliv.com www.amcharts.com fonts.googleapis.com; font-src 'self' data: fonts.gstatic.com www.w3.org; img-src * data:";
+
+        try_files $uri $uri/ index.html =404;
+    }
+
+    location /api/v2 {
+        proxy_pass ${API_HOST}/api/v2;
+    }
+}

@@ -1,0 +1,127 @@
+<div class="filter-container">
+  <!-- BUTTON -->
+  <button class="btn btn-filter pull-left margin-right-05"
+          [ngClass]="isMenuOpened ? 'is-active' : ''"
+          (click)="toggleMenu()">
+          Labels
+          <i class="icon-angle-down"></i>
+  </button>
+</div>
+<!-- DROPDOWN -->
+<div class="dropdown-div-list" *ngIf="isMenuOpened">
+  <!-- HEADER DROPDOWN -->
+  <header class="dropdown-div-header">
+    <input class="custom-input-search" type="text" [(ngModel)]="search" (ngModelChange)="searchLabel.emit($event)"
+      name="search" placeholder="E.g: Hacktivism">
+  </header>
+  <!-- BODY DROPDOWN -->
+  <main class="dropdown-div-main">
+    <ul class="labels-list">
+      <li *ngFor="let it of labelItems" class="labels-list-item phm pvm labels-list-item-custom-height">
+        <input [id]="'label_'+it.id" class="custom-input-check" type="checkbox" name="check"
+          [class.indeterminate]="isIndeterminate(it.label) && (!changes[it.id] || changes[it.id].state === 'add')"
+          [checked]="isChecked(it.label)" (change)="onChangeCheckbox(it, $event)" />
+        <label [for]="'label_'+it.id"
+          [class.ignore]="isIndeterminate(it.label) && changes[it.id] && changes[it.id].state === 'delete'">
+          <i *ngIf="!isIndeterminate(it.label) || (isIndeterminate(it.label) && changes[it.id] && changes[it.id].state === 'add')"
+            class="material-icons custom-checkbox">
+            done
+          </i>
+          <i *ngIf="isIndeterminate(it.label) && !changes[it.id]"
+             class="material-icons custom-checkbox">
+             remove
+          </i>
+        </label>
+        <span class="label" [style.backgroundColor]="getHexadecimalColor(it.bgColor)"
+          [style.borderColor]="getHexadecimalColor(it.textColor)" [style.color]="getHexadecimalColor(it.textColor)">
+          {{ it.label }}
+        </span>
+      </li>
+    </ul>
+  </main>
+  <!-- ADD LABEL -->
+  <div class="add-labels-box" *ngIf="addLabelBool">
+    <div class="add-labels">
+      <div class="form-box margin-bottom-10">
+        <span>Type Label Name:</span>
+        <input type="text" name="newLabelName" [(ngModel)]="newLabelName">
+      </div>
+      <div class="row">
+        <div class="col-md-8 form-box">
+          <span>Color preview:</span>
+          <input [style.color]="newLabelTextColor" [style.background]="newLabelColor" [value]="defaultLabelText"
+            readonly="true" />
+        </div>
+        <div class="col-md-2 form-box">
+          <span>Bg:</span>
+          <input [(colorPicker)]="newLabelColor" [style.background]="newLabelColor" [cpPosition]="'bottom'" />
+        </div>
+        <div class="col-md-2 form-box">
+          <span>Text:</span>
+          <input [(colorPicker)]="newLabelTextColor" [style.background]="newLabelTextColor" [cpPosition]="'bottom'" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="add-labels-box" *ngIf="editLabelBool">
+    <div class="add-labels">
+      <div class="form-box margin-bottom-10">
+        <span>Type Label Name:</span>
+        <input type="text" name="newLabelName" [(ngModel)]="itemToEdit.label">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-8 form-box">
+        <span>Color preview:</span>
+        <input [style.color]="itemToEdit.textColor" [style.background]="itemToEdit.bgColor" [value]="itemToEdit.label"
+          readonly="true" />
+      </div>
+      <div class="col-md-2 form-box">
+        <span>Bg:</span>
+        <input [(colorPicker)]="itemToEdit.bgColor" [style.background]="itemToEdit.bgColor" [cpPosition]="'bottom'" />
+      </div>
+      <div class="col-md-2 form-box">
+        <span>Text:</span>
+        <input [(colorPicker)]="itemToEdit.textColor" [style.background]="itemToEdit.textColor"
+          [cpPosition]="'bottom'" />
+      </div>
+    </div>
+  </div>
+  <!-- FOOTER DROPDOWN -->
+  <footer class="dropdown-div-footer" *ngIf="existLabel">
+    <div class="margin-05" *ngIf="isEmpty(changes)">
+      <button *ngIf="!addLabelBool && !editLabelBool" class="btn btn-filter pull-left" id="createLabelButton"
+        (click)="addLabelToggle()">
+        Create label
+      </button>
+      <button *ngIf="!addLabelBool && !editLabelBool" class="btn btn-danger pull-right" (click)="toggleMenu(false)">
+        Cancel
+      </button>
+      <button *ngIf="addLabelBool && !editLabelBool" class="btn btn-filter pull-left" id="submitCreateNewLabelButton"
+        (click)="submitNewLabel('create')">
+        Submit
+      </button>
+      <button *ngIf="addLabelBool && !editLabelBool" class="btn btn-danger pull-right" (click)="addLabelToggle()">
+        Cancel
+      </button>
+    </div>
+    <div *ngIf="!existLabel">
+      <a nohref>Add <b>{{ search }}</b></a>
+    </div>
+    <div class="margin-05" *ngIf="!isEmpty(changes) && !editLabelBool">
+      <button class="btn btn-filter" (click)="applyLabel()" [disabled]="loading">
+          <i *ngIf="loading" class="icon-spinner rotate"></i>
+          {{ loading ? 'Applying...' : 'Apply' }}
+      </button>
+      <button *ngIf="selectedLabelsToAdd.length==1" id="editLabelButton" class="btn btn-filter"
+        (click)="editLabelToggle()">Edit label</button>
+      <button class="btn btn-danger" (click)="toggleMenu(false)">Cancel</button>
+    </div>
+    <div class="margin-05 padding-10" *ngIf="!isEmpty(changes) && editLabelBool">
+      <button *ngIf="!addLabelBool && editLabelBool" id="submitUpdateNewLabelButton" class="btn btn-filter"
+        (click)="submitNewLabel('update')">Submit</button>
+      <button *ngIf="!addLabelBool && editLabelBool" class="btn btn-danger pull-right"
+        (click)="editLabelToggle()">Cancel</button>
+    </div>
+  </footer>
+</div>

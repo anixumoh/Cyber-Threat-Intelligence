@@ -1,0 +1,60 @@
+@import 'src/scss/variables';
+
+.overlay {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  .modal {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    top: 15%;
+    width: 550px;
+    font-size: $font-normal;
+    overflow: visible;
+    background-color: $light;
+  }
+}
+.error-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  img {
+    width: 55px;
+  }
+
+  .media-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 74%;
+    text-align: center;
+    margin-top: 10px;
+    h3 {
+      margin: 5px;
+      color: $primary;
+      font-weight: 200;
+    }
+
+    .media-text {
+      margin-top: 10px;
+    }
+  }
+}
+
+.error-btn {
+  padding-bottom: 20px;
+  padding-top: 22px;
+  button {
+    text-align: center;
+    padding-left: 30px;
+    padding-right: 30px;
+    width: 30%;
+  }
+}

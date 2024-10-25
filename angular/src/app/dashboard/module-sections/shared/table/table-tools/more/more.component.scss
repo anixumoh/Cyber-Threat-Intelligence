@@ -1,0 +1,23 @@
+@import "src/scss/variables";
+
+.dropdown-div-list {
+    position: absolute;
+    top: 50px;
+    z-index: 5;
+    width: 230px;
+    margin: 0;
+    padding: 0;
+    transition: height .3s;
+    overflow: hidden;
+    border: none;
+    border-radius: $border-radius;
+    visibility: hidden;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.13);
+    &.open {
+        visibility: visible;
+        border: 1px solid $light;
+        background-color: $white;
+        display: flex;
+        flex-direction: column;
+    }
+}

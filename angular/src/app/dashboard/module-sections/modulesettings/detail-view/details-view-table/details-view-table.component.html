@@ -1,0 +1,46 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th *ngFor="let header of tableHeader" style="font-size: 12px">{{ header }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of items">
+      <td class="vertical-middle">
+        <p class="mb-0">{{ item.name }}</p>
+      </td>
+      <td class="vertical-middle td-center td-80">
+        <app-enable-disable [status]="item.enabled" [interactive]="false"> </app-enable-disable>
+      </td>
+      <td class="vertical-middle td-center" *ngIf="grants?.isMaster() || grants?.isSuperAdmin()">
+        <div class="d-flex">
+          <input class="mb-0" type="text" [disabled]="true" [value]="item.analysis" />
+          <span class="cursor-pointer text-primary" (click)="openInfoModal()"
+            ><i class="icon-info-circle-solid ml-2"></i
+          ></span>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<modal-window (cancel)="openInfoModal()" [modalTitle]="'Info'" *ngIf="isModalInfoOpen">
+  <pre>
+        <p class="font-weight-bold">Format:</p>
+        *  *  *  *  *  *
+        ┬  ┬  ┬  ┬  ┬  ┬
+        │  │  │  │  │  └─── day of week (0 - 6) (0 is Sunday)
+        │  │  │  │  └────── month (1 - 12)
+        │  │  │  └───────── day of month (1 - 31)
+        │  │  └──────────── hour (0 - 23)
+        │  └─────────────── minute (0 - 59)
+        └────────────────── second (0 - 59)</pre>
+  <p class="font-weight-bold">Examples:</p>
+  <ul class="info-list">
+    <li>0 0 * * * ? : Every hour</li>
+    <li>0 0/5 * * * ? : Every 5 minutes</li>
+    <li>0 0 12 * * ? : Every day at 12 p.m.</li>
+    <li>0 0 8 1 * ? : Every 1st day of month at 8 a.m.</li>
+    <li>0 0 8 * * 1-5? : On mondays to fridays at 8 a.m.</li>
+  </ul>
+</modal-window>

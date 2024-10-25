@@ -1,0 +1,29 @@
+@import "src/scss/variables";
+@import "../settings-detail-generic";
+
+.dropdown-container{
+  // DROPDOWN
+  .list-group{
+    position: absolute;
+    top: 30px;
+    left: -80px;
+    z-index:9;
+    transition: height .3s;
+    overflow: hidden;
+    visibility: hidden;
+    &.open {
+      visibility: visible;
+      max-height: 200px;
+      width:300px;
+      overflow: auto;
+    }
+    .list-group-item {
+      &:hover{
+        color: $primary;
+      }
+      &.active {
+        color: $primary;
+      }
+    }
+  }
+}

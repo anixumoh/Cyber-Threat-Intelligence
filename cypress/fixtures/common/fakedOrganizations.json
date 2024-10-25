@@ -1,0 +1,666 @@
+[
+    {
+        "id": 504,
+        "enabled": true,
+        "name": "*-todelete",
+        "createdAt": 1662384713000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "title": "TC QA Cypress",
+                "firstName": "QA",
+                "lastName": "Cypress",
+                "email": "qa1@blueliv.com",
+                "phone": "123456789",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1662384713000
+    },
+    {
+        "id": 484,
+        "enabled": true,
+        "name": "-4965",
+        "createdAt": 1659973010000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "cypress",
+                "lastName": "qa",
+                "email": "qa@blueliv.com",
+                "phone": "123456789",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 246,
+        "enabledMfa": false,
+        "created_at": 1659973010000
+    },
+    {
+        "id": 291,
+        "enabled": false,
+        "name": "Angular 13",
+        "createdAt": 1647436097000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Angular 13",
+                "lastName": "Angular 13",
+                "email": "dddd@www.es",
+                "phone": "222222222",
+                "country": "CU"
+            }
+        },
+        "catalogId": 79,
+        "customerId": 211,
+        "enabledMfa": false,
+        "created_at": 1647436097000
+    },
+    {
+        "id": 787,
+        "enabled": true,
+        "name": "Customer NEW",
+        "createdAt": 1682589153000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Alonso",
+                "lastName": "Quijano",
+                "email": "test@blueliv.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1682589153000
+    },
+    {
+        "id": 824,
+        "enabled": true,
+        "name": "DemoAlerts",
+        "createdAt": 1684162248000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Laura",
+                "lastName": "Aldana",
+                "email": "laura.estrada@outpost24.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 268,
+        "enabledMfa": false,
+        "created_at": 1684162248000
+    },
+    {
+        "id": 495,
+        "enabled": true,
+        "name": "ExplorerLau",
+        "createdAt": 1661433206000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Laura",
+                "lastName": "Aldana",
+                "email": "test@gmail.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 250,
+        "enabledMfa": false,
+        "created_at": 1661433206000
+    },
+    {
+        "id": 597,
+        "enabled": true,
+        "name": "INFANTE ORG",
+        "createdAt": 1669633312000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "INFANTE test",
+                "lastName": "INFANTE test",
+                "email": "pedro.infante@blueliv.com",
+                "country": "EU"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 265,
+        "enabledMfa": false,
+        "created_at": 1669633312000
+    },
+    {
+        "id": 592,
+        "enabled": true,
+        "name": "JAVI",
+        "createdAt": 1669024152000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "title": "JAVI",
+                "firstName": "JAVI",
+                "lastName": "DE LA SERNA",
+                "email": "test@gmail.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 264,
+        "enabledMfa": false,
+        "created_at": 1669024152000
+    },
+    {
+        "id": 604,
+        "enabled": true,
+        "name": "leiretest",
+        "createdAt": 1670428728000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Leire",
+                "lastName": "Hernandez Gonzalez",
+                "email": "leire.hernandez@blueliv.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 264,
+        "enabledMfa": false,
+        "created_at": 1670428728000
+    },
+    {
+        "id": 754,
+        "enabled": true,
+        "name": "Lola",
+        "createdAt": 1681815036000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Lola",
+                "lastName": "Lola",
+                "email": "lola@example.com",
+                "country": "AU"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1681815036000
+    },
+    {
+        "id": 323,
+        "enabled": true,
+        "name": "manuorg",
+        "createdAt": 1648464859000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "manu",
+                "lastName": "manu",
+                "email": "manuel.perez@blueliv.com",
+                "country": "CU"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 204,
+        "enabledMfa": false,
+        "created_at": 1648464859000
+    },
+    {
+        "id": 920,
+        "enabled": true,
+        "name": "New Orghooat",
+        "createdAt": 1685016459000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "title": "Mrs",
+                "firstName": "Sample",
+                "lastName": "Name",
+                "email": "Orgumwbj@maildrop.cc",
+                "phone": "01808782234",
+                "country": "NG"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1685016459000
+    },
+    {
+        "id": 491,
+        "enabled": true,
+        "name": "NUEVONUEVONUEVONUEVONUEVONUEVONUEVONUEVONUEVO",
+        "createdAt": 1660821961000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "NUEVO",
+                "lastName": "NUEVO",
+                "email": "NUEVO@NUEVO.es",
+                "country": "AZ"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 252,
+        "enabledMfa": false,
+        "created_at": 1660821961000
+    },
+    {
+        "id": 955,
+        "enabled": true,
+        "name": "Offsec Test",
+        "createdAt": 1686051578000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "title": "Head of Offsec",
+                "firstName": "Guillermo",
+                "lastName": "García",
+                "email": "guillermo.garcia@outpost24.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1686051578000
+    },
+    {
+        "id": 498,
+        "enabled": true,
+        "name": "Org with Tcx",
+        "createdAt": 1662361946000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Laura",
+                "lastName": "Enriquez",
+                "email": "laura.enriquez@blueliv.com",
+                "phone": "637944229",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 211,
+        "enabledMfa": false,
+        "created_at": 1662361946000
+    },
+    {
+        "id": 499,
+        "enabled": true,
+        "name": "Org without Tcx",
+        "createdAt": 1662362006000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Laura",
+                "lastName": "Enriquez",
+                "email": "laura.enriquez@blueliv.com",
+                "phone": "637984419",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 255,
+        "enabledMfa": false,
+        "created_at": 1662362006000
+    },
+    {
+        "id": 1,
+        "enabled": true,
+        "name": "Percebes",
+        "createdAt": 1592818482000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Laura",
+                "lastName": "Enríquez",
+                "email": "laura.enriquez@blueliv.com",
+                "phone": "987655434",
+                "country": "ES"
+            }
+        },
+        "catalogId": 145,
+        "customerId": 202,
+        "enabledMfa": false,
+        "created_at": 1592818482000
+    },
+    {
+        "id": 15,
+        "enabled": true,
+        "name": "PS test",
+        "createdAt": 1623934386000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "invoicingData": {
+                "invoicingContact": {}
+            },
+            "firstContact": {
+                "title": "PS test",
+                "firstName": "PS test",
+                "lastName": "PS test",
+                "email": "pstest@blueliv.com",
+                "phone": "644646646",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1623934386000
+    },
+    {
+        "id": 4,
+        "enabled": false,
+        "name": "QA",
+        "createdAt": 1617806844000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "alias": "",
+            "invoicingData": {},
+            "firstContact": {
+                "title": "Dr. Carlos Dominguez",
+                "firstName": "Carlos",
+                "lastName": "Silva",
+                "email": "carlossilva@blueliv.com",
+                "phone": "123456789",
+                "country": "BZ",
+                "state": "",
+                "address1": "",
+                "address2": "",
+                "department": ""
+            }
+        },
+        "catalogId": 79,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1617806844000
+    },
+    {
+        "id": 689,
+        "enabled": true,
+        "name": "Sample",
+        "createdAt": 1679495109000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "title": "Mr",
+                "firstName": "Test",
+                "lastName": "Sample",
+                "email": "dmak@gmail.com",
+                "phone": "022738294",
+                "country": "NE"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1679495109000
+    },
+    {
+        "id": 2,
+        "enabled": true,
+        "name": "Sergio",
+        "createdAt": 1592904774000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Sergio",
+                "lastName": "Moreno",
+                "email": "sergio.moreno@blueliv.com",
+                "phone": "677777777",
+                "country": "ES",
+                "state": "Barcelona"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1592904774000
+    },
+    {
+        "id": 685,
+        "enabled": true,
+        "name": "TCDemoOptos",
+        "createdAt": 1677768622000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "manu",
+                "lastName": "manu",
+                "email": "manuel.perez@blueliv.com",
+                "country": "CU"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 204,
+        "enabledMfa": false,
+        "created_at": 1677768622000
+    },
+    {
+        "id": 968,
+        "enabled": true,
+        "name": "test-e2e-1b82896c",
+        "createdAt": 1688464729000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "QA",
+                "lastName": "QA",
+                "email": "qa@blueliv.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1688464729000
+    },
+    {
+        "id": 966,
+        "enabled": true,
+        "name": "test-e2e-3588a688",
+        "createdAt": 1686649712000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "QA",
+                "lastName": "QA",
+                "email": "qa@blueliv.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1686649712000
+    },
+    {
+        "id": 967,
+        "enabled": true,
+        "name": "test-e2e-8abf6241",
+        "createdAt": 1686649726000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "QA",
+                "lastName": "QA",
+                "email": "qa@blueliv.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1686649726000
+    },
+    {
+        "id": 774,
+        "enabled": true,
+        "name": "test-org-global",
+        "createdAt": 1682360392000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "manuel",
+                "lastName": "perez",
+                "email": "manuel@outpost.com",
+                "country": "CU"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 204,
+        "enabledMfa": false,
+        "created_at": 1682360392000
+    },
+    {
+        "id": 683,
+        "enabled": true,
+        "name": "testjuan",
+        "createdAt": 1677579734000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "title": "testjuan",
+                "firstName": "testjuan",
+                "lastName": "testjuan",
+                "email": "juan.cuesta@gmail.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 1,
+        "enabledMfa": false,
+        "created_at": 1677579734000
+    },
+    {
+        "id": 959,
+        "enabled": true,
+        "name": "TestWru",
+        "createdAt": 1686145920000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Wruschika",
+                "lastName": "B",
+                "email": "wruschika.bakane@outpost24.com",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 269,
+        "enabledMfa": false,
+        "created_at": 1686145920000
+    },
+    {
+        "id": 3,
+        "enabled": true,
+        "name": "Thiapp Dev",
+        "createdAt": 1612778213000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "invoicingData": {
+                "invoicingContact": {}
+            },
+            "firstContact": {
+                "firstName": "Jose Miguel",
+                "lastName": "Esparza",
+                "email": "jose.esparza@blueliv.com",
+                "phone": "666666666",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 110,
+        "enabledMfa": false,
+        "created_at": 1612778213000
+    },
+    {
+        "id": 320,
+        "enabled": true,
+        "name": "Vicente_TEST",
+        "createdAt": 1648110451000,
+        "industryId": "OTHER",
+        "trial": false,
+        "trialExpirationDate": 0,
+        "contact": {
+            "firstContact": {
+                "firstName": "Vicente",
+                "lastName": "Martín",
+                "email": "vicente.martin@blueliv.com",
+                "phone": "123456789",
+                "country": "ES"
+            }
+        },
+        "catalogId": 1,
+        "customerId": 88,
+        "enabledMfa": false,
+        "created_at": 1648110451000
+    }
+]

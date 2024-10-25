@@ -1,0 +1,25 @@
+@import '~scss/variables';
+
+.disabled-class {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+}
+
+.input-group {
+  input {
+    height: 31px;
+    font-size: 14px !important;
+  }
+
+  .disabled-search {
+    @extend .disabled-class;
+  }
+}
+
+.validation-path {
+  padding: 0 7px;
+
+  &__message {
+    color: $danger;
+  }
+}

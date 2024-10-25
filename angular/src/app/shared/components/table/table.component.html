@@ -1,0 +1,13 @@
+<div class="app-table-container">
+  <div class="empty" *ngIf="!loading && items.length === 0" [ngClass]="{ 'empty--sm': sm }">
+    <div><img src="/assets/default_images/searching.svg" alt="" /></div>
+    <div class="empty__text">{{ noItems }}</div>
+  </div>
+  <app-overlay [loading]="loading" [minHeight]="loading ? '300px' : 'auto'" *ngIf="loading || items.length > 0">
+    <div [ngClass]="isFromAdmin ? 'table-scroll' : ''">
+      <table class="table table-hover table-indexed mt-2" [ngClass]="class">
+        <ng-content></ng-content>
+      </table>
+    </div>
+  </app-overlay>
+</div>

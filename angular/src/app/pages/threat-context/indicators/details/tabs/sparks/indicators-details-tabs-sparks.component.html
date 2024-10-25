@@ -1,0 +1,36 @@
+<div class="col-md-12 col-lg-12">
+  <div class="mt-4">
+    <!-- NO RESULTS DATA -->
+    <div class="mb-4" *ngIf="!items || items.length == 0">
+      <div class="pl-3">
+        <div class="no-results-box bg-light">
+          <img src="assets/default_images/searching.svg" />
+          <h4 class="no-results">No data has been found</h4>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngFor="let spark of items">
+      <div
+        class="callout m-0 py-2"
+        [ngClass]="{
+          'callout-danger': spark.tlp == 'red',
+          'callout-success': spark.tlp == 'green',
+          'callout-warning': spark.tlp == 'amber',
+          'callout-secondary': spark.tlp == 'white'
+        }"
+      >
+        <div>
+          <a style="color: #000000;" target="_blank" href="{{ sparkUrl }}/s/{{ spark.communityId }}">
+            {{ spark.name }}
+          </a>
+        </div>
+        <ng-container *ngFor="let tag of spark.tags">
+          <a href="{{ sparkUrl }}/discover?tags={{ tag | lowercase }}" class="badge badge-primary" target="_blank">
+            {{ tag }}
+          </a>
+        </ng-container>
+      </div>
+      <hr class="mx-3 my-1" />
+    </ng-container>
+  </div>
+</div>

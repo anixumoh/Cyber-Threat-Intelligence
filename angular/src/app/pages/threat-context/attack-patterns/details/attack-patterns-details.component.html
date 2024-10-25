@@ -1,0 +1,255 @@
+<app-overlay [loading]="loading">
+  <threat-context-navigation [path]="path" [name]="name"></threat-context-navigation>
+  <div style="min-height: 650px">
+    <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-0 tcx-section-name">Attack Patterns</h6>
+    <div class="mb-2" style="display: flex; justify-content: space-between; align-items: center">
+      <h4 class="mt-2 text-truncate tcx-resource-name">{{ name }}</h4>
+      <div style="display: flex">
+        <div class="button-action mr-1" ngbDropdown>
+          <button
+            ngbDropdownToggle
+            class="btn btn-light btn-sm border text-primary width-85 float-left btn-actions"
+            type="button"
+            id="actionsButtonDropdown"
+            name="button"
+          >
+            Export
+          </button>
+          <div ngbDropdownMenu class="actions-dropdown-menu padding-0 border-0">
+            <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded font-14">
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToCSV()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>CSV</span>
+              </li>
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToJson()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>JSON</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-light btn-sm border text-primary width-85" (click)="backToList()">
+          Back to list
+        </button>
+      </div>
+    </div>
+
+    <div class="card p-0 mb-4">
+      <div class="flex">
+        <div class="col-auto">
+          <img class="img-fluid" src="/assets/img/attack-pattern.png" alt="Target" width="130" />
+        </div>
+
+        <div class="col-lg">
+          <app-flush-list [data]="entries" mode="bold"></app-flush-list>
+        </div>
+
+        <div class="col-lg">
+          <app-flush-list [data]="entries2" mode="bold"></app-flush-list>
+        </div>
+      </div>
+    </div>
+
+    <app-tabs [items]="tabs" [active]="activeTab" (onChange)="onTabChange($event)">
+      <div class="description-and-ul p-2" *ngIf="activeTab === attackPatternsTabs.DESCRIPTION && description">
+        <div class="card">
+          <div class="card-body">
+            <div class="overflow-auto max-h-36">
+              <p class="text-justify" [innerHTML]="description"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-section mb-4" *ngIf="prerequisites.length > 0">
+          <p>
+            <button
+              type="button"
+              (click)="collapsePrerequisites.toggle()"
+              class="btn btn-outline-primary mb-3"
+              [attr.aria-expanded]="isCollapsed"
+              aria-controls="collapseExample"
+            >
+              Prerequisites
+              <i class="icon-large ml-2 icon-arrow-down"></i>
+            </button>
+          </p>
+          <div #collapsePrerequisites="ngbCollapse" [ngbCollapse]="!isCollapsed">
+            <div class="card">
+              <div class="card-body">
+                <div class="overflow-auto max-h-36">
+                  <ul>
+                    <li *ngFor="let pre of prerequisites">
+                      <span [innerHTML]="pre"></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-section mb-4" *ngIf="attackerSkillsOrKnowledgeRequired.length > 0">
+          <p>
+            <button
+              type="button"
+              (click)="collapse1.toggle()"
+              class="btn btn-outline-primary mb-3"
+              [attr.aria-expanded]="isCollapsed"
+              aria-controls="collapseExample"
+            >
+              Attacker skills or knowledge required
+              <i class="icon-large ml-2 icon-arrow-down"></i>
+            </button>
+          </p>
+          <div #collapse1="ngbCollapse" [ngbCollapse]="!isCollapsed">
+            <div class="card">
+              <div class="card-body">
+                <div class="overflow-auto max-h-36">
+                  <ul>
+                    <li *ngFor="let skill of attackerSkillsOrKnowledgeRequired">
+                      <ul class="list-unstyled">
+                        <li><b>Level:</b> {{ skill[0] }}</li>
+                        <li><b>Description:</b> <span [innerHTML]="skill[1]"></span></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-section mb-4" *ngIf="item.capec_id && attackPhases.length > 0">
+          <p>
+            <button
+              type="button"
+              (click)="collapseAttack.toggle()"
+              class="btn btn-outline-primary mb-3"
+              [attr.aria-expanded]="isCollapsed"
+              aria-controls="collapseExample"
+            >
+              Attack Phases
+              <i class="icon-large ml-2 icon-arrow-down"></i>
+            </button>
+          </p>
+          <div #collapseAttack="ngbCollapse" [ngbCollapse]="!isCollapsed">
+            <div class="card">
+              <div class="card-body">
+                <div class="overflow-auto max-h-36">
+                  <ol>
+                    <li *ngFor="let phase of attackPhases">
+                      {{ phase.name }}
+                      <ol>
+                        <li *ngFor="let step of phase.steps">
+                          <ul class="list-unstyled">
+                            <li><b>Name:</b> {{ step.name }}</li>
+                            <li><b>Description:</b> <span [innerHTML]="step.description"></span></li>
+                          </ul>
+                        </li>
+                      </ol>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-section mb-4" *ngIf="solutionsAndMitigations.length > 0">
+          <p>
+            <button
+              type="button"
+              (click)="collapseSolutions.toggle()"
+              class="btn btn-outline-primary mb-3"
+              [attr.aria-expanded]="isCollapsed"
+              aria-controls="collapseExample"
+            >
+              Solutions and Mitigations
+              <i class="icon-large ml-2 icon-arrow-down"></i>
+            </button>
+          </p>
+          <div #collapseSolutions="ngbCollapse" [ngbCollapse]="!isCollapsed">
+            <div class="card">
+              <div class="card-body">
+                <div class="overflow-auto max-h-36">
+                  <ul>
+                    <li *ngFor="let solution of solutionsAndMitigations">
+                      <span [innerHTML]="solution"></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-section mb-4" *ngIf="references && references.length > 0">
+          <p>
+            <button
+              type="button"
+              (click)="collapseReferences.toggle()"
+              class="btn btn-outline-primary mb-3"
+              [attr.aria-expanded]="!isCollapsed"
+              aria-controls="collapseExample"
+            >
+              References
+              <i class="icon-large ml-2 icon-arrow-down"></i>
+            </button>
+          </p>
+          <div #collapseReferences="ngbCollapse" [ngbCollapse]="isCollapsed">
+            <div class="card">
+              <div class="card-body">
+                <div class="overflow-auto max-h-36">
+                  <ul>
+                    <li *ngFor="let ref of references">
+                      <a target="_blank" *ngIf="ref[1]" href="{{ ref[1] }}">
+                        {{ ref[0] }}
+                      </a>
+                      <div *ngIf="!ref[1]">{{ ref[0] }}</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <related-ioc-list
+        [showTitle]="false"
+        [style.display]="activeTab === attackPatternsTabs.MALWARE ? 'block' : 'none'"
+        *ngIf="item && item.name && !item.capec_id"
+        [source]="malwareSource"
+      ></related-ioc-list>
+
+      <actors-list
+        [style.display]="activeTab === attackPatternsTabs.ACTORS ? 'block' : 'none'"
+        *ngIf="item && canStartToLoadActors"
+        [source]="actorsListSource"
+      ></actors-list>
+
+      <campaigns-list
+        [style.display]="activeTab === attackPatternsTabs.CAMPAIGNS ? 'block' : 'none'"
+        *ngIf="item && canStartToLoadCampaigns"
+        [source]="campaignsSource"
+      ></campaigns-list>
+
+      <signatures-list
+        [style.display]="activeTab === attackPatternsTabs.SIGNATURES ? 'block' : 'none'"
+        *ngIf="item && canStartToLoadSignatures"
+        [source]="signaturesListSource"
+      ></signatures-list>
+
+      <cve-list
+        [style.display]="activeTab === attackPatternsTabs.CVE ? 'block' : 'none'"
+        *ngIf="item && canStartToLoadCVE"
+        [source]="cveListSource"
+      ></cve-list>
+    </app-tabs>
+  </div>
+</app-overlay>

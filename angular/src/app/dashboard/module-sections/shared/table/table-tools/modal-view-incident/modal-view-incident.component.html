@@ -1,0 +1,14 @@
+<modal-window
+  *ngIf="isModalOpen"
+  modalTitle="List of incidents"
+  zIndex="899"
+  cancelBtn="Close"
+  (cancel)="onCloseModal.emit()"
+>
+  <app-table-tools-resource-issues
+    [selectedItemIssues]="selectedItemIssues"
+    [resource]="selectedResource"
+    [loading]="isLoading"
+  >
+  </app-table-tools-resource-issues>
+</modal-window>

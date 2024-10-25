@@ -1,0 +1,140 @@
+<app-overlay [loading]="false">
+  <threat-context-navigation [path]="path" [name]="name"></threat-context-navigation>
+  <div style="min-height: 650px">
+    <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-0 tcx-section-name">{{ indicatorTypeName }}</h6>
+    <div class="mb-2 indicators-header">
+      <div class="indicators-header--title">
+        <h4 class="mt-2 text-truncate tcx-resource-name">{{ name }}</h4>
+      </div>
+      <div class="indicators-header--btns">
+        <div class="button-action mr-1" ngbDropdown>
+          <button
+            ngbDropdownToggle
+            class="btn btn-light btn-sm border text-primary width-85 btn-actions"
+            type="button"
+            id="actionsButtonDropdown"
+            name="button"
+          >
+            Export
+          </button>
+          <div ngbDropdownMenu class="actions-dropdown-menu padding-0 border-0">
+            <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded font-14">
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToCSV()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>CSV</span>
+              </li>
+              <li
+                class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+                (click)="exportToJson()"
+              >
+                <i class="icon-share-square mr-2"></i>
+                <span>JSON</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          *ngIf="indicatorType === indicatorTypes.Malware.toLocaleLowerCase()"
+          (click)="reportMalware()"
+          class="btn btn-light btn-sm border text-primary mr-1 width-85"
+        >
+          Report
+        </button>
+
+        <button type="button" class="btn btn-light btn-sm border text-primary width-85" (click)="backToList()">
+          Back to list
+        </button>
+      </div>
+    </div>
+
+    <div class="card p-0 mb-4">
+      <app-overlay [loading]="loading">
+        <div class="flex" style="min-height: 180px">
+          <div class="flex--gauge">
+            <app-gauge-chart *ngIf="risk && risk.score" [gaugeData]="risk"> </app-gauge-chart>
+
+            <div class="text-center" *ngIf="risk && risk.score">
+              <button class="btn btn-primary" (click)="reanalize()">Re-Analyze</button>
+            </div>
+          </div>
+
+          <div class="flex--list">
+            <app-flush-list [data]="entries" mode="bold"></app-flush-list>
+          </div>
+
+          <div class="flex--list">
+            <app-flush-list [data]="entries2" mode="bold"></app-flush-list>
+          </div>
+        </div>
+      </app-overlay>
+    </div>
+
+    <app-tabs [items]="tabs" [active]="activeTab" (onChange)="onTabChange($event)">
+      <app-indicators-details-tab-context
+        [style.display]="activeTab === indicatorsTabs.CONTEXT ? 'block' : 'none'"
+        *ngIf="canStartToLoadIOC"
+        [indicatorType]="indicatorType"
+        [indicatorId]="indicatorId"
+      ></app-indicators-details-tab-context>
+
+      <app-indicators-details-tabs-dns
+        [style.display]="activeTab === indicatorsTabs.DNS ? 'block' : 'none'"
+        *ngIf="canStartToLoadDNS"
+        [indicatorType]="indicatorType"
+        [indicatorId]="indicatorId"
+      ></app-indicators-details-tabs-dns>
+
+      <app-indicators-details-tabs-external
+        [style.display]="activeTab === indicatorsTabs.EXTERNAL ? 'block' : 'none'"
+        *ngIf="canStartToLoadExternal"
+        [indicatorType]="indicatorType"
+        [indicatorId]="indicatorId"
+      ></app-indicators-details-tabs-external>
+
+      <app-indicators-details-tabs-relations
+        [style.display]="activeTab === indicatorsTabs.RELATIONS ? 'block' : 'none'"
+        *ngIf="canStartToLoadRelations"
+        [indicatorType]="indicatorType"
+        [indicatorId]="indicatorId"
+        [indicatorName]="indicatorName"
+      ></app-indicators-details-tabs-relations>
+
+      <actors-list
+        [style.display]="activeTab === indicatorsTabs.ACTORS ? 'block' : 'none'"
+        *ngIf="canStartToLoadActors"
+        [source]="actorsListSource"
+      ></actors-list>
+
+      <campaigns-list
+        [style.display]="activeTab === indicatorsTabs.CAMPAIGNS ? 'block' : 'none'"
+        *ngIf="canStartToLoadCampaigns"
+        [source]="campaingsListSource"
+      ></campaigns-list>
+
+      <app-indicators-details-tabs-sources
+        [style.display]="activeTab === indicatorsTabs.SOURCES ? 'block' : 'none'"
+        *ngIf="canStartToLoadSources"
+        [indicatorType]="indicatorType"
+        [indicatorId]="indicatorId"
+      ></app-indicators-details-tabs-sources>
+
+      <signatures-list
+        [style.display]="activeTab === indicatorsTabs.SIGNATURES ? 'block' : 'none'"
+        *ngIf="canStartToLoadSignatures"
+        [source]="signaturesListSource"
+      ></signatures-list>
+
+      <sparks-list
+        [style.display]="activeTab === indicatorsTabs.SPARKS ? 'block' : 'none'"
+        *ngIf="canStartToLoadSparks"
+        [source]="sparksListSource"
+      >
+      </sparks-list>
+    </app-tabs>
+  </div>
+</app-overlay>

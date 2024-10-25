@@ -1,0 +1,30 @@
+@import '~scss/variables';
+
+.app-tabs {
+  padding-top: 15px;
+  margin-bottom: 0;
+  border-bottom: 0;
+  .nav {
+    padding-left: 10px;
+    padding-right: 10px;
+    li {
+      color: $primary;
+      padding: 10px 15px 5px 15px;
+      text-transform: capitalize !important;
+      cursor: pointer;
+      &.is-active {
+        border-bottom: 3px solid $primary;
+      }
+      &:focus {
+        outline: none;
+      }
+
+      i {
+        &[class^='icon-'],
+        &[class*=' icon-'] {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}

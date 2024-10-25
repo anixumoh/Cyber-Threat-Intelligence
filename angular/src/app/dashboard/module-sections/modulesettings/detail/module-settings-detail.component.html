@@ -1,0 +1,7 @@
+<ng-container *ngIf="componentData">
+  <dynamic-component [componentData]="componentData"></dynamic-component>
+</ng-container>
+
+<modal-window *ngIf="isOpen" [modalTitle]="modalTitle" (cancel)="closeModal()" [customClass]="'modal-xl'">
+  {{ modalMessage }}
+</modal-window>

@@ -1,0 +1,8 @@
+{
+    "field": "",
+    "message": "User successfully logged out",
+    "error": false,
+    "token": null,
+    "code": 0,
+    "httpCode": 200
+}

@@ -1,0 +1,14 @@
+@import 'src/scss/variables';
+
+.hideChart {
+  display: none;
+}
+
+.chart-export-btn {
+  position: relative;
+  top: -23px;
+}
+
+.transparent-chart {
+  opacity: 0.1;
+}

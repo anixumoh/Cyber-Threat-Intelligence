@@ -1,0 +1,17 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      "$stores": ["src/stores"],
+      "$stores/*": ["src/stores/*"],
+      "$src": ["src"],
+      "$src/*": ["src/*"]
+    },
+    "rootDirs": [".", "./.svelte-kit/types"],
+    "types": ["node", "svelte"]
+  },
+  "include": ["src/**/*"]
+}

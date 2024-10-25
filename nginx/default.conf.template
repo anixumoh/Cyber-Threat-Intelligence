@@ -1,0 +1,18 @@
+server {
+    listen 8000;
+
+    access_log /var/log/community_access.log;
+    access_log /dev/stdout;
+    error_log /var/log/community_error.log;
+    error_log /dev/stderr;
+
+    server_name localhost;
+
+    location / {
+        proxy_pass http://ui:3000;
+    }
+
+    location /api/v2 {
+        proxy_pass ${API_HOST}/api/v2;
+    }
+}

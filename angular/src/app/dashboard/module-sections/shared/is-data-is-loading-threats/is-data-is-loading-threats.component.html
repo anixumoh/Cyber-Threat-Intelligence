@@ -1,0 +1,24 @@
+<div class="d-flex justify-content-center card-section mt-4 mr-5 ml-5 mb-5">
+  <ng-container>
+    <div class="no-results-box">
+      <ng-template [ngIf]="!isLoading" [ngIfElse]="templateLoading">
+        <img src="assets/default_images/searching.svg" />
+
+        <ng-template [ngIf]="displayMsj" [ngIfElse]="noResults">
+          <h3 class="no-results" [ngClass]="info ? 'info-text' : ''">{{ message?.msj }}</h3>
+          <div class="no-results d-flex align-items-center flex-column irrelevant-result-msg">
+            <span>but we have found results marked as not important </span>
+            <button class="ml-2 mt-2 btn no-flex btn-outline-primary btn-sm" (click)="message.callback()">show</button>
+          </div>
+        </ng-template>
+        <ng-template #noResults>
+          <h3 class="no-results" [ngClass]="info ? 'info-text' : ''">{{ message }}</h3>
+        </ng-template>
+      </ng-template>
+      <ng-template #templateLoading>
+        <i class="icon-spinner rotate"></i>
+        <h3 class="no-results">Loading</h3>
+      </ng-template>
+    </div>
+  </ng-container>
+</div>

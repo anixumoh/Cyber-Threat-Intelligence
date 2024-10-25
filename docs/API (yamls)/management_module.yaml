@@ -1,0 +1,834 @@
+swagger: '2.0'
+info:
+  title: CTIP MANAGEMENT API
+  description: API for the Management
+  version: "1.0.0"
+host: new-ui-pre.blueliv.com
+schemes:
+  - https
+basePath: /api/v2
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+
+# This are the end points related to USER management
+  /user:
+    get:
+      summary: Users
+      description: Get users list
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+      tags:
+        - Users
+      responses:    
+        200:
+          description: List of users
+          schema:
+            title: ArrayOfUsers
+            type: object
+            properties:
+              totalRegistres:
+                type: integer
+              users:
+                type: array  
+                items:
+                  $ref: '#/definitions/UserListObject'
+          examples:
+            application/json:
+              {
+                "totalRegistres": 1,
+                "users": [
+                    {
+                      "id": 1,
+                      "name": "Admin",
+                      "firstSurname": "Admin",
+                      "secondSurname": null,
+                      "email": "admin@foo.com",
+                      "repeatEmail": null,
+                      "username": "admin",
+                      "password": "xxxxxxxxxxx",
+                      "repeatPassword": null,
+                      "address": null,
+                      "telephone": null,
+                      "cellphone": null,
+                      "job": null,
+                      "accountStatus": "ENABLED",
+                      "expirationTime": null,
+                      "passwordErrorCount": 0,
+                      "lastIpAddress": "127.0.0.1",
+                      "createdAt": null,
+                      "updatedAt": 1488299711000,
+                      "licenseAccepted": true,
+                      "lastLoginAt": 1488299711000
+                    }
+                  ]
+              }
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create
+      description: Create a new user
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: user
+          in: body
+          description: User object send to perform a creation
+          required: true
+          schema:
+            $ref: '#/definitions/UserDTO'
+      tags:
+        - Users
+      responses:    
+        200:
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+  /user/account:
+    get:
+      summary: Who am I?
+      description: Retrieves the user information
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+      tags:
+        - Users
+      responses:
+        200:
+          description: User account information
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              firstSurname:
+                type: string
+              secondSurname:
+                type: string
+              email:
+                type: string
+              username:
+                type: string
+              password:
+                type: string
+              address:
+                type: string
+              telephone:
+                type: string
+              cellphone:
+                type: string
+              job:
+                type: string
+              expirationTime:
+                type: string
+                format: date-time
+                pattern: YYYY-MM-DD
+              createdAt:
+                type: string
+                format: date-time
+                pattern: YYYY-MM-DD
+              updatedAt:
+                type: string
+                format: date-time
+                pattern: YYYY-MM-DD
+              lastPasswordChangeTime:
+                type: string
+                format: date-time
+                pattern: YYYY-MM-DD
+              lastLoginAt:
+                type: string
+                format: date-time
+                pattern: YYYY-MM-DD
+              lastIpAddress:
+                type: string
+              internalUser:
+                type: boolean
+              licenseAccepted:
+                type: boolean
+              grants:
+                $ref: '#/definitions/GrantsObject'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+  /user/{userId}:
+    put:
+      summary: Edit
+      description: Edit an user
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: userId
+          in: path
+          description: User id
+          required: true
+          type: string
+        - name: user
+          in: body
+          description: User object send to perform an edit
+          required: true
+          schema:
+            $ref: '#/definitions/UserDTO'
+      tags:
+        - Users
+      responses:    
+        200:
+          description: User edited successfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete
+      description: Delete an user
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: userId
+          in: path
+          description: User id to be deleted
+          required: true
+          type: string
+      tags:
+        - Users
+      responses:    
+        200:
+          description: User created successfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+  /user/{userId}/grant:
+    get:
+      summary: Users
+      description: Get user grants 
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: userId
+          in: path
+          description: User id
+          required: true
+          type: string
+      tags:
+        - Users
+      responses:
+        200:
+          description: Grant list of the user
+          schema:
+            $ref: '#/definitions/GrantsObject'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      summary: Users
+      description: Get user grants 
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: userId
+          in: path
+          description: User id
+          required: true
+          type: string
+        - name: grant
+          in: body
+          description: User grants edit
+          required: true
+          schema:
+            $ref: '#/definitions/GrantsObject'
+      tags:
+        - Users
+      responses:    
+        200:
+          description: User grants updated
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+# This are the end points related to ORGANIZATION management
+  /organization:
+    get:
+      summary: Organization
+      description: Get organiztion list
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: only_enabled
+          in: query
+          description: User name
+          required: false
+          type: boolean
+      tags:
+        - Organizations
+      responses:    
+        200:
+          description: List of organizations
+          schema:
+            title: ArrayOfOrganizations
+            type: array
+            items:
+              $ref: '#/definitions/OrganizationObject'
+          examples:
+            application/json:
+              [
+                {
+                  "id": 1,
+                  "name": "Test UI",
+                  "enabled": true,
+                  "createdAt": 1488299711000
+                }
+              ]
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create
+      description: Create a new organization
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organization
+          in: body
+          description: Organization object send to perform a creation
+          required: true
+          schema:
+            $ref: '#/definitions/OrganizationObject'
+      tags:
+        - Organizations
+      responses:    
+        200:
+          description: Organization created successfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{organizationId}:
+    put:
+      summary: Edit
+      description: Edit an organization
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: string
+        - name: organization
+          in: body
+          description: Organization object send to perform an edit
+          required: true
+          schema:
+            $ref: '#/definitions/OrganizationObject'
+      tags:
+        - Organizations
+      responses:    
+        200:
+          description: Organization edited successfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete
+      description: Delete an organization
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id to be deleted
+          required: true
+          type: string
+      tags:
+        - Organizations
+      responses:    
+        200:
+          description: Organization created successfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+# This are the end points related to MODULE management
+  /organization/{organizationId}/module:
+    get:
+      summary: Module
+      description: Get module list
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: string
+      tags:
+        - Modules
+      responses:    
+        200:
+          description: List of modules
+          schema:
+            title: ArrayOfModules
+            type: array
+            items:
+              $ref: '#/definitions/ModuleObject'
+          examples:
+            application/json:
+              [
+                {
+                    "id": 1,
+                    "name": "Botnets and C&C",
+                    "shortname": "BTN-b1",
+                    "organizationId": 1,
+                    "enabled": true,
+                    "type": "BOTNETS",
+                    "extraConfig": null,
+                    "emptySilo": false,
+                    "createdAt": 1484147577000,
+                    "demoMode": false
+                }
+              ]
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Create
+      description: Create a new module
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: string
+        - name: module
+          in: body
+          description: Module object send to perform a creation
+          required: true
+          schema:
+            $ref: '#/definitions/ModuleObject'
+      tags:
+        - Modules
+      responses:    
+        200:
+          description: Module created successfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+  /organization/{organizationId}/module/{moduleId}:
+    put:
+      summary: Edit
+      description: Edit an module
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: string
+        - name: moduleId
+          in: path
+          description: Module id
+          required: true
+          type: string
+        - name: module
+          in: body
+          description: Module object send to perform an edit
+          required: true
+          schema:
+            $ref: '#/definitions/ModuleObject'
+      tags:
+        - Modules
+      responses:    
+        200:
+          description: Organization edited successfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Delete
+      description: Delete a module
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: string
+        - name: moduleId
+          in: path
+          description: Module id to be deleted
+          required: true
+          type: string
+      tags:
+        - Modules
+      responses:    
+        200:
+          description: Module created successfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  Success:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  OrganizationObject:
+    description: This is an organization object
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+      enabled:
+        type: boolean
+      industryId:
+        type: string
+        description: (FINANCE, PHARMA, RETAIL, GOVERNMENT, UTILITIES, TELCO, OTHER)
+      created_at:
+        description: Milliseconds
+        type: integer
+        format: int64
+      trialType:
+        type: string
+      trialExpirationDate:
+        description: Milliseconds
+        type: integer
+        format: int64
+      contact:
+        type: object
+        properties:
+          firstContact:
+            type: object
+            properties:
+              title:
+                type: string
+              firstName:
+                type: string
+              lastName:
+                type: string
+              phone:
+                type: string
+              email:
+                type: string
+              country:
+                type: string
+              state:
+                type: string
+              address1:
+                type: string
+              address2:
+                type: string
+          alias:
+            type: string
+          invoicingData:
+            type: object
+            properties:
+              department:
+                type: string
+              title:
+                type: string
+              firstName:
+                type: string
+              lastName:
+                type: string
+              phone:
+                type: string
+              email:
+                type: string
+              country:
+                type: string
+              state:
+                type: string
+              address1:
+                type: string
+              address2:
+                type: string
+    example:
+      application/json:
+        {
+            "name": "Org1",
+            "industryId": "FINANCE",
+            "trial": true,
+            "contact": {
+              "firstContact": {
+                "title": "",
+                "firstName": "Name",
+                "lastName": "Last Name",
+                "phone": "45345345345",
+                "email": "foo@bar.com",
+                "country": "AF",
+                "state": "",
+                "address1": "",
+                "address2": ""
+              },
+              "alias": "",
+              "invoicingData": {
+                "invoicingContact": {
+                  "department": "",
+                  "title": "",
+                  "firstName": "",
+                  "lastName": "",
+                  "phone": "",
+                  "email": "",
+                  "address1": "C/foo",
+                  "address2": "",
+                  "country": "AF",
+                  "state": "DSA"
+                },
+                "vat": "45634563456"
+              }
+            }
+          }
+
+  ModuleObject:
+    description: This is a module object
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+      shortname:
+        type: string
+      organizationId:
+        type: integer
+      enabled:
+        type: boolean
+      type:
+        type: string
+      createdAt:
+        description: Milliseconds
+        type: integer
+        format: int64
+      demoMode:
+        type: boolean
+  UserListObject:
+    description: This is an user object.
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+      firstSurname:
+        type: string
+      secondSurname:
+        type: string
+      email:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
+      addres:
+        type: string
+      telephone:
+        type: string
+      cellphone:
+        type: string
+      job:
+        type: string
+      accountStatus:
+        type: boolean
+      lastLoginAt:
+        description: Milliseconds
+        type: integer
+        format: int64
+      lockedAt:
+        description: Milliseconds
+        type: integer
+        format: int64
+      lastIpAddress:
+        type: string
+      createdAt:
+        description: Milliseconds
+        type: integer
+        format: int64
+      updatedAt:
+        description: Milliseconds
+        type: integer
+        format: int64
+      licenseAccepted:
+        type: boolean
+      passwordErrorCount:
+        type: integer
+  UserDTO:
+    type: object
+    properties:
+      name:
+        type: string
+      firstSurname:
+        type: string
+      secondSurname:
+        type: string
+      email:
+        type: string
+      username:
+        type: string
+      password:
+        type: string
+      address:
+        type: string
+      telephone:
+        type: string
+      cellphone:
+        type: string
+      job:
+        type: string
+      expirationTime:
+        type: string
+        format: date-time
+        pattern: YYYY-MM-DD
+      timezone:
+        type: string
+        description: Example -> Europe/Paris
+      internalUser:
+        type: boolean
+      grants:
+        $ref: '#/definitions/GrantsObject'
+  GrantsObject:
+    type: object
+    properties:
+      superadmin:
+        type: boolean
+      mssp_admin:
+        type: boolean
+      research:
+        type: boolean
+      sales:
+        type: boolean
+      superSearchGrants:
+        type: array
+        items:
+          type: object
+          description: Organization grants
+          properties:
+            itemId:
+              type: string
+            analyst:
+              type: boolean
+            operator:
+              type: boolean
+            mssp_customer:
+              type: boolean
+            reputationalSearchGrants:
+              type: array
+              items:
+                type: object
+                description: Module grants
+                properties:
+                  itemId:
+                    type: string
+                  analyst:
+                    type: boolean
+                  operator:
+                    type: boolean
+                  mssp_customer:
+                    type: boolean

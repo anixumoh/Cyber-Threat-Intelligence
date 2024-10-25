@@ -1,0 +1,144 @@
+@import 'src/scss/variables';
+@import '../settings-detail-generic';
+@import '~scss/mixins';
+
+// GENERAL
+label {
+  .custom-control-indicator {
+    background-color: $white;
+    border: 1px solid $gray;
+    width: 14px;
+    height: 14px;
+  }
+  .custom-control-input:checked ~ .custom-control-indicator {
+    background-color: $gray;
+  }
+  .custom-control-description {
+    margin-left: 25px;
+  }
+}
+
+.search-input {
+  height: 31px;
+}
+
+// DROPDOWN
+.dropdown-ul-list {
+  position: absolute;
+  top: 50px;
+  z-index: 9;
+  width: 230px;
+  margin: 0;
+  padding: 0;
+  transition: height 0.3s;
+  overflow: hidden;
+  border: none;
+  border-radius: $border-radius;
+  visibility: hidden;
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.13);
+  &.right-position {
+    visibility: visible;
+    border: 1px solid $light;
+    right: 0 !important;
+  }
+  &.left-position {
+    visibility: visible;
+    border: 1px solid $light;
+  }
+}
+.dropdown-li-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style-type: none;
+  border-top: 1px solid $light;
+  background-color: $white;
+  color: $gray;
+  font-size: 14px;
+  font-weight: $font-weight-thin;
+  height: 42px;
+  padding: 0 10px;
+  cursor: pointer;
+  .check {
+    float: right;
+    display: none;
+    font-size: 16px;
+  }
+  &:first-child {
+    color: $light;
+    background-color: $white;
+    border-top: none;
+  }
+  &:hover:not(:first-child) {
+    background-color: $bg-blueliv;
+    color: $gray;
+  }
+  &.active {
+    background-color: $bg-blueliv;
+    color: $gray;
+    .check {
+      display: block;
+    }
+  }
+}
+
+//Modal select
+
+.template-group-container {
+  display: flex;
+  justify-content: center;
+
+  .template-select {
+    width: 170px;
+  }
+
+  .template-btn {
+    height: 34px;
+    margin-left: 5px;
+  }
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.55);
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  td {
+    span,
+    button {
+      visibility: hidden;
+    }
+
+    p {
+      margin-left: 17px;
+    }
+  }
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging .drag-row:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+textarea:focus,
+input:focus {
+  outline: none !important;
+}
+
+.item-generated {
+  background-color: #2a75e214 !important;
+}
+
+.add-filter {
+  display: flex;
+  align-items: center;
+}

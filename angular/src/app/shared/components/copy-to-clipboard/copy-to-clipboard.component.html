@@ -1,0 +1,13 @@
+<div class="box">
+  <div class="copy">
+    <div class="text" *ngIf="tooltip && !child" [ngbTooltip]="value" [placement]="placement">{{ value }}</div>
+    <div class="text" *ngIf="!tooltip && !child">{{ value }}</div>
+    <ng-container *ngIf="child">
+      <ng-content></ng-content>
+    </ng-container>
+    <div class="actions">
+      <i class="icon-copy cursor-pointer" (click)="copyToClipboard(value)" *ngIf="!copyCooldown"></i>
+      <i class="icon-check_circle text-success copied" *ngIf="copyCooldown"></i>
+    </div>
+  </div>
+</div>

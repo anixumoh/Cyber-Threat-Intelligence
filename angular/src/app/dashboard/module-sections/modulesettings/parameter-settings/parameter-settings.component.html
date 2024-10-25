@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-lg-4" *ngFor="let parameter of parameters">
+    <app-parameter-settings-detail [parameter]="parameter"> </app-parameter-settings-detail>
+  </div>
+  <div
+    class="classify-box d-flex align-items-center"
+    *ngIf="activeModule.moduleName === 'credential' && !grants?.isCustomerOrOperator()"
+  >
+    <span class="classify-text ml-3">
+      There are
+      <span class="badge" [ngClass]="unclassified > 0 ? 'badge-primary' : 'badge-secondary'">{{ unclassified }}</span>
+      unclassified assets.
+    </span>
+    <button *ngIf="unclassified > 0" class="btn no-flex btn-link" (click)="navigateToClassify()">Classify them.</button>
+  </div>
+</div>

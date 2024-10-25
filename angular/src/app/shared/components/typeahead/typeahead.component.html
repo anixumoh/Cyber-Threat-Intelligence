@@ -1,0 +1,24 @@
+<app-overlay [loading]="typeaheadLoading">
+  <div style="display: flex">
+    <input
+      [(ngModel)]="selected"
+      [typeaheadAsync]="true"
+      [typeahead]="dataSource"
+      (typeaheadLoading)="changeTypeaheadLoading($event)"
+      (typeaheadOnSelect)="typeaheadOnSelect($event)"
+      typeaheadOptionsLimit="10"
+      typeaheadMinLength="2"
+      typeaheadOptionField="name"
+      placeholder=""
+      class="form-control"
+    />
+    <button
+      type="button"
+      class="btn btn-primary btn-sm ml-1"
+      [disabled]="!selectedItem || typeaheadLoading"
+      (click)="onSubmit()"
+    >
+      {{ buttonText }}
+    </button>
+  </div>
+</app-overlay>

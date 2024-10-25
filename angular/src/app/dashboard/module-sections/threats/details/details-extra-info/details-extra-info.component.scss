@@ -1,0 +1,85 @@
+@import 'src/scss/variables';
+
+*:focus {
+  outline: none;
+}
+.alert-success {
+  i {
+    font-size: 14px;
+    margin-right: 5px;
+  }
+  span {
+    font-size: 14px;
+  }
+}
+// BUTTONS
+.buttonActive {
+  background-color: $light;
+  border-color: $border;
+  &.active {
+    background-color: rgba(50, 122, 189, 0.2) !important;
+    color: #327abd !important;
+    border-color: #327abd !important;
+  }
+  &:hover {
+    color: #327abd !important;
+    border-color: #327abd !important;
+  }
+}
+// OPEN COLLAPSE
+.report-several-content {
+  display: none;
+  &.open {
+    overflow: auto;
+    display: block;
+  }
+}
+.report-sent-flash {
+  display: none;
+}
+// REPORT EMAIL CONTENT
+.input-group {
+  input {
+    height: 31px;
+    font-size: 14px !important;
+  }
+}
+// DROPDOWN
+.language.dropdown-content {
+  position: absolute;
+}
+.language.dropdown-content.open {
+  display: block;
+}
+.list-group {
+  overflow: hidden;
+  visibility: hidden;
+  transition: height 0.3s;
+  &.open {
+    visibility: visible;
+    overflow: auto;
+    height: auto;
+    max-height: 250px;
+    width: 180px;
+    position: relative;
+    z-index: 10;
+  }
+  .list-group-item {
+    &:hover {
+      color: $primary;
+    }
+  }
+}
+
+.history-table {
+  margin: 0;
+  tr {
+    th {
+      padding: 12px 15px;
+    }
+
+    td {
+      padding: 12px 15px;
+    }
+  }
+}

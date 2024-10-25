@@ -1,0 +1,16 @@
+export const environment = {
+  version: 'master',
+  branch: 'master',
+  production: true,
+  host: '/api',
+  origin: 'https://tipfepro.blueliv.com',
+  RECAPTCHA_PUBLIC_KEY: '6LcKOkEUAAAAADiJBok6-IAqGQ8BvwyqmU6hnqG3',
+  // RECAPTCHA_PRIVATE_KEY: '6LcKOkEUAAAAALycr1FzZ94HISKl2k30qink_96P',
+  dev_user: null,
+  dev_password: null,
+  FACEBOOK_APP_ID: '397648067003916',
+  logoImageDir: 'logotype_blueliv.svg',
+  faviconImageDir: 'favicon_blueliv.ico',
+  titleTab: 'Blueliv',
+  deployedAt: '10.08.2020 @ 11:05:59 CEST',
+};

@@ -1,0 +1,75 @@
+<div class="input-group input-group-sm">
+  <input
+    #search
+    [disabled]="!isDisplayingList"
+    class="form-control"
+    type="text"
+    placeholder="Write here your search"
+    [(ngModel)]="searchText"
+    (keyup.enter)="onSearchEvent()"
+    (ngModelChange)="onSearchTextChangeEvent()"
+  />
+  <div class="input-group-append">
+    <button
+      *ngIf="searchText.length"
+      class="btn btn-outline-secondary border"
+      type="button"
+      name="clearBtn"
+      (click)="onClearSearchTermEvent()"
+    >
+      <i class="icon-times"></i>
+    </button>
+  </div>
+  <div class="input-group-append">
+    <span
+      class="input-group-text cursor-pointer"
+      (click)="onSearchEvent()"
+      [ngClass]="isDisplayingList ? '' : 'disabled-search'"
+      ><i class="icon-search"></i
+    ></span>
+  </div>
+  <div class="input-group-append" *ngIf="isShowSyntax">
+    <button
+      #modalButton
+      class="btn btn-light border text-primary"
+      (click)="onOpenModalDorksEvent()"
+      [disabled]="!isDisplayingList"
+    >
+      Syntax
+    </button>
+  </div>
+  <div class="input-group-append" *ngIf="showSaveSearchButton && searchText">
+    <button
+      [ngClass]="disabledSaveSearchButton() ? 'disabled-class' : ''"
+      class="btn btn-light border text-primary"
+      (click)="!disabledSaveSearchButton() ? onOpenModalSaveDorks(true) : ''"
+      [ngbTooltip]="
+        disabledSaveSearchButton() ? 'There’s already a search saved with this dork' : 'Save the search with this dork'
+      "
+    >
+      Save search
+    </button>
+  </div>
+</div>
+<modal-window
+  modalTitle="Save your searchs"
+  *ngIf="openModalSaveDorks"
+  cancelBtn="Close"
+  acceptBtn="Save"
+  [disabledAccept]="onValidateRepeatNames() || onValidateSaveSearch() || !searchName.length"
+  (accept)="onSaveSearchDorks()"
+  (cancel)="onOpenModalSaveDorks(false)"
+>
+  <div class="padding-10 pt-3 pb-4">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input [(ngModel)]="searchName" id="name" placeholder="" class="form-control" />
+      <div class="validation-path" *ngIf="onValidateSaveSearch()">
+        <div class="validation-path__message">The name can only contain a maximum of 50 alphanumeric characters</div>
+      </div>
+      <div class="validation-path" *ngIf="onValidateRepeatNames()">
+        <div class="validation-path__message">Name is already in use</div>
+      </div>
+    </div>
+  </div>
+</modal-window>

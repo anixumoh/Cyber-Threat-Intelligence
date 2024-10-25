@@ -1,0 +1,48 @@
+@import 'src/scss/variables';
+
+.modal-big {
+  width: 1000px !important;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 149%;
+}
+
+.sb-search-input {
+  height: 31px;
+}
+
+.right-elements-container {
+  display: flex;
+  justify-content: space-between;
+
+  .trial-container {
+    height: 35px;
+    width: 40%;
+  }
+
+  .customer-container {
+    width: 50%;
+    position: relative;
+  }
+}
+.w-304px{
+  width: 304px !important;
+}
+.w-32{
+  width:8rem !important
+}
+.w-44{
+  width: 11rem !important;
+}
+.flex-1{
+  flex:1
+}
+.loading-info {
+  position: absolute;
+  top: 31px;
+  left: 74px;
+}

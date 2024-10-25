@@ -1,0 +1,169 @@
+<div class="settings-feeds card mb-4">
+  <div class="card-header border-bottom-0 bg-light px-2 py-1 clearfix">
+    <h6 class="title-card text-dark text-uppercase float-left">
+      Feeds
+    </h6>
+    <button class="btn btn-circle bg-light ml-1 float-right" #buttonInfo>
+      <i class="icon-info-character text-primary"></i>
+    </button>
+  </div>
+  <!-- INFO -->
+  <ng-template [appToggleContains]="buttonInfo">
+    <div class="alert-info px-2 py-1">
+      <span class="font-italic text-90">{{parameterObject?.parameterTexts?.description}}</span>
+    </div>
+  </ng-template>
+  <form class="bg-light p-2 clearfix">
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+        <div class="form-check mb-0">
+          <input class="form-check-input" type="checkbox"
+                 [checked]="feedsObject && feedsObject.feeds ? feedsObject.feeds.publicFeed : false"
+                 (change)="changeStatePublicFeed()"
+                 [disabled]="grants?.isCustomerOrOperator()">
+          <span class="text-dark ml-1">{{ parameterObject?.parameterTexts?.publicFeed }}</span>
+        </div>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+        <div class="form-check mb-0">
+          <input class="form-check-input" type="checkbox"
+                 [checked]="feedsObject && feedsObject.feeds ? feedsObject.feeds.activateAlerts : false"
+                 (change)="changeStateNewCard()"
+                 [disabled]="grants?.isCustomerOrOperator()">
+          <span class="text-dark ml-1">{{ parameterObject?.parameterTexts?.newCard }}</span>
+        </div>
+      </li>
+      <li class="list-group-item p-0" *ngIf="feedsObject?.feeds?.activateAlerts === true">
+        <ul class="list-group list-group-flush ml-4">
+          <li class="list-group-item p-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox"
+                     [disabled]="!feedsObject?.listBanksFeeds || grants?.isCustomerOrOperator()"
+                     [checked]="feedsObject && feedsObject?.feeds ? feedsObject.feeds.alertBanks : false"
+                     (change)="changeStateBankCard()">
+              <span class="text-dark ml-1">{{ parameterObject?.parameterTexts?.bankCard }}</span>
+            </div>
+          </li>
+          <li class="list-group-item  p-2" *ngIf="feedsObject?.feeds?.activateAlerts === true">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox"
+                     [disabled]="!feedsObject?.listCreditCardsFeeds || grants?.isCustomerOrOperator()"
+                     [checked]="feedsObject && feedsObject?.feeds ? feedsObject.feeds.alertCorporates : false"
+                     (change)="changeStateCorpCard()">
+              <span class="text-dark ml-1">{{ parameterObject?.parameterTexts?.CorpCard }}</span>
+              <span *ngIf="!feedsObject?.listCreditCardsFeeds" class="alert-warning">Please, insert a Credit Card</span>
+            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </form>
+  <div class="card-header border-bottom-0 bg-light px-2 py-1 clearfix"
+       [style.display]="feedsObject?.feeds?.activateAlerts ? 'block' : 'none'">
+    <div class="form-check mt-2 mb-0 float-left">
+      <ng-template  let-dataInf
+                    let-isSelectedAllInf="isSelectedAll"
+                    let-ctrl="controller"
+                    (updateSelectAll)="updateSelectAll($event)"
+                    (updateElement)="updateElement($event)"
+                    [appInfiniteScrollConsumer]="infiniteElement">
+        <input class="form-check-input mt-0"
+               type="checkbox"
+               [disabled]="!dataInf || !dataInf.length || grants?.isCustomerOrOperator()"
+               [ngModel]="isSelectedAllInf"
+               (input)="ctrl.selectAll($event)">
+      </ng-template>
+    </div>
+    <ng-template [appToggle]="searchTemplate">
+      <button class="btn btn-light btn-sm text-primary ml-1 float-left"
+              *ngIf="!grants?.isCustomerOrOperator()"
+              #dropDownButtonUser
+              type="button"
+              name="button"
+              (click)="toggleMenu()">
+        <i class="icon-plus-circle-solid text-primary"></i>
+        Add User
+      </button>
+    </ng-template>
+    <div class="dropdown-list"
+         *ngIf="!grants?.isCustomerOrOperator()">
+      <ul class="list-group list-group-flush border rounded shadow"
+          #dropDownUser
+          [ngClass]="isMenuAlertOpened ? 'open' : ''"
+          (click)="toggleMenu()">
+        <ng-container *ngFor="let user of parameterObject?.usersList">
+          <li class="list-group-item list-group-item-action cursor-pointer border-0 p-2"
+              *ngIf="!user.notShow"
+              (click)="selectUser(user)">
+            <span>{{user.email}}</span>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <button class="btn btn-circle bg-light ml-1 float-right" #buttonSearch>
+      <i class="icon-search text-primary"></i>
+    </button>
+    <ng-template [appToggleContains]="buttonSearch" #searchTemplate="appToggleContains">
+      <div class="content-search">
+        <div class="form-group mb-0">
+          <input class="form-control form-control-sm"
+                 [placeholder]="parameterObject?.parameterTexts?.area_placeholder"
+                 (keyup)="searchInList($event)">
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <div class="card-body height-list border-top p-0"
+       [style.display]="feedsObject?.feeds?.activateAlerts ? 'block' : 'none'"
+       appInfiniteScrollProvider
+       [infiniteCompleteArray]="parameterObject?.parameterData"
+       [infiniteScrollPercent]="20"
+       [infiniteAttribute]="'hide'"
+       [infiniteNum]="10"
+       #infiniteElement="appInfiniteScrollProvider">
+    <div class="list-parameters">
+      <!-- NO RESULTS -->
+      <div class="no-results-box-md p-4" *ngIf="parameterObject?.parameterData.length === 0 ">
+        <img class="rounded mx-auto d-block mb-2" src="assets/default_images/searching.svg"/>
+        <h6 class="mb-0 text-center text-primary">"There are no Users"</h6>
+      </div>
+      <!-- LIST -->
+      <ul class="list-group list-group-flush">
+        <ng-template let-dataInf let-ctrl="controller"
+                     (updateElement)="updateElement($event)"
+                     [appInfiniteScrollConsumer]="infiniteElement">
+          <ng-template ngFor let-value [ngForOf]="dataInf" let-index="index">
+            <ng-container *ngIf="!value.hide && value.isInfinite">
+              <li class="list-group-item
+              list-group-item-action
+              d-flex
+              justify-content-between
+              align-items-center
+              p-2">
+                <div class="form-check mb-0 text-truncate"
+                     [ngbTooltip]="renderValue(value)"
+                     [placement]=" index == 0 ? 'bottom' : 'top'">
+                  <input class="form-check-input" type="checkbox"
+                         [disabled]="grants?.isCustomerOrOperator()"
+                         [(ngModel)]="value.selected"
+                         (input)="ctrl.selectOne($event, value); checkIfAnySelected()">
+                  <span class="text-dark ml-1">{{renderValue(value)}}</span>
+                </div>
+                <button class="btn btn-circle bg-light ml-1 float-right"
+                        [disabled]="grants?.isCustomerOrOperator()"
+                        (click)="deleteOne(index); checkIfAnySelected()">
+                  <i class="icon-delete bglight text-danger"></i>
+                </button>
+              </li>
+            </ng-container>
+          </ng-template>
+        </ng-template>
+      </ul>
+    </div>
+  </div>
+  <!-- CARD FOOTER - ONLY SELECTED LIST-ITEMS -->
+  <div class="card-footer p-1"*ngIf="parameterObject?.anyChecked">
+    <button class="btn btn-light btn-sm text-danger px-4 float-right"
+            (click)="delete(); checkIfAnySelected()">Delete</button>
+  </div>
+</div>

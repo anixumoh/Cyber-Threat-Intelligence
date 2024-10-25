@@ -1,0 +1,5 @@
+.list {
+  span:not(:first-child) {
+    margin-left: 3px;
+  }
+}

@@ -1,0 +1,79 @@
+@import "src/scss/variables";
+
+*:focus{
+  outline: none;
+}
+
+.button-more {
+  border:none;
+  &:hover{
+    background-color:$bg-blueliv;
+    color:$gray;
+  }
+}
+.alert-success{
+  i{
+    font-size:14px;
+    margin-right:5px;
+  }
+  span{
+    font-size:14px;
+  }
+}
+.moreInfo-several-content,
+.report-several-content {
+  display: none;
+  margin-top:12px;
+  padding-top:20px;
+  border-top:1px solid $light;
+  &.open {
+    overflow: auto;
+    display: block;
+  }
+  .create-info{
+    margin-top: 20px;
+    padding-bottom:10px;
+    font: 400 16px 'Open Sans', sans-serif;
+    span{
+      font-weight:$font-weight-thin;
+    }
+  }
+  .log-info{
+    height: 300px;
+    overflow-x: scroll;
+    font-size: 14px;
+  }
+}
+
+.dropdown-languages{
+  position:relative;
+  top:0;
+  left:0;
+  z-index:9;
+}
+.select-languages{
+  position:relative;
+  top:0;
+  left:174px;
+  z-index:9;
+}
+.settings-search-input{
+  width:300px;
+}
+.report-sent-flash {
+  display: none;
+}
+.buttonActive{
+  &.active{
+    background-color:$default !important;
+    border:1px solid $default !important;
+    color:$white !important;
+    font-weight:200 !important;
+  }
+  &.active:hover{
+    background-color:$black !important;
+    border:1px solid $black !important;
+    color:$white !important;
+    font-weight:200 !important;
+  }
+}

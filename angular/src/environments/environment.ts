@@ -1,0 +1,15 @@
+export const environment = {
+  production: false,
+  version: '0.2.15',
+  branch: 'master',
+  host: 'https://localhost:4200',
+  origin: 'https://localhost:4200',
+  retailVersion: '4.0.Beta',
+  RECAPTCHA_PUBLIC_KEY: '6LcKOkEUAAAAADiJBok6-IAqGQ8BvwyqmU6hnqG3',
+  RECAPTCHA_PRIVATE_KEY: '6LcKOkEUAAAAALycr1FzZ94HISKl2k30qink_96P',
+  FACEBOOK_APP_ID: '397648067003916',
+  logoImageDir: 'logotype_blueliv.svg',
+  faviconImageDir: 'favicon_blueliv.ico',
+  titleTab: 'Blueliv',
+  deployedAt: '10.08.2020 @ 11:05:59 CEST',
+};

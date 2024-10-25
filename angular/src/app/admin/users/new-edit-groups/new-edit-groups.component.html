@@ -1,0 +1,53 @@
+<modal-window
+  [acceptBtn]="isNew ? 'Create' : 'Save'"
+  [cancelBtn]="'Close'"
+  [customClass]="'modal-big'"
+  [modalTitle]="(isNew ? 'Create' : 'Edit') + ' User Groups'"
+  (accept)="createEdit()"
+  (cancel)="closeModal()"
+>
+  <div class="modal-body">
+    <input-control class="pb-4" [label]="'Group Name'" [control]="form.controls['name']"> </input-control>
+    <app-table-admin
+      [isRowSelected]="false"
+      [isPaginate]="!viewSelected"
+      [isDelete]="false"
+      [isEdit]="false"
+      [template_header]="[HeaderTitle, OtherOptions]"
+      [template_outlet]="{ addRemove: templateAdd }"
+      (reloadEmitter)="getUsers()"
+      [(table)]="tableUser"
+    >
+    </app-table-admin>
+  </div>
+</modal-window>
+
+<ng-template #templateAdd let-item>
+  <button class="btn btn-light btn-sm" *ngIf="getIndex(item) === -1" (click)="addUser(item)">
+    <i class="icon-plus-circle-solid text-primary mr-1"></i>
+    <span class="text-primary">Add</span>
+  </button>
+  <button class="btn btn-light btn-sm" (click)="removeUser(getIndex(item), item)" *ngIf="getIndex(item) !== -1">
+    <i class="icon-delete text-danger mr-1"></i>
+    <span class="text-danger">Remove</span>
+  </button>
+</ng-template>
+
+<ng-template #HeaderTitle>
+  <button class="btn btn-light text-primary btn-sm" type="button" (click)="getUsers()">
+    <i class="icon-refresh" [class.rotate]="tableUser.isLoading" aria-hidden="true"></i>
+    <span class="ml-1">Refresh</span>
+  </button>
+</ng-template>
+
+<ng-template #OtherOptions>
+  <button
+    class="btn btn-light btn-sm text-primary float-right"
+    [class.active]="viewSelected"
+    (click)="viewOnlySelected()"
+    title="View Selected"
+  >
+    <i class="icon-eye"></i>
+    <span class="ml-1">{{ viewSelected ? 'View all' : 'View selected' }} {{ usersSelected.length }}</span>
+  </button>
+</ng-template>

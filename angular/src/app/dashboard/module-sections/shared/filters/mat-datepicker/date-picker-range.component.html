@@ -1,0 +1,44 @@
+<div class="datepicker-container">
+  <mat-form-field appearance="fill" class="example-form-field">
+    <mat-date-range-input [formGroup]="formDateRange" [rangePicker]="rangePicker">
+      <input
+        matStartDate
+        formControlName="startDateCtrl"
+        placeholder="Start date"
+        readonly
+        [attr.disabled]="disabled"
+      />
+      <input matEndDate formControlName="endDateCtrl" placeholder="End date" readonly [attr.disabled]="disabled" />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="rangePicker" [disabled]="disabled"></mat-datepicker-toggle>
+    <mat-date-range-picker #rangePicker [disabled]="disabled" (closed)="onCloseRangePickerPopup()">
+      <mat-date-range-picker-actions>
+        <button mat-button matDateRangePickerCancel>Cancel</button>
+        <div>
+          <button mat-button matDateRangePickerCancel (click)="onResetDateSelection()">Reset</button>
+          <button mat-raised-button color="primary" matDateRangePickerApply (click)="onDateFilter()">Filter</button>
+        </div>
+      </mat-date-range-picker-actions>
+    </mat-date-range-picker>
+  </mat-form-field>
+  <div class="mr-2 mt-1 font-12 d-flex" style="font-size: 10px">
+    <div
+      *ngIf="
+        formDateRange.get('startDateCtrl').invalid &&
+        (formDateRange.get('startDateCtrl').dirty || formDateRange.get('startDateCtrl').touched)
+      "
+      class="mr-auto"
+    >
+      <mat-error *ngIf="formDateRange.get('startDateCtrl').errors.required"> Start date is mandatory. </mat-error>
+    </div>
+    <div
+      *ngIf="
+        formDateRange.get('endDateCtrl').invalid &&
+        (formDateRange.get('endDateCtrl').dirty || formDateRange.get('endDateCtrl').touched)
+      "
+      class="mr-auto"
+    >
+      <mat-error *ngIf="formDateRange.get('endDateCtrl').errors.required"> End date is mandatory. </mat-error>
+    </div>
+  </div>
+</div>

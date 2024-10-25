@@ -1,0 +1,16 @@
+<div *ngIf="showErrorMessage" class="overlay" [style.zIndex]="zIndex">
+  <div class="modal panel panel-default padding-20">
+    <div class="media error-box mt-4">
+      <div class="media-left media-middle">
+        <img class="pull-left" src="assets/default_images/warning.svg" />
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading">Something went wrong</h3>
+        <p class="media-text">{{ errorState?.errorMessage }}</p>
+      </div>
+    </div>
+    <div class="error-box error-btn">
+      <button class="btn btn-primary btn-block" (click)="errorAction()">Close</button>
+    </div>
+  </div>
+</div>

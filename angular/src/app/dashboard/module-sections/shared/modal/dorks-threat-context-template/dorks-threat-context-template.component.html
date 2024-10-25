@@ -1,0 +1,195 @@
+<div class="m-2 dork-threat-context-template">
+  <p style="font-size: 16px" *ngIf="dorksThreathContextType === 'actors'">
+    In order to filter results in an advanced way Threat Context provides a list of dorks to find specific information.
+    In the Actor section
+    <b class="text-bold">if no dork is used the default search is a fuzzy search of the actor name and aliases</b>. This
+    is the list of all dorks available in this section:
+  </p>
+
+  <p style="font-size: 16px" *ngIf="dorksThreathContextType === 'campaigns'">
+    In order to filter results in an advanced way Threat Context provides a list of dorks to find specific information.
+    In the Campaign section
+    <b class="text-bold">if no dork is used the default search is a fuzzy search of the campaign name</b>. This is the
+    list of all dorks available in this section:
+  </p>
+
+  <p style="font-size: 16px" *ngIf="dorksThreathContextType === 'tools'">
+    In order to filter results in an advanced way Threat Context provides a list of dorks to find specific information.
+    In the Tools section
+    <b class="text-bold">if no dork is used the default search is a fuzzy search of the tool name</b>. This is the list
+    of all dorks available in this section:
+  </p>
+
+  <p style="font-size: 16px" *ngIf="dorksThreathContextType === 'indicators'">
+    In order to filter results in an advanced way Threat Context provides a list of dorks to find specific information.
+    In the Indicators section
+    <b class="text-bold"
+      >if no dork is used the default search is an exact search of the indicator value: IP, domain, URL or hash (MD5 /
+      SHA1 / SHA256 / SHA512)</b
+    >. This is the list of all dorks available in this section:
+  </p>
+
+  <p style="font-size: 16px" *ngIf="dorksThreathContextType === 'cves'">
+    In order to filter results in an advanced way Threat Context provides a list of dorks to find specific information.
+    In the CVEs section
+    <b class="text-bold">if no dork is used the default search is an exact search of the CVE name</b>. This is the list
+    of all dorks available in this section:
+  </p>
+
+  <p style="font-size: 16px" *ngIf="dorksThreathContextType === 'attack-patterns'">
+    In order to filter results in an advanced way Threat Context provides a list of dorks to find specific information.
+    In the Attack Patterns section
+    <b class="text-bold">if no dork is used the default search is a fuzzy search of the Attack Pattern name</b>. This is
+    the list of all dorks available in this section:
+  </p>
+
+  <p style="font-size: 16px" *ngIf="dorksThreathContextType === 'signatures'">
+    In order to filter results in an advanced way Threat Context provides a list of dorks to find specific information.
+    In the Signatures section
+    <b class="text-bold">if no dork is used the default search is an exact search of the Signature name</b>. This is the
+    list of all dorks available in this section:
+  </p>
+
+  <p style="font-size: 16px" *ngIf="dorksThreathContextType === 'malware-hunting'">
+    In order to filter results in an advanced way Threat Context provides a list of dorks to find specific information.
+    In the Malware Hunting section
+    <b class="text-bold"
+      >if no dork is used the default search is an exact search of the Malware hash (MD5 / SHA1 / SHA256 / SHA512) or a
+      fuzzy search of the malware type</b
+    >. This is the list of all dorks available in this section:
+  </p>
+
+  <table class="table border-top mb-5">
+    <thead>
+      <tr>
+        <th style="width: 160px">Dork</th>
+        <th style="width: 140px">Type</th>
+        <th>INFORMATION</th>
+      </tr>
+    </thead>
+    <tbody class="text-secondary">
+      <tr *ngFor="let dorkField of _dorkFieldsEntity">
+        <td>
+          <span>{{ dorkField }}</span>
+        </td>
+        <td>
+          <span>{{ _dorkFields[dorkField].type === 'DateTime' ? 'Date' : _dorkFields[dorkField].type }}</span>
+        </td>
+        <td>
+          <div *ngIf="_dorkFields[dorkField].description" [innerHTML]="_dorkFields[dorkField].description"></div>
+          <div *ngIf="!_dorkFields[dorkField].description">
+            <span *ngFor="let choice of _dorkFields[dorkField].choices; let last = last">
+              {{ choice }}
+              <ng-container *ngIf="!last"> |</ng-container>
+            </span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="m-4">
+  <h5>Available operations</h5>
+  <table class="table border-top">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Operator</th>
+        <th style="width: 430px">Description</th>
+        <th style="width: 250px">Example</th>
+      </tr>
+    </thead>
+    <tbody class="text-secondary">
+      <tr>
+        <td>String / Relationship / Choice</td>
+        <td>field:[^,$,~]"value"</td>
+        <td>
+          - By default the field must exactly match "value". <br />
+          - If "^" is specified the field must start with "value". <br />
+          - If "$" is specified the field must end with "value". <br />
+          - If "~" is specified the field must contain "value".
+        </td>
+        <td>name:^"CVE-2020"</td>
+      </tr>
+      <tr>
+        <td>Integer / Float</td>
+        <td>field:[<,<=,>,>=]value</td>
+        <td>
+          - By default field equals value. <br />
+          - If ">" is specified the field must be greater than value. <br />
+          - If "<" is specified the field must be less than value. <br />
+          - If ">=" or “<=" is specified the field might be greater/less or equal to value.
+        </td>
+        <td>
+          blueliv_score:>=9.2 <br />
+          <br />
+          num_malware:>100
+        </td>
+      </tr>
+      <tr>
+        <td>Date</td>
+        <td>field:[<,<=,>,>=]yyyy[-mm-dd]</td>
+        <td>
+          - By default Field equals the date. <br />
+          - If ">" is specified the field must be greater. <br />
+          - If "<" is specified the field must be less. <br />
+          - if ">=" or "<=" is specified the field might be greater/less or equal to value.
+        </td>
+        <td>first_seen:>=2017-01-05</td>
+      </tr>
+      <tr>
+        <td>Boolean</td>
+        <td>field:[0,1]</td>
+        <td>Field is false (0) or true (1).</td>
+        <td>active:0</td>
+      </tr>
+      <tr>
+        <td>List</td>
+        <td>field:"value"</td>
+        <td>
+          List has an item which equals to "value". No operators are available, with exception of aliases in Actors.
+        </td>
+        <td>
+          types:"hacker" <br />
+          <br />
+          aliases:~"panda"
+        </td>
+      </tr>
+      <tr>
+        <td>Generic</td>
+        <td>field.subfield:[^,$,~]"value"</td>
+        <td>
+          The GenericField type gives access to an element with JSON format which can be navigated using dots.
+          <br />
+          Most of the times the "value" is a String so the available operators are the same as the String type: ^, $ and
+          ~.
+          <br />
+
+          The word “keyword" can be added at the end to avoid tokenization by the backend.
+        </td>
+        <td>ioa.url.keyword:~".php"</td>
+      </tr>
+      <tr>
+        <td>Logical Operators</td>
+        <td>AND, OR</td>
+        <td>
+          - AND: Returns true if both operands are true.<br />
+          - OR: Returns true if either operand is true
+        </td>
+        <td>active:1 AND targets:~"financial"</td>
+      </tr>
+      <tr>
+        <td>Negation Operator</td>
+        <td>NOT field:0</td>
+        <td>Returns false if its single operand can be converted to true; otherwise, returns true.</td>
+        <td>NOT active:0</td>
+      </tr>
+      <tr>
+        <td>Grouping Operator</td>
+        <td>()</td>
+        <td>Grouping operator</td>
+        <td>(active:0 AND targets:"Italy") OR name:~"Lazarus"</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

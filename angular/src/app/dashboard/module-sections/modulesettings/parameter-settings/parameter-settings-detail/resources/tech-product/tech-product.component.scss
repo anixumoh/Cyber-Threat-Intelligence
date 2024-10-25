@@ -1,0 +1,93 @@
+@import 'src/scss/variables';
+@import '../generic-parameter/generic-parameter.component.scss';
+@import '~scss/mixins';
+
+.adding-card {
+  overflow: scroll;
+  min-height: 245px;
+}
+.carbon-fix {
+  line-height: 20px;
+}
+
+// INPUT
+.form-group {
+  input {
+    height: 31px;
+  }
+}
+
+//SEARCH BOX
+.search-box {
+  height: 28px;
+  color: #444;
+  line-height: 28px;
+  border: 1px solid #aaa;
+  width: 100%;
+  margin-bottom: 9px;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-box::placeholder {
+  color: #999;
+  font-size: 14px;
+}
+
+.company-dropdown {
+  padding-left: 0px;
+  max-height: 151px;
+  overflow: scroll;
+  width: 97%;
+  position: absolute;
+  border: 1px solid #ced4da;
+  border-radius: 0.2rem;
+  z-index: 999;
+
+  &--version {
+    top: 187px;
+  }
+}
+
+.deprecated-checkbox {
+  float: right;
+  @include ct-flex-center();
+}
+
+// DROPDOWN
+.dropdown-list {
+  position: relative;
+  z-index: 1000;
+  .list-group {
+    position: absolute;
+    visibility: hidden;
+    &.open {
+      visibility: visible;
+      top: 32px;
+      left: 75px;
+      width: 300px;
+      max-height: 200px;
+      overflow: auto !important;
+    }
+    .list-group-item {
+      &:hover {
+        color: $primary;
+      }
+      &.active {
+        background-color: $light;
+        color: $primary;
+      }
+    }
+  }
+}
+
+.header-card {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}

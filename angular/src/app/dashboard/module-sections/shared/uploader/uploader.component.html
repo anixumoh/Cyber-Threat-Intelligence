@@ -1,0 +1,127 @@
+<!-- BUTTONS CHOOSE -->
+<div class="uploader">
+  <ng-container *ngIf="!url">
+    <div class="d-flex align-items-center">
+      <input
+        class="uploadDefault"
+        type="file"
+        #uploader
+        (change)="uploadFile.emit(uploader.files)"
+        name="fileUpload"
+        multiple="multipleSelect"
+        value=""
+      />
+      <button (click)="uploader.click()" class="btn btn-outline-primary btn-sm bg-light text-primary">
+        <i class="icon-plus-circle-solid mr-1" aria-hidden="true"></i>
+        <span>Upload a sample</span>
+      </button>
+      <button class="btn btn-outline-primary btn-sm bg-light text-primary px-3 ml-2" [ngbTooltip]="tooltip">
+        <i class="icon-info" aria-hidden="true"><span style="visibility: hidden">.</span></i>
+      </button>
+    </div>
+  </ng-container>
+</div>
+
+<div
+  class="uploader-info pan"
+  *ngIf="status.length && uploaderInfo"
+  [ngClass]="isMinified ? 'is-minified' : 'is-maximized'"
+>
+  <header class="header-info pal" [ngClass]="isMinified ? '' : 'is-maximized'">
+    <div class="d-flex justify-content-between align-items-center w-100">
+      <div class="time-info pl-3">
+        <span *ngIf="!isUploading(status)">Upload Completed</span>
+        <span *ngIf="isUploading(status)">Uploading {{ getNumUploading(status) }} files</span>
+        <span *ngIf="isUploading(status)" class="time-info__remaining"
+          >{{ estimatedTime(status) || 0 }}s remaining</span
+        >
+      </div>
+      <div class="summary-info d-flex justify-content-around pr-3" style="width: 240px">
+        <div class="info info-success">
+          <i class="icon-arrow-up text-success"></i><span>{{ getNumUploaded(status) }} file(s) uploaded</span>
+        </div>
+        <div class="info info-error">
+          <i class="icon-times text-danger"></i><span>{{ getNumError(status) }} errors</span>
+        </div>
+      </div>
+    </div>
+    <div class="action-btns position-absolute">
+      <i class="icon-arrow-down cursor-pointer" *ngIf="!isMinified" (click)="toogleMinified()"></i>
+      <i class="icon-arrow-up cursor-pointer" *ngIf="isMinified" (click)="toogleMinified()"></i>
+      <i class="icon-times-circle-solid cursor-pointer" (click)="closeEmitter.emit()"></i>
+    </div>
+  </header>
+  <main class="main-info" *ngIf="!isMinified">
+    <section class="file-info cancel">
+      <a nohref (click)="cancelEmitter.emit()" class="link text-danger pr-3">Cancel</a>
+    </section>
+    <section *ngFor="let f of status" class="file-info d-flex">
+      <div class="d-flex">
+        <div class="pl-3 pr-3" [ngClass]="f.errorMessage ? 'error-icon' : ''">
+          <i class="material-icons is-circle is-white is-success mrm mll" *ngIf="f.status === 'complete'">done</i>
+          <i class="material-icons is-circle is-white is-error mrm mll" *ngIf="f.status === 'error'">clear</i>
+          <span *ngIf="f.status === 'uploading'"><i class="icon-spinner rotate mrm mll"></i></span>
+        </div>
+        <div class="file-info__text" style="width: 450px">
+          {{ shortenFilename(f.name) }}<br />
+          <span
+            *ngIf="
+              f.status === 'error' &&
+              f.errorMessage &&
+              (f.errorMessage.error.message === 'malware.already_uploaded' ||
+                f.errorMessage.error.message === 'error.already_uploaded')
+            "
+            class="file-info__text-error text-danger"
+            >File already uploaded.</span
+          >
+          <span
+            *ngIf="f.status === 'error' && f.errorMessage && f.errorMessage.error.message === 'error.undefined_error'"
+            class="file-info__text-error text-danger"
+            >File upload error. Please, try again.</span
+          >
+          <span
+            *ngIf="f.status === 'error' && f.errorMessage && f.errorMessage.error.message === 'malware.max_file_size'"
+            class="file-info__text-error text-danger"
+            >File size cannot exceed 20MB.</span
+          >
+          <span *ngIf="f.error && !f.errorMessage" class="file-info__text-error text-danger"
+            >{{ f.error }} - Error uploading the file</span
+          >
+          <span
+            *ngIf="
+              f.status === 'complete' &&
+              f.estimatedTime &&
+              !f.estimatedTime.error &&
+              f.estimatedTime.httpCode === 202 &&
+              f.estimatedTime.message === 'error.already_uploaded'
+            "
+            class="file-info__text-error text-danger"
+            >File already uploaded.</span
+          >
+          <span
+            *ngIf="f.status === 'error' && f?.errorMessage?.error?.message === 'Upload malware file is empty'"
+            class="file-info__text-error text-danger"
+            >Uploaded malware file is empty</span
+          >
+          <span
+            *ngIf="f.status === 'error' && f?.errorMessage?.error === 'file_not_allowed'"
+            class="file-info__text-error text-danger"
+            >Extension does not match file type</span
+          >
+        </div>
+      </div>
+      <div class="pr-3 d-flex justify-content-between" style="width: 50px">
+        <i
+          class="icon-refresh cursor-pointer refresh-icon"
+          *ngIf="f.status === 'error'"
+          (click)="reUploadFile.emit(f)"
+        ></i>
+        <i
+          class="icon-delete cursor-pointer delete-icon"
+          *ngIf="f.status !== 'uploading'"
+          (click)="removeFile.emit(f.id)"
+        ></i>
+      </div>
+    </section>
+  </main>
+</div>

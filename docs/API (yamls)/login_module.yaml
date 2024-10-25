@@ -1,0 +1,73 @@
+# This is the new CTIP API
+swagger: '2.0'
+info:
+  title: CTIP LOGIN API
+  description: API for the LOGIN
+  version: "1.0.0"
+host: new-ui-pre.blueliv.com
+schemes:
+  - https
+basePath: /api/v2
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /auth:
+    post:
+      summary: Authentication
+      description: User can log in. A session token is returned and should be kept and send back in each end point call
+      consumes:
+        - application/json
+      parameters:
+        - name: credential
+          in: body
+          description: User credentials
+          required: true
+          schema:
+            $ref: '#/definitions/UserCredentials'
+      tags:
+        - Login
+      responses:    
+        200:
+          description: User succesfully logged and session token returned
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+  /logout:
+    get:
+      summary: Logout
+      description: Log outs a user
+      tags:
+        - Login
+      responses:    
+        200:
+          description: User logged out succesfully
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Error:
+    type: object
+    properties:
+      error:
+        type: string
+  Success:
+    type: object
+    properties:
+      token:
+        type: string
+  UserCredentials:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string

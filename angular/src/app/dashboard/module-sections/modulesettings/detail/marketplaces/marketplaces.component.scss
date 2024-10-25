@@ -1,0 +1,26 @@
+@import "src/scss/variables";
+
+// DROPDOWN
+.dropdown-content{
+  position: relative;
+  .list-group {
+    position: absolute;
+    top: 0;
+    left: 100px;
+    z-index: 9;
+    transition: height .3s;
+    overflow: hidden;
+    visibility: hidden;
+    &.open {
+      visibility: visible;
+      height: 200px;
+      width: 300px;
+      overflow: auto;
+    }
+    .list-group-item {
+      &:hover{
+        color: $primary;
+      }
+    }
+  }
+}

@@ -1,0 +1,243 @@
+<mat-card class="assets-card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-center align-items-center">
+      <mat-checkbox
+        *ngIf="!canAdd"
+        class="mr-2 checkbox--center"
+        (click)="showSelectOptions()"
+        [checked]="isAllSelected(selectedItems)"
+        [indeterminate]="!isAllSelected(selectedItems) && selectedItems.length > 0"
+      >
+      </mat-checkbox>
+      <ul *ngIf="isSelectOptionsOpen" class="list-group border rounded shadow list-group--select">
+        <li
+          *ngFor="let option of selectOptions; let i = index"
+          class="list-group-item list-group-item--select d-flex align-items-center justify-content-between text-left border-0 px-3 py-2 cursor-pointer"
+        >
+          <span>{{ option.value }}</span>
+          <mat-checkbox class="checkbox--center" [checked]="option.selected" (click)="selectOption(i)"></mat-checkbox>
+        </li>
+      </ul>
+      <span class="text-capitalize">{{ itemsType === 'ip' ? 'IP' : itemsType }}s</span>
+    </div>
+
+    <div class="d-flex">
+      <button
+        class="btn btn-circle bg-light mr-2"
+        *ngIf="!isOpenSearch && areThereSelectedItems()"
+        [matTooltip]="deleteType === 'delete' ? 'Delete selected' : 'Discard selected'"
+        (click)="deleteMany()"
+      >
+        <i class="bglight text-danger" [ngClass]="deleteType === 'delete' ? 'icon-delete' : 'icon-eye-slash'"></i>
+      </button>
+      <!-- Backend is not done, this will be revisited later on -->
+      <!-- <button
+        class="btn btn-circle bg-light mr-2"
+        *ngIf="!isOpenSearch && areThereSelectedItems() && !canAdd"
+        [matTooltip]="'Export selected'"
+        (click)="openCloseExportModal()"
+      >
+        <i class="bglight text-primary" [ngClass]="'icon-share-square'"></i>
+      </button> -->
+      <ng-container *ngIf="!isOpenSearch && !isAdding">
+        <button
+          class="btn btn-circle bg-light"
+          [matTooltip]="canAdd ? 'Add Setting' : 'Add selected to settings'"
+          *ngIf="canAdd || areThereSelectedItems()"
+          (click)="openCloseAdd()"
+        >
+          <i class="icon-add text-primary"></i>
+        </button>
+        <div class="ml-2 mr-2 vertical-line" *ngIf="areThereSelectedItems() && !canAdd"></div>
+        <div *ngIf="filterByOptions" class="mr-2">
+          <button
+            class="btn btn-circle bg-light"
+            nohref
+            (click)="toggleFilter()"
+            [ngClass]="selectedFilter ? 'btn-active' : ''"
+          >
+            <i class="icon-filter-solid text-primary"></i>
+          </button>
+          <ul class="list-group list-group--filter border rounded shadow" *ngIf="openFilter">
+            <li
+              (click)="selectFilter(filter.name)"
+              class="list-group-item list-group-item-action d-flex align-items-center justify-content-between text-left border-0 px-3 py-2 cursor-pointer"
+              [ngClass]="filter.name === selectedFilter ? 'active' : ''"
+              *ngFor="let filter of filterByOptions"
+            >
+              {{ filter.value }}
+              <i class="icon-check"></i>
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="sortByOptions">
+          <button
+            class="btn btn-circle bg-light"
+            nohref
+            (click)="toggleSort()"
+            [ngClass]="selectedSort ? 'btn-active' : ''"
+          >
+            <i class="icon-sort-amount-asc text-primary"></i>
+          </button>
+          <ul class="list-group list-group--sort border rounded shadow" *ngIf="openSort">
+            <li
+              (click)="selectSort(sort.name)"
+              [ngClass]="sort.name === selectedSort ? 'active' : ''"
+              class="cursor-pointer list-group-item list-group-item-action d-flex justify-content-between align-items-center text-left border-0 px-3 py-2"
+              *ngFor="let sort of sortByOptions"
+            >
+              {{ sort.value }}
+              <i class="icon-check"></i>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+      <div class="header-button d-flex align-items-center header-button-search" *ngIf="!isAdding">
+        <ng-container *ngIf="isOpenSearch">
+          <div class="form-group mb-0">
+            <input
+              class="form-control form-control-sm"
+              [placeholder]="'Click enter to search'"
+              (keyup.enter)="search()"
+              [(ngModel)]="searchTerm"
+              #inputSearch
+            />
+          </div>
+        </ng-container>
+        <button
+          class="btn btn-circle bg-light ml-1"
+          (click)="toggleSearch()"
+          *ngIf="canSearch"
+          [ngClass]="searchTerm ? 'btn-active' : ''"
+        >
+          <i class="icon-search text-primary"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <form *ngIf="isAdding" class="mt-2 mb-2 p-2" [formGroup]="dataToAdd">
+      <ng-container *ngIf="canAdd">
+        <textarea
+          class="w-100"
+          formControlName="data"
+          (ngModelChange)="isDataValid()"
+          rows="5"
+          placeholder="Write your settings here separated by a line break"
+        ></textarea>
+        <small
+          *ngIf="
+            dataToAdd.controls['data'].invalid &&
+            (dataToAdd.controls['data'].dirty || dataToAdd.controls['data'].touched) &&
+            dataToAdd.controls['data'].errors.required
+          "
+          class="text-danger"
+          >This field is mandatory.</small
+        >
+        <small class="text-danger" *ngIf="addError">{{ addError }}</small>
+      </ng-container>
+      <ng-container *ngIf="!canAdd">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Modules</mat-label>
+          <mat-select #matSelectAssets formControlName="modules" multiple>
+            <ng-container *ngFor="let module of filteredModules[itemsType]">
+              <mat-option [value]="module.id">{{ module.name }}</mat-option>
+            </ng-container>
+            <button
+              (click)="onCloseMatSelectAssets()"
+              class="btn btn-primary btn-sm mb-2 mr-2 mt-2 float-right close-select"
+            >
+              Done
+            </button>
+          </mat-select>
+        </mat-form-field>
+        <input placeholder="Tag" formControlName="tag" class="w-100 mb-2 mt-2" />
+      </ng-container>
+
+      <button
+        class="btn btn-primary btn-sm mb-2 float-right"
+        (click)="add()"
+        [disabled]="!dataToAdd.controls['data'].value || addError || dataToAdd.status === 'INVALID'"
+      >
+        Save
+      </button>
+      <button class="btn btn-light text-danger btn-sm float-right ng-star-inserted mr-2" (click)="openCloseAdd()">
+        Close
+      </button>
+    </form>
+    <mat-selection-list #itemList [(ngModel)]="selectedItems">
+      <ng-container *ngIf="areThereItems(); else loading">
+        <ng-container *ngIf="!isAdding">
+          <mat-list-option
+            [checkboxPosition]="'before'"
+            *ngFor="let item of items"
+            [value]="item"
+            [ngClass]="getClass(item)"
+          >
+            <span
+              >{{ item[label] }} <span *ngIf="!canAdd" class="badge badge__domain mr-2">{{ item.domain }}</span>
+              <span *ngIf="!canAdd" class="badge mr-2" [ngClass]="getBadgeClass(item)">{{ item.assetStatus }}</span>
+            </span>
+
+            <button
+              *ngIf="item.assetStatus !== 'DELETED'"
+              class="btn btn-circle bg-light mr-1"
+              [matTooltip]="getTooltipText(item)"
+              (click)="deleteOne(item)"
+            >
+              <i class="bglight" [ngClass]="getDeleteClass(item)"></i>
+            </button>
+          </mat-list-option>
+        </ng-container>
+      </ng-container>
+      <ng-template #loading>
+        <div class="no-data-box">
+          <span *ngIf="!areThereItems() && !loadingItems">No data</span
+          ><i class="icon-spinner rotate" *ngIf="loadingItems"></i>
+        </div>
+      </ng-template>
+    </mat-selection-list>
+  </div>
+</mat-card>
+
+<modal-window
+  (accept)="openCloseExportModal()"
+  (cancel)="openCloseExportModal()"
+  [acceptBtn]="'Export'"
+  [cancelBtn]="'Close'"
+  [modalTitle]="'Export results'"
+  *ngIf="isExportModalOpen"
+  [customClass]="'modal-l modal-margin-top'"
+>
+  <div class="modal-body">
+    <div class="d-flex justify-content-center align-items-center">
+      <mat-form-field appearance="fill" class="mr-2" style="width: 170px">
+        <mat-label>Export type</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let opt of exportOptions" [value]="opt.id">{{ opt.value }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <span>Select what you want to export:</span>
+    <div class="d-flex justify-content-around mt-4">
+      <div>
+        <div class="pl-3"><span class="mr-2" style="font-size: 15px">IPs</span><mat-checkbox></mat-checkbox></div>
+        <mat-selection-list #ipExportList>
+          <mat-list-option *ngFor="let opt of exportStatus" [value]="opt.id" style="font-size: 13px">
+            {{ opt.value }}
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+      <div>
+        <div class="pl-3">
+          <span class="mr-2" style="font-size: 15px">Subdomains</span><mat-checkbox></mat-checkbox>
+        </div>
+        <mat-selection-list #subdomainExportList>
+          <mat-list-option *ngFor="let opt of exportStatus" [value]="opt.id" style="font-size: 13px">
+            {{ opt.value }}
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+    </div>
+  </div>
+</modal-window>

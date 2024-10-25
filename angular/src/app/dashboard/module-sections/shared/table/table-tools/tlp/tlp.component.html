@@ -1,0 +1,52 @@
+<div
+  *ngIf="!isButton"
+  [class.relative-position]="isRelativePosition"
+  [class.td-center]="isTdCenter"
+  [ngClass]="customClasses"
+>
+  <button
+    class="btn btn-circle center-actions"
+    (click)="showTlp()"
+    nohref
+    ngbTooltip="TLP: A way to organize secure exchange of TI information with the right audience"
+    placement="bottom"
+    tooltipClass="tlp-tooltip"
+  >
+    <i [ngClass]="tlpClass(status)"></i>
+  </button>
+  <div class="relativePosition">
+    <ul
+      class="list-group border rounded shadow"
+      [ngClass]="{ open: tlpVisible && interactive, isFirst: isFirst, isLast: isLast }"
+    >
+      <li
+        class="list-group-item list-group-item-action border-0 px-2 py-1"
+        *ngIf="availableStatus.WHITE"
+        (click)="updateStatus($event, 'WHITE')"
+      >
+        <i class="icon-radio_button_unchecked is-white"></i>
+      </li>
+      <li
+        class="list-group-item list-group-item-action border-0 px-2 py-1"
+        *ngIf="availableStatus.GREEN"
+        (click)="updateStatus($event, 'GREEN')"
+      >
+        <i class="icon-lens is-green"></i>
+      </li>
+      <li
+        class="list-group-item list-group-item-action border-0 px-2 py-1"
+        *ngIf="availableStatus.AMBER"
+        (click)="updateStatus($event, 'AMBER')"
+      >
+        <i class="icon-lens is-amber"></i>
+      </li>
+      <li
+        class="list-group-item list-group-item-action border-0 px-2 py-1"
+        *ngIf="availableStatus.RED"
+        (click)="updateStatus($event, 'RED')"
+      >
+        <i class="icon-lens is-red"></i>
+      </li>
+    </ul>
+  </div>
+</div>

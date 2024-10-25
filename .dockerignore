@@ -1,0 +1,14 @@
+.svelte-kit
+.angular
+build
+node_modules
+angular/node_modules
+angular/.angular
+docs
+.dockerignore
+.git
+.gitlab-ci.yml
+.gitignore
+Dockerfile
+Dockerfile.nginx
+README.md

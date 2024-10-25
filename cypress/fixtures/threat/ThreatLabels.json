@@ -1,0 +1,62 @@
+[
+    {
+        "id": 6,
+        "label": "Hacktivism Credentials",
+        "organizationId": null,
+        "organizationName": null,
+        "moduleId": null,
+        "moduleName": null,
+        "labelTypeId": 18,
+        "labelTypeName": "Credentials Type",
+        "labelProtected": true,
+        "prioritized": true,
+        "bgColorHex": "#00B388",
+        "textColorHex": "#FFFFFF",
+        "moduleTypeId": null
+    },
+    {
+        "id": 11,
+        "label": "Negative Mention",
+        "organizationId": null,
+        "organizationName": null,
+        "moduleId": null,
+        "moduleName": null,
+        "labelTypeId": 20,
+        "labelTypeName": "ThreatOrigin",
+        "labelProtected": true,
+        "prioritized": true,
+        "bgColorHex": "#0093B2",
+        "textColorHex": "#FFFFFF",
+        "moduleTypeId": null
+    },
+    {
+        "id": 4,
+        "label": "Phishing Domain",
+        "organizationId": null,
+        "organizationName": null,
+        "moduleId": null,
+        "moduleName": null,
+        "labelTypeId": 17,
+        "labelTypeName": "Phishing Severity",
+        "labelProtected": true,
+        "prioritized": true,
+        "bgColorHex": "#0093B2",
+        "textColorHex": "#FFFFFF",
+        "moduleTypeId": null
+    },
+    {
+        "id": 14872,
+        "label": "+0_AMOS_New_Alert",
+        "organizationId": null,
+        "organizationName": null,
+        "moduleId": null,
+        "moduleName": null,
+        "labelTypeId": null,
+        "labelTypeName": null,
+        "labelProtected": true,
+        "prioritized": false,
+        "bgColorHex": "#FFFFFF",
+        "textColorHex": "#FF0000",
+        "moduleTypeId": null
+    }
+]

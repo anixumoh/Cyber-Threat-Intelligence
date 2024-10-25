@@ -1,0 +1,66 @@
+<!-- LOADING PROCESS -->
+<div *ngIf="!resource" class="no-results-box">
+  <i class="icon-spinner rotate"></i>
+  <h3 class="no-results">Loading</h3>
+</div>
+<div *ngIf="resource" class="card">
+  <div class="card-header p-1 clearfix">
+    <h6 class="text-dark mt-1 mb-0 mx-2 float-left">General Info</h6>
+    <button
+      class="btn btn-light btn-sm text-primary float-left mr-1"
+      *ngIf="!grants.isCustomerOrOperator()"
+      (click)="navigateToEdit()"
+    >
+      <i class="icon-mode_edit"></i>
+      <span class="ml-1">Edit</span>
+    </button>
+    <button
+      class="btn btn-light btn-sm text-primary float-left mr-1"
+      *ngIf="(grants.isMaster() || grants.isSuperAdmin()) && activeOrganization.enabled"
+      (click)="runSearch()"
+    >
+      <i class="icon-cogs"></i>
+      <span class="ml-1">Run Search</span>
+    </button>
+    <button
+    class="btn btn-light btn-sm text-primary float-left mr-1 disabled-btn"
+    *ngIf="(grants.isMaster() || grants.isSuperAdmin()) && !activeOrganization.enabled"
+    [ngbTooltip]="'This organization is disabled so you cannot perform this action'"
+  >
+    <i class="icon-cogs"></i>
+    <span class="ml-1">Run Search</span>
+  </button>
+    <div class="btn-group btn-group-sm float-right">
+      <button
+        class="btn btn-light btn-sm border text-primary"
+        (click)="navigateDetails('previous')"
+        [disabled]="!showNavigation || !showPrev"
+      >
+        <i class="icon-angle-left px-1"></i>
+      </button>
+      <button class="btn btn-light btn-sm border text-primary" (click)="navigateToList()">Back to list</button>
+      <button
+        class="btn btn-light btn-sm border text-primary"
+        (click)="navigateDetails('next')"
+        [disabled]="!showNavigation || !showNext"
+      >
+        <i class="icon-angle-right px-1"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row justify-content-between">
+      <div class="" [ngClass]="grants.isMaster() || grants?.isSuperAdmin() ? 'col-md-6' : 'col-md-7'">
+        <app-module-details-header [headerData]="headerData" [resource]="resource.header"> </app-module-details-header>
+      </div>
+      <div class="table-container" [ngClass]="grants?.isSuperAdmin() ? 'col-md-6' : 'col-md-4'">
+        <app-details-view-table
+          [items]="resource.content.value"
+          [tableHeader]="resource.content.tableHeader"
+          [interactive]="false"
+        >
+        </app-details-view-table>
+      </div>
+    </div>
+  </div>
+</div>

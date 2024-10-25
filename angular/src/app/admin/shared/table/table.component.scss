@@ -1,0 +1,68 @@
+@import 'src/scss/variables';
+@import '~scss/mixins';
+
+.header-table-section {
+  @include ct-flex-with-params(space-between, center);
+  @include ct-flex-wrap(wrap);
+}
+
+.change-padding {
+  padding: 0.25rem;
+}
+
+.list-group {
+  position: absolute;
+  top: 32px;
+  z-index: 1000;
+  transition: height 0.3s;
+  overflow: hidden;
+  &.right-position {
+    visibility: visible;
+    right: 0 !important;
+  }
+  &.left-position {
+    visibility: visible;
+    left: -134px;
+  }
+  .list-group-item {
+    width: 200px;
+    cursor: pointer;
+    .check {
+      display: none;
+    }
+    &:hover {
+      background-color: $light;
+      color: $primary;
+      .check {
+        display: none;
+      }
+    }
+    &.active {
+      background-color: $light;
+      color: $primary;
+      .check {
+        display: block;
+        color: $primary;
+      }
+    }
+  }
+}
+//FOOTER
+.page-item {
+  .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.active {
+      color: $white !important;
+      background-color: $primary;
+      pointer-events: none;
+    }
+
+    &.disabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+  }
+}

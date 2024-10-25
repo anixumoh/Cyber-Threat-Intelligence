@@ -1,0 +1,70 @@
+<!-- MAIN HEADER -->
+<div class="mt-4 pb-3 border-bottom">
+  <div class="main-header row align-items-end clearfix">
+    <div class="main-header-left col float-left">
+      <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-3 mt-1">Settings</h6>
+      <h5 class="text-dark mb-0">{{ moduleNameHeader }}</h5>
+    </div>
+    <div class="main-header-right col-auto float-right">
+      <app-info-button [activeModule]="activeModule"></app-info-button>
+      <button
+        class="btn btn-primary btn-sm float-right px-3 ml-1"
+        (click)="openMenu('alerts')"
+        id="profileButton"
+        [disabled]="!activeOrganization.enabled"
+        *ngIf="
+          !grants?.isCustomerOrOperator() &&
+          activeModule.moduleName !== moduleName.CUSTOM &&
+          activeModule.moduleName !== moduleName.MOBILE_APPS &&
+          activeModule.moduleName !== moduleName.SOCIAL_MEDIA &&
+          activeModule.moduleName !== moduleName.EXPLORER
+        "
+      >
+        <i class="icon-bell-solid mr-1" aria-hidden="true" id="profileButton"></i>
+        <span class="ml-1" id="profileButton">Alerts</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-2" style="margin: 8px" *ngIf="!grants?.isAdminSuperAdminMaster() && !activeOrganization.enabled">
+  <div class="alert-table mb-0 d-flex" style="background-color: #e2d6604a; color: #6e6014">
+    <i class="icon-info-circle-solid mr-3" style="margin-top: 4px"></i>
+    <span class="font-weight-bold">
+      Settings configurations can't be modified because this organization is disabled.</span
+    >
+  </div>
+</div>
+
+<div class="module-settings" [class.not-allowed]="!grants?.isAdminSuperAdminMaster() && !activeOrganization.enabled">
+  <div [class.all-disabled]="!activeOrganization.enabled">
+    <div class="card-tab mb-2">
+      <ul class="nav nav-pills border-bottom" *ngIf="activeModule.moduleName !== moduleName.EXPLORER">
+        <li
+          class=""
+          *ngIf="tabs && tabs[tabSetting.parameters] && tabs[tabSetting.parameters].length > 0"
+          (click)="resetParams()"
+          [routerLink]="tabSetting.parameters"
+          routerLinkActive="is-active"
+          role="presentation"
+        >
+          {{ tabSetting.parameters }}
+        </li>
+        <ng-container *ngIf="tabs && tabs[tabSetting.otherSettings] && tabs[tabSetting.otherSettings].length > 0">
+          <ng-container *ngFor="let setting of tabs[tabSetting.otherSettings]">
+            <li
+              *ngIf="!setting.hidden"
+              role="presentation"
+              [routerLink]="setting.id"
+              routerLinkActive="is-active"
+              (click)="resetParams()"
+            >
+              {{ setting.name }}
+            </li>
+          </ng-container>
+        </ng-container>
+      </ul>
+    </div>
+    <!-- <router-outlet></router-outlet> -->
+  </div>
+</div>

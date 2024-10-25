@@ -1,0 +1,16 @@
+<app-overlay [loading]="loading" minHeight="120px">
+  <div class="p-4">
+    <div *ngIf="!data && !loading">
+      <div class="no-results-box bg-light">
+        <img src="assets/default_images/searching.svg" />
+        <h4 class="no-results">No sources has been found</h4>
+      </div>
+    </div>
+    <app-timeline
+      *ngIf="data && data.length > 0"
+      [timelineData]="data"
+      [moduleId]="activeModule.id"
+      [orgId]="activeOrganization.id"
+    ></app-timeline>
+  </div>
+</app-overlay>

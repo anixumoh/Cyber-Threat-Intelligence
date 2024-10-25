@@ -1,0 +1,320 @@
+<modal-window
+  (cancel)="closeModal()"
+  [customClass]="wizard > 1 ? 'modal-xl' : 'modal-xl'"
+  [modalTitle]="(isNew ? 'Create' : 'Edit') + ' Organization'"
+>
+  <ng-container [ngSwitch]="wizard">
+    <ng-template ngSwitchDefault>
+      <div class="modal-body">
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <div class="mb-3 d-flex align-items-center">
+              <input-control
+                class="flex-1"
+                [maxlength]="MAX_ORG_NAME_LENGTH"
+                [label]="'Name (*)'"
+                data-bv="name"
+                [control]="form.controls['name']"
+              >
+              </input-control>
+              <div *ngIf="values.name.length != 0 || !form.controls['name'].dirty" class="mt-4 ml-1">
+                {{ values.name.length }} / {{ MAX_ORG_NAME_LENGTH }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 right-elements-container">
+            <div
+              class="border w-304px rounded p-2 mt-4 mr-2 trial-container d-flex"
+              *ngIf="grants?.isMaster() || grants?.isSuperAdmin()"
+            >
+              <input-control
+                [customClass]="'float-left mt-1 mr-1 ml-1'"
+                [type]="'checkbox'"
+                [label]="'User Worked On Level'"
+                [control]="form.controls['userWorkedOn']"
+              >
+              </input-control>
+              <i
+                class="icon-info-circle-solid mt-1"
+                [ngbTooltip]="
+                  'If checked, only the user that is working on a threat will be able to see the `Worked on` checkmark.'
+                "
+                tooltipClass="font-12"
+              >
+              </i>
+            </div>
+            <div
+              class="border w-32 rounded p-2 mt-4 mr-2 trial-container"
+              *ngIf="grants?.isMaster() || grants?.isSuperAdmin()"
+            >
+              <input-control
+                [customClass]="'float-left mt-1 mr-2 ml-1'"
+                [type]="'checkbox'"
+                [label]="'Trial'"
+                [control]="form.controls['trial']"
+              >
+              </input-control>
+            </div>
+
+            <div
+              class="border w-44 rounded p-2 mt-4 mr-2 trial-container"
+              *ngIf="grants.roles.master || grants.roles.admin || grants.roles.superadmin"
+            >
+              <input-control
+                [customClass]="'float-left mt-1 mr-2 ml-1'"
+                [type]="'checkbox'"
+                [label]="'Enable 2FA'"
+                [control]="form.controls['enabledMfa']"
+              >
+              </input-control>
+            </div>
+            <div class="customer-container" *ngIf="grants?.isMaster() || grants?.isSuperAdmin()">
+              <i class="icon-spinner rotate text-primary ml-2 loading-info" *ngIf="isLoadingCustomer"></i>
+              <input-control
+                data-bv="customer"
+                [label]="'Customer (*)'"
+                [type]="'dropdown'"
+                [isDisabled]="isLoadingCustomer"
+                [valueDropdown]="selectedCustomer"
+                [optionsSelect]="customerList"
+                [openDropdown]="openDropdown"
+                [control]="form.controls['customerId']"
+                (onResetValue)="resetCustomer()"
+                [showMessage]="noCustomerValidation"
+                (onCloseDropdown)="
+                  this.openDropdown = false; this.customerError = false; this.noCustomerValidation = false
+                "
+                (keyup)="debounceSearch($event)"
+              >
+              </input-control>
+              <small class="text-danger" *ngIf="customerError">You need to select a customer from the list (*)</small>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header text-primary bg-light clearfix">
+            <h6 class="mb-0 float-left">First Contact</h6>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-3 mb-3">
+                <input-control [label]="'Title'" [control]="firstContact.controls['title']"> </input-control>
+              </div>
+              <div class="col-9 mb-3">
+                <input-control
+                  [label]="'First Name (*)'"
+                  data-bv="firstName"
+                  [control]="firstContact.controls['firstName']"
+                >
+                </input-control>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input-control [label]="'Surname (*)'" data-bv="surName" [control]="firstContact.controls['lastName']">
+                </input-control>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input-control [label]="'Phone'" data-bv="phone" [control]="firstContact.controls['phone']">
+                </input-control>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input-control [label]="'Email (*)'" data-bv="email" [control]="firstContact.controls['email']">
+                </input-control>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input-control
+                  data-bv="country"
+                  [optionsSelect]="listCountry"
+                  [valueSelect]="'id'"
+                  [viewSelect]="'name'"
+                  [type]="'select'"
+                  [label]="'Country (*)'"
+                  [control]="firstContact.controls['country']"
+                >
+                </input-control>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngTemplateOutlet="footer_new"></ng-container>
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="1">
+      <app-admin-module-option
+        [(modules)]="modules"
+        [customerIdForModules]="customerId"
+        [isEnabled]="true"
+        [isModuleDisabled]="isModuleDisabled"
+        (changeDisableModule)="changeDisableModules($event)"
+      ></app-admin-module-option>
+      <ng-container *ngTemplateOutlet="footer_new"></ng-container>
+    </ng-template>
+
+    <ng-template [ngSwitchCase]="2">
+      <ng-container *ngTemplateOutlet="template_grants"></ng-container>
+      <ng-container *ngTemplateOutlet="footer_new"></ng-container>
+    </ng-template>
+  </ng-container>
+  <app-org-users
+    [isOpen]="showUsers"
+    [userSelected]="userSelected"
+    (closeModal)="onCloseModal($event)"
+    (addUserToOrg)="selectedUser($event)"
+    (removeUser)="removeUser($event)"
+    (existUsers)="getExistUsers($event)"
+  ></app-org-users>
+</modal-window>
+
+<ng-template #HeaderTitleUserSelected>
+  <button
+    (click)="showUsers = true"
+    [disabled]="!existUsers || !modules?.length"
+    type="button"
+    class="btn btn-sm text-primary float-left ml-1"
+    data-toggle="tooltip"
+    data-placement="top"
+  >
+    <i class="icon-plus-circle-solid" aria-hidden="true"></i>
+    <span class="pr-1 ml-1">Add User</span>
+  </button>
+  <button
+    (click)="createUserView()"
+    [disabled]="!existUsers || !modules?.length"
+    type="button"
+    class="btn btn-sm text-primary float-left ml-1"
+    data-toggle="tooltip"
+    data-placement="top"
+  >
+    <i class="icon-plus-circle-solid" aria-hidden="true"></i>
+    <span class="pr-1 ml-1">Create User</span>
+  </button>
+</ng-template>
+
+<ng-template #template_grants>
+  <app-table-admin
+    [isRowSelected]="false"
+    [hiddenBody]="true"
+    [isPaginate]="true"
+    [template_header]="[HeaderTitleUserSelected]"
+    [(table)]="tableUserSelected"
+  >
+    <tbody>
+      <ng-template ngFor let-ssg let-o="index" [ngForOf]="userSelected">
+        <tr class="text-secondary">
+          <td class="d-flex align-items-center" [attr.rowspan]="rowsSpan(perms(ssg).superSearchGrants)">
+            <app-action-circle
+              (clickEvent)="removeUser(ssg)"
+              [icon]="'icon-delete'"
+              [colorIcon]="'text-danger'"
+              [tooltip]="'Remove'"
+              [placement]="'right-bottom'"
+            >
+            </app-action-circle>
+            <span class="ml-4">
+              <h6 class="mb-0">{{ ssg.username }}</h6>
+            </span>
+          </td>
+          <td class="text-center">ALL</td>
+          <td class="text-center">
+            <input
+              [checked]="isChecked(perms(ssg).superSearchGrants, 'analyst')"
+              (click)="onClickSSG(ssg, 'analyst')"
+              [disabled]="isDisableRSG(perms(ssg).superSearchGrants, 'analyst')"
+              type="checkbox"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              [checked]="isChecked(perms(ssg).superSearchGrants, 'operator')"
+              (click)="onClickSSG(ssg, 'operator')"
+              [disabled]="isDisableRSG(perms(ssg).superSearchGrants, 'operator')"
+              type="checkbox"
+            />
+          </td>
+          <td class="text-center">
+            <input
+              [checked]="isChecked(perms(ssg).superSearchGrants, 'mssp_customer')"
+              (click)="onClickSSG(ssg, 'mssp_customer')"
+              [disabled]="isDisableRSG(perms(ssg).superSearchGrants, 'mssp_customer')"
+              type="checkbox"
+            />
+          </td>
+        </tr>
+        <ng-template ngFor let-rsg let-i="index" [ngForOf]="modules">
+          <tr class="text-secondary" *ngIf="!activeOption(perms(ssg).superSearchGrants)">
+            <td class="text-center">
+              <!-- space to align the rows child -->
+            </td>
+            <td class="align-middle text-center">
+              {{ rsg.name }}
+            </td>
+            <td class="text-center">
+              <input
+                [checked]="isChecked(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'analyst')"
+                (click)="onClickRSG(ssg, 'analyst', i)"
+                [disabled]="isDisableRSG(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'analyst')"
+                type="checkbox"
+              />
+            </td>
+            <td class="text-center">
+              <input
+                [checked]="isChecked(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'operator')"
+                (click)="onClickRSG(ssg, 'operator', i)"
+                [disabled]="isDisableRSG(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'operator')"
+                type="checkbox"
+              />
+            </td>
+            <td class="text-center">
+              <input
+                [checked]="isChecked(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'mssp_customer')"
+                (click)="onClickRSG(ssg, 'mssp_customer', i)"
+                [disabled]="isDisableRSG(perms(ssg).superSearchGrants.reputationalSearchGrants[i], 'mssp_customer')"
+                type="checkbox"
+              />
+            </td>
+          </tr>
+        </ng-template>
+      </ng-template>
+      <ng-template [ngIf]="!userSelected.length">
+        <ng-container *ngTemplateOutlet="notData_table"></ng-container>
+      </ng-template>
+    </tbody>
+  </app-table-admin>
+</ng-template>
+
+<ng-template #footer_new>
+  <div class="px-3 clearfix">
+    <button
+      data-bv="next"
+      class="btn btn-light btn-sm text-primary border float-right ml-1"
+      (click)="nextFinish()"
+      type="button"
+    >
+      {{ wizard !== lastWizard ? 'Next' : 'Finish' }}
+    </button>
+    <button class="btn btn-light btn-sm border float-left mr-1" *ngIf="wizard > 0" (click)="backWizard()" type="button">
+      <i class="icon-arrow-left mr-1"></i>
+      Back
+    </button>
+    <button class="btn btn-light btn-sm text-danger float-right ml-1" (click)="closeModal()" type="button">
+      {{ 'Cancel' }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #notData_table>
+  <tr>
+    <td colspan="100%">
+      <div class="card-section mt-4 mr-5 ml-5 mb-5">
+        <div class="no-results-box">
+          <img src="assets/default_images/searching.svg" *ngIf="modules && modules.length" />
+          <img src="assets/default_images/warning.svg" *ngIf="!(modules && modules.length)" />
+          <h3 class="no-results" *ngIf="modules && modules.length">There are no results</h3>
+          <p class="no-results" *ngIf="!(modules && modules.length)">
+            You need to add at least one module in order to setup user grants
+          </p>
+        </div>
+      </div>
+    </td>
+  </tr>
+</ng-template>

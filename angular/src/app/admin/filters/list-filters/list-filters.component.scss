@@ -1,0 +1,19 @@
+@import 'src/scss/variables';
+
+.filter-section {
+  select {
+    height: 31px !important;
+    background-color: $white;
+    border-radius: 4px;
+  }
+
+  .input-search {
+    margin-left: -22px;
+    margin-right: 4px;
+  }
+
+  .sb-search-input {
+    padding-right: 27px;
+    height: 31px;
+  }
+}

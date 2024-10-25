@@ -1,0 +1,30 @@
+@import 'src/scss/variables';
+
+// DROPDOWN
+.menu-section {
+  list-style-type: none;
+  position: fixed;
+  top: 50px;
+  right: 0;
+  width: 250px;
+  margin-right: 16px;
+  .menu-options {
+    color: $secondary;
+    cursor: pointer;
+    &:hover {
+      background-color: $light;
+    }
+    &:focus {
+      outline: 0 !important;
+    }
+  }
+}
+.edit-account:hover {
+  color: $black !important;
+}
+.logout:hover {
+  color: $danger !important;
+}
+.closed {
+  display: none;
+}

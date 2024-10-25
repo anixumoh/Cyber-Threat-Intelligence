@@ -1,0 +1,264 @@
+<modal-window
+  [acceptBtn]="isNew ? 'Create' : 'Save'"
+  [cancelBtn]="'Close'"
+  [customClass]="'modal-xl'"
+  [modalTitle]="(isNew ? 'Create' : 'Edit') + ' User'"
+  (accept)="createEdit()"
+  (cancel)="closeModal()"
+  [loadingAccept]="loading"
+>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <input-control [label]="'Name (*)'" [control]="form.controls['name']"> </input-control>
+      </div>
+      <div class="col-md-4 mb-3">
+        <input-control [label]="'Surname (*)'" [control]="form.controls['firstSurname']"> </input-control>
+      </div>
+      <div class="col-md-4 mb-3">
+        <input-control
+          [label]="'Username (*)'"
+          [control]="form.controls['username']"
+          [customClass]="usernameError ? 'is-invalid' : ''"
+          [msjError]="checkUsername()"
+        >
+        </input-control>
+        <div *ngIf="usernameError" class="text-danger">{{ usernameError }}</div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <input-control [label]="'Address'" [control]="form.controls['address']"> </input-control>
+      </div>
+      <div class="col-md-4 mb-3">
+        <input-control
+          [type]="'email'"
+          [label]="'Email (*)'"
+          [control]="form.controls['email']"
+          [customClass]="usermailError ? 'is-invalid' : ''"
+        >
+        </input-control>
+        <div *ngIf="usermailError" class="text-danger">{{ usermailError }}</div>
+      </div>
+      <div class="col-md-4 mb-3" *ngIf="!selectedUser">
+        <input-control [type]="'password'" [label]="'Password (*)'" [control]="form.controls['password']">
+        </input-control>
+        <small>Must be at least 10 characters, with 1 uppercase, 1 digit and 1 special character.</small>
+      </div>
+      <div class="col-md-4 mb-3">
+        <input-control [type]="'tel'" [label]="'Cellphone'" [control]="form.controls['cellphone']"> </input-control>
+      </div>
+      <div class="col-md-4 mb-3">
+        <input-control [label]="'Company'" [control]="form.controls['job']"> </input-control>
+      </div>
+      <div class="col-md-4 mb-3 customer-container" *ngIf="userGrants?.isMaster() || userGrants?.isSuperAdmin()">
+        <small class="text-danger" *ngIf="companyError">You need to select a customer from the list.</small>
+        <i class="icon-spinner rotate text-primary ml-2 loading-info" *ngIf="isLoadingCustomer"></i>
+        <input-control
+          [label]="'Customer (*)'"
+          [type]="'dropdown'"
+          [valueDropdown]="selectedCompany"
+          [optionsSelect]="companyList"
+          [openDropdown]="openDropdown"
+          [isDisabled]="isLoadingCustomer"
+          [control]="form.controls['customerId']"
+          (onResetValue)="resetCustomer()"
+          [showMessage]="noCustomerValidation"
+          (onCloseDropdown)="this.openDropdown = false; this.companyError = false; noCustomerValidation = false"
+          (keyup)="debounceSearch($event)"
+        >
+        </input-control>
+      </div>
+      <div class="col-md-4 mb-3">
+        <input-control
+          [type]="'select'"
+          [optionsSelect]="listTimeZone"
+          [label]="'Timezone (*)'"
+          [control]="form.controls['timezone']"
+        >
+        </input-control>
+      </div>
+      <div class="col-md-4 mb-3" *ngIf="userGrants?.isSuperAdmin() || userGrants?.isMaster()">
+        <label class="mb-0">&nbsp;</label>
+        <div class="border rounded p-1 pl-2 pr-2">
+          <input-control
+            [customClass]="'float-left checkbox-align'"
+            [type]="'checkbox'"
+            [label]="'API user'"
+            [control]="form.controls['api']"
+          >
+          </input-control>
+        </div>
+      </div>
+    </div>
+    <div class="border-top bg-light border-bottom px-2 py-3 mt-4 mb-3 clearfix">
+      <h6 class="mb-0 float-left">User type</h6>
+    </div>
+    <div class="row">
+      <div class="col-md mb-3" *ngIf="userGrants?.isMaster()">
+        <div class="border rounded p-1 pl-2 pr-2">
+          <input type="radio" (click)="changeCheckbox($event, 'master')" [checked]="isChecked('master')" />
+          <label class="mb-0 ml-2">Master</label>
+        </div>
+      </div>
+      <div class="col-md mb-3" *ngIf="isSuperAdmin">
+        <div class="border rounded p-1 pl-2 pr-2">
+          <input type="radio" (click)="changeCheckbox($event, 'superadmin')" [checked]="isChecked('superadmin')" />
+          <label class="mb-0 ml-2">Superadmin</label>
+        </div>
+      </div>
+      <div class="col-md mb-3">
+        <div class="border rounded p-1 pl-2 pr-2">
+          <input type="radio" (click)="changeCheckbox($event, 'mssp_admin')" [checked]="isChecked('mssp_admin')" />
+          <label class="mb-0 ml-2">Administrator</label>
+        </div>
+      </div>
+      <div class="col-md mb-3">
+        <div class="border rounded p-1 pl-2 pr-2">
+          <input
+            type="radio"
+            (click)="changeCheckbox($event, 'user')"
+            [checked]="!isChecked('master') && !isChecked('superadmin') && !isChecked('mssp_admin')"
+          />
+          <label class="mb-0 ml-2">User</label>
+        </div>
+      </div>
+    </div>
+    <div
+      class="border-top bg-light p-2 pb-3 mt-4 clearfix"
+      *ngIf="!isChecked('master') && !isChecked('superadmin') && !isChecked('mssp_admin')"
+    >
+      <h6 class="mt-1 mb-0 float-left">Permissions to Organizations/Modules</h6>
+      <button
+        class="btn btn-light btn-sm text-primary float-right ml-1"
+        (click)="showOrg = true"
+        [disabled]="!(listOrg && listOrg.length)"
+        [ngbTooltip]="'Add organization'"
+        tooltipClass="font-12"
+      >
+        <i class="icon-plus-circle-solid" aria-hidden="true"></i>
+        <span class="ml-1">Add Organization</span>
+      </button>
+    </div>
+    <div class="table-responsive" *ngIf="!isChecked('master') && !isChecked('superadmin') && !isChecked('mssp_admin')">
+      <table class="table table-sm">
+        <thead>
+          <tr class="rounded-top">
+            <th>Organization</th>
+            <th>Module</th>
+            <th class="text-center">Analyst</th>
+            <th class="text-center">Operator</th>
+            <th class="text-center">Customer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-template ngFor let-ssg let-i="index" [ngForOf]="superSearchGrants.controls">
+            <tr class="text-secondary">
+              <td class="align-top" style="vertical-align: top !important" [attr.rowspan]="rowsSpan(ssg)">
+                <button
+                  class="btn btn-light btn-sm rounded float-left"
+                  (click)="orgSelected = { id: ssg.controls['itemId'].value, index: i }"
+                >
+                  <i class="icon-delete color-danger"></i>
+                </button>
+                <h6 class="text-dark float-left mb-0 mt-1 ml-2">
+                  {{ organization(ssg.controls['itemId'].value)?.name }}
+                </h6>
+              </td>
+              <td class="align-middle">ALL</td>
+              <td class="text-center td-100">
+                <input-control
+                  [type]="'checkbox'"
+                  [isDisabled]="ssg.value.mssp_customer || ssg.value.operator"
+                  [control]="ssg.controls['analyst']"
+                >
+                </input-control>
+              </td>
+              <td class="text-center td-100">
+                <input-control
+                  [type]="'checkbox'"
+                  [isDisabled]="ssg.value.mssp_customer || ssg.value.analyst"
+                  [control]="ssg.controls['operator']"
+                >
+                </input-control>
+              </td>
+              <td class="text-center td-100">
+                <input-control
+                  [type]="'checkbox'"
+                  [isDisabled]="ssg.value.operator || ssg.value.analyst"
+                  [control]="ssg.controls['mssp_customer']"
+                >
+                </input-control>
+              </td>
+            </tr>
+            <ng-template ngFor let-rsg let-i="index" [ngForOf]="reputationalSearchGrants(ssg).controls">
+              <tr class="text-secondary" *ngIf="!activeOption(ssg)">
+                <td class="align-middle">
+                  {{ module(ssg.controls['itemId'].value, rsg.controls['itemId'].value)?.name }}
+                </td>
+                <td class="text-center td-100">
+                  <input-control
+                    [type]="'checkbox'"
+                    [isDisabled]="disableOperatorModule(rsg, 'analyst')"
+                    [control]="rsg.controls['analyst']"
+                  >
+                  </input-control>
+                </td>
+                <td class="text-center td-100">
+                  <input-control
+                    [type]="'checkbox'"
+                    [isDisabled]="disableOperatorModule(rsg, 'operator')"
+                    [control]="rsg.controls['operator']"
+                  >
+                  </input-control>
+                </td>
+                <td class="text-center td-100">
+                  <input-control
+                    [type]="'checkbox'"
+                    [isDisabled]="disableOperatorModule(rsg, 'mssp_customer')"
+                    [control]="rsg.controls['mssp_customer']"
+                  >
+                  </input-control>
+                </td>
+              </tr>
+            </ng-template>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</modal-window>
+<!-- MODAL -->
+<modal-window
+  *ngIf="showOrg"
+  [cancelBtn]="'Close'"
+  [zIndex]="902"
+  [modalTitle]="'Organizations'"
+  (cancel)="showOrg = null"
+>
+  <div class="modal-body p-0">
+    <ul class="list-group">
+      <ng-template ngFor let-org let-i="index" [ngForOf]="listOrganizations">
+        <li class="list-group-item d-flex justify-content-between align-items-center px-2 py-1">
+          <span class="font-weight-light text-truncate" [ngbTooltip]="org.name" [placement]="'top-left'">{{
+            org.name
+          }}</span>
+          <button class="btn btn-light text-primary btn-sm" (click)="selectedOrg(org)">
+            <i class="icon-plus-circle-solid text-primary mr-2"></i>
+            Add
+          </button>
+        </li>
+      </ng-template>
+    </ul>
+  </div>
+</modal-window>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to discard the organization ' + organization(orgSelected?.id).name + ' ?'"
+  [warning]="'User permissions to the selected organization\'s modules will also be deleted.'"
+  *ngIf="orgSelected"
+  [acceptBtn]="'Yes'"
+  [cancelBtn]="'No'"
+  (accept)="removeSuperSearchGrant(orgSelected?.index)"
+  (cancel)="orgSelected = null"
+>
+</modal-window>

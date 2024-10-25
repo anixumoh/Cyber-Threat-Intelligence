@@ -1,0 +1,386 @@
+<modal-window
+  [acceptBtn]="isNew ? 'Create' : 'Save'"
+  [cancelBtn]="'Close'"
+  [customClass]="'modal-xl'"
+  [modalTitle]="(isNew ? 'Create' : 'Edit') + ' Filter'"
+  [loadingAccept]="loading"
+  (accept)="createEdit()"
+  (cancel)="closeModal()"
+>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col mb-4">
+        <input-control [label]="'Template Name'" [control]="form.controls['name']"> </input-control>
+        <small
+          class="form-text text-danger"
+          *ngIf="form && form.controls.name.errors && form.controls.name.errors.pattern"
+        >
+          Name must not start with ? or *
+        </small>
+      </div>
+      <div class="col mb-4">
+        <input-control
+          [optionsSelect]="listOrg"
+          [valueSelect]="'id'"
+          [viewSelect]="'name'"
+          [label]="'Organization'"
+          [customClass]="'col-md-12'"
+          [type]="'select'"
+          [control]="form.controls['superSearchId']"
+        >
+        </input-control>
+        <i
+          *ngIf="form.controls['superSearchId'].value"
+          class="icon-times text-danger cursor-pointer delete-org"
+          (click)="resetOrganization()"
+          [ngbTooltip]="'Reset Organization'"
+        ></i>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-header bg-light text-primary clearfix" (click)="togleBool(0)">
+        <a class="cursor-pointer float-left">Filter Conditions</a>
+        <i *ngIf="!viewConditions[0]" class="icon-arrow-down text-primary float-right mt-1" aria-hidden="true"></i>
+        <i *ngIf="viewConditions[0]" class="icon-arrow-up test-promary float-right mt-1" aria-hidden="true"></i>
+      </div>
+      <div class="card-body pb-0" *ngIf="viewConditions[0]">
+        <div class="row">
+          <div class="col-lg-6 mb-4">
+            <label class="mb-0 float-left">Filter Phrase</label>
+            <div class="float-right">
+              <input-control
+                [type]="'checkbox'"
+                [label]="'Inverse'"
+                [control]="condition_filter_phrase.controls['inverse']"
+              >
+              </input-control>
+            </div>
+            <input-control [type]="'textarea'" [control]="condition_filter_phrase.controls['value']"> </input-control>
+          </div>
+          <div class="col-lg-6 mb-4">
+            <label class="mb-0 float-left">Domain</label>
+            <div class="flex-center float-right">
+              <input-control [type]="'checkbox'" [label]="'Inverse'" [control]="condition_domain.controls['inverse']">
+              </input-control>
+            </div>
+            <input-control [control]="condition_domain.controls['value']"></input-control>
+          </div>
+          <div class="d-block w-100 mb-3"></div>
+
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="mb-4">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <label class="mb-0">Labels</label>
+                    <div class="search-container d-flex">
+                      <input
+                        *ngIf="searchOpen.labels"
+                        class="header-search-input"
+                        placeholder="search"
+                        (keyup)="searchInFilters($event, 'labels')"
+                      />
+                      <button type="button" class="btn btn-circle bg-light mr-1 ml-1" (click)="closeSearch('labels')">
+                        <i class="icon-search text-primary pl-1"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <multi-select2
+                    [forButton]="false"
+                    [valueKey]="'id'"
+                    [(control)]="labels_condition.controls['value']"
+                    [viewKey]="'label'"
+                    [listItems]="list('labels')"
+                    [styles]="{ height: '415px' }"
+                  >
+                  </multi-select2>
+                </div>
+              </div>
+              <div class="col-lg-8">
+                <div class="row">
+                  <div class="col-lg-6 mb-4">
+                    <div class="clearfix">
+                      <label class="float-left">Analysis Result</label>
+                    </div>
+                    <ul class="list-group card overflow-auto">
+                      <li
+                        class="list-group-item d-flex justify-content-between align-items-center"
+                        *ngFor="let item of ListAnalysisResults"
+                        (click)="add_contitions_analysisR(item.key)"
+                        [ngClass]="{
+                          active:
+                            indexAnalysisR(item.key) > -1 ||
+                            (indexAnalysisR('6') > -1 && (item.key === '3' || item.key === '4' || item.key === '5')),
+                          disabled:
+                            indexAnalysisR('6') > -1 && (item.key === '3' || item.key === '4' || item.key === '5')
+                        }"
+                      >
+                        <span>{{ item.name }}</span>
+                        <i class="icon-check"></i>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-lg-6 mb-4">
+                    <div class="clearfix">
+                      <label class="float-left">File Type</label>
+                    </div>
+                    <ul class="list-group card overflow-auto">
+                      <li
+                        class="list-group-item d-flex justify-content-between align-items-center"
+                        *ngFor="let item of listFileType"
+                        (click)="add_contitions_FileType(item.key)"
+                        [ngClass]="indexFileType(item.key) === -1 ? '' : 'active'"
+                      >
+                        <span>{{ item.name }}</span>
+                        <i class="icon-check"></i>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="d-block w-100"></div>
+                  <div class="col-lg-6 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <label class="d-flex justify-content-between align-items-center mb-2">Language</label>
+                      <div class="float-right d-flex align-middle">
+                        <div class="search-container d-flex">
+                          <input
+                            *ngIf="searchOpen.languages"
+                            class="header-search-input"
+                            placeholder="search"
+                            (keyup)="searchInFilters($event, 'languages')"
+                          />
+                          <button
+                            type="button"
+                            class="btn btn-circle bg-light mr-1 ml-1"
+                            (click)="closeSearch('languages')"
+                          >
+                            <i class="icon-search text-primary pl-1"></i>
+                          </button>
+                        </div>
+                        <input-control
+                          *ngIf="!searchOpen.languages"
+                          [type]="'checkbox'"
+                          [label]="'Inverse '"
+                          [control]="condition_languages.controls['inverse']"
+                        >
+                        </input-control>
+                      </div>
+                    </div>
+                    <multi-select2
+                      [forButton]="false"
+                      [valueKey]="'value'"
+                      [(control)]="condition_languages.controls['value']"
+                      [viewKey]="'label'"
+                      [listItems]="list('languages')"
+                    >
+                    </multi-select2>
+                  </div>
+                  <div class="col-lg-6 mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <label class="mb-0">Country</label>
+                      <div class="d-flex">
+                        <div class="search-container d-flex">
+                          <input
+                            *ngIf="searchOpen.countries"
+                            class="header-search-input"
+                            placeholder="search"
+                            (keyup)="searchInFilters($event, 'countries')"
+                          />
+                          <button
+                            type="button"
+                            class="btn btn-circle bg-light mr-1 ml-1"
+                            (click)="closeSearch('countries')"
+                          >
+                            <i class="icon-search text-primary pl-1"></i>
+                          </button>
+                        </div>
+                        <input-control
+                          *ngIf="!searchOpen.countries"
+                          [type]="'checkbox'"
+                          [label]="'Inverse'"
+                          [control]="condition_country.controls['inverse']"
+                        >
+                        </input-control>
+                      </div>
+                    </div>
+                    <multi-select2
+                      [(control)]="condition_country.controls['value']"
+                      [forButton]="false"
+                      [valueKey]="'value'"
+                      [viewKey]="'label'"
+                      [listItems]="list('countries')"
+                    >
+                    </multi-select2>
+                  </div>
+                  <div class="d-block w-100 mt-2"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="mb-0">Origin Type</label>
+              <div class="d-flex">
+                <div class="search-container d-flex">
+                  <input
+                    *ngIf="searchOpen.plugins"
+                    class="header-search-input"
+                    placeholder="search"
+                    (keyup)="searchInFilters($event, 'plugins')"
+                  />
+                  <button type="button" class="btn btn-circle bg-light mr-1 ml-1" (click)="closeSearch('plugins')">
+                    <i class="icon-search text-primary pl-1"></i>
+                  </button>
+                </div>
+                <input-control
+                  *ngIf="!searchOpen.plugins"
+                  [type]="'checkbox'"
+                  [label]="'Inverse'"
+                  [control]="condition_origins.controls['inverse']"
+                >
+                </input-control>
+              </div>
+            </div>
+
+            <multi-select2
+              [(control)]="condition_origins.controls['origins']"
+              [valueKey]="['value', 'type']"
+              [forButton]="false"
+              [viewKey]="'value'"
+              [listItems]="list('plugins')"
+            >
+            </multi-select2>
+          </div>
+          <div class="col-6">
+            <div class="col-12 m-0 p-0">
+              <div
+                class="border-top bg-light border-bottom p-1 mb-1 pl-2 pr-2 d-flex justify-content-between align-items-center"
+              >
+                <h6 class="mb-0">Extradata Entry</h6>
+                <span>
+                  <input-control
+                    [customClass]="'pb-0 ml-2'"
+                    [type]="'checkbox'"
+                    [label]="'Inverse'"
+                    [control]="condition_extradata_entry.controls['inverse']"
+                  >
+                  </input-control>
+                </span>
+              </div>
+            </div>
+            <div class="col-12 mb-3 mt-3">
+              <input-control [label]="'Key'" [control]="condition_extradata_entry.controls['value'].controls['key']">
+              </input-control>
+            </div>
+            <div class="col-12">
+              <input-control
+                [label]="'Value'"
+                [control]="condition_extradata_entry.controls['value'].controls['value']"
+              >
+              </input-control>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header bg-light text-primary clearfix" (click)="togleBool(1)">
+        <a class="cursor-pointer float-left">Filter Actions</a>
+        <i *ngIf="!viewConditions[1]" class="icon-arrow-down text-primary float-right mt-1" aria-hidden="true"></i>
+        <i *ngIf="viewConditions[1]" class="icon-arrow-up test-promary float-right mt-1" aria-hidden="true"></i>
+      </div>
+      <div class="card-body pb-0" *ngIf="viewConditions[1]">
+        <div class="row">
+          <div class="col-lg-4 mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label class="mb-0">Labels</label>
+              <div class="d-flex">
+                <button
+                  class="btn btn-light text-primary float-right"
+                  (click)="newLabel()"
+                  *ngIf="form.controls['superSearchId'].value && !searchOpen.actionLabels"
+                >
+                  <i class="icon-plus-circle-solid btn-sm text-primary"></i>
+                  <span>New Label</span>
+                </button>
+                <div class="search-container d-flex">
+                  <input
+                    *ngIf="searchOpen.actionLabels"
+                    class="header-search-input"
+                    placeholder="search"
+                    (keyup)="searchInFilters($event, 'actionLabels')"
+                  />
+                  <button type="button" class="btn btn-circle bg-light mr-1 ml-1" (click)="closeSearch('actionLabels')">
+                    <i class="icon-search text-primary pl-1"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <multi-select2
+              [forButton]="false"
+              [valueKey]="'id'"
+              [(control)]="labels_asignation.controls['value']"
+              [viewKey]="'label'"
+              [listItems]="list('actionLabels')"
+            >
+            </multi-select2>
+          </div>
+          <div class="col-lg-4" *ngIf="weight_assignation">
+            <div class="mb-3">
+              <div class="form-group mb-4">
+                <div class="clearfix">
+                  <label class="float-left">Assign result type</label>
+                </div>
+                <ul class="list-group card overflow-auto">
+                  <li
+                    class="list-group-item d-flex justify-content-between align-items-center"
+                    *ngFor="let result of analysisResultActionsArray; let i = index"
+                    (click)="assignResultType(result)"
+                    [ngClass]="result.selected ? 'active' : ''"
+                  >
+                    <span>{{ result.name }}</span>
+                    <i class="icon-check"></i>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="mb-3">
+              <input-control
+                [label]="'Assign Weight'"
+                [type]="'stars'"
+                [typeOf]="'number'"
+                [control]="weight_assignation.controls['value']"
+              >
+              </input-control>
+            </div>
+            <label class="mb-0">&nbsp;</label>
+            <div class="border rounded p-1 mb-3">
+              <input-control
+                [customClass]="'float-left mt-1 mr-2 ml-1'"
+                [type]="'checkbox'"
+                [label]="'Delete & Stop Filter Execution'"
+                [control]="deleteStopFilterExecution.controls['value']"
+              >
+              </input-control>
+            </div>
+            <label class="mb-0">&nbsp;</label>
+            <div class="border rounded p-1 mb-3">
+              <input-control
+                [customClass]="'float-left mt-1 mr-2 ml-1'"
+                [type]="'checkbox'"
+                [label]="'Stop Filter Execution '"
+                [control]="cutExecution.controls['value']"
+              >
+              </input-control>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</modal-window>
+
+<ng-template #dynamic></ng-template>

@@ -1,0 +1,103 @@
+<span>
+  <button id="threat-context-report" class="btn btn-sm btn-primary" (click)="showModal()">
+    <i class="icon-download mr-1" aria-hidden="true"></i> Report
+  </button>
+
+  <app-modal [show]="open" (close)="closeModal()" [loading]="loading">
+    <div class="modal-content">
+      <app-overlay [loading]="loading">
+        <div class="card actors-report">
+          <div class="card-header actors-report__header">
+            <span class="font-16">Threat Actor Report Generation</span>
+
+            <button class="btn btn-circle bg-light text-danger float-right" type="button" (click)="closeModal()">
+              <i class="icon-times"></i>
+            </button>
+          </div>
+          <div class="card-body padding-30">
+            <div class="mb-4">
+              <mat-form-field appearance="fill" class="mr-2">
+                <mat-label>Report type:</mat-label>
+                <mat-select [(value)]="selectedType" (selectionChange)="onTypeChange($event)">
+                  <mat-option *ngFor="let type of types" [value]="type">{{ type.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="mb-4">
+              <label *ngIf="selectedType.value === reportTypes.ACTOR">Select Threat Actor:</label>
+              <label *ngIf="selectedType.value === reportTypes.SECTOR">Select Industry Sector:</label>
+              <label *ngIf="selectedType.value === reportTypes.COUNRTY">Select Country:</label>
+              <label *ngIf="selectedType.value === reportTypes.REGION">Select Region:</label>
+              <div class="actors-typeahead">
+                <app-spinner *ngIf="typeAheadLoading" [sm]="true" class="actors-typeahead__spinner"></app-spinner>
+                <input
+                  *ngIf="selectedType.value === reportTypes.ACTOR"
+                  [(ngModel)]="searchActor"
+                  [typeaheadAsync]="true"
+                  [typeahead]="actorSuggestions$"
+                  (typeaheadLoading)="changeTypeaheadLoading($event)"
+                  (typeaheadOnSelect)="onSelectActor($event)"
+                  [typeaheadWaitMs]="1500"
+                  [typeaheadOptionsLimit]="8"
+                  [typeaheadMinLength]="2"
+                  typeaheadOptionField="name"
+                  placeholder="Type to search"
+                  class="form-control"
+                />
+
+                <div class="mb-4" *ngIf="selectedType.value === reportTypes.COUNRTY">
+                  <mat-form-field appearance="fill" class="mr-2">
+                    <mat-label>Country</mat-label>
+                    <mat-select [(value)]="countrySelected" (selectionChange)="onSelectCountry($event)">
+                      <mat-option *ngFor="let country of countries" [value]="country">{{ country.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="mb-4" *ngIf="selectedType.value === reportTypes.SECTOR">
+                  <mat-form-field appearance="fill" class="mr-2">
+                    <mat-label>Sector</mat-label>
+                    <mat-select [(value)]="sectorSelected" (selectionChange)="onSelectSector($event)">
+                      <mat-option *ngFor="let sector of sectors" [value]="sector">{{ sector.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="mb-4" *ngIf="selectedType.value === reportTypes.REGION">
+                  <mat-form-field appearance="fill" class="mr-2">
+                    <mat-label>Region</mat-label>
+                    <mat-select [(value)]="regionSelected" (selectionChange)="onSelectRegion($event)">
+                      <mat-option *ngFor="let region of regions" [value]="region">{{ region.name }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <span *ngIf="selectedType.value === reportTypes.DORK && dorkSearch && hasResults"
+                  >This will generate a report with the current search dork:</span
+                >
+                <div *ngIf="selectedType.value === reportTypes.DORK && dorkSearch && hasResults" class="dork-box">
+                  <span>{{ dorkSearch }}</span>
+                </div>
+                <div class="dork-error" *ngIf="selectedType.value === reportTypes.DORK && !dorkSearch">
+                  <small
+                    >Sorry, the search box does not contain any dork, it is not possible to generate the report.</small
+                  >
+                </div>
+                <div class="dork-error" *ngIf="selectedType.value === reportTypes.DORK && dorkSearch && !hasResults">
+                  <small
+                    >The dork you are using did not retrieve any results. You need at least one Threat Actor to be able
+                    to generate a report.</small
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-right d-flex justify-content-between">
+            <button class="btn btn-light text-danger btn-sm mr-2" (click)="closeModal()">Cancel</button>
+            <button class="btn btn-primary btn-sm" (click)="download()" [disabled]="!isValidReportRequest()">
+              Generate Report
+            </button>
+          </div>
+        </div>
+      </app-overlay>
+    </div>
+  </app-modal>
+</span>

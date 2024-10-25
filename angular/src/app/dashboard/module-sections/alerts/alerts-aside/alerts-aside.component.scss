@@ -1,0 +1,76 @@
+@import "src/scss/variables";
+
+// ASIDE CONTENT
+.aside-container.card{
+  width: 600px;
+  .height-header{
+    height: 56px;
+  }
+  .automatic-height{
+    padding-bottom: 64px;
+    height: calc(100vh - 112px);
+    overflow-y: scroll;
+    &::-webkit-scrollbar-track{
+      background-color: $white;
+    }
+    &::-webkit-scrollbar{
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      width: 2px !important;
+    }
+    &::-webkit-scrollbar-thumb{
+      background-color: #084951;
+      outline: 1px solid black;
+    }
+  }
+  .height-footer{
+    position: absolute;
+    bottom: 0;
+    height: 56px;
+    width: 599px;
+  }
+}
+// HEIGHT & SCROLLBAR
+.height-list{
+  max-height: 300px;
+  overflow-y: scroll !important;
+}
+
+// LIST
+.list-user-info{
+  i{
+    height: 28px;
+    width: 28px;
+    text-align: center;
+    padding-top: 7px;
+  }
+}
+
+.dropdown-container{
+  // DROPDOWN
+  .list-group{
+    position: absolute;
+    top: -9px;
+    left: 240px;
+    z-index:9;
+    transition: height .3s;
+    overflow: hidden;
+    visibility: hidden;
+    &.open {
+      visibility: visible;
+      max-height: 300px;
+      width:141px;
+      overflow: auto;
+      border: 1px solid rgba(0, 0, 0, 0.125);
+      border-radius: 0.25rem;
+      border-top: none;
+    }
+    .list-group-item {
+      &:hover{
+        color: $primary;
+      }
+      &.active {
+        color: $primary;
+      }
+    }
+  }
+}

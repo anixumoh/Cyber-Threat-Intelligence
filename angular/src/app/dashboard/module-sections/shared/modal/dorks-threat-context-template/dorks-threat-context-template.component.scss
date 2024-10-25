@@ -1,0 +1,20 @@
+@import 'src/scss/variables';
+
+.dork-threat-context-template {
+  // GENERAL
+  h2 {
+    color: $default;
+    font-weight: 500;
+  }
+  p,
+  li,
+  td {
+    color: $default75;
+    font-weight: $font-weight-thin;
+  }
+
+  .set-dork-example {
+    cursor: pointer;
+    color: $primary;
+  }
+}

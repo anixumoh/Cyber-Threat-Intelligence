@@ -1,0 +1,212 @@
+<ng-container *ngIf="dataToPrint && dataToPrint.length > 0; else loading">
+  <div class="more-info-div">
+    <ng-container *ngIf="!jsonContent">
+      <div *ngFor="let data of dataToPrint">
+        <ng-container *ngIf="data && data.type && data.value">
+          <ng-container *ngIf="data.type !== 'Download Link' && !data.isPhp">
+            <div class="card card-border-primary mb-2">
+              <div class="card-header bg-ligth clearfix" [ngClass]="data.type === 'Content' ? 'p-2' : ''">
+                <h6 class="mb-0 float-left" [ngClass]="data.type === 'Content' ? 'mt-2 ml-2' : ''">{{ data.type }}</h6>
+                <div class="match-control float-right d-flex flex-wrap align-items-center">
+                  <button
+                    class="btn btn-primary btn-sm float-right ml-1 mr-2"
+                    href="#"
+                    (click)="expandedView = true"
+                    *ngIf="data.type === 'Content' && expandedContent"
+                  >
+                    <i class="icon-expand mr-1"></i>
+                    Expand
+                  </button>
+                  <div class="btn-group btn-group-sm float-right">
+                    <button
+                      type="button"
+                      class="btn btn-light btn-sm border text-primary"
+                      (click)="focus('previous')"
+                      *ngIf="totalMatches > 0 && data.type === 'Content'"
+                    >
+                      <i class="icon-angle-left px-1"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-light btn-sm border text-primary"
+                      (click)="focus('next')"
+                      *ngIf="totalMatches > 0 && data.type === 'Content'"
+                    >
+                      <i class="icon-angle-right px-1"></i>
+                    </button>
+                  </div>
+                  <div *ngIf="totalMatches > 0 && data.type === 'Content'" class="p-2">
+                    {{ focused ? focused : '0' }}/{{ totalMatches }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body p-0" *ngFor="let subData of data.value">
+                <div
+                  class="p-4 height-scroll"
+                  *ngIf="
+                    subData.type !== 'IMAGE' &&
+                    subData.type !== 'HTML' &&
+                    subData.type !== 'URL' &&
+                    subData.type !== 'JSON' &&
+                    subData.type !== 'RAW'
+                  "
+                >
+                  <p class="mb-0 text-secondary">{{ subData.value }}</p>
+                  <button
+                    *ngIf="activeModuleName === 'mobile_apps' && data.type === 'App Hash' && subData.type === 'TEXT'"
+                    class="btn btn-light btn-sm border mr-1 float-left hash-button"
+                    (click)="downloadHashFile()"
+                  >
+                    Download
+                  </button>
+                </div>
+                <div class="p-4" *ngIf="subData.type === 'IMAGE'">
+                  <img
+                    *ngIf="safeImageContent"
+                    class="img-thumbnail cursor-pointer"
+                    (click)="openModalExpandImage()"
+                    width="150px"
+                    [src]="safeImageContent"
+                  />
+                  <i *ngIf="!safeImageContent" class="icon-spinner rotate"></i>
+
+                  <!-- MODAL EXPAND IMAGE -->
+                  <modal-window
+                    modalTitle="ScreenShot"
+                    *ngIf="modalExpandImage"
+                    [customClass]="'modal-big'"
+                    (cancel)="closeModalExpandImage()"
+                  >
+                    <div class="modal-body">
+                      <img class="img-fluid" width="100%" [src]="safeImageContent" />
+                    </div>
+                  </modal-window>
+                </div>
+                <div
+                  class="height-scroll"
+                  [ngClass]="subData.type === 'HTML' ? 'pre-html' : ''"
+                  *ngIf="
+                    activeModuleName !== moduleDictionary.MEDIA_TRACKER &&
+                    (subData.type === 'HTML' || subData.type === 'RAW')
+                  "
+                >
+                  <pre
+                    class="bg-light p-4 mb-0 text-secondary json-pre"
+                    [ngClass]="data.type === 'Content' ? 'content' : ''"
+                    #contentElement
+                    >{{ subData.value }}</pre
+                  >
+                </div>
+                <div *ngIf="subData.type === 'JSON'">
+                  <pre class="p-4 text-secondary json-pre">{{ subData.value }}</pre>
+                </div>
+
+                <div
+                  class="height-scroll media-box"
+                  *ngIf="
+                    activeModuleName === moduleDictionary.MEDIA_TRACKER &&
+                    (subData.type === 'HTML' || subData.type === 'RAW')
+                  "
+                >
+                  {{ subData.value }}
+                </div>
+                <ng-container *ngIf="subData.type === 'URL' && data.type !== 'Download Link'">
+                  <div class="p-4">
+                    <a [href]="subData.value" target="_blank">
+                      {{ subData.value }}
+                    </a>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <div *ngIf="jsonContent">
+      <div class="card card-border-primary mb-2">
+        <div class="card-header bg-ligth clearfix">
+          <h6 class="mb-0">Details</h6>
+        </div>
+        <div class="pt-2 height-scroll">
+          <table class="table detail-table">
+            <thead>
+              <tr>
+                <th class="align-middle text-center td-110">Username</th>
+                <th class="align-middle text-center td-110">E-mail</th>
+                <th class="align-middle text-center td-110">Domain/URL</th>
+                <th class="align-middle text-center td-100">Password/hash</th>
+                <th class="align-middle text-center td-110">Leaked at</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="tr-link cursor-pointer">
+                <td class="align-middle td-link">
+                  <p class="mb-0">{{ jsonContent.username }}</p>
+                </td>
+                <td class="align-middle text-center td-110">
+                  <p class="mb-0">{{ jsonContent.email }}</p>
+                </td>
+                <td class="align-middle text-center td-110">
+                  <p class="mb-0">{{ jsonContent.emailDomain }}</p>
+                </td>
+                <td class="align-middle text-center td-100" style="max-width: 100px; overflow: hidden">
+                  <p class="mb-0">{{ jsonContent.password }}</p>
+                </td>
+                <td class="align-middle text-center td-110">
+                  <p class="mb-0">{{ jsonContent.leakedAt | timezone }}</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <is-data-is-loading [isLoading]="dataToPrint === undefined" errorMsj="No additional data"></is-data-is-loading>
+</ng-template>
+
+<modal-window
+  modalTitle="Content"
+  *ngIf="expandedView"
+  [customClass]="'modal-dark-web'"
+  cancelBtn="Close"
+  (cancel)="expandedView = false; expandFocused = 0"
+>
+  <div class="expandButtons">
+    <div class="btn-group btn-group-sm float-right">
+      <button
+        type="button"
+        class="btn btn-light btn-sm border text-primary"
+        (click)="expandFocus('previous')"
+        *ngIf="totalMatches > 0"
+      >
+        <i class="icon-angle-left px-1"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-light btn-sm border text-primary"
+        (click)="expandFocus('next')"
+        *ngIf="totalMatches > 0"
+      >
+        <i class="icon-angle-right px-1"></i>
+      </button>
+    </div>
+    <div *ngIf="totalMatches > 0" class="p-2">{{ expandFocused ? expandFocused : '0' }}/{{ totalMatches }}</div>
+  </div>
+  <pre
+    *ngIf="activeModuleName !== moduleDictionary.MEDIA_TRACKER"
+    #expandedContentElemement
+    class="height-scroll-modal expanded-content"
+    id="expandedContentElemement"
+    >{{ expandedContent }}</pre
+  >
+  <div class="height-scroll media-box" *ngIf="activeModuleName === moduleDictionary.MEDIA_TRACKER">
+    {{ expandedContent }}
+  </div>
+</modal-window>

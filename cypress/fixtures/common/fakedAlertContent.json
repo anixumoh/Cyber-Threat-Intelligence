@@ -1,0 +1,216 @@
+{
+    "CUSTOM": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        }
+    ],
+    "DOMAIN_PROTECTION": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        }
+    ],
+    "CREDIT_CARDS_FULL": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        },
+        {
+            "name": "CARDS",
+            "enable": true
+        }
+    ],
+    "MOBILE_APPS": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        },
+        {
+            "name": "MARKET",
+            "enable": true
+        },
+        {
+            "name": "PLATFORM",
+            "enable": true
+        }
+    ],
+    "CREDENTIALS": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        }
+    ],
+    "DATA_LEAKAGE": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        },
+        {
+            "name": "DESCRIPTION",
+            "enable": true
+        }
+    ],
+    "SOCIAL_MEDIA": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        }
+    ],
+    "HACKTIVISM": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        }
+    ],
+    "MEDIA_TRACKER": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        }
+    ],
+    "DARK_WEB": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        }
+    ],
+    "THREAT_CONTEXT": [
+        {
+            "name": "TITLE",
+            "enable": true
+        },
+        {
+            "name": "CREATED_AT",
+            "enable": true
+        },
+        {
+            "name": "LABELS",
+            "enable": true
+        },
+        {
+            "name": "SEARCH_WORD",
+            "enable": true
+        }
+    ]
+}

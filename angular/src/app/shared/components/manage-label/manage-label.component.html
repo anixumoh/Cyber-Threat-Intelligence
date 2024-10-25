@@ -1,0 +1,92 @@
+<div class="card">
+  <div class="card-header">
+    <span>Labels</span>
+    <button class="btn btn-light btn-sm text-primary" (click)="cancel()">
+      <i class="icon-arrow-circle-left-solid"></i> Back to list
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="form-group">
+      <label>Label Name</label>
+      <input class="form-control" [(ngModel)]="label.label" placeholder="name" />
+    </div>
+    <div class="form-group">
+      <label>Border color</label>
+      <div ngbDropdown>
+        <button
+          class="btn btn-default full-width text-left"
+          ngbDropdownToggle
+          type="button"
+          id="selectColorDropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          [disabled]="!label.label || label.label === ''"
+          [style.border]="'2px solid'"
+          [style.border-color]="label.bgColorHex"
+          [style.color]="'#1b2734'"
+        >
+          {{ label.label || 'Select Color' }}
+        </button>
+        <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="selectColorDropdown">
+          <li
+            *ngFor="let color of colors"
+            class="dropdown-item"
+            [style.color]="'#1b2734'"
+            [style.border]="'2px solid'"
+            [style.border-color]="color"
+            (click)="selectColor(color)"
+          >
+            {{ label.label }}
+            <i *ngIf="label.bgColorHex == color" class="icon-check_box pull-right" aria-hidden="true"></i>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <ng-container *ngIf="!label.id">
+      <label>Type</label>
+      <ul class="list-group mb-4">
+        <li class="list-group-item p-1">
+          <div class="form-check ml-3 mb-1">
+            <input
+              class="form-check-input"
+              value="0"
+              [name]="'type_label'"
+              [(ngModel)]="label.labelTypeId"
+              type="radio"
+            />
+            <label class="form-check-label text-secondary pl-2">Global</label>
+          </div>
+        </li>
+        <li class="list-group-item p-1">
+          <div class="form-check ml-3 mb-1">
+            <input
+              class="form-check-input"
+              value="1"
+              [name]="'type_label'"
+              [(ngModel)]="label.labelTypeId"
+              type="radio"
+            />
+            <label class="form-check-label text-secondary pl-2">Organization</label>
+          </div>
+        </li>
+        <li class="list-group-item p-1">
+          <div class="form-check ml-3 mb-1">
+            <input
+              class="form-check-input"
+              value="2"
+              [name]="'type_label'"
+              [(ngModel)]="label.labelTypeId"
+              type="radio"
+            />
+            <label class="form-check-label text-secondary pl-2">Module</label>
+          </div>
+        </li>
+      </ul>
+    </ng-container>
+  </div>
+  <div class="card-footer text-right">
+    <button class="btn btn-light text-danger btn-sm d-inline-block" (click)="cancel()">Cancel</button>
+    <button class="btn btn-light text-danger btn-sm d-inline-block" (click)="destroy()" *ngIf="label.id">Delete</button>
+    <button class="btn btn-primary btn-sm d-inline-block" (click)="save()">{{ label.id ? 'Update' : 'Save' }}</button>
+  </div>
+</div>

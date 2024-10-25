@@ -1,0 +1,7 @@
+<span>
+  <span *ngIf="(!isDwLink && !id && moduleId) || (!isDwLink && !moduleId && !hasLinkFn())">{{ value }}</span>
+  <a href="#" (click)="showModal($event, 'tcx')" *ngIf="!isDwLink && !moduleId && hasLinkFn()">{{ value }}</a>
+  <a href="" [routerLink]="getRedirectToToolsLink()" *ngIf="!isDwLink && id && moduleId">{{ value }}</a>
+  <a [href]="getRedirectToDarkWeb()" *ngIf="isDwLink && moduleId">{{ value }}</a>
+  <a href="" (click)="showModal($event, 'dw')" *ngIf="isDwLink && !moduleId">{{ value }}</a>
+</span>

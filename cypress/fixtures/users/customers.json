@@ -1,0 +1,19 @@
+{
+    "content":[
+    {
+        "id": 1,
+        "name": "Blueliv",
+        "customerType": {
+            "id": 1,
+            "name": "MSSP"
+        }
+    },
+    {
+        "id": 88,
+        "name": "Blueliv POC",
+        "customerType": {
+            "id": 3,
+            "name": "INTERNAL"
+        }
+    }
+]}

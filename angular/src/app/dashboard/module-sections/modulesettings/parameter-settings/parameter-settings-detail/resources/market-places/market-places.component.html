@@ -1,0 +1,77 @@
+<!-- HEADER -->
+<div class="settings-marketplace card mb-4">
+  <div class="card-header border-bottom-0 bg-light px-2 py-1 clearfix">
+    <h6 class="title-card text-dark text-uppercase float-left">Marketplace</h6>
+    <button class="btn btn-circle bg-light ml-1 float-right" #buttonInfo>
+      <i class="icon-info-character text-primary"></i>
+    </button>
+  </div>
+  <!-- INFO -->
+  <ng-template [appToggleContains]="buttonInfo">
+    <div class="alert-info px-2 py-1">
+      <span class="font-italic text-90">{{ parameterObject?.parameterTexts?.description }}</span>
+    </div>
+  </ng-template>
+  <!-- LIST -->
+  <div class="bg-light p-2">
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+        <div class="form-check mb-0">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            *ngIf="parameterObject && parameterObject.parameterData && parameterObject.parameterData[1] != null"
+            (change)="checkboxClicked(1)"
+            [disabled]="grants?.isCustomerOrOperator()"
+            [checked]="parameterObject.parameterData[1].value"
+          />
+          <span class="text-dark ml-1">Official Markets</span>
+        </div>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+        <div class="form-check mb-0">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            *ngIf="parameterObject && parameterObject.parameterData && parameterObject.parameterData[0] != null"
+            (change)="checkboxClicked(0)"
+            [disabled]="grants?.isCustomerOrOperator()"
+            [checked]="parameterObject.parameterData[0].value"
+          />
+          <span class="text-dark ml-1">Alternative Markets</span>
+        </div>
+      </li>
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center p-2"
+        *ngIf="
+          parameterObject &&
+          parameterObject.parameterData &&
+          parameterObject.parameterData[0] != null &&
+          parameterObject.parameterData[0].value
+        "
+      >
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend">
+            <label class="input-group-text text-primary" for="inputGroupSelectBank">Country</label>
+          </div>
+          <select
+            class="custom-select"
+            id="inputGroupSelectBank"
+            *ngIf="parameterObject && parameterObject.parameterData && parameterObject.parameterData[2] != null"
+            [disabled]="grants?.isCustomerOrOperator()"
+            (change)="selectMarketplace($event)"
+            [value]="this.parameterObject.parameterData[2].value"
+          >
+            <option [value]="null"></option>
+            <option
+              *ngFor="let country of marketPlaces.countries"
+              [value]="country.id"
+              [selected]="this.parameterObject.parameterData[2].value === country.id ? true : false"
+              >{{ country.name }}</option
+            >
+          </select>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

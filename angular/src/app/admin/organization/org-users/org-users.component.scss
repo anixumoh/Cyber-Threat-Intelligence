@@ -1,0 +1,6 @@
+@import '~scss/mixins';
+
+.header-container {
+  @include ct-flex-with-params(space-between, center);
+  width: 149%;
+}

@@ -1,0 +1,26 @@
+<div class="">
+  <!-- MARK INCIDENT BUTTON -->
+  <button class="btn btn-filter margin-right-05 pull-left"
+          [disabled]='grants.isCustomer()'
+          type="button"
+          name="button"
+          (click)="markAsIssue.emit()">
+          Mark as incident
+  </button>
+  <!-- MARK READ BUTTON -->
+  <button class="btn btn-filter margin-right-05 pull-left"
+          *ngIf="!onlyIssue"
+          type="button"
+          name="button"
+          (click)="markAsRead.emit()">
+          Mark as read
+  </button>
+  <!-- MARK UNREAD BUTTON -->
+  <button class="btn btn-filter margin-right-05 pull-left"
+          *ngIf="!onlyIssue"
+          type="button"
+          name="button"
+          (click)="markAsUnread.emit()">
+          Mark as unread
+  </button>
+</div>

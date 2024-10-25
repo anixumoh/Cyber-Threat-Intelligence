@@ -1,0 +1,40 @@
+<app-modal [show]="show" (close)="closeModal()">
+  <div class="modal-content">
+    <div class="card">
+      <div class="modal-header bg-light" *ngIf="title">
+        <h5 class="modal-title mb-0 pull-left">{{ title }}</h5>
+        <button type="button" class="close pull-right" (click)="closeModal()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <ng-content></ng-content>
+      </div>
+
+      <div class="card-footer text-right" [ngClass]="{ 'card-footer--no-header': !title }">
+        <button
+          class="btn btn-sm"
+          [ngClass]="{
+            'btn-light text-danger': type === confirmationTypes.DEFAULT,
+            'btn-outline-primary': type === confirmationTypes.DELETE
+          }"
+          (click)="closeModal()"
+        >
+          {{ cancelText }}
+        </button>
+
+        <button
+          class="btn btn-sm ml-1"
+          [ngClass]="{
+            'btn-primary': type === confirmationTypes.DEFAULT,
+            'btn-outline-danger': type === confirmationTypes.DELETE
+          }"
+          (click)="confirmAction()"
+        >
+          {{ okText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</app-modal>

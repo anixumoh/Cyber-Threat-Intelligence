@@ -1,0 +1,36 @@
+<div class="tab-content">
+  <div class="tab-pane active">
+    <!-- HEADER SECTION -->
+    <app-table-admin
+      [isRowSelected]="false"
+      [keyMaxRow]="'maxRows'"
+      [isPaginate]="false"
+      (editEmitter)="createEdit($event)"
+      (deleteEmmiter)="selected = $event; confirmation['delete'] = true"
+      [template_header]="[HeaderTitle]"
+      (reloadEmitter)="reloadData()"
+      (rowClick)="clickOnARow($event)"
+      [(table)]="table"
+    >
+    </app-table-admin>
+  </div>
+</div>
+
+<ng-template #HeaderTitle>
+  <button type="button" (click)="createEdit()" class="btn btn-light text-primary btn-sm">
+    <i class="icon-plus-circle-solid mr-1" aria-hidden="true"></i>
+    Add Type
+  </button>
+</ng-template>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete the type ' + selected?.name + ' ?'"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="confirmation['delete'] && selected"
+  [acceptBtn]="'Yes'"
+  [cancelBtn]="'No'"
+  (accept)="delete(selected)"
+  (cancel)="(confirmation['delete']); selected = null"
+>
+</modal-window>

@@ -1,0 +1,10 @@
+<button class="btn btn-light btn-sm text-primary mr-1"
+        *ngFor="let key of content;let isFirst = first;let i = index"
+        [class.is-active]="isFirst && isPressed"
+        (click)=onSelect(key)
+        [ngClass]="currentTab === key ? 'is-active' : ''">
+        {{key}}
+</button>
+<div class="">
+  <ng-content></ng-content>
+</div>

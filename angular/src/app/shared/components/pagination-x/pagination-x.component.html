@@ -1,0 +1,36 @@
+<nav aria-label="Page navigation float-left" *ngIf="pages.length > 0">
+  <ul class="pagination pagination-sm justify-content-start">
+    <li class="page-item">
+      <a class="page-link d-flex align-items-center" [class.disabled]="isFirstPage" (click)="first()">
+        <i class="icon-angle-double-left text-primary"></i>
+        <span style="visibility: hidden">.</span>
+      </a>
+    </li>
+    <li class="page-item">
+      <a class="page-link d-flex align-items-center" [class.disabled]="isFirstPage" (click)="previous()">
+        <i class="icon-angle-left text-primary"></i>
+        <span style="visibility: hidden">.</span>
+      </a>
+    </li>
+    <li class="page-item" *ngFor="let item of pages">
+      <a class="page-link text-primary" [class.active]="pageFormat(item) === page" (click)="this.selectPage(item)">{{
+        item + 1
+      }}</a>
+    </li>
+    <li class="page-item">
+      <a class="page-link d-flex align-items-center" [class.disabled]="isLastPage" (click)="next()">
+        <i class="icon-angle-right text-primary"></i>
+        <span style="visibility: hidden">.</span>
+      </a>
+    </li>
+    <li class="page-item">
+      <a class="page-link d-flex align-items-center" [class.disabled]="isLastPage" (click)="last()">
+        <i class="icon-angle-double-right text-primary"></i>
+        <span style="visibility: hidden">.</span>
+      </a>
+    </li>
+    <span class="ml-2 mb-0 pt-1"
+      >Total pages: <span class="font-weight-bold">{{ pageCount | number }}</span></span
+    >
+  </ul>
+</nav>

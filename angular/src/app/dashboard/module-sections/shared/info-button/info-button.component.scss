@@ -1,0 +1,288 @@
+@import 'src/scss/variables';
+@import '~scss/mixins';
+
+.info-header {
+  margin-top: 0px !important;
+  margin-bottom: 23px;
+}
+
+.info-footer {
+  background: #327abd;
+  background-image: linear-gradient(to bottom, #327abd, #225382);
+  height: 36px;
+  margin-bottom: -30px !important;
+  margin-right: -15px !important;
+  margin-left: -15px !important;
+  margin-top: 6rem !important;
+  @include ct-flex-center();
+}
+
+.first-checkmark {
+  margin-bottom: 0px !important;
+  .media-body p:first-of-type {
+    margin-bottom: 0px !important;
+  }
+}
+
+.module-title {
+  font-size: 32px;
+  margin-top: 8px;
+  color: $dark;
+}
+
+.blueliv-icon {
+  width: 22px;
+}
+
+.module-icon {
+  height: auto;
+  width: 3.75rem;
+  margin-bottom: 1rem;
+}
+
+.info-body {
+  font-weight: 200;
+  font-size: 16px;
+}
+
+.checkmark-icon {
+  width: 30px;
+  margin-right: 7px;
+  margin-left: 10px !important;
+}
+
+.info-modal-body {
+  margin: -15px !important;
+}
+
+.modal-body-margin {
+  margin: 15px;
+}
+
+i.icon-info {
+  font-size: 20px;
+}
+
+.credentials-info::before {
+  background-image: url(/assets/info/credentials-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.socialmedia-info::before {
+  background-image: url(/assets/info/social-media-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.creditcard-info::before {
+  background-image: url(/assets/info/credit-card-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.domainprotection-info::before {
+  background-image: url(/assets/info/domain-protection-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 105px;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.mobileapp-info::before {
+  background-image: url(/assets/info/mobile-apps-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.malware-info::before {
+  background-image: url(/assets/info/malware-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.dataleakage-info::before {
+  background-image: url(/assets/info/data-leakage-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.hacktivism-info::before {
+  background-image: url(/assets/info/hacktivism-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.mediatraacker-info::before {
+  background-image: url(/assets/info/media-tracker-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.darkweb-info::before {
+  background-image: url(/assets/info/dark-web-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.threatcontext-info::before {
+  background-image: url(/assets/info/threat-context-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.custom-info::before {
+  background-image: url(/assets/info/custom-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.media-tracker-info::before {
+  background-image: url(/assets/info/media-tracker-blue-icon.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.explorer-info::before {
+  background-image: url(/assets/info/radar.png);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+  content: '';
+  height: 70%;
+  left: 0;
+  opacity: 0.05;
+  max-height: 70vh;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}

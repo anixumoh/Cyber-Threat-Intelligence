@@ -1,0 +1,70 @@
+<modal-window
+  *ngIf="isModalOpen"
+  acceptBtn="Save"
+  cancelBtn="Close"
+  modalTitle="Assign to an incident"
+  [disabledAccept]="isDisabledAcceptBtn"
+  (accept)="onSave()"
+  (cancel)="close()"
+>
+  <div class="modal-incident">
+    <div class="modal-chart-container">
+      <div class="card mb-2">
+        <app-overlay [loading]="loading" [minHeight]="loading ? 160 : 'auto'">
+          <div class="card-header bg-light clearfix">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item" (click)="enableType()">
+                <a class="nav-link" [ngClass]="{ active: !fromExisting }">New incident</a>
+              </li>
+              <li class="nav-item" (click)="enableIncident()">
+                <a class="nav-link" [ngClass]="{ active: fromExisting }">Existing incident</a>
+              </li>
+            </ul>
+          </div>
+          <div class="card-body">
+            <div [style.display]="!fromExisting ? 'block' : 'none'">
+              <div class="form-group">
+                <label class="indented" for="name">Name</label>
+                <input
+                  id="name"
+                  class="form-control"
+                  [(ngModel)]="incidentName"
+                  type="text"
+                  name="name"
+                  value=""
+                  [disabled]="typeDisabled"
+                  [class.is-disabled]="!incidentDisabled"
+                />
+              </div>
+              <app-search-dropdown
+                *ngIf="showSelectCtrl"
+                [isDisabled]="typeDisabled"
+                [placeholder]="'Select Incident Type'"
+                [options]="filterIssuesTypes"
+                (selectedEvent)="clickType($event)"
+                (debounceSearchEvent)="filterIssuesType($event)"
+              ></app-search-dropdown>
+              <app-search-dropdown
+                [placeholder]="'Select a user'"
+                [isLoading]="isLoadingUsers"
+                [options]="usersList"
+                (selectedEvent)="getSelectedUser($event)"
+                (debounceSearchEvent)="debounceSearch($event)"
+              ></app-search-dropdown>
+            </div>
+            <div [style.display]="fromExisting ? 'block' : 'none'">
+              <app-search-dropdown
+                *ngIf="showSelectCtrl"
+                [isDisabled]="incidentDisabled"
+                [placeholder]="'Select Incident'"
+                [options]="filteredIssuesList"
+                (selectedEvent)="clickItem($event)"
+                (debounceSearchEvent)="filterIssuesList($event)"
+              ></app-search-dropdown>
+            </div>
+          </div>
+        </app-overlay>
+      </div>
+    </div>
+  </div>
+</modal-window>

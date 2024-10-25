@@ -1,0 +1,10 @@
+<app-indicators-details-tab-context-history
+  *ngIf="
+    indicatorType !== indicatorsBackendRequestTypes.CrimeServer &&
+    indicatorType !== indicatorsBackendRequestTypes.Malware
+  "
+  [indicatorId]="indicatorId"
+  [indicatorType]="indicatorType"
+></app-indicators-details-tab-context-history>
+
+<related-ioc-list [showTitle]="true" [source]="iocSource"></related-ioc-list>

@@ -1,0 +1,75 @@
+<div class="card mb-2 w-50">
+  <div class="card-header p-1 clearfix">
+    <h6 class="mt-1 mb-0 ml-1 float-left">Select</h6>
+    <button class="btn btn-circle bg-light float-right" (click)="toggleShowInfo()">
+      <i class="icon-info-circle-solid color-primary"></i>
+    </button>
+  </div>
+  <div class="card-header px-3 px-2 py-1 alert-info border-0" *ngIf="isShowInfo">
+    <span class="font-italic text-90">
+      Select the marketplaces where you want to search mobile apps. Official Markets includes: Google Play, Apple Store,
+      Windows Phone, Blackberry World, Amazon Apps, Samsung Apps, etc. Alternative Markets includes: BlackMarkt,
+      Aptoide, podnova, etc.
+    </span>
+  </div>
+  <div class="card-body p-0">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <div class="toggle-button">
+          <input
+            type="checkbox"
+            (change)="checkboxClicked(1)"
+            [disabled]="grants?.isCustomerOrOperator()"
+            [checked]="values[1].value"
+          />
+          <span class="ml-2"> Official Markets</span>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <div class="toggle-button">
+          <input
+            type="checkbox"
+            (change)="checkboxClicked(0)"
+            [disabled]="grants?.isCustomerOrOperator()"
+            [checked]="values[0].value"
+          />
+          <span class="ml-2"> Alternative Markets</span>
+        </div>
+      </li>
+      <li class="list-group-item" [hidden]="!data.values[0].value">
+        <span class="bg-light">
+          <p class="mt-1 mb-0 ml-4 mr-2 float-left">COUNTRY</p>
+          <button
+            class="btn btn-light border btn-sm text-primary"
+            #dropDownButton
+            [ngClass]="isMenuOpened ? 'is-active' : ''"
+            type="button"
+            name="button"
+            [disabled]="grants?.isCustomerOrOperator()"
+            (click)="toggleMenu()"
+          >
+            {{ countrySelected || 'Select country' }}
+            <i class="icon-angle-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <ul
+              class="list-group list-group-flush border rounded shadow"
+              [ngClass]="isMenuOpened ? 'open' : ''"
+              #dropDown
+              (click)="toggleMenu()"
+            >
+              <li
+                class="list-group-item list-group-item-action p-2"
+                *ngFor="let country of countries"
+                [value]="country"
+                (click)="selectMarketplace(country)"
+              >
+                <span>{{ country.name }}</span>
+              </li>
+            </ul>
+          </div>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<modal-window modalTitle="Manage your searches" *ngIf="openModal" cancelBtn="Close" (cancel)="onOpenModal(false)">
+  <div class="form-group">
+    <ul class="list-group list-group-flush">
+      <ng-template [ngIf]="savedSearchDorks.length" [ngIfElse]="noItems">
+        <ng-container *ngFor="let value of savedSearchDorks; let i = index">
+          <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+            <div class="form-check mb-0 text-truncate carbon-fix" [ngbTooltip]="value.dork" [placement]="'top'">
+              <span class="text-dark ml-1">{{ value.name }}</span>
+            </div>
+            <app-action-circle
+              [icon]="'icon-lens'"
+              [colorIcon]="value?.markAsDefault ? 'text-success' : 'text-danger'"
+              [tooltip]="value?.markAsDefault ? 'Remove default' : 'Mark as default'"
+              (clickEvent)="onMarkAsDefaultSavedFilter(value.name)"
+            >
+            </app-action-circle>
+            <button
+              class="btn btn-circle bg-light ml-1 float-right"
+              (click)="onDeleteSavedFilter(value.name)"
+              [ngbTooltip]="'Remove'"
+            >
+              <i class="icon-delete bglight text-danger"></i>
+            </button>
+          </li>
+        </ng-container>
+      </ng-template>
+    </ul>
+  </div>
+  <ng-template #noItems>
+    <li class="list-group-item text-container">
+      <span class="tc-dropdown__content-item">
+        <span class="tc-dropdown__content-link">You haven’t saved any searches.</span></span
+      >
+    </li>
+  </ng-template>
+</modal-window>

@@ -1,0 +1,52 @@
+@import 'src/scss/variables';
+
+.callout {
+  position: relative;
+  padding: 5px 0;
+  margin: 1rem 0;
+  border: 0 solid #cfd8dc;
+  border-left-width: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.callout-success {
+  border-left-color: #4dbd74;
+}
+
+.callout-danger {
+  border-left-color: #f86c6b;
+}
+
+.callout-warning {
+  border-left-color: #f8cb00;
+}
+
+.checkbox-column {
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  flex: 0 0 40px;
+}
+
+.empty {
+  display: flex;
+  flex-flow: nowrap column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  text-align: center;
+
+  &--sm {
+    min-height: 170px;
+  }
+
+  img {
+    min-width: 100px;
+    width: 25%;
+  }
+
+  &__text {
+    font-size: 1.5em;
+    color: $primary;
+  }
+}

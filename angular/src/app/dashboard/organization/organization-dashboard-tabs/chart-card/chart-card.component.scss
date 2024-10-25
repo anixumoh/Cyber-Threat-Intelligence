@@ -1,0 +1,91 @@
+@import '../../../../../scss/variables';
+
+$cursor: pointer;
+
+.no-results-box {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.card-header-title__buttons {
+  white-space: nowrap;
+  > button {
+    display: inline-block;
+  }
+}
+
+.card-header-title {
+  display: flex;
+  align-items: center;
+  color: $dark;
+  margin-left: 0.25rem;
+  padding-top: 4px;
+}
+
+.card-header-title__text {
+  flex: 1;
+  min-width: 0;
+  ::ng-deep span {
+    font-size: 15px;
+    &:hover {
+      cursor: $cursor;
+    }
+  }
+}
+
+.edit-icon {
+  margin-right: 5px;
+  &:hover {
+    cursor: $cursor;
+  }
+}
+
+.padding-no-button {
+  padding: 8px 4px !important;
+}
+
+.color-boxes-wrapper {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  vertical-align: top;
+  display: inline-block;
+
+  & li {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #eee;
+    float: left;
+    display: inline;
+    margin: 0 5px 0 0;
+    cursor: pointer;
+  }
+}
+
+.color-red {
+  background: #ff585d;
+}
+
+.color-yellow {
+  background: #ffd100;
+}
+
+.color-blue {
+  background: #0093b2;
+}
+
+.color-white {
+  background: #dfdfdf;
+}
+
+.color-orange {
+  background: #07272d;
+}
+
+.color-green {
+  background: #00b388;
+}

@@ -1,0 +1,219 @@
+<ng-template #module_template>
+  <div
+    class="w-100 d-flex flex-column justify-content-center align-items-center loading-container"
+    *ngIf="loading && !values.type"
+  >
+    <div class="text-secondary mb-2 font-weight-bold">Loading...</div>
+    <i class="icon-spinner rotate"></i>
+  </div>
+  <div class="row" *ngIf="!loading && !values.type && listTypeMod.length > 0">
+    <div class="col-4" *ngFor="let item of listTypeMod">
+      <button
+        class="btn flex-column btn-block border mb-4"
+        [class.cursor-not-allowed]="values.id"
+        [class.btn-light]="item.type !== values.type"
+        [class.btn-outline-secondary]="item.type === values.type || (isCreditCard && item.type === keyCreditsCard)"
+        (click)="values.id ? null : selectedTypeMod(item)"
+      >
+        <img [src]="item.image" height="28" />
+        <h6 class="text-dark mt-1 mb-0">{{ item.name }}</h6>
+      </button>
+    </div>
+  </div>
+  <div *ngIf="listTypeMod.length <= 0">
+    <div class="card-section mt-4 mr-5 ml-5 mb-5">
+      <div class="no-results-box">
+        <img src="assets/default_images/searching.svg" />
+        <h3 class="no-results">There are no results</h3>
+      </div>
+    </div>
+  </div>
+  <div class="card" *ngIf="values.type">
+    <div class="card-header bg-light clearfix">
+      <h6 class="mb-0 float-left">Fill the Fields</h6>
+    </div>
+    <div class="card-body">
+      <div class="pb-3 border-bottom mb-4">
+        <p class="mb-0 font-italic text-dark">{{ moduleDetail.description }}</p>
+      </div>
+      <div class="border rounded bg-light p-2 clearfix mb-4" *ngIf="values.id">
+        <h6 class="mt-1 mb-0 float-left">
+          Created at: <span class="badge badge-dark ml-2">{{ values.createdAt | timezone }}</span>
+        </h6>
+        <button
+          class="btn btn-primary btn-sm float-right btn-blue-bkg"
+          (click)="runSearch()"
+          *ngIf="!isOrgDisabled && !isModuleDisabled"
+        >
+          <i class="icon-cogs mr-1" aria-hidden="true"></i>
+          Run Search
+          <i *ngIf="isLoadingRunSearch" class="icon-spinner rotate"></i>
+        </button>
+
+        <button
+          class="btn btn-primary btn-sm float-right btn-blue-bkg disabled-btn"
+          *ngIf="isOrgDisabled || isModuleDisabled"
+          [ngbTooltip]="'This organization/module is disabled so you cannot perform this action'"
+        >
+          <i class="icon-cogs mr-1" aria-hidden="true"></i>
+          Run Search
+        </button>
+      </div>
+      <div class="row">
+        <div class="col-md-5">
+          <input-control
+            [label]="'Name'"
+            [placeholder]="placeholder"
+            [control]="form.controls['name']"
+            class="form-group-sm"
+          >
+          </input-control>
+          <small class="text-danger" *ngIf="isDuplicateKey('name', values.id)"> The name already exists </small>
+          <small class="text-danger" *ngIf="form.controls.name.value.length > 45"> Max length is 45 characters. </small>
+          <small class="text-danger" *ngIf="form.controls.name.value && form.controls.name.value.length < 6">
+            Min length is 6 characters.
+          </small>
+        </div>
+        <div class="col-md-5">
+          <div class="form-group">
+            <label class="mb-0">Short-Name:</label>
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <span class="input-group-text">{{ namePrefix }}</span>
+              </div>
+              <input
+                class="form-control"
+                style="height: 100%"
+                placeholder="Short-name"
+                [maxlength]="maxShortNameLengthPrefix"
+                (ngModelChange)="changeName($event)"
+                [(ngModel)]="shortname"
+              />
+            </div>
+            <small class="text-danger" *ngIf="isDuplicateKey('shortName', values.id)"> Shortname already in use </small>
+            <small class="text-danger" *ngIf="shortname.length > maxShortNameLengthPrefix">
+              Short-name must be maximum {{ maxShortNameLengthPrefix }} long.
+            </small>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="box-status clearfix">
+            <label class="mb-0">Status</label>
+            <div class="checkbox-modal border rounded p-1">
+              <act-switch [(model)]="values.enabled" (eventUpdate)="form.controls['enabled'].setValue(!values.enabled)">
+              </act-switch>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-checkbox
+        *ngIf="values.type === 'CREDENTIALS'"
+        class="mr-2 checkbox--center"
+        (change)="form.controls['firstDataLoad'].setValue($event.checked)"
+        [checked]="values.firstDataLoad"
+      >
+        The first data load displays credentials with a maximum age of one year.
+      </mat-checkbox>
+      <mat-checkbox
+        *ngIf="values.type === 'CREDENTIALS' && hasAdminPermissionsAndAbove(grants)"
+        class="mr-2 checkbox--center"
+        (change)="form.controls['hidePasswords'].setValue($event.checked)"
+        [checked]="values.hidePasswords"
+      >
+        Hide passwords for this module.
+      </mat-checkbox>
+      <mat-checkbox
+        *ngIf="values.type.includes('CREDIT_CARD') && hasAdminPermissionsAndAbove(grants)"
+        class="mr-2 checkbox--center"
+        (change)="form.controls['hideCC'].setValue($event.checked)"
+        [checked]="values.hideCC"
+      >
+        Hide CVV and expiration dates for this module.
+      </mat-checkbox>
+      <div
+        class="row"
+        *ngIf="form.controls['type'].value !== 'EXPLORER' && form.controls['type'].value !== 'THREAT_CONTEXT'"
+      >
+        <div class="col-md-10">
+          <div class="form-group">
+            <label class="mb-0">Strict Term:</label>
+            <div>
+              <textarea
+                class="form-control"
+                rows="6"
+                cols="60"
+                style="width: auto"
+                [(ngModel)]="moduleStrictTokens"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="form.controls['type'].value === 'CUSTOM'">
+      <div class="card mb-4" style="margin: 8px" *ngIf="!canSelectSources && !grants?.isMasterSuperAdmin()">
+        <div class="alert-table mb-0 d-flex" style="background-color: #e2d6604a; color: #6e6014">
+          <i class="icon-info-circle-solid mr-3" style="margin-top: 4px"></i>
+          <span class="font-weight-bold">
+            If you want to add or delete any Sources, please contact your Account Manager.</span
+          >
+        </div>
+      </div>
+      <label _ngcontent-mih-c733="" class="mb-0" style="margin-left: 20px; margin-bottom: 10px !important"
+        >Sources</label
+      >
+      <div class="card" style="margin: 0px 20px 20px">
+        <div class="card-body p-0 height-list" style="height: 350px; overflow: scroll">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th style="font-size: 12px">Name</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody *ngIf="sources?.length != 0">
+              <tr *ngFor="let transformada of sources; let i = index">
+                <td class="vertical-middle">
+                  <p class="mb-0">{{ transformada.name }}</p>
+                </td>
+                <td class="vertical-middle td-center td-80">
+                  <mat-slide-toggle
+                    ngDefaultControl
+                    [(ngModel)]="transformada.checked"
+                    [disabled]="!canSelectSources && !grants?.isMasterSuperAdmin()"
+                  ></mat-slide-toggle>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="card-footer bg-light clearfix">
+      <button
+        class="btn btn-light btn-sm border text-primary float-right px-4 ml-1"
+        [disabled]="
+          !form.valid ||
+          isDuplicateKey('shortName', values.id) ||
+          isDuplicateKey('name', values.id) ||
+          shortname.length > maxShortNameLengthPrefix ||
+          form.controls.name.value.length > 45 ||
+          form.controls.name.value.length < 6 ||
+          loadingCreateEdit
+        "
+        (click)="newUpdate()"
+      >
+        <i class="icon-spinner rotate" *ngIf="loadingCreateEdit"></i>
+        OK
+      </button>
+      <button class="btn btn-light btn-sm text-danger float-right ml-1" (click)="closeModal()">Cancel</button>
+    </div>
+  </div>
+</ng-template>
+<!-- MODAL -->
+<ng-template [ngIf]="isModal" [ngIfElse]="module_template">
+  <modal-window [modalTitle]="'Module'" [customClass]="'modal-big'" (cancel)="closeModal()">
+    <ng-container *ngTemplateOutlet="module_template"></ng-container>
+  </modal-window>
+</ng-template>

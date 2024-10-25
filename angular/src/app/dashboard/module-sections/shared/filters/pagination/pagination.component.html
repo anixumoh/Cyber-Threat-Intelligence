@@ -1,0 +1,87 @@
+<div [ngSwitch]="paginationComponent">
+  <!-- HEADER -->
+  <div *ngSwitchCase="'header'" class="position-relative">
+    <button
+      class="btn btn-light btn-sm border float-right"
+      [ngClass]="isMenuOpened ? 'is-active' : ''"
+      type="button"
+      name="button"
+      (click)="toggleMenu($event)"
+    >
+      <i class="icon-format_list_bulleted"></i>
+      {{ checkPag() }}
+    </button>
+    <ul class="list-group border rounded" [ngClass]="isMenuOpened ? dropPosition : ''" (click)="toggleMenu($event)">
+      <li
+        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center cursor-pointer border-0 px-3 py-2"
+        *ngFor="let i of pagination; let j = index"
+        [value]="i.label"
+        [ngClass]="i.selected === true ? 'active' : ''"
+        (click)="clickOnItem($event, j)"
+      >
+        <span>{{ i.label }}</span>
+        <i class="icon-check"></i>
+      </li>
+    </ul>
+  </div>
+  <!--FOOTER-->
+  <div *ngSwitchCase="'footer'">
+    <nav class="float-left mr-2">
+      <ul class="pagination pagination-sm">
+        <li class="page-item">
+          <a class="page-link d-flex align-items-center" (click)="goFirstPage()" [class.disabled]="isGoFirst()">
+            <i class="icon-angle-double-left text-primary" aria-hidden="true"></i>
+            <span style="visibility: hidden">.</span>
+          </a>
+        </li>
+        <li class="page-item">
+          <a
+            class="page-link d-flex align-items-center"
+            (click)="selectPage(-1)"
+            [class.disabled]="!rangePageValidator(-1)"
+          >
+            <i class="icon-angle-left text-primary" aria-hidden="true"></i>
+            <span style="visibility: hidden">.</span>
+          </a>
+        </li>
+        <li class="page-item" *ngFor="let page of pages">
+          <a
+            *ngIf="page !== -1"
+            class="page-link text-primary"
+            [class.active]="pageFormat(currentPage) === page"
+            (click)="selectConcretepage(page, pageFormat(currentPage) === page)"
+            nohref
+          >
+            {{ page }}
+          </a>
+          <a *ngIf="page === -1" class="page-link disabled" nohref>...</a>
+        </li>
+        <li></li>
+        <li class="page-item">
+          <a
+            class="page-link d-flex align-items-center"
+            (click)="selectPage(1)"
+            [class.disabled]="!rangePageValidator(1)"
+          >
+            <i class="icon-angle-right text-primary" aria-hidden="true"></i>
+            <span style="visibility: hidden">.</span>
+          </a>
+        </li>
+        <ng-template [ngIf]="!hasLimitPagination">
+          <li class="page-item">
+            <a class="page-link d-flex align-items-center" (click)="goLastPage()" [class.disabled]="isGoLast()">
+              <i class="icon-angle-double-right text-primary" aria-hidden="true"></i>
+              <span style="visibility: hidden">.</span>
+            </a>
+          </li>
+        </ng-template>
+      </ul>
+    </nav>
+    <ng-template [ngIf]="!hasLimitPagination">
+      <p class="pagination-info mb-0 pt-1 float-left" *ngIf="!favorite">
+        <span class="mr-1">Total pages:</span>
+        <span class="font-weight-bold">{{ numPages | number }}</span>
+      </p>
+    </ng-template>
+  </div>
+</div>

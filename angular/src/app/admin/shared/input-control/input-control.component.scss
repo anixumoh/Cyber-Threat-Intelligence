@@ -1,0 +1,31 @@
+:host {
+  display: block;
+}
+.size {
+  min-height: 300px !important;
+}
+.company-dropdown {
+  z-index: 999;
+  padding-left: 0px;
+  max-height: 116px;
+  overflow: scroll;
+  width: 81%;
+  position: absolute;
+  border: 1px solid #ced4da;
+  border-radius: 0.2rem;
+}
+.reset-icon {
+  position: absolute;
+  right: 23px;
+  top: 34px;
+}
+
+.disabled-switch {
+  pointer-events: none;
+  cursor: not-allowed !important;
+}
+
+.checkbox-align {
+  margin-top: 6px;
+  margin-right: 6px;
+}

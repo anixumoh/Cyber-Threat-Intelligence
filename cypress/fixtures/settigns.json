@@ -1,0 +1,57 @@
+{
+    "body":{
+        "enabled": true,
+        "industryId": "OTHER",
+        "name": "-1-cypress",
+        "customerId": 1,
+        "trial": false,
+        "contact": {
+            "firstContact": {
+                "email": "qa@blueliv.com",
+                "firstName": "QA",
+                "lastName": "Cypress",
+                "country": "ES",
+                "phone": "123456789"
+            },
+            "invoicingData": {
+                "invoicingContact": {}
+            }
+        }
+    },
+    "orgName": "-1-cypress",
+    "orgTitle": "TC QA Cypress",
+    "orgFirstName": "QA",
+    "orgSurname": "Cypress",
+    "phone": "123456789",
+    "email": {
+        "one": "qa@blueliv.com",
+        "two": "pepe@gmail.com"
+    },
+    "domain": {
+        "one": "bbva.es",
+        "two": "apple.com"
+    },
+    "ip": "195.235.25.0/24",
+    "bank": "My Bank",
+    "creditCard": "435791",
+    "creditHash": "86e5bbc210937a00934c3c5c62bff28d",
+    "customTerm": "pa mi casa",
+    "searchWord": "apple",
+    "term": {
+        "one": "Iphone",
+        "two": "iphone13"
+    },
+    "rss": {
+        "one":"http://windowsinsider.mpsn.libsynpro.com/rss",
+        "two":"https://www.famous-smoke.com/cigaradvisor/feed"
+    },
+    "twitter": {
+        "one": "@bbva",
+        "two": "@espn"
+    },
+    "searchTerm": "Gym",
+    "searchPhrase": "Limited edition",
+    "label": "luxury",
+    "rssName": "Cigar Advisor"
+
+}

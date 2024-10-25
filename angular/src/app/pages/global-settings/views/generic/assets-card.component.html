@@ -1,0 +1,612 @@
+<mat-card class="assets-card">
+  <div class="assets-card-header">
+    <span class="font-weight-bold" [ngClass]="getSettingNameClass(settingType)">{{
+      settingsDictionary[settingType]
+    }}</span>
+    <div class="header-buttons d-flex">
+      <button
+        class="btn btn-circle bg-light mr-1"
+        (click)="deleteMultipleOption()"
+        *ngIf="isMultipleSelected()"
+        matTooltip="Delete multiple"
+        [disabled]="grants?.isCustomerOrOperator()"
+      >
+        <i class="icon-delete bglight text-danger"></i>
+      </button>
+      <button
+        class="btn btn-circle bg-light ml-1"
+        [ngClass]="isAdding ? 'btn-active' : ''"
+        (click)="showAdd()"
+        matTooltip="Add new {{ settingsDictionary[settingType] }}"
+        [disabled]="grants?.isCustomerOrOperator()"
+      >
+        <i class="icon-plus text-primary"></i>
+      </button>
+      <button class="btn btn-circle bg-light ml-1" (click)="openCloseInfoModal()" matTooltip="Info">
+        <i class="icon-info text-primary"></i>
+      </button>
+      <button class="btn btn-circle bg-light ml-1" (click)="openCloseExpandedModal()" matTooltip="Edit">
+        <i class="icon-expand text-primary"></i>
+      </button>
+    </div>
+  </div>
+  <div class="assets-card-body">
+    <form *ngIf="isAdding" class="mt-2" [formGroup]="dataToAdd">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Modules</mat-label>
+        <mat-select #matSelectAssets formControlName="modules" multiple (ngModelChange)="debounceValidator()">
+          <ng-container *ngFor="let module of allowedModules">
+            <mat-option [value]="module">{{ module.name }}</mat-option>
+          </ng-container>
+          <button (click)="onCloseMatSelectAssets()" class="btn btn-primary btn-sm mb-2 float-right close-select">
+            Done
+          </button>
+        </mat-select>
+      </mat-form-field>
+      <ng-container *ngIf="isGenericSetting()">
+        <textarea
+          class="w-100"
+          formControlName="data"
+          (ngModelChange)="debounceValidator()"
+          rows="4"
+          placeholder="Write your settings here separated by a line break"
+        ></textarea>
+        <small
+          *ngIf="
+            dataToAdd.controls['data'].invalid &&
+            (dataToAdd.controls['data'].dirty || dataToAdd.controls['data'].touched) &&
+            dataToAdd.controls['data'].errors.required
+          "
+          class="text-danger"
+          >This field is mandatory.</small
+        >
+      </ng-container>
+      <ng-container *ngIf="!isGenericSetting()" [ngSwitch]="true">
+        <ng-template [ngSwitchCase]="settingType === 'FILE_EXTENSION' || settingType === 'EXTRA_CATEGORIES'">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>{{ settingType === 'FILE_EXTENSION' ? 'File Extension' : 'RSS Categories' }}</mat-label>
+            <mat-select formControlName="data" multiple>
+              <ng-container *ngFor="let item of lists[settingType]">
+                <mat-option [value]="item.id">
+                  <span [matTooltip]="item.formats">{{ item.value }}</span></mat-option
+                >
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+        </ng-template>
+        <ng-template [ngSwitchCase]="settingType === 'IMAGE'">
+          <textarea
+            class="w-100"
+            formControlName="data"
+            (ngModelChange)="debounceValidator()"
+            rows="1"
+            placeholder="Write your search phrase here"
+          ></textarea>
+          <small
+            *ngIf="
+              dataToAdd.controls['data'].invalid &&
+              (dataToAdd.controls['data'].dirty || dataToAdd.controls['data'].touched) &&
+              dataToAdd.controls['data'].errors.required
+            "
+            class="text-danger"
+            >This field is mandatory.</small
+          >
+          <img style="width: 70px" class="mb-2" *ngIf="uploadedImage.image" [src]="uploadedImage.image" />
+          <app-uploader-settings
+            (uploadFile)="uploadFile($event)"
+            (deleteFile)="deleteFile()"
+            [allowedUrl]="false"
+            [uploaderInfo]="false"
+            [multipleSelect]="false"
+            [isDelete]="false"
+            [isModule]="false"
+          >
+          </app-uploader-settings>
+        </ng-template>
+        <ng-template [ngSwitchCase]="settingType === 'CPE_TECH'">
+          <div class="deprecated-checkbox">
+            <input
+              type="checkbox"
+              [(ngModel)]="techDeprecated"
+              (ngModelChange)="changeDeprecated()"
+              [ngModelOptions]="{ standalone: true }"
+              class="mr-1"
+            />
+            Include deprecated versions
+          </div>
+
+          <div class="">
+            <input
+              type="text"
+              class="mt-2 search-box w-100"
+              placeholder="Search for vendor"
+              [(ngModel)]="techVendorSearch"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="searchVendor()"
+            />
+            <div *ngIf="isVendorDropdownOpen">
+              <ul class="company-dropdown">
+                <ng-container *ngIf="companies && companies.length; else noItems">
+                  <li
+                    class="list-group-item list-group-item-action cursor-pointer border-0 p-2"
+                    *ngFor="let company of companies"
+                    (click)="companyChange(company)"
+                  >
+                    <span class="text-90">{{ company.label }}</span>
+                  </li>
+                </ng-container>
+                <ng-template #noItems>
+                  <li
+                    class="list-group-item list-group-item-action border-0 p-4 font-italic loading"
+                    *ngIf="loadingVendors"
+                  >
+                    <i class="icon-spinner rotate"></i>
+                  </li>
+                  <li class="list-group-item list-group-item-action border-0 p-4 font-italic" *ngIf="!loadingVendors">
+                    No results
+                  </li>
+                </ng-template>
+              </ul>
+            </div>
+          </div>
+          <div class="padding-bottom-10" *ngIf="selectedVendor">
+            <input
+              type="text"
+              class="mt-2 search-box w-100"
+              placeholder="Search for products"
+              [(ngModel)]="techProductSearch"
+              (ngModelChange)="searchProducts()"
+              [ngModelOptions]="{ standalone: true }"
+            />
+            <div *ngIf="isProductDropdownOpen">
+              <ul class="company-dropdown">
+                <ng-container *ngIf="products && products.length && !loadingProducts; else noItems">
+                  <li
+                    class="list-group-item list-group-item-action cursor-pointer border-0 p-2"
+                    *ngFor="let product of products"
+                    (click)="productChange(product)"
+                  >
+                    <span class="text-90" [ngClass]="product.deprecated ? 'text-danger' : ''">{{ product.label }}</span>
+                    <span class="text-danger font-italic ml-1" *ngIf="product.deprecated">(deprecated)</span>
+                  </li>
+                </ng-container>
+                <ng-template #noItems>
+                  <li
+                    class="list-group-item list-group-item-action border-0 p-4 font-italic loading"
+                    *ngIf="loadingProducts"
+                  >
+                    <i class="icon-spinner rotate"></i>
+                  </li>
+                  <li class="list-group-item list-group-item-action border-0 p-4 font-italic" *ngIf="!loadingProducts">
+                    No results
+                  </li>
+                </ng-template>
+              </ul>
+            </div>
+          </div>
+
+          <div class="padding-bottom-10" *ngIf="selectedProduct">
+            <input
+              type="text"
+              class="search-box w-100"
+              placeholder="Search for versions"
+              [(ngModel)]="techVersionSearch"
+              (ngModelChange)="searchVersions()"
+              [ngModelOptions]="{ standalone: true }"
+            />
+            <div *ngIf="isVersionDropdownOpen">
+              <ul class="company-dropdown">
+                <ng-container *ngIf="versions && versions.length && !loadingVersions; else noItems">
+                  <li
+                    class="list-group-item list-group-item-action cursor-pointer border-0 p-2"
+                    *ngFor="let version of versions"
+                    (click)="versionChange(version)"
+                  >
+                    <span class="text-90" [ngClass]="version.deprecated ? 'text-danger' : ''">{{ version.title }}</span>
+                    <span class="text-danger font-italic ml-1" *ngIf="version.deprecated">(deprecated)</span>
+                  </li>
+                </ng-container>
+                <ng-template #noItems>
+                  <li
+                    class="list-group-item list-group-item-action border-0 p-4 font-italic loading"
+                    *ngIf="loadingVersions"
+                  >
+                    <i class="icon-spinner rotate"></i>
+                  </li>
+                  <li class="list-group-item list-group-item-action border-0 p-4 font-italic" *ngIf="!loadingVersions">
+                    No results
+                  </li>
+                </ng-template>
+              </ul>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template [ngSwitchCase]="settingType === 'BANK'">
+          <textarea
+            class="w-100"
+            formControlName="data"
+            (ngModelChange)="debounceValidator()"
+            rows="1"
+            placeholder="Write the bank's name here"
+          ></textarea>
+          <small
+            *ngIf="
+              dataToAdd.controls['data'].invalid &&
+              (dataToAdd.controls['data'].dirty || dataToAdd.controls['data'].touched) &&
+              dataToAdd.controls['data'].errors.required
+            "
+            class="text-danger"
+            >This field is mandatory.</small
+          >
+          <textarea
+            class="w-100 mt-2"
+            formControlName="bincodes"
+            (ngModelChange)="checkBincodes()"
+            rows="1"
+            placeholder="Write your bincodes separated by comma"
+          ></textarea>
+          <div><small class="text-danger" *ngIf="bincodeError">Bincodes must be 6 or 8 digits lenght</small></div>
+          <small
+            *ngIf="
+              dataToAdd.controls['bincodes'].invalid &&
+              (dataToAdd.controls['bincodes'].dirty || dataToAdd.controls['bincodes'].touched) &&
+              dataToAdd.controls['bincodes'].errors.required
+            "
+            class="text-danger"
+            >This field is mandatory.</small
+          >
+        </ng-template>
+      </ng-container>
+      <div class="d-flex w-100 justify-content-between">
+        <small class="text-danger term-error">{{ addError }}</small
+        ><small class="text-primary cursor-pointer" *ngIf="addError" (click)="openManageErrors()">Manage errors</small>
+      </div>
+
+      <input
+        *ngIf="
+          settingType !== 'CONFIDENTIAL' &&
+          settingType !== 'RSS' &&
+          settingType !== 'EXTRA_CATEGORIES' &&
+          settingType !== 'FILE_EXTENSION'
+        "
+        placeholder="Tag"
+        formControlName="tags"
+        class="w-100 mb-2 mt-2"
+      />
+      <button
+        *ngIf="settingType !== 'CPE_TECH'"
+        class="btn btn-sm mb-2 float-right {{ matSelectAssets.panelOpen ? 'btn-secondary' : 'btn-primary' }}"
+        (click)="addSetting()"
+        [disabled]="
+          !dataToAdd.controls['modules'].value ||
+          dataToAdd.controls['modules'].value.length === 0 ||
+          !dataToAdd.controls['data'].value ||
+          addError ||
+          bincodeError ||
+          matSelectAssets.panelOpen
+        "
+      >
+        Save
+      </button>
+      <button
+        *ngIf="settingType === 'CPE_TECH'"
+        class="btn btn-sm mb-2 float-right {{ matSelectAssets.panelOpen ? 'btn-secondary' : 'btn-primary' }}"
+        (click)="addSetting()"
+        [disabled]="
+          !dataToAdd.controls['modules'].value ||
+          dataToAdd.controls['modules'].value.length === 0 ||
+          !selectedVendor ||
+          matSelectAssets.panelOpen
+        "
+      >
+        Save
+      </button>
+      <button
+        class="btn {{
+          matSelectAssets.panelOpen ? 'btn-secondary' : 'btn-light text-danger'
+        }} btn-sm mb-2 float-right cancel-assets"
+        (click)="showAdd()"
+        [disabled]="matSelectAssets.panelOpen"
+      >
+        Close
+      </button>
+    </form>
+    <ng-container *ngTemplateOutlet="tableGS"> This text is not displayed </ng-container>
+  </div>
+</mat-card>
+
+<ng-template #noItems>
+  <div class="d-flex justify-content-center align-items-center no-items-box">There are no items to show</div>
+</ng-template>
+
+<modal-window
+  modalTitle="Setting Details"
+  *ngIf="isExpandedModalOpen"
+  closeBtn="true"
+  cancelBtn="Close"
+  (cancel)="closeExpandModal()"
+  [customClass]="'modal-xl'"
+>
+  <div class="search-container">
+    <input
+      type="text"
+      class="search-box"
+      placeholder="Search your {{ settingsDictionary[settingType] }}"
+      #searchInput
+      (keyup)="debounceSearch($event)"
+    />
+    <i class="icon-times text-danger reset-icon cursor-pointer" *ngIf="searchInput.value" (click)="resetQuery()"></i>
+    <button class="btn btn-light btn-sm border mr-0 btn-search">
+      <i class="icon-search"></i>
+    </button>
+  </div>
+  <ng-container *ngTemplateOutlet="tableGS"> This text is not displayed </ng-container>
+</modal-window>
+
+<modal-window
+  modalTitle="Choose modules"
+  *ngIf="moduleSelectionModal"
+  closeBtn="true"
+  cancelBtn="Close"
+  acceptBtn="Delete"
+  [disabledAccept]="disableAcceptButton"
+  (cancel)="moduleSelectionModal = false; items.filter = ''"
+  (accept)="deleteTerm()"
+>
+  <div>
+    <mat-card class="module-selection-card"> Choose the modules you want to delete the term from. </mat-card>
+
+    <mat-selection-list #modules [(ngModel)]="selectedModules">
+      <mat-list-option *ngFor="let mod of selectedItem.modules" [value]="mod.moduleId">
+        {{ mod.moduleName }}
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+</modal-window>
+
+<modal-window
+  modalTitle="Remove setting"
+  modalBody="Are you sure you want to remove the selected setting?"
+  [warning]="'This action  cannot be undone.'"
+  *ngIf="deleteConfirmationModal"
+  closeBtn="true"
+  acceptBtn="Yes"
+  cancelBtn="No"
+  (accept)="deleteTermSingleModule()"
+  (cancel)="deleteConfirmationModal = false; selectedItem = null; selectedModules = []"
+>
+</modal-window>
+
+<modal-window
+  modalTitle="Remove settings"
+  modalBody="Are you sure you want to remove the selected settings?"
+  [warning]="'The setting will be deleted from all modules. This action  cannot be undone.'"
+  *ngIf="deleteMultipleConfirmation"
+  closeBtn="true"
+  acceptBtn="Yes"
+  cancelBtn="No"
+  (accept)="deleteMultipleConfirmation = false; deleteMultiple()"
+  (cancel)="deleteMultipleConfirmation = false; selectedItem = null; selectedModules = []"
+>
+</modal-window>
+
+<modal-window
+  customClass="modal-dialog-centered"
+  modalTitle="Info"
+  *ngIf="infoModal"
+  closeBtn="true"
+  cancelBtn="Close"
+  (cancel)="infoModal = false"
+>
+  <div class="content-info">
+    <i class="icon-info"></i>
+    <span>{{ settings[settingType].description }}</span>
+  </div>
+</modal-window>
+
+<modal-window
+  modalTitle="Manage setting errors"
+  *ngIf="errorsModal"
+  closeBtn="true"
+  cancelBtn="Close"
+  acceptBtn="Save"
+  (cancel)="errorsModal = false"
+  (accept)="addTermsFromErrorModal()"
+>
+  <table mat-table [dataSource]="dataError" class="w-100">
+    <ng-container matColumnDef="term">
+      <th mat-header-cell *matHeaderCellDef class="vertical-middle">Term</th>
+      <td mat-cell *matCellDef="let element; let i = index" class="vertical-middle">
+        <input matInput [value]="element.term" [(ngModel)]="element.term" (ngModelChange)="checkTerm($event, i)" />
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="valid">
+      <th mat-header-cell *matHeaderCellDef class="vertical-middle text-center">Valid</th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="vertical-middle text-center"
+        [ngClass]="element.error ? 'text-danger' : 'text-success'"
+      >
+        <span *ngIf="element.error">{{ element.error }}</span>
+        <span *ngIf="!element.error"><i class="icon-check"></i></span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef class="vertical-middle text-center"></th>
+      <td mat-cell *matCellDef="let element; let i = index" class="vertical-middle text-center">
+        <button
+          class="btn btn-circle bg-light mr-1"
+          (click)="deleteTermFromErrorModal(i)"
+          [disabled]="grants?.isCustomerOrOperator()"
+        >
+          <i class="icon-delete bglight text-danger"></i>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedErrorColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedErrorColumns"></tr>
+  </table>
+</modal-window>
+
+<ng-template #tableGS>
+  <table mat-table class="table" [dataSource]="items">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef class="vertical-middle text-center table__cell table__cell--checkbox">
+        <input
+          type="checkbox"
+          (change)="$event ? masterToggle() : null"
+          [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()"
+        />
+      </th>
+      <td mat-cell *matCellDef="let row" class="vertical-middle text-center table__cell table__cell--checkbox">
+        <input
+          type="checkbox"
+          (click)="$event.stopPropagation()"
+          (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)"
+        />
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="term">
+      <th mat-header-cell *matHeaderCellDef class="vertical-middle" [ngClass]="getSettingNameClass(settingType)">
+        {{ settingsDictionary[settingType] }}
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="vertical-middle table__cell"
+        [matTooltip]="
+          settingType === 'FILE_EXTENSION' ? lists.FORMATS[element.searchPhrase].formats : element.searchPhrase
+        "
+      >
+        {{ settingType === 'FILE_EXTENSION' ? lists.FORMATS[element.searchPhrase].value : element.searchPhrase }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="modules">
+      <th mat-header-cell *matHeaderCellDef class="vertical-middle">Modules</th>
+      <td mat-cell *matCellDef="let element; let i = index" class="vertical-middle table__cell">
+        <span
+          *ngFor="let mod of element.modules"
+          class="badge badge-secondary mr-2"
+          [matTooltip]="getModuleTooltip(mod.moduleId, i)"
+          [ngClass]="canBeRestored(mod.moduleId, i) ? 'badge--deleted' : ''"
+          (click)="navigateToModule($event, mod.moduleId, isBeingEdited(i))"
+          >{{ mod.moduleName }}
+          <i
+            [matTooltip]="canBeRestored(mod.moduleId, i) ? 'Restore' : 'Delete module'"
+            (click)="deleteOrRestoreModule(mod.moduleId)"
+            *ngIf="isBeingEdited(i) && !isImage()"
+            [ngClass]="canBeRestored(mod.moduleId, i) ? 'icon-plus icon-plus--small' : 'icon-cancel icon-cancel--small'"
+            class="ml-2 cursor-pointer"
+          ></i
+        ></span>
+        <ng-container *ngIf="isBeingEdited(i)">
+          <span
+            *ngFor="let mod of isEditingItem.modules.toAdd"
+            class="badge badge-success"
+            matTooltip="This module will be added to this term"
+            >{{ getModuleName(mod) }}
+            <i
+              [matTooltip]="'Remove module'"
+              (click)="removeProvisional(mod)"
+              class="icon-cancel icon-cancel--small ml-2 cursor-pointer"
+            ></i
+          ></span>
+        </ng-container>
+
+        <i
+          class="icon-plus icon-plus--medium text-primary ml-2"
+          [ngClass]="isAddingModule ? 'icon-cancel text-danger' : 'icon-add icon-add--small'"
+          [matTooltip]="isAddingModule ? 'Close add' : 'Add modules'"
+          (click)="openCloseAddModule()"
+          *ngIf="isBeingEdited(i) && !isImage()"
+        ></i>
+        <div
+          *ngIf="isBeingEdited(i) && isAddingModule"
+          class="add-modules-dropdown"
+          [class.dropdown-up]="items.data.length - 1 === i && i > 4"
+        >
+          <ul *ngIf="areThereModulesToAdd(element.modules); else emptyModuleList">
+            <ng-container *ngFor="let module of allowedModules">
+              <li class="cursor-pointer" *ngIf="moduleIsNotConfigured(module.id)" (click)="addModule(module.id)">
+                {{ module.name }}
+              </li>
+            </ng-container>
+          </ul>
+          <ng-template #emptyModuleList>
+            <div class="d-flex justify-content-center align-items-center p-4 add-modules-dropdown--empty">
+              <span>There are no other modules to add</span>
+            </div>
+          </ng-template>
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="tags">
+      <th mat-header-cell *matHeaderCellDef class="vertical-middle">Tag</th>
+
+      <td mat-cell *matCellDef="let element; let i = index" class="vertical-middle mr-2 table__cell">
+        <span
+          class="cursor-pointer"
+          *ngIf="!isEditingItem.editing || isEditingItem.item !== i"
+          (click)="clickOnTag(element.tag)"
+          [matTooltip]="'Click to filter by this tag'"
+          >{{ element.tag }}</span
+        >
+        <input
+          class="tag-input"
+          matInput
+          [value]="element.tag"
+          [(ngModel)]="element.tag"
+          *ngIf="isBeingEdited(i) && canEditTag()"
+        />
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef class="vertical-middle text-center ml-2"></th>
+      <td
+        mat-cell
+        *matCellDef="let element; let i = index"
+        class="vertical-middle text-center table__cell table__cell--delete"
+      >
+        <button
+          class="btn btn-circle bg-light mr-1"
+          (click)="cancelOrDelete(element)"
+          [matTooltip]="!isEditingItem.editing || isEditingItem.item !== i ? 'Delete' : 'Cancel'"
+          [disabled]="grants?.isCustomerOrOperator() || (isEditingItem.editing && !isBeingEdited(i))"
+        >
+          <i class="bglight text-danger" [ngClass]="!isBeingEdited(i) ? 'icon-delete' : 'icon-cancel'"></i>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef class="vertical-middle text-center ml-2"></th>
+      <td
+        mat-cell
+        *matCellDef="let element; let i = index"
+        class="vertical-middle text-center table__cell table__cell--delete"
+      >
+        <button
+          class="btn btn-circle bg-light"
+          (click)="editItem(i, element)"
+          [matTooltip]="!isEditingItem.editing || isEditingItem.item !== i ? 'Edit' : 'Save'"
+          [disabled]="
+            grants?.isCustomerOrOperator() || (isEditingItem.editing && !isBeingEdited(i)) || areModulesEmpty(i)
+          "
+        >
+          <i
+            class="icon-pencil-square bglight"
+            style="font-size: 13px; color: #222222"
+            [ngClass]="!isEditingItem.editing || isEditingItem.item !== i ? 'icon-pencil-square' : 'icon-save'"
+          ></i>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</ng-template>

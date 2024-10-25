@@ -1,0 +1,14 @@
+@import 'src/scss/variables';
+@import '~scss/mixins';
+
+.reload-div {
+  height: 100%;
+  width: 100%;
+  @include ct-flex-center();
+  cursor: pointer;
+  color: $primary;
+}
+.chart-div {
+  height: 100%;
+  min-height: 250px;
+}

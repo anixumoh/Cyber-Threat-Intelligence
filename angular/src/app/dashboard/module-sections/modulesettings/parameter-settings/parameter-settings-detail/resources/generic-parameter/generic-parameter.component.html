@@ -1,0 +1,186 @@
+<div class="settings-parameter card mb-4">
+  <div class="card-header border-bottom-0 bg-light px-2 py-1 clearfix">
+    <div class="form-check mt-2 mb-0 float-left carbon-fix">
+      <ng-template
+        let-dataInf
+        let-isSelectedAllInf="isSelectedAll"
+        let-ctrl="controller"
+        (updateSelectAll)="updateSelectAll($event)"
+        (updateElement)="updateElement($event)"
+        [appInfiniteScrollConsumer]="infiniteElement"
+        *ngIf="!openForm"
+      >
+        <input
+          class="form-check-input mt-0"
+          type="checkbox"
+          [disabled]="!dataInf || !dataInf.length || grants?.isCustomerOrOperator()"
+          [ngClass]="grants?.isCustomerOrOperator() ? 'cursor-not-allowed' : ''"
+          [ngModel]="isSelectedAllInf"
+          (input)="ctrl.selectAll($event)"
+        />
+      </ng-template>
+    </div>
+    <ng-template [appToggle]="searchTemplate">
+      <h6
+        [ngClass]="parameterObject?.parameterName === 'IPs' ? '' : 'text-uppercase '"
+        class="title-card text-dark float-left"
+      >
+        {{ parameterObject?.parameterName }}
+      </h6>
+    </ng-template>
+    <i
+      class="alert-error icon-error text-danger float-left"
+      *ngIf="parameterObject?.newData && parameterObject?.parameterTexts?.tooltip && !parameterObject?.parameterValid"
+      [ngbTooltip]="parameterObject?.parameterTexts?.tooltip"
+    ></i>
+    <button class="btn btn-circle bg-light ml-1 float-right" #buttonSearch>
+      <i class="icon-search text-primary"></i>
+    </button>
+    <button
+      class="btn btn-circle bg-light ml-1 float-right"
+      [disabled]="grants?.isCustomerOrOperator()"
+      [ngClass]="grants?.isCustomerOrOperator() ? 'is-hidden cursor-not-allowed' : ''"
+      (click)="showAdd()"
+    >
+      <i class="icon-plus text-primary noClickOutside"></i>
+    </button>
+
+    <button class="btn btn-circle bg-light ml-1 float-right" #buttonInfo>
+      <i class="icon-info-character text-primary"></i>
+    </button>
+    <ng-template
+      [appToggleContains]="buttonSearch"
+      #searchTemplate="appToggleContains"
+      (isShowEmitter)="openCloseSearch($event)"
+    >
+      <div class="content-search">
+        <div class="form-group mb-0">
+          <input
+            class="form-control form-control-sm"
+            [placeholder]="parameterObject?.parameterTexts?.area_placeholder"
+            (keyup)="searchInList($event)"
+          />
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <!-- INFO -->
+  <ng-template [appToggleContains]="buttonInfo">
+    <div class="alert-info px-2 py-1">
+      <span class="font-italic text-90">{{ parameterObject?.parameterTexts?.description }}</span>
+    </div>
+  </ng-template>
+  <!-- FORM GENERIC -->
+  <form class="bg-light p-2 clearfix show-form-height" *ngIf="openForm">
+    <div class="form-group mb-1">
+      <textarea
+        class="form-control form-control-sm"
+        [class.is-invalid]="!parameterObject?.parameterValid"
+        rows="3"
+        [disabled]="grants?.isCustomerOrOperator()"
+        [(ngModel)]="parameterObject.newData"
+        [placeholder]="parameterObject?.parameterTexts?.area_placeholder"
+        [ngModelOptions]="{ standalone: true }"
+      >
+      </textarea>
+    </div>
+
+    <button class="btn btn-primary btn-sm px-4 float-right" [disabled]="disableAdd" (click)="openAdd()">Add</button>
+    <button
+      class="btn {{ !openForm ? 'btn-secondary' : 'btn-light text-danger' }} btn-sm mb-2 float-right cancel-assets"
+      (click)="closeForm()"
+      [disabled]="!openForm"
+    >
+      Close
+    </button>
+  </form>
+  <div
+    class="card-body height-list border-top p-0"
+    appInfiniteScrollProvider
+    [infiniteCompleteArray]="parameterObject?.parameterData"
+    [infiniteScrollPercent]="20"
+    [infiniteAttribute]="'hide'"
+    [infiniteNum]="10"
+    #infiniteElement="appInfiniteScrollProvider"
+  >
+    <ng-container *ngIf="!openForm">
+      <div class="list-parameters">
+        <!-- NO RESULTS -->
+        <div class="no-results-box-md mt-4 p-4" *ngIf="parameterObject?.parameterData.length === 0">
+          <img class="rounded mx-auto d-block mb-2" src="assets/default_images/searching.svg" />
+          <h6 class="mb-0 text-center text-primary">"There are no {{ parameterObject?.parameterName }}"</h6>
+        </div>
+        <!-- LIST -->
+        <ul class="list-group list-group-flush">
+          <ng-template
+            let-dataInf
+            let-ctrl="controller"
+            (updateElement)="updateElement($event)"
+            [appInfiniteScrollConsumer]="infiniteElement"
+          >
+            <ng-container *ngFor="let value of dataInf; let i = index">
+              <ng-container *ngIf="!value.hide && value.isInfinite">
+                <li
+                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2"
+                >
+                  <div
+                    class="form-check mb-0 text-truncate carbon-fix"
+                    [ngbTooltip]="renderValue(value)"
+                    [placement]="i === 0 || dataInf[i - 1].hide ? 'bottom' : 'top'"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [(ngModel)]="value.selected"
+                      [disabled]="grants?.isCustomerOrOperator()"
+                      [ngClass]="grants?.isCustomerOrOperator() ? 'cursor-not-allowed' : ''"
+                      (input)="ctrl.selectOne($event, value); checkIfAnySelected()"
+                    />
+                    <span class="text-dark ml-1">{{ renderValue(value) }}</span>
+                  </div>
+                  <button
+                    class="btn btn-circle bg-light ml-1 float-right"
+                    *ngIf="!grants?.isCustomerOrOperator()"
+                    (click)="openConfirmationModal(value.index)"
+                  >
+                    <i class="icon-delete bglight text-danger"></i>
+                  </button>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ng-template>
+        </ul>
+      </div>
+    </ng-container>
+  </div>
+  <!-- CARD FOOTER - ONLY SELECTED LIST-ITEMS -->
+  <div class="card-footer p-1" *ngIf="parameterObject?.anyChecked">
+    <button class="delete btn btn-danger btn-sm px-4 float-right" (click)="openDeleteAllConfirmationModal()">
+      Delete
+    </button>
+  </div>
+</div>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete this?'"
+  [warning]="'This action cannot be undone.'"
+  [acceptBtn]="'Yes'"
+  *ngIf="deleteConfirmation"
+  [cancelBtn]="'No'"
+  (accept)="deleteOne(parameterIndex); checkIfAnySelected()"
+  (cancel)="closeConfirmation()"
+>
+</modal-window>
+
+<modal-window
+  [modalTitle]="'Confirmation'"
+  [modalBody]="'Are you sure you want to delete all entries?'"
+  [warning]="'This action cannot be undone.'"
+  [acceptBtn]="'Yes'"
+  *ngIf="deleteAllConfirmation"
+  [cancelBtn]="'No'"
+  (accept)="delete(); checkIfAnySelected()"
+  (cancel)="closeConfirmation()"
+>
+</modal-window>

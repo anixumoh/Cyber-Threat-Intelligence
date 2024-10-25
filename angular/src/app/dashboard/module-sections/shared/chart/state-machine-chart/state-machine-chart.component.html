@@ -1,0 +1,18 @@
+<app-generic-chart *ngIf="isDataPresent" [chartData]="chartData"> </app-generic-chart>
+
+<div
+  *ngIf="isError && !isRobotSnippet"
+  [style.margin-top.px]="errorHeightMarginTop"
+  class="d-flex justify-content-center"
+>
+  <span class="text-primary" [ngClass]="errorClass" [style.font-size.px]="fontSize.toString()">
+    {{ errorMessage }}
+  </span>
+</div>
+
+<div *ngIf="isError && isRobotSnippet" [style.margin-top.px]="errorHeightMarginTop">
+  <img class="no-result-image" [style.height.px]="robotHeight.toString()" src="assets/default_images/searching.svg" />
+  <p class="text-center text-primary mx-2" [ngClass]="errorClass" [style.font-size.px]="fontSize.toString()">
+    {{ errorMessage }}
+  </p>
+</div>

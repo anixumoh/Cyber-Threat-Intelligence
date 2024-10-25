@@ -1,0 +1,20 @@
+<app-overlay [loading]="isLoading || loading" [minHeight]="isLoading || loading ? 160 : 'auto'">
+  <ul class="list-group app-basic-list">
+    <li class="list-group-item app-basic-list__item cursor-pointer" *ngFor="let issue of selectedItemIssues">
+      <span (click)="navigateToIssue(issue)">{{ issue.title }}</span>
+      <span class="app-basic-list__item-close d-flex align-items-center justify-content-center">
+        <i
+          [ngbTooltip]="'Remove'"
+          (click)="deleteIssueIncident(issue.id, resource)"
+          [class.cursor-not-allowed]="grants?.isCustomerOrOperator()"
+          class="icon-times"
+        >
+        </i>
+      </span>
+    </li>
+  </ul>
+  <button class="btn btn-link" nohref (click)="setCloseTheModalComponent(resource)">
+    <i class="icon-plus-circle-solid mr-1"></i>
+    Add Incident
+  </button>
+</app-overlay>

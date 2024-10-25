@@ -1,0 +1,188 @@
+@import 'src/scss/variables';
+@import '~scss/mixins';
+
+.main-header-left {
+  i[class^='icon-'],
+  i[class*=' icon-'] {
+    background-color: $primary;
+    color: $white;
+    padding: 7px 8px;
+  }
+}
+
+// HEIGHT & SCROLLBAR
+.dropdown-container {
+  position: absolute;
+  top: 43px;
+  right: 20px;
+  width: 300px;
+  .list-group {
+    visibility: hidden;
+  }
+  .list-group.open {
+    visibility: visible;
+    border: 1px solid $border;
+    border-radius: 4px;
+    box-shadow: $shadow-regular;
+    .list-group-item:hover {
+      color: $primary;
+    }
+  }
+}
+.list-group-dropdown {
+  height: 148px;
+  overflow-y: scroll;
+}
+.list-group {
+  height: 179px;
+  overflow-y: scroll;
+  .list-group-item {
+    border-radius: 0.25rem;
+    border: 0;
+    cursor: pinter;
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: transparent;
+    }
+  }
+  .list-group-item:hover {
+    background-color: $light;
+    color: $primary;
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: $primary;
+    }
+  }
+  .list-group-item.active {
+    background-color: $light;
+    color: $primary;
+    font-weight: bold;
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: $primary;
+    }
+  }
+}
+.list-group::-webkit-scrollbar-track {
+  background-color: $light;
+}
+.list-group::-webkit-scrollbar {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  width: 5px !important;
+  height: 5px !important;
+}
+.list-group::-webkit-scrollbar-thumb {
+  background-color: #084951;
+  outline: 1px solid black;
+}
+
+.dropdown-container-tlp {
+  .list-group {
+    width: 137px;
+    position: absolute;
+    z-index: 100;
+    height: auto;
+  }
+}
+.box-inputs {
+  position: relative;
+  .checkbox-top {
+    position: absolute;
+    top: 8px;
+    right: 0;
+  }
+}
+.input-search {
+  width: 220px;
+  .form-control {
+    height: 31px;
+  }
+}
+
+.dropdown-container-tlp {
+  position: absolute;
+  top: 63px;
+  right: 43px;
+  width: 137px;
+  z-index: 5;
+  .list-group {
+    visibility: hidden;
+  }
+  .list-group.open {
+    visibility: visible;
+    border: 1px solid $border;
+    border-radius: 4px;
+    box-shadow: $shadow-regular;
+    .list-group-item:hover {
+      color: $primary;
+    }
+    .tlp-text {
+      color: $dark;
+      margin-left: 6px;
+    }
+  }
+}
+
+// HEIGHT & SCROLLBAR
+.height-list {
+  max-height: 300px;
+  overflow-y: scroll !important;
+}
+
+// LIST
+.list-user-info {
+  padding-left: 12px;
+  padding-right: 12px;
+
+  i {
+    height: 28px;
+    width: 28px;
+    text-align: center;
+    padding-top: 7px;
+  }
+}
+// GENERAL
+.icon-arrow-down,
+.icon-arrow-up {
+  cursor: pointer;
+}
+
+.color-red {
+  color: red;
+}
+
+.delete-org {
+  position: absolute;
+  top: 5px;
+  left: 113px;
+}
+
+.list-empty-labels {
+  @include ct-flex-center();
+  padding: 12px;
+  text-align: center;
+  color: $secondary;
+  font-style: italic;
+}
+
+.disabled {
+  cursor: not-allowed;
+  color: $secondary !important;
+  pointer-events: none;
+  opacity: 0.6;
+
+  i[class^='icon-'],
+  i[class*=' icon-'] {
+    color: $secondary !important;
+  }
+}
+
+.origin-type {
+  min-width: 85px;
+}
+.language {
+  min-width: 72px;
+}
+.country {
+  min-width: 65px;
+}

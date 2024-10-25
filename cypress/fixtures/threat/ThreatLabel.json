@@ -1,0 +1,15 @@
+{
+  "id": 30482,
+  "label": "Label iylg",
+  "organizationId": null,
+  "organizationName": null,
+  "moduleId": null,
+  "moduleName": null,
+  "labelTypeId": 1,
+  "labelTypeName": "Entity",
+  "labelProtected": false,
+  "prioritized": false,
+  "bgColorHex": "#E91E63",
+  "textColorHex": "#FFFFFF",
+  "moduleTypeId": null
+}

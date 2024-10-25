@@ -1,0 +1,3 @@
+export const GATEWAY_APP = {
+  IMAGES_DOWNLOADER: 'IMAGES_DOWNLOADER'
+};

@@ -1,0 +1,217 @@
+<div class="row">
+  <div class="col">
+    <h3>Global Settings</h3>
+  </div>
+  <div class="col">
+    <button
+      class="btn btn-outline-primary filter-btn ml-1 float-right"
+      type="button"
+      name="button"
+      nohref
+      (click)="openTotalModal()"
+    >
+      Total settings values
+    </button>
+  </div>
+</div>
+
+<div class="modal" *ngIf="progressBar">
+  <div class="mb-3" *ngIf="progressBar">{{ progressText }}</div>
+  <mat-progress-bar mode="indeterminate" class="w-50" *ngIf="progressBar"></mat-progress-bar>
+</div>
+
+<app-assets-filters
+  [allowedModules]="allowedModules"
+  [settingTypes]="allowedSettingTypes"
+  [tagsList]="tagsList"
+  [filteredTag]="filteredTag"
+  (applyAssetFilters)="applyFilters($event)"
+  (applySearch)="searchAssets($event)"
+  (resetAllFilters)="resetFilters()"
+></app-assets-filters>
+
+<div class="card mb-2" style="margin: 8px" *ngIf="!grants?.isAdminSuperAdminMaster() && !activeOrganization.enabled">
+  <div class="alert-table mb-0 d-flex" style="background-color: #e2d6604a; color: #6e6014">
+    <i class="icon-info-circle-solid mr-3" style="margin-top: 4px"></i>
+    <span class="font-weight-bold">
+      Settings configurations can't be modified because this organization is disabled.</span
+    >
+  </div>
+</div>
+
+<div class="global-settings" [class.not-allowed]="!grants?.isAdminSuperAdminMaster() && !activeOrganization.enabled">
+  <div [class.all-disabled]="!activeOrganization.enabled">
+    <div class="assets-body">
+      <div class="grid-container" *ngIf="!loading && items.length; else loadingTemplate">
+        <app-assets-card
+          *ngFor="let settings of items"
+          [items]="settings"
+          [allowedModules]="allowedModules"
+          (editElement)="editElement($event, true)"
+          (addNewSetting)="addSetting($event)"
+          (deleteOneSetting)="deleteOneSetting($event)"
+          (addImage)="addImage($event)"
+          (searchTech)="searchTech($event)"
+          (deleteMultipleSettings)="deleteMultiple($event)"
+          [companies]="companies"
+          [products]="products"
+          [versions]="versions"
+          [orgId]="activeOrganization.id"
+          (filterByTag)="filterByTag($event)"
+        ></app-assets-card>
+      </div>
+      <ng-template #loadingTemplate>
+        <div class="loading-container" *ngIf="loading">
+          <i class="icon-spinner rotate"></i>
+        </div>
+        <div *ngIf="!loading && !allowedModules.length" class="no-items-box">
+          <img src="assets/default_images/searching.svg" style="height: 100px" />
+          <div class="text-primary mt-4">
+            You haven't added any modules yet. Once you have created some modules, you will be able to manage all your
+            assets here.
+          </div>
+        </div>
+        <div *ngIf="!loading && isFiltering" class="no-items-box">
+          <img src="assets/default_images/searching.svg" style="height: 100px" />
+          <div class="text-primary mt-4">No results found</div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<modal-window
+  *ngIf="errorModal"
+  [acceptBtn]="showEditButton ? 'Edit' : ''"
+  [cancelBtn]="'Close'"
+  (cancel)="closeErrorModal()"
+  (accept)="editFailedTerms()"
+  [modalTitle]="'Error info'"
+  ><div *ngFor="let module of errorInfo.data" class="mb-4">
+    <p class="font-weight-bold mb-1 text-primary">{{ getModuleName(module[0].moduleId) }}</p>
+    <table mat-table [dataSource]="module" class="w-100">
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef>Value</th>
+        <td mat-cell *matCellDef="let error">{{ error.field }}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="error">
+        <th mat-header-cell *matHeaderCellDef>Error</th>
+        <td mat-cell *matCellDef="let error">{{ getMessageKey(error.messageKey) }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedErrorColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedErrorColumns"></tr>
+    </table>
+  </div>
+</modal-window>
+
+<modal-window
+  *ngIf="isTotalModalOpen"
+  [cancelBtn]="'Close'"
+  (cancel)="closeTotalModal()"
+  modalTitle="Total settings values"
+  customClass="modal-xl"
+>
+  <div class="modal-body">
+    <div class="row align-items-end">
+      <div class="col-lg table-scroll">
+        <div class="filter-total">
+          <ul>
+            <li>
+              <div class="form-check ml-3">
+                <input
+                  class="form-check-input"
+                  [value]="1"
+                  [name]="'type_total'"
+                  [(ngModel)]="filterTotalSettings"
+                  (ngModelChange)="chooseFilter()"
+                  type="radio"
+                />
+                <label class="form-check-label text-secondary pl-2">All modules</label>
+              </div>
+            </li>
+            <li>
+              <div class="form-check ml-3">
+                <input
+                  class="form-check-input"
+                  [value]="2"
+                  [name]="'type_total'"
+                  [(ngModel)]="filterTotalSettings"
+                  (ngModelChange)="chooseFilter()"
+                  type="radio"
+                />
+                <label class="form-check-label text-secondary pl-2">Enabled modules</label>
+              </div>
+            </li>
+            <li>
+              <div class="form-check ml-3">
+                <input
+                  class="form-check-input"
+                  [value]="3"
+                  [name]="'type_total'"
+                  [(ngModel)]="filterTotalSettings"
+                  (ngModelChange)="chooseFilter()"
+                  type="radio"
+                />
+                <label class="form-check-label text-secondary pl-2">Disabled modules</label>
+              </div>
+            </li>
+          </ul>
+          <button
+            [disabled]="totalSettingsDownloading"
+            class="btn btn-light btn-sm text-primary float-right report-btn mb-2"
+            (click)="downloadTotalSettings()"
+          >
+            <i [class]="totalSettingsDownloading ? 'icon-spinner rotate' : 'icon-download'" class="mr-2"></i>
+            Download Report
+          </button>
+        </div>
+
+        <div *ngIf="totalSettingsLoading" class="loading-container">
+          <i class="icon-spinner rotate"></i>
+        </div>
+
+        <div *ngIf="!totalSettingsLoading">
+          <div *ngFor="let item of totalSettings | keyvalue">
+            <table class="table mb-5" *ngIf="!totalSettingsLoading">
+              <thead>
+                <tr class="text-center">
+                  <th colspan="100%">{{ MODULES_TYPES_DICTIONARY[item.key] || item.key }}</th>
+                </tr>
+                <tr>
+                  <th
+                    *ngFor="let settingType of totalSettings[item.key]"
+                    class="text-center"
+                    [style.width]="settingType[0] === 'THREATS' ? '20%' : totalSettingsColPercent[settingType[0]]"
+                  >
+                    <div *ngIf="settingType[0] === 'SUBDOMAIN' && item.key === 'CREDENTIALS'; else elseBlock">
+                      <span
+                        class="d-flex align-items-center justify-content-center"
+                        matTooltip="All subdomains that not have a main domain configurated will be taken into account for accounting process."
+                      >
+                        {{ SETTINGS_DICTIONARY[settingType[0]] || settingType[0] }}
+                        <i class="icon-info text-primary ml-2"></i>
+                      </span>
+                    </div>
+                    <ng-template #elseBlock>
+                      {{ SETTINGS_DICTIONARY[settingType[0]] || settingType[0] }}
+                    </ng-template>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-center" *ngFor="let settingType of totalSettings[item.key]">
+                    {{ settingType[1] }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</modal-window>

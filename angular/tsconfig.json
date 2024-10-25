@@ -1,0 +1,38 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2020",
+    "module": "esnext",
+    "lib": ["es2019", "dom"],
+    "typeRoots": ["node_modules/@types"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "app": ["src/app"],
+      "app/*": ["src/app/*"],
+      "environments": ["src/environments"],
+      "environments/*": ["src/environments/*"],
+    },
+    "rootDirs": ["."],
+    "types": ["node"]
+  },
+  "angularCompilerOptions": {
+    "allowEmptyCodegenFiles": true,
+    "strictTemplates": true
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    ".angular/*",
+    "node_modules/*",
+    "**/*.spec.ts",
+    "**/*.mock.ts"
+  ]
+}

@@ -1,0 +1,193 @@
+# This is the new CTIP API
+swagger: '2.0'
+info:
+  title: CTIP ISSUE API
+  description: API for the ISSUE
+  version: "1.0.0"
+host: new-ui-pre.blueliv.com
+schemes:
+  - https
+basePath: /api/v2
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /organization/{organizationId}/issue:
+    post:
+      summary: Create issue
+      description: Creates a new issue
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          description: Object to create issue
+          required: true
+          schema:
+            type: object
+            properties:
+              moduleId:
+                type: integer
+              title:
+                type: string
+              typeId:
+                type: string
+              description:
+                type: string
+              remediationTips:
+                type: string
+
+      tags:
+        - Issue
+      responses:    
+        200:
+          description: List of organizations
+          schema:
+            title: Issue Id
+            type: object
+            properties:
+              issueId:
+                type: integer
+          examples:
+            application/json:
+              {
+                "issueId": "5"
+              }
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+  /organization/{organizationId}/issue/{issueId}:
+    delete:
+      summary: Delete an issue
+      description: Deletes an issue from the system
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: issueId
+          in: path
+          description: Issue Id
+          required: true
+          type: integer
+      tags:
+        - Issue
+      responses:    
+        200:
+          description: List of organizations
+          schema:
+            $ref: '#/definitions/Success'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+    post:
+      summary: Issue
+      description: Assign a new issue to resources
+      parameters:
+        - name: referer
+          in: header
+          description: CTIP host location
+          required: true
+          type: string
+        - name: organizationId
+          in: path
+          description: Organization id
+          required: true
+          type: integer
+        - name: issueId
+          in: path
+          description: Issue Id
+          required: true
+          type: integer
+        - name: object
+          in: body
+          description: Module Id & Resource Id list
+          required: true
+          schema:
+            type: object
+            properties:
+              moduleId:
+                type: integer
+              resourcesId:
+                type: array
+                items:
+                  type: integer
+      tags:
+        - Issue
+      responses:    
+        200:
+          description: JSON contaning detailed information
+          schema:
+            title: Detailed object
+            type: object
+            items:
+              title: Details
+              type: object
+              properties:
+                incidents_id:
+                  type: integer
+                incidents_title:
+                  type: string
+                not_assigned:
+                  type: array
+                  items:
+                    type: string
+                abuse_message:
+                  type: string
+          examples: 
+            application/json: 
+             {
+                "incidents_id": 6,
+                "incidents_title": "Test issue 2 for BOTNET",
+                "not_assigned": [
+                  "1_1_23",
+                  "1_1_23",
+                  "1_1_24"
+                ],
+                "abuse_message": "Stolen credentials"
+              }
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  Success:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string

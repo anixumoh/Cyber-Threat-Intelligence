@@ -1,0 +1,19 @@
+<mat-slide-toggle
+  #switchElement
+  (change)="clicked($event)"
+  [checked]="model"
+  [disabled]="isDisabled"
+  [matTooltip]="isDisabled && tooltip ? tooltip : ''"
+></mat-slide-toggle>
+
+<modal-window
+  *ngIf="disabledConfirmationModal"
+  [modalTitle]="'Confirmation'"
+  [modalBody]="disableConfirmationText"
+  [acceptBtn]="'Confirm'"
+  [cancelBtn]="'Cancel'"
+  (accept)="confirmDisable()"
+  (cancel)="closeModal()"
+>
+  <ng-content></ng-content>
+</modal-window>

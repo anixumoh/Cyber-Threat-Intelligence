@@ -1,0 +1,20 @@
+{
+    "total_resources": 1,
+    "list": [
+        {
+            "id": 971,
+            "name": "Sample",
+            "firstSurname": "User2",
+            "secondSurname": "",
+            "email": "user2@maildrop.cc",
+            "username": "test_user2",
+            "job": "Test job",
+            "status": "ENABLED",
+            "lastIpAddress": null,
+            "lastLoginAt": 1686830926001,
+            "masterGrant": "SUPERADMIN",
+            "hasMFA": false,
+            "daysToPasswordChange": 10000
+        }
+    ]
+}

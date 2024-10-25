@@ -1,0 +1,46 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "cypress/globals": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": [
+      "tsconfig.eslint.json"
+    ]
+  },
+  "plugins": [
+    "scanjs-rules",
+    "no-unsanitized",
+    "prototype-pollution-security-rules",
+    "security",
+    "security-node",
+    "no-wildcard-postmessage"
+  ],
+  "extends": [
+    "plugin:security/recommended",
+    "plugin:security-node/recommended"
+  ],
+  "rules": {
+    "no-unused-vars": "off",
+    "no-constant-condition": "off",
+    "no-useless-escape": "off",
+    "no-control-regex": "off",
+    "no-prototype-builtins": "off",
+    "no-undef": "off",
+    "prefer-const": "off",
+    "no-console": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/require-await": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/restrict-plus-operands": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ]
+    }
+  ]
+}

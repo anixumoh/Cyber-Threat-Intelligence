@@ -1,0 +1,20 @@
+@import 'src/scss/variables';
+@import '~scss/mixins';
+
+.sb-search-input {
+  padding-right: 27px;
+  height: 31px;
+  width: 230px;
+}
+
+.input-search {
+  @include ct-input-search();
+}
+
+.no-data-box {
+  padding: 25px;
+  padding-top: 35px;
+  width: 100%;
+  text-align: center;
+  @include ct-flex-center();
+}

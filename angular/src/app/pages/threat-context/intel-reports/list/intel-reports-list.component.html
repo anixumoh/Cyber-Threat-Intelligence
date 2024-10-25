@@ -1,0 +1,154 @@
+<div class="main-header mt-4 mb-3 clearfix">
+  <div class="row align-items-end justify-content-md-center">
+    <div class="col-md-3">
+      <h6 class="text-muted text-uppercase text-90 font-weight-bold mb-3 mt-1">Threat Intel Reports</h6>
+      <h5 class="text-dark float-left mb-0">{{ activeModule?.name }}</h5>
+    </div>
+    <div class="col-md-6">
+      <app-ctx-search
+        [tcxType]="'intelReports'"
+        [searchText]="searchText"
+        [showSaveSearchButton]="showSaveSearchButton"
+        [isShowSyntax]="false"
+        (searchEvent)="search()"
+        (clearSearchTermEvent)="onClearSearchTerm()"
+        (searchTextChangeEvent)="onSetSearchTerm($event)"
+      ></app-ctx-search>
+      <app-tcx-quick-filters
+        [tcxType]="'intelReports'"
+        [items]="quickFilters"
+        (changeMethod)="onChangeQuickFilter($event)"
+      ></app-tcx-quick-filters>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="card shadow-sm mb-4 intel-reports-table">
+  <div class="rounded-top bg-light p-2 mx-0 fixed-scroll">
+    <h6 class="d-flex align-items-center mt-2">
+      <span>Threat Intel Reports showing:</span>
+      <span *ngIf="!loading" class="badge badge-pill badge-primary ml-2">{{ totalResources | number }} results</span>
+      <i class="icon-spinner rotate text-primary ml-2" *ngIf="loading"></i>
+    </h6>
+  </div>
+
+  <!--    TABLE-->
+  <div>
+    <app-table
+      [items]="items"
+      [loading]="loading"
+      class="table-fixed table--sticky table--sticky-fixed-scroll position-static"
+    >
+      <thead>
+        <tr>
+          <th class="text-center app-th-type vertical-middle">
+            <span class="d-flex align-items-center justify-content-center">
+              Type
+              <i
+                *ngIf="sort !== 'type' && sort !== '-type'"
+                class="icon-sort ml-1 cursor-pointer"
+                (click)="sortBy('type')"
+              ></i>
+              <i *ngIf="sort === 'type'" class="icon-sort-asc ml-1 cursor-pointer" (click)="sortBy('-type')"></i>
+              <i *ngIf="sort === '-type'" class="icon-sort-desc ml-1 cursor-pointer" (click)="sortBy('type')"></i>
+            </span>
+          </th>
+          <th>
+            <span class="d-flex align-items-center">
+              Name
+              <i
+                *ngIf="sort !== 'name' && sort !== '-name'"
+                class="icon-sort ml-1 cursor-pointer"
+                (click)="sortBy('name')"
+              ></i>
+              <i *ngIf="sort === 'name'" class="icon-sort-asc ml-1 cursor-pointer" (click)="sortBy('-name')"></i>
+              <i *ngIf="sort === '-name'" class="icon-sort-desc ml-1 cursor-pointer" (click)="sortBy('name')"></i>
+            </span>
+          </th>
+          <th class="text-center app-th-date">
+            <span class="d-flex align-items-center justify-content-center">
+              Industry
+              <i
+                *ngIf="sort !== 'industry' && sort !== '-industry'"
+                class="icon-sort ml-1 cursor-pointer"
+                (click)="sortBy('industry')"
+              ></i>
+              <i
+                *ngIf="sort === 'industry'"
+                class="icon-sort-asc ml-1 cursor-pointer"
+                (click)="sortBy('-industry')"
+              ></i>
+              <i
+                *ngIf="sort === '-industry'"
+                class="icon-sort-desc ml-1 cursor-pointer"
+                (click)="sortBy('industry')"
+              ></i>
+            </span>
+          </th>
+          <th class="text-center app-th-date">
+            <span class="d-flex align-items-center justify-content-center">
+              Region
+              <i
+                *ngIf="sort !== 'region' && sort !== '-region'"
+                class="icon-sort ml-1 cursor-pointer"
+                (click)="sortBy('region')"
+              ></i>
+              <i *ngIf="sort === 'region'" class="icon-sort-asc ml-1 cursor-pointer" (click)="sortBy('-region')"></i>
+              <i *ngIf="sort === '-region'" class="icon-sort-desc ml-1 cursor-pointer" (click)="sortBy('region')"></i>
+            </span>
+          </th>
+          <th class="text-center app-th-date">
+            <span class="d-flex align-items-center justify-content-center">
+              Date
+              <i
+                *ngIf="sort !== 'publicationDate' && sort !== '-publicationDate'"
+                class="icon-sort ml-1 cursor-pointer"
+                (click)="sortBy('publicationDate')"
+              ></i>
+              <i
+                *ngIf="sort === 'publicationDate'"
+                class="icon-sort-asc ml-1 cursor-pointer"
+                (click)="sortBy('-publicationDate')"
+              ></i>
+              <i
+                *ngIf="sort === '-publicationDate'"
+                class="icon-sort-desc ml-1 cursor-pointer"
+                (click)="sortBy('publicationDate')"
+              ></i>
+            </span>
+          </th>
+          <th class="text-center app-th-link">Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items; let index = index">
+          <td class="align-middle text-center">
+            {{ item.type }}
+          </td>
+          <td class="align-middle">
+            {{ item.name }}
+          </td>
+          <td class="align-middle text-center">
+            {{ item.industry || '-' }}
+          </td>
+          <td class="align-middle text-center">
+            {{ item.region || '-' }}
+          </td>
+          <td class="align-middle text-center">
+            {{ item.publicationDate | date: 'dd/MM/yyyy' }}
+          </td>
+          <td class="align-middle text-center">
+            <a [href]="item.link" target="_blank"><i class="icon-external-link"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </app-table>
+  </div>
+</div>
+
+<div class="float-left mt-3 mb-4">
+  <app-pagination-x [page]="page" [count]="count" [pageSize]="limit" (pageChange)="onPageChange($event)">
+  </app-pagination-x>
+</div>

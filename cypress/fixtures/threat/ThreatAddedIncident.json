@@ -1,0 +1,27 @@
+[
+    {
+        "id": 773,
+        "title": "Threat 5",
+        "description": "This incident type is related to all kind of information leakage published online due to hacktivism attacks or vulnerabilities.\nExamples include exposure of information such as internal databases, API Keys, procedures, etc.",
+        "typeId": "10",
+        "typeName": "Information leakage",
+        "remediationTips": "Blueliv recommends contacting the host or the administrator of the platform where the leaked information is published in order to have it removed as soon as possible.\nOnce removed, locate the source of the leak (a vulnerability, an employee, a hacktivism attack) and take the necessary steps required to avoid further damage.",
+        "status": "OPEN",
+        "risk": "LOW",
+        "activities": 0,
+        "creationDate": 1690755263000,
+        "notificationDate": null,
+        "changedAt": 1690983969000,
+        "lastUpdateUser": "qa@blueliv.com",
+        "reputationalSearchId": 2902,
+        "superSearchId": 504,
+        "searchShortname": null,
+        "searchName": null,
+        "labels": [],
+        "comments": [],
+        "notifications": [],
+        "currentIncompleteNotification": null,
+        "numberOfAnalyzedResources": null,
+        "searchType": null
+    }
+]

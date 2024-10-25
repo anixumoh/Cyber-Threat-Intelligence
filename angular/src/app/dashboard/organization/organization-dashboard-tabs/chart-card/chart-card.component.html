@@ -1,0 +1,61 @@
+<div class="card" [style.borderColor]="cardStyle.borderColor">
+  <div
+    class="card-header p-1 clearfix"
+    [ngClass]="{ 'padding-no-button': !isDownloadBtnVisible && !isExpandBtnVisible }"
+    [style.background]="cardStyle.background"
+  >
+    <div class="card-header-title">
+      <div class="card-header-title__text title-card" [style.color]="cardStyle.color">
+        <app-large-text [value]="newChartTitleCtrl.value || title" placement="top">
+          <i class="icon-pencil-square edit-icon" *ngIf="isEditIconVisible" (click)="toggleEditHeader()"></i>
+        </app-large-text>
+      </div>
+      <div class="card-header-title__buttons">
+        <button
+          *ngIf="isExpandBtnVisible"
+          class="btn btn-light btn-sm text-primary mr-1"
+          (click)="onClickExpandBtn()"
+          [disabled]="isDisabled"
+        >
+          <i class="fa fa-expand mr-1"></i>
+          <span>Expand</span>
+        </button>
+        <button
+          *ngIf="isDownloadBtnVisible"
+          (click)="onClickDownloadBtn()"
+          class="btn btn-light btn-sm text-primary"
+          [disabled]="isDisabled"
+        >
+          <i class="fa fa-download mr-1"></i>
+          <span>Download</span>
+        </button>
+      </div>
+    </div>
+    <div class="ml-1" *ngIf="isEditHeaderVisible">
+      <div class="d-flex mt-2">
+        <span class="mr-1" [style.color]="cardStyle.color">Title: </span>
+        <div class="w-100 pr-2">
+          <input [formControl]="newChartTitleCtrl" type="text" class="w-100" />
+        </div>
+      </div>
+      <div class="d-flex mt-2 mb-2">
+        <span class="mr-1" [style.color]="cardStyle.color">Colors: </span>
+        <ul class="color-boxes-wrapper">
+          <li style="background: #ffd100" (click)="onSetColor(yellow.style.background)" #yellow></li>
+          <li style="background: #ff585d" (click)="onSetColor(red.style.background)" #red></li>
+          <li style="background: #0093b2" (click)="onSetColor(blue.style.background)" #blue></li>
+          <li style="background: #dfdfdf" (click)="onSetColor(white.style.background)" #white></li>
+          <li style="background: #07272d" (click)="onSetColor(orange.style.background)" #orange></li>
+          <li style="background: #00b388" (click)="onSetColor(green.style.background)" #green></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card-body p-0" [style.height.px]="height">
+    <div class="no-results-box" *ngIf="chartState?.isLoading">
+      <i class="icon-spinner rotate"></i>
+      <h6 class="no-results">Loading</h6>
+    </div>
+    <ng-content></ng-content>
+  </div>
+</div>

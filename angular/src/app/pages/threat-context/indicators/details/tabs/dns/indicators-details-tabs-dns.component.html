@@ -1,0 +1,47 @@
+<div class="col-md-12 col-lg-12" *ngIf="showActiveDNS">
+  <div>
+    <div class="card-section mb-5">
+      <h5>Active DNS</h5>
+      <div class="card-subsection pl-4">
+        <div class="mb-4" *ngFor="let entryType of dns | iterable">
+          <ng-container *ngIf="entryType.value.length > 0">
+            <h6>{{ entryType.key }}</h6>
+            <app-active-dns [items]="entryType.value" [name]="entryType.key"></app-active-dns>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+  <div>
+    <div class="card-section mb-5">
+      <h5>Passive DNS</h5>
+      <div class="card-subsection pl-4">
+        <app-passive-dns [indicatorId]="indicatorId" [indicatorType]="indicatorType"></app-passive-dns>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+  <div>
+    <div class="card-section mb-5">
+      <h5>WHOIS</h5>
+      <div class="card-subsection pl-4">
+        <pre class="pre" *ngIf="whoIs">
+          <code [innerHtml]="prettifyWhois()"></code>
+        </pre>
+        <div *ngIf="whoIs && whoIs.hasOwnProperty('raw')">
+          <button class="btn btn-primary mb-4" type="button" (click)="toogleRaw()">
+            {{ showRaw ? 'Hide Raw Whois' : 'Display Raw Whois' }}
+          </button>
+          <pre class="pre" *ngIf="showRaw">
+            <code>{{whoIs.raw}}</code>
+          </pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

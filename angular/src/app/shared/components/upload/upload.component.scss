@@ -1,0 +1,40 @@
+@import "~scss/variables";
+
+.upload-input.form-control[readonly] {
+  background-color: #fff;
+}
+
+.report {
+  position: fixed;
+  transform: translateY(100%);
+  bottom: 0;
+  opacity: 0;
+  right: 100px;
+  background-color: #fff;
+  z-index: 1100;
+  transition: all ease-out 0.4s;
+  width: 450px;
+
+  &--open {
+    transform: translateY(calc(100% - 50px));
+    opacity: 1;
+  }
+
+  &--open.report--maximazed {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.flex-between-center {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ellipsis {
+  width: 360px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

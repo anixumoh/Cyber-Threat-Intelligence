@@ -1,0 +1,147 @@
+@import '~scss/variables';
+
+.timeline {
+  list-style: none;
+  padding: 20px 0 20px;
+  position: relative;
+  min-height: 150px;
+  margin: 0;
+}
+
+.timeline:before {
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  content: ' ';
+  width: 3px;
+  background-color: #eeeeee;
+  left: 50%;
+  margin-left: -1.5px;
+}
+
+.timeline > li {
+  position: relative;
+}
+
+.timeline-text-muted {
+  color: #b2b2b2;
+  font-size: 13px;
+}
+
+.timeline > li:before {
+  content: ' ';
+  display: table;
+}
+
+.timeline > li:after {
+  clear: both;
+}
+
+.timeline > li > .timeline-panel {
+  border: none;
+  border-radius: 2px;
+  padding: 20px 0;
+  position: relative;
+}
+
+.timeline > li > .timeline-badge {
+  color: #fff;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  margin-left: -25px;
+  background-color: #999999;
+  z-index: 100;
+  border-radius: 50%;
+
+  i[class^='icon-'],
+  i[class*=' icon-'] {
+    font-size: 2em;
+  }
+}
+
+.timeline > li.timeline-inverted > .timeline-panel {
+  float: right;
+}
+
+.timeline > li.timeline-inverted > .timeline-panel:before {
+  border-left-width: 0;
+  border-right-width: 15px;
+  left: -15px;
+  right: auto;
+}
+
+.timeline > li.timeline-inverted > .timeline-panel:after {
+  border-left-width: 0;
+  border-right-width: 14px;
+  left: -14px;
+  right: auto;
+}
+
+.timeline-badge.primary {
+  background-color: $primary !important;
+}
+
+.timeline-badge.success {
+  background-color: $success !important;
+}
+
+.timeline-badge.warning {
+  background-color: $warning !important;
+}
+
+.timeline-badge.danger {
+  background-color: $danger !important;
+}
+
+.timeline-title {
+  margin: 0;
+  color: inherit;
+}
+
+.timeline-body > p,
+.timeline-body > ul {
+  margin-bottom: 0;
+}
+
+.timeline-body > p + p {
+  margin-top: 5px;
+}
+
+ul.timeline:before {
+  left: 40px;
+}
+
+ul.timeline > li > .timeline-badge {
+  left: 15px;
+  margin-left: 0;
+  top: 16px;
+}
+
+ul.timeline > li > .timeline-panel {
+  margin-left: 90px;
+}
+
+ul.timeline > li > .timeline-panel:before {
+  border-left-width: 0;
+  border-right-width: 15px;
+  left: -15px;
+  right: auto;
+}
+
+ul.timeline > li > .timeline-panel:after {
+  border-left-width: 0;
+  border-right-width: 14px;
+  left: -14px;
+  right: auto;
+}
+
+.timeline-a {
+  margin-right: 4px;
+}

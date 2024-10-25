@@ -1,0 +1,3 @@
+<button class="btn btn-circle" [ngClass]="interactive ? 'cursor-pointer' : 'cursor-default'" (click)="updateStatus()">
+  <i class="icon-lens" [ngClass]="status ? 'is-green' : 'is-red'"></i>
+</button>

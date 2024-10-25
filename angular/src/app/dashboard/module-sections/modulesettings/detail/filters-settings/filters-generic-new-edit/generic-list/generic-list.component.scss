@@ -1,0 +1,85 @@
+@import '~scss/variables';
+
+.generic-list-container {
+  margin: 0 3px;
+}
+
+.header-search-input {
+  width: 114px;
+  height: 25px;
+}
+
+.list-group {
+  height: 179px;
+  overflow-y: scroll;
+  .list-group-item {
+    border-radius: 0.25rem;
+    border: 0;
+    cursor: pointer;
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: transparent;
+    }
+  }
+  .list-group-item:hover {
+    background-color: $light;
+    color: $primary;
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: $primary;
+    }
+  }
+
+  .list-group-item.active {
+    z-index: 1;
+    background-color: $light;
+    color: $primary;
+    font-weight: bold;
+    i[class^='icon-'],
+    i[class*=' icon-'] {
+      color: $primary;
+    }
+  }
+
+  &.label-span-two-rows {
+    height: 414px;
+  }
+}
+
+::ng-deep {
+  .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: #327abd94 !important;
+  }
+
+  .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+    background-color: $primary;
+  }
+}
+
+.active {
+  color: $primary;
+  font-weight: 600 !important;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+  background-color: #8080802b;
+  height: 35px;
+}
+
+.disabledResult {
+  cursor: not-allowed;
+  color: $secondary !important;
+  pointer-events: none;
+  opacity: 0.6;
+  i[class^='icon-'],
+  i[class*=' icon-'] {
+    color: $secondary !important;
+  }
+}
+
+.btn-circle {
+  width: 25px;
+  height: 25px;
+}

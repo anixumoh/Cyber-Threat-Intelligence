@@ -1,0 +1,24 @@
+.app-basic-list {
+  &__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__item-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 22px;
+    width: 22px;
+    color: #fff;
+    background-color: silver;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #dd0000;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+.flex {
+  display: flex;
+  padding: 15px 0;
+  width: 100%;
+}
+.d-gap{
+  gap:12px
+}
+.mentions {
+  background-color: #fff !important;
+  //border-radius: 0;
+  //border-left: none;
+  //border-right: none;
+  padding: 0.75em 0;
+}
+
+.text-link {
+  cursor: pointer;
+  color: #327abd;
+}

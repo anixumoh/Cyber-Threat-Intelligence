@@ -1,0 +1,63 @@
+{
+    "num_cards": 1,
+    "credit_cards": [
+
+        {
+            "id": "64940fe97e4d6d5b5f724190",
+            "ccNumber": "5374101188148558",
+            "ccExpiration": "0227",
+            "ccCvv": "641",
+            "reportedAt": 1687425001000,
+            "source": "Telegram",
+            "confidenceLevel": "Low",
+            "validated": true,
+            "ccNumberMd5": "ca637d5a02e39344aca751cbd3448335",
+            "firstReportedAt": 1687425001000,
+            "lastReportedAt": 1687425001000,
+            "reportedCount": 1
+        }
+    ],
+    "sources": [
+        "Telegram",
+        "POS Meta",
+        "POS Unclassified",
+        "POS Redline",
+        "Underground"
+    ],
+    "id": 133677665,
+    "module_id": 11976,
+    "module_name": "Credit Cards",
+    "module_short_name": "CC-CC10",
+    "module_type": "CREDIT_CARDS_FULL",
+    "title": "NWG",
+    "analysis_result": "NEGATIVE",
+    "analysis_calc_result": "NEGATIVE",
+    "created_at": 1689889608000,
+    "checked_at": 1689889608000,
+    "changed_at": 1689889608000,
+    "user_rating": 0,
+    "read": true,
+    "userModified": false,
+    "fav": "NOT_STARRED",
+    "issued": false,
+    "labels": [
+        {
+            "id": 102,
+            "name": "CCShop",
+            "background_color": 16777215,
+            "text_color": 0,
+            "type": "GLOBAL"
+        },
+        {
+            "id": 109757,
+            "name": "NWG",
+            "background_color": 8421504,
+            "text_color": 16777215,
+            "type": "MODULE_LABEL"
+        }
+    ],
+    "tlpStatus": "RED",
+    "sourceType": "TRANSFORM",
+    "followedUp": false,
+    "history": []
+}

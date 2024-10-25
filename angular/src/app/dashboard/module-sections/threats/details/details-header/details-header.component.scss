@@ -1,0 +1,39 @@
+@import 'src/scss/variables';
+
+.details-header {
+  i {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    padding-top: 7px;
+  }
+
+  .url-width {
+    min-width: 100px;
+  }
+
+  .title-width {
+    min-width: 230px;
+  }
+}
+.rating-box {
+  background-color: $light !important;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.07) !important;
+  }
+}
+.hash {
+  display: inline-block;
+  word-break: break-all;
+  position: relative;
+}
+
+.download-box {
+  display: flex;
+  align-items: center;
+}
+
+.icon-titlet {
+  display: flex;
+  align-items: center;
+}

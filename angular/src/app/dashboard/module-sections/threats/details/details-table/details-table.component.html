@@ -1,0 +1,194 @@
+<!-- TABLE -->
+<div *ngIf="showTable">
+  <div class="d-flex align-items-center justify-content-between">
+    <div>
+      <select
+        *ngIf="moduleName === 'credential' && showClassification"
+        class="mt-2 mb-2 float-right"
+        (change)="onChangeClassification($event)"
+      >
+        <option [value]="item" *ngFor="let item of classificationType">{{ item }}</option>
+      </select>
+    </div>
+    <ng-container *ngIf="items?.length > 0">
+      <div class="ml-2 mb-2 mt-2">
+        <app-select
+          [items]="limits"
+          [model]="limit"
+          [icon]="'icon-format_list_bulleted'"
+          [placement]="'bottom-right'"
+          id="limitDropdown"
+          (onChange)="onChangeLimit($event)"
+        >
+        </app-select>
+      </div>
+    </ng-container>
+  </div>
+  <ng-container *ngIf="items?.length > 0 && !loading; then displayTable; else displaySpinner"> </ng-container>
+  <ng-template #displayTable>
+    <app-table [items]="items" [loading]="loading" class="table-fixed">
+      <thead>
+        <tr>
+          <ng-container *ngIf="moduleName === 'credential' || moduleName === 'credit_card'">
+            <th class="td-30">
+              <input
+                type="checkbox"
+                [checked]="items.length && getCheckedItems().length === items.length"
+                (click)="checkAll()"
+              />
+            </th>
+          </ng-container>
+          <ng-container *ngFor="let head of heads">
+            <th *ngIf="head.show" [ngClass]="head.class ? head.class : ''">
+              {{ head.value }}
+            </th>
+          </ng-container>
+          <th class="th-center td-50" *ngIf="!showDomainUrl">Info</th>
+          <ng-container *ngIf="(moduleName === 'credential' || moduleName === 'credit_card') && !isCustomerAndGlobal">
+            <th class="th-center td-50">
+              <button
+                class="btn btn-circle bg-light text-danger"
+                (click)="openDeleteModal('bulk')"
+                [ngClass]="getCheckedItems().length < 2 ? 'cursor-forbidden' : 'cursor-pointer'"
+                [disabled]="getCheckedItems().length < 2"
+              >
+                <i class="icon-delete"></i>
+              </button>
+            </th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let it of items" class="'cursor-default'">
+          <ng-container *ngIf="_moduleName === 'credential' || _moduleName === 'credit_card'">
+            <td class="vertical-middle text-center td-30">
+              <input type="checkbox" [(ngModel)]="it.selected" (click)="setChecked()" />
+            </td>
+          </ng-container>
+          <ng-container *ngFor="let t of it.values">
+            <td class="vertical-middle" *ngIf="columnToShow.indexOf(t.show) >= 0" [ngClass]="t.class ? t.class : ''">
+              <p
+                class="mb-0"
+                *ngIf="
+                  t.show != 'url' &&
+                  t.show != 'domainUrl' &&
+                  t.show != 'password' &&
+                  !(t.show === 'type' && _moduleName === 'credential') &&
+                  !(t.show === 'source' && _moduleName === 'credit_card')
+                "
+                [ngClass]="[
+                  t.elementClass ? t.elementClass : '',
+                  t.show === 'username' ? 'affected-other-properties' : ''
+                ]"
+                [ngbTooltip]="t.show === 'username' ? t.value : null"
+              >
+                {{ t.value }}
+              </p>
+              <ng-container *ngIf="t.show === 'password'">
+                <p class="mb-0 affected-other-properties" *ngIf="t.value !== '-'" [ngbTooltip]="t.value">
+                  {{ t.value }}
+                </p>
+                <p class="mb-0" *ngIf="t.value === '-'">
+                  No password available
+                  <i
+                    class="icon-info-circle-solid text-primary cursor-pointer ml-2"
+                    [ngbTooltip]="'The password of this credential was not available at the source of the data breach'"
+                  ></i>
+                </p>
+              </ng-container>
+
+              <ng-container
+                *ngIf="
+                  (t.show === 'type' && _moduleName === 'credential') ||
+                  (t.show === 'source' && _moduleName === 'credit_card')
+                "
+              >
+                <app-tcx-linkeable
+                  [value]="t.value"
+                  [checkForActors]="t.show === 'source'"
+                  [isCreditCard]="_moduleName === 'credit_card'"
+                ></app-tcx-linkeable>
+              </ng-container>
+
+              <a
+                class="text-decoration-none affected-url"
+                *ngIf="t.show == 'url' || t.show == 'domainUrl'"
+                href="{{ t.originalUrl }}"
+                target="_blank"
+                [ngClass]="t.elementClass ? t.elementClass : ''"
+                [ngbTooltip]="t.value"
+              >
+                {{ t.value }}
+              </a>
+            </td>
+          </ng-container>
+          <td class="vertical-middle text-center td-30" *ngIf="!showDomainUrl">
+            <button
+              class="btn btn-circle text-primary"
+              [disabled]="!showDomainUrl && it.stolenData ? false : true"
+              (click)="openBotModal(it)"
+            >
+              <i class="icon-info-circle-solid" aria-hidden="true"></i>
+            </button>
+          </td>
+          <ng-container *ngIf="(moduleName === 'credential' || moduleName === 'credit_card') && !isCustomerAndGlobal">
+            <td class="vertical-middle text-center td-30">
+              <button class="btn btn-circle bg-light text-danger" (click)="openDeleteModal('single', it)">
+                <i class="icon-delete"></i>
+              </button>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </app-table>
+    <div class="float-left p-2">
+      <app-pagination-x [page]="page" [count]="count" [pageSize]="limit" (pageChange)="onPageChange($event)">
+      </app-pagination-x>
+    </div>
+  </ng-template>
+  <ng-template #displaySpinner>
+    <is-data-is-loading-threats
+      [isLoading]="loading"
+      [message]="
+        selectedClassification === 'ALL' ? 'There are no items' : 'There are no items with that classification'
+      "
+    ></is-data-is-loading-threats>
+  </ng-template>
+</div>
+
+<!-- MODAL -->
+<app-details-modal
+  [item]="selectedItem"
+  [resourceType]="resource.resource_type"
+  *ngIf="showBotModal"
+  (modalClosed)="closeBotModal()"
+>
+</app-details-modal>
+
+<!-- DELETE MODAL -->
+
+<modal-window
+  modalTitle="Delete"
+  [modalBody]="'Are you sure you want to delete the selected item?'"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="isDeleteConfirmationOpened"
+  acceptBtn="Yes"
+  [loadingAccept]="isDeleteLoading"
+  cancelBtn="No"
+  (accept)="deleteOne(); isDeleteConfirmationOpened = false"
+  (cancel)="isDeleteConfirmationOpened = false"
+>
+</modal-window>
+
+<modal-window
+  modalTitle="Delete"
+  [modalBody]="'Are you sure you want to delete the selected items?'"
+  [warning]="'This action cannot be undone.'"
+  *ngIf="isBulkDeleteConfirmationOpened"
+  acceptBtn="Yes"
+  [loadingAccept]="isBulkDeleteLoading"
+  cancelBtn="No"
+  (accept)="deleteBulk(); isBulkDeleteConfirmationOpened = false"
+  (cancel)="isBulkDeleteConfirmationOpened = false"
+>
+</modal-window>

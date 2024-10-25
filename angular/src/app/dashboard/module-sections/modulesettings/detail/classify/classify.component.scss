@@ -1,0 +1,245 @@
+@import 'src/scss/variables';
+@import '../settings-detail-generic';
+@import '~dragula/dist/dragula.css';
+
+// GENERAL
+*:focus {
+  outline: none !important;
+}
+
+.card {
+  height: 100%;
+  max-height: 100vh;
+}
+button {
+  border-radius: 2px !important;
+}
+.show {
+  display: block;
+}
+.hide {
+  display: none;
+}
+.full-width {
+  width: 100%;
+}
+.height-list {
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+.text-dark {
+  color: #343a40 !important;
+}
+
+.empty-box {
+  margin: 5px 18px;
+}
+
+.setting-classify {
+  .classify-list {
+    max-height: calc(100vh - 245px);
+    overflow: auto;
+    background-color: $bg-blueliv;
+    border: 1px solid $bg-blueliv;
+    border-bottom: 10px solid $bg-blueliv;
+    border-top: 10px solid $bg-blueliv;
+    border-radius: 2px;
+  }
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  margin-left: 14px;
+  margin-right: 14px;
+  width: 100%;
+  align-items: center;
+  background: #eee;
+  padding: 10px;
+}
+
+.validation-path {
+  @extend .buttons-container;
+  padding: 0 7px;
+
+  &__message {
+    color: $danger;
+  }
+}
+
+.symbol-separator {
+  font-size: 38px;
+  line-height: 0.75em;
+  margin: 0 9px;
+}
+
+.btn-filter {
+  border: 1px solid #bbb;
+  width: 35%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+.list-header {
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 0px;
+}
+
+// LIST
+.list-group {
+  background-color: $bg-blueliv;
+  padding-left: 8px;
+  padding-right: 8px;
+  min-height: 30px;
+  .list-group-item {
+    margin-left: 0;
+    border: 1px solid $light;
+    border-radius: 4px;
+    margin-bottom: 3px;
+    &:hover {
+      cursor: move;
+      border: 1px solid $gray;
+    }
+  }
+}
+// DROPDOWN
+.sub-header-list {
+  position: relative !important;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  .input-select-asset {
+    border-radius: 4px !important;
+    border: 1px solid $light;
+    height: 38px;
+    background: white;
+  }
+
+  .dropdown-menu.show {
+    width: 50%;
+    position: absolute;
+    left: 26%;
+    overflow: auto;
+    top: 105%;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 200;
+    background-color: #f5f5f5;
+    color: #8c8c8c;
+    height: 300px;
+    z-index: 9999;
+    .search-domain {
+      width: 96%;
+      margin: 5px;
+      margin-top: 0;
+      padding: 5px;
+      border-radius: 4px;
+      border: 1px solid $light;
+    }
+    .list-group {
+      background-color: $white;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      .list-group-item {
+        margin: 0;
+        border-bottom: none;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+.title-drag {
+  position: relative;
+  height: 20px;
+  border-bottom: 1px solid #343a40;
+  margin-bottom: 5px;
+  & > div.search-div {
+    position: absolute;
+    right: 27px;
+    top: -17px;
+  }
+  i {
+    position: absolute;
+    right: 5px;
+    top: 0;
+    font-size: 18px;
+    cursor: pointer;
+  }
+}
+.height-box {
+  // height:calc((100vh - 48px - 47px - 44px - 65px)/3);
+  height: calc((100vh - 300px) / 3);
+  overflow: auto;
+  background-color: $bg-blueliv;
+  border: 1px solid $bg-blueliv;
+  border-bottom: 10px solid $bg-blueliv;
+  border-top: 10px solid $bg-blueliv;
+  border-radius: 2px;
+}
+// COLLAPSE
+.collapsecontent {
+  color: #8c8c8c;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: $font-weight-thin;
+  font-style: italic;
+  .height-box-info {
+    margin: 0px 8px 5px 8px;
+    background-color: $white;
+    border-bottom: 3px solid $light;
+    position: absolute;
+    z-index: 10000;
+    width: 89%;
+    border-radius: 4px;
+    padding: 5px;
+    line-height: 14px;
+    span {
+      font-style: regular;
+      font-weight: $font-weight-regular;
+      color: $primary;
+    }
+  }
+}
+
+.search-div {
+  position: relative;
+  margin: 5px;
+
+  & button {
+    position: absolute;
+    left: 160px;
+    top: 0;
+    color: gray;
+    text-decoration: none;
+  }
+}
+
+.margin-for-search {
+  margin-top: 25px;
+}
+
+.button-reset {
+  top: 4px !important;
+}
+
+.cut-text {
+  width: 369px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.disabled-row {
+  pointer-events: none;
+  cursor: not-allowed;
+}

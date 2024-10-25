@@ -1,0 +1,14 @@
+@import "src/scss/variables";
+
+.is-white {
+  color:$gray;
+}
+.is-yellow {
+  color:rgb(232, 255, 28);
+}
+.is-amber {
+  color:$warning;
+}
+.is-red {
+  color:$danger;
+}

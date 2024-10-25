@@ -1,0 +1,15 @@
+<terms-brand-abuse-view-image
+  *ngIf="settingId == 'terms' && activeModule.moduleName == 'social_media' && type == 'image'"
+  [settingId]="settingId"
+  [resourceId]="resourceId"
+>
+</terms-brand-abuse-view-image>
+<terms-custom-view *ngIf="settingId == 'terms' && type !== 'image'" [settingId]="settingId" [resourceId]="resourceId">
+</terms-custom-view>
+<app-filters-generic-new-edit
+  *ngIf="settingId == 'filters'"
+  [settingId]="settingId"
+  [resourceId]="resourceId"
+  [editMode]="editMode"
+>
+</app-filters-generic-new-edit>

@@ -1,0 +1,35 @@
+<app-terms-brand-abuse-new-search-phrase
+  *ngIf="settingId == 'terms' && activeModule.moduleName == 'social_media' && type == 'phrase'"
+  [settingId]="settingId"
+  [resourceId]="resourceId"
+  [editMode]="editMode"
+>
+</app-terms-brand-abuse-new-search-phrase>
+<app-terms-brand-abuse-new-edit-image
+  *ngIf="settingId == 'terms' && activeModule.moduleName == 'social_media' && type == 'image'"
+  [settingId]="settingId"
+  [resourceId]="resourceId"
+  [editMode]="editMode"
+>
+</app-terms-brand-abuse-new-edit-image>
+<app-terms-custom-new-edit
+  *ngIf="settingId == 'terms' && type !== 'image' && type !== 'phrase'"
+  [settingId]="settingId"
+  [resourceId]="resourceId"
+  [editMode]="editMode"
+>
+</app-terms-custom-new-edit>
+<app-rss-brand-abuse-new-edit
+  *ngIf="settingId == 'rss'"
+  [settingId]="settingId"
+  [resourceId]="resourceId"
+  [editMode]="editMode"
+>
+</app-rss-brand-abuse-new-edit>
+<app-filters-generic-new-edit
+  *ngIf="settingId == 'filters'"
+  [settingId]="settingId"
+  [resourceId]="resourceId"
+  [editMode]="editMode"
+>
+</app-filters-generic-new-edit>

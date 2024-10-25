@@ -1,0 +1,114 @@
+{
+    "total_resources": 5,
+    "list": [
+        {
+            "id": 504,
+            "enabled": true,
+            "name": "Organization1",
+            "createdAt": 1662384713000,
+            "industryId": "OTHER",
+            "trial": false,
+            "trialExpirationDate": 0,
+            "contact": {
+                "firstContact": {
+                    "title": "TC QA Cypress",
+                    "firstName": "QA",
+                    "lastName": "Cypress",
+                    "email": "qa1@blueliv.com",
+                    "phone": "123456789",
+                    "country": "ES"
+                }
+            },
+            "catalogId": 1,
+            "customerId": 1,
+            "enabledMfa": false,
+            "created_at": 1662384713000
+        },
+        {
+            "id": 484,
+            "enabled": true,
+            "name": "Organization2",
+            "createdAt": 1659973010000,
+            "industryId": "OTHER",
+            "trial": false,
+            "trialExpirationDate": 0,
+            "contact": {
+                "firstContact": {
+                    "firstName": "cypress",
+                    "lastName": "qa",
+                    "email": "qa@blueliv.com",
+                    "phone": "123456789",
+                    "country": "ES"
+                }
+            },
+            "catalogId": 1,
+            "customerId": 246,
+            "enabledMfa": false,
+            "created_at": 1659973010000
+        },
+        {
+            "id": 291,
+            "enabled": false,
+            "name": "Organization3",
+            "createdAt": 1647436097000,
+            "industryId": "OTHER",
+            "trial": false,
+            "trialExpirationDate": 0,
+            "contact": {
+                "firstContact": {
+                    "firstName": "Angular 13",
+                    "lastName": "Angular 13",
+                    "email": "dddd@www.es",
+                    "phone": "222222222",
+                    "country": "CU"
+                }
+            },
+            "catalogId": 79,
+            "customerId": 211,
+            "enabledMfa": false,
+            "created_at": 1647436097000
+        },
+        {
+            "id": 787,
+            "enabled": true,
+            "name": "Organization4",
+            "createdAt": 1682589153000,
+            "industryId": "OTHER",
+            "trial": false,
+            "trialExpirationDate": 0,
+            "contact": {
+                "firstContact": {
+                    "firstName": "Alonso",
+                    "lastName": "Quijano",
+                    "email": "test@blueliv.com",
+                    "country": "ES"
+                }
+            },
+            "catalogId": 1,
+            "customerId": 1,
+            "enabledMfa": false,
+            "created_at": 1682589153000
+        },
+        {
+            "id": 824,
+            "enabled": true,
+            "name": "Organization5",
+            "createdAt": 1684162248000,
+            "industryId": "OTHER",
+            "trial": false,
+            "trialExpirationDate": 0,
+            "contact": {
+                "firstContact": {
+                    "firstName": "Laura",
+                    "lastName": "Aldana",
+                    "email": "laura.estrada@outpost24.com",
+                    "country": "ES"
+                }
+            },
+            "catalogId": 1,
+            "customerId": 268,
+            "enabledMfa": false,
+            "created_at": 1684162248000
+        }
+    ]
+}

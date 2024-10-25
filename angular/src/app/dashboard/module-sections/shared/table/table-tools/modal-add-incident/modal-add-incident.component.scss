@@ -1,0 +1,23 @@
+.modal-incident {
+  .select2.select2-container .select2-selection--single {
+    height: calc(2.25rem + 2px);
+    border-color: #ced4da;
+  }
+
+  .select2.select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 35px;
+    padding-left: 10px;
+  }
+
+  .select2.select2-container .select2-selection--single .select2-selection__arrow {
+    height: 35px;
+    right: 6px;
+  }
+}
+
+li.select2-results__option {
+  width: 405px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

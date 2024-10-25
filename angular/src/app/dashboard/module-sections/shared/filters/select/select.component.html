@@ -1,0 +1,47 @@
+<div class="filter-container">
+  <!-- STATUS FILTER - RESPONSIVE BIG -->
+  <button
+    class="btn btn-light btn-sm border d-none d-xl-block"
+    [ngClass]="selectedFilter ? 'buttonActive' : ''"
+    type="button"
+    name="button"
+    [disabled]="disableScroll"
+    (click)="toggleMenu($event)"
+  >
+    {{ selectTitle }}
+  </button>
+  <!-- STATUS FILTER - RESPONSIVE SMALL -->
+  <button
+    class="btn btn-light btn-sm d-xl-none"
+    [ngClass]="selectedFilter ? 'buttonActive' : ''"
+    type="button"
+    name="button"
+    [disabled]="disableScroll"
+    (click)="toggleMenu($event)"
+  >
+    <i class="icon-eye"></i>
+  </button>
+  <!-- DROPDOWN -->
+  <ul class="list-group border rounded" [ngClass]="isMenuOpened ? 'open' : ''" (click)="toggleMenu($event)">
+    <li
+      class="
+        list-group-item list-group-item-action
+        d-flex
+        justify-content-between
+        align-items-center
+        cursor-pointer
+        border-0
+        px-3
+        py-2
+      "
+      *ngFor="let i of selectedItems; let j = index"
+      [value]="i.label"
+      [ngClass]="i.selected === true ? 'buttonActiveDropdown' : ''"
+      (click)="clickOnItem($event, j)"
+      (click)="toggleMenu($event)"
+    >
+      <span>{{ i.label }}</span>
+      <i class="icon-check"></i>
+    </li>
+  </ul>
+</div>

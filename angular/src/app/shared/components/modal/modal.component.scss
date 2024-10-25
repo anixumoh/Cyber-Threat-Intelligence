@@ -1,0 +1,20 @@
+.modal {
+  background-color: rgba(0, 0, 0, 0.4);
+  overflow-y: auto;
+
+  &.show {
+    display: block;
+  }
+
+  &-dialog {
+    top: 15%;
+  }
+
+  &--xl {
+    max-width: 1090px;
+  }
+
+  &--md {
+    max-width: 760px;
+  }
+}

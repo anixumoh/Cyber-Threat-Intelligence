@@ -1,0 +1,50 @@
+.box {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.text {
+  text-overflow: ellipsis;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.copy {
+  display: flex;
+
+  &:hover .actions {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.copied {
+  &:hover {
+    &::after {
+      opacity: 1;
+    }
+  }
+  &::after {
+    opacity: 0;
+    content: 'Copied!';
+    position: absolute;
+    background-color: #28a745;
+    padding: 0 7px 6px;
+    color: #fff;
+    border-radius: 6px;
+    top: 0;
+    left: 38px;
+    transition: all 0.3s ease-in-out;
+    z-index: 999999;
+    width: 69px;
+  }
+}
+
+.actions {
+  position: relative;
+  z-index: 5;
+  opacity: 0;
+  margin-left: 5px;
+  transform: translateX(-10px);
+  transition: all 0.3s ease-in-out;
+}

@@ -1,0 +1,6 @@
+export const StatusDictionary = {
+  POSITIVE: 'POSITIVE',
+  NEGATIVE: 'NEGATIVE',
+  INFORMATIVE: 'INFORMATIVE',
+  NOT_IMPORTANT: 'NOT IMPORTANT',
+};

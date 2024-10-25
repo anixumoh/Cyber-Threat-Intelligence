@@ -1,0 +1,66 @@
+<div class="mb-2 action-table">
+  <div class="button-action" ngbDropdown>
+    <button
+      ngbDropdownToggle
+      [disabled]="!hasSomeChecked()"
+      class="btn btn-light btn-sm border px-2 btn-actions"
+      [ngClass]="{ pulse: hasSomeChecked() }"
+      type="button"
+      id="actionsButtonDropdown"
+      name="button"
+    >
+      <i class="icon-ellipsis-v px-1"></i>
+    </button>
+    <div ngbDropdownMenu class="actions-dropdown-menu">
+      <ul aria-labelledby="actionsButtonDropdown" class="list-group actions-menu shadow border rounded">
+        <li class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2" (click)="exportToCSV()">
+          <i class="icon-share-square mr-2"></i>
+          <span>Export to CSV</span>
+        </li>
+        <li class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2" (click)="exportToJson()">
+          <i class="icon-share-square mr-2"></i>
+          <span>Export to JSON</span>
+        </li>
+        <li
+          class="list-group-item list-group-item-action cursor-pointer border-0 px-3 py-2"
+          (click)="copyToClipboard('description')"
+        >
+          <i class="icon-copy mr-2"></i>
+          <span>Copy to clipboard</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div [ngClass]="{ 'bg-gray': bgGray }">
+  <app-table [items]="items" [loading]="loading" class="mb-0 table--sticky" sm="true" noItems="No data found">
+    <thead>
+      <tr>
+        <th class="text-center td-40">
+          <input type="checkbox" [(ngModel)]="bulk" (click)="setCheckedState($event)" />
+        </th>
+        <th class="align-middle">Category</th>
+        <th class="align-middle">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td class="text-center td-40 vertical-middle cursor-default" (click)="$event.stopImmediatePropagation()">
+          <input type="checkbox" class="cursor-pointer" [(ngModel)]="item.fxSelected" (click)="setChecked()" />
+        </td>
+        <td class="text-capitalize align-middle">
+          <p class="mb-0">{{ item.category }}</p>
+        </td>
+        <td class="align-middle">
+          <p class="mb-0"><app-copy-to-clipboard [value]="item.description"></app-copy-to-clipboard></p>
+        </td>
+      </tr>
+    </tbody>
+  </app-table>
+</div>
+
+<div class="float-left p-2" *ngIf="role !== roles.target">
+  <app-pagination-x [page]="page" [count]="count" [pageSize]="limit" (pageChange)="onPageChange($event)">
+  </app-pagination-x>
+</div>
